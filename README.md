@@ -1,11 +1,9 @@
-# glue_lab
+# Glue JupyterLab Extension
 
-[![Github Actions Status](https://github.com/trungleduc/glue-lab/workflows/Build/badge.svg)](https://github.com/trungleduc/glue-lab/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trungleduc/glue-lab/main?urlpath=lab)
-A JupyterLab extension for glue-viz
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trungleduc/glue-lab/main?urlpath=lab)
 
-This extension is composed of a Python package named `glue_lab`
-for the server extension and a NPM package named `glue-lab`
-for the frontend extension.
+## Overview
+Glue is an open-source data exploration tool that allows users to visualize and analyze data in a way that is intuitive and easy to understand. This JupyterLab extension brings Glue's data exploration capabilities directly into JupyterLab, allowing users to seamlessly analyze and visualize data without leaving their JupyterLab environment.
 
 ## Requirements
 
