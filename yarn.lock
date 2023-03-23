@@ -1965,7 +1965,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/application@npm:^4.0.0-alpha.19, @jupyterlab/application@npm:^4.0.0-alpha.22":
+"@jupyterlab/application@npm:^4.0.0-alpha.22":
   version: 4.0.0-alpha.22
   resolution: "@jupyterlab/application@npm:4.0.0-alpha.22"
   dependencies:
@@ -2036,7 +2036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/builder@npm:^4.0.0-alpha.19":
+"@jupyterlab/builder@npm:^4.0.0-alpha.22":
   version: 4.0.0-alpha.22
   resolution: "@jupyterlab/builder@npm:4.0.0-alpha.22"
   dependencies:
@@ -2306,6 +2306,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jupyterlab/mainmenu@npm:^4.0.0-alpha.22":
+  version: 4.0.0-alpha.22
+  resolution: "@jupyterlab/mainmenu@npm:4.0.0-alpha.22"
+  dependencies:
+    "@jupyterlab/apputils": ^4.0.0-alpha.22
+    "@jupyterlab/translation": ^4.0.0-alpha.22
+    "@jupyterlab/ui-components": ^4.0.0-alpha.37
+    "@lumino/algorithm": ^2.0.0
+    "@lumino/commands": ^2.0.0
+    "@lumino/coreutils": ^2.0.0
+    "@lumino/widgets": ^2.0.0
+  checksum: 7e7ced1ece2abad6c2a846818ce4fe4d4c0419b31f010553054cb7baad985f924acfa6bcd28d6790d11c20ac96a23c3664e6070d87f37976e6246a32daf2e543
+  languageName: node
+  linkType: hard
+
 "@jupyterlab/nbformat@npm:^3.0.0 || ^4.0.0-alpha.15, @jupyterlab/nbformat@npm:^4.0.0-alpha.22":
   version: 4.0.0-alpha.22
   resolution: "@jupyterlab/nbformat@npm:4.0.0-alpha.22"
@@ -2504,7 +2519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/testutils@npm:^4.0.0-alpha.19":
+"@jupyterlab/testutils@npm:^4.0.0-alpha.22":
   version: 4.0.0-alpha.22
   resolution: "@jupyterlab/testutils@npm:4.0.0-alpha.22"
   dependencies:
@@ -5517,11 +5532,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "glue-lab@workspace:."
   dependencies:
-    "@jupyterlab/application": ^4.0.0-alpha.19
-    "@jupyterlab/builder": ^4.0.0-alpha.19
+    "@jupyterlab/application": ^4.0.0-alpha.22
+    "@jupyterlab/builder": ^4.0.0-alpha.22
     "@jupyterlab/coreutils": ^6.0.0-alpha.19
+    "@jupyterlab/mainmenu": ^4.0.0-alpha.22
     "@jupyterlab/services": ^7.0.0-alpha.19
-    "@jupyterlab/testutils": ^4.0.0-alpha.19
+    "@jupyterlab/testutils": ^4.0.0-alpha.22
     "@types/jest": ^29.2.0
     "@typescript-eslint/eslint-plugin": ^4.8.1
     "@typescript-eslint/parser": ^4.8.1
