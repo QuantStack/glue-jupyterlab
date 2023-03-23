@@ -3,6 +3,7 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trungleduc/glue-lab/main?urlpath=lab)
 
 ## Overview
+
 Glue is an open-source data exploration tool that allows users to visualize and analyze data in a way that is intuitive and easy to understand. This JupyterLab extension brings Glue's data exploration capabilities directly into JupyterLab, allowing users to seamlessly analyze and visualize data without leaving their JupyterLab environment.
 
 ## Requirements
