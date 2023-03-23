@@ -3,6 +3,7 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trungleduc/glue-lab/main?urlpath=lab)
 
 ## Overview
+
 Glue is an open-source data exploration tool that allows users to visualize and analyze data in a way that is intuitive and easy to understand. This JupyterLab extension brings Glue's data exploration capabilities directly into JupyterLab, allowing users to seamlessly analyze and visualize data without leaving their JupyterLab environment.
 
 ## Requirements
@@ -126,7 +127,7 @@ jlpm test
 
 #### Integration tests
 
-This extension uses [Playwright](https://playwright.dev/docs/intro/) for the integration tests (aka user level tests).
+This extension uses [Playwright] for the integration tests (aka user level tests).
 More precisely, the JupyterLab helper [Galata](https://github.com/jupyterlab/jupyterlab/tree/master/galata) is used to handle testing the extension in JupyterLab.
 
 More information are provided within the [ui-tests](./ui-tests/README.md) README.
