@@ -41,6 +41,9 @@ repos:
       - id: eslint
         files: \.tsx?$
         types: [file]
+        additional_dependencies:
+          - '@typescript-eslint/eslint-plugin'
+          - '@typescript-eslint/parser'
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.0.0-alpha.6
