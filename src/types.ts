@@ -40,3 +40,7 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
 }
 
 export type IGlueCanvasWidget = IDocumentWidget<Widget, IGlueSessionModel>;
+
+export interface IControlPanelModel {
+  sharedModel: IGlueSessionSharedModel | undefined;
+}

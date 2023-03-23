@@ -5,7 +5,7 @@ import { CommandRegistry } from '@lumino/commands';
 import { GlueSessionModel } from './docModel';
 
 import { Widget } from '@lumino/widgets';
-import { GlueCanvasWidget } from '../view/glueView';
+import { GlueCanvasWidget } from '../canvas/glueCanvasWidget';
 
 interface IOptios extends DocumentRegistry.IWidgetFactoryOptions {
   commands: CommandRegistry;
