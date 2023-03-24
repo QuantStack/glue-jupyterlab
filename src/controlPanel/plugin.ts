@@ -6,21 +6,27 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
+import { IGlueCanvasTracker } from '../token';
 
 const NAME_SPACE = 'gluelab';
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:control-panel',
   autoStart: true,
-  requires: [ILayoutRestorer],
-  activate: (app: JupyterFrontEnd, restorer: ILayoutRestorer) => {
-    const controlModel = new ControlPanelModel({});
+  requires: [ILayoutRestorer, IGlueCanvasTracker],
+  activate: (
+    app: JupyterFrontEnd,
+    restorer: ILayoutRestorer,
+    tracker: IGlueCanvasTracker
+  ) => {
+    const controlModel = new ControlPanelModel({ tracker });
 
     const controlPanel = new ControlPanelWidget({
-      model: controlModel
+      model: controlModel,
+      tracker
     });
     controlPanel.id = 'glueLab::controlPanel';
-    controlPanel.title.caption = 'GlueLab Control Panel';
+    controlPanel.title.caption = 'GlueLab';
     controlPanel.title.icon = glueIcon;
     if (restorer) {
       restorer.add(controlPanel, NAME_SPACE);

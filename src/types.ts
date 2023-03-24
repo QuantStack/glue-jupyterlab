@@ -43,4 +43,5 @@ export type IGlueCanvasWidget = IDocumentWidget<Widget, IGlueSessionModel>;
 
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
+  canvasChanged: ISignal<IControlPanelModel, IGlueCanvasWidget | null>;
 }

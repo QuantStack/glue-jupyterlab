@@ -1,6 +1,7 @@
 import { SidePanel } from '@jupyterlab/ui-components';
 import { IControlPanelModel } from '../types';
 import { ControlPanelHeader } from './header';
+import { IGlueCanvasTracker } from '../token';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
@@ -10,6 +11,13 @@ export class ControlPanelWidget extends SidePanel {
     console.log('th', this._model);
     const header = new ControlPanelHeader();
     this.header.addWidget(header);
+    this._model.canvasChanged.connect((_, changed) => {
+      if (changed) {
+        header.title.label = changed.context.localPath;
+      } else {
+        header.title.label = '-';
+      }
+    });
   }
 
   dispose(): void {
@@ -22,5 +30,6 @@ export class ControlPanelWidget extends SidePanel {
 export namespace LeftPanelWidget {
   export interface IOptions {
     model: IControlPanelModel;
+    tracker: IGlueCanvasTracker;
   }
 }
