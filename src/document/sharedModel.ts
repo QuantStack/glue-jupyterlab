@@ -25,6 +25,7 @@ export class GlueSessionSharedModel
     this._objects.observeDeep(this._objectsObserver);
     this._metadata.observe(this._metaObserver);
     this._options.observe(this._optionsObserver);
+    console.log('this.ydoc', this.ydoc);
   }
 
   dispose(): void {

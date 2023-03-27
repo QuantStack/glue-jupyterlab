@@ -3,3 +3,11 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.glue-Panel-tabBar ul.lm-TabBar-content {
+  flex-grow: 1;
+}
+
+.glue-Panel-tabBar li.lm-TabBar-tab {
+  flex-grow: 1;
+}

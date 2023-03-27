@@ -6,6 +6,7 @@ import { GlueSessionModel } from './docModel';
 export class GlueSessionModelFactory
   implements DocumentRegistry.IModelFactory<GlueSessionModel>
 {
+  collaborative = true;
   /**
    * The name of the model.
    *
@@ -68,8 +69,6 @@ export class GlueSessionModelFactory
    * @returns The model
    */
   createNew(): GlueSessionModel {
-    console.log('create new mode');
-
     const model = new GlueSessionModel({});
     return model;
   }

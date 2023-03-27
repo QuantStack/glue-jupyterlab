@@ -19,7 +19,6 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueCanvasTracker> = {
     const tracker = new WidgetTracker<IGlueCanvasWidget>({
       namespace: NAME_SPACE
     });
-
     return tracker;
   }
 };
@@ -59,6 +58,5 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       fileFormat: 'text',
       contentType: 'glu'
     });
-    console.log('activated', app.docRegistry);
   }
 };
