@@ -1,35 +1,38 @@
 import {
   IControlPanelModel,
-  IGlueCanvasWidget,
+  IGlueSessionWidget,
   IGlueSessionSharedModel
 } from '../types';
-import { IGlueCanvasTracker } from '../token';
+import { IGlueSessionTracker } from '../token';
 import { Signal, ISignal } from '@lumino/signaling';
 
 export class ControlPanelModel implements IControlPanelModel {
   constructor(options: ControlPanelModel.IOptions) {
     this._tracker = options.tracker;
     this._tracker.currentChanged.connect((_, changed) => {
-      this._canvasChanged.emit(changed);
+      this._glueSessionChanged.emit(changed);
     });
   }
   get sharedModel(): IGlueSessionSharedModel | undefined {
-    return this._tracker.currentWidget?.context.model.sharedModel;
+    return this._tracker.currentSharedModel();
   }
 
-  get canvasChanged(): ISignal<IControlPanelModel, IGlueCanvasWidget | null> {
-    return this._canvasChanged;
-  }
-
-  private readonly _tracker: IGlueCanvasTracker;
-  private _canvasChanged = new Signal<
+  get glueSessionChanged(): ISignal<
     IControlPanelModel,
-    IGlueCanvasWidget | null
+    IGlueSessionWidget | null
+  > {
+    return this._glueSessionChanged;
+  }
+
+  private readonly _tracker: IGlueSessionTracker;
+  private _glueSessionChanged = new Signal<
+    IControlPanelModel,
+    IGlueSessionWidget | null
   >(this);
 }
 
 namespace ControlPanelModel {
   export interface IOptions {
-    tracker: IGlueCanvasTracker;
+    tracker: IGlueSessionTracker;
   }
 }

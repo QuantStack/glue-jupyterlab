@@ -28,9 +28,7 @@ export interface IGlueSessionSharedModelChange {
 
 export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
-  objects: Array<any>;
-  options: JSONObject;
-  metadata: JSONObject;
+  contents: JSONObject;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {
@@ -39,9 +37,9 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
   disposed: ISignal<any, void>;
 }
 
-export type IGlueCanvasWidget = IDocumentWidget<Widget, IGlueSessionModel>;
+export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
 
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
-  canvasChanged: ISignal<IControlPanelModel, IGlueCanvasWidget | null>;
+  glueSessionChanged: ISignal<IControlPanelModel, IGlueSessionWidget | null>;
 }

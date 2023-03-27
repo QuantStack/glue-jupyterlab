@@ -1,11 +1,11 @@
 import { DocumentWidget } from '@jupyterlab/docregistry';
 import { Widget } from '@lumino/widgets';
 
-import { IGlueSessionModel, IGlueCanvasWidget } from '../types';
+import { IGlueSessionModel, IGlueSessionWidget } from '../types';
 
-export class GlueCanvasWidget
+export class GlueSessionWidget
   extends DocumentWidget<Widget, IGlueSessionModel>
-  implements IGlueCanvasWidget
+  implements IGlueSessionWidget
 {
   constructor(options: DocumentWidget.IOptions<Widget, IGlueSessionModel>) {
     super(options);

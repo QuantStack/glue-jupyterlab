@@ -4,24 +4,25 @@ import {
 } from '@jupyterlab/application';
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import { IGlueCanvasTracker } from '../token';
-import { IGlueCanvasWidget } from '../types';
+import { IGlueSessionTracker } from '../token';
 import { GlueSessionModelFactory } from './modelFactory';
+import { GlueSessionTracker } from './tracker';
 import { GlueCanvasWidgetFactory } from './widgetFactory';
 
 const NAME_SPACE = 'gluelab';
 
-export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueCanvasTracker> = {
-  id: 'glue-lab:tracker-plugin',
-  autoStart: true,
-  provides: IGlueCanvasTracker,
-  activate: (app: JupyterFrontEnd) => {
-    const tracker = new WidgetTracker<IGlueCanvasWidget>({
-      namespace: NAME_SPACE
-    });
-    return tracker;
-  }
-};
+export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
+  {
+    id: 'glue-lab:tracker-plugin',
+    autoStart: true,
+    provides: IGlueSessionTracker,
+    activate: (app: JupyterFrontEnd) => {
+      const tracker = new GlueSessionTracker({
+        namespace: NAME_SPACE
+      });
+      return tracker;
+    }
+  };
 
 /**
  * Initialization data for the glue-lab extension.
@@ -29,7 +30,7 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueCanvasTracker> = {
 export const gluePlugin: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:document-plugin',
   autoStart: true,
-  requires: [IGlueCanvasTracker],
+  requires: [IGlueSessionTracker],
   activate: (app: JupyterFrontEnd, canvasTracker: WidgetTracker) => {
     const widgetFactory = new GlueCanvasWidgetFactory({
       name: 'Glue Lab',

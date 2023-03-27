@@ -6,18 +6,18 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { IGlueCanvasTracker } from '../token';
+import { IGlueSessionTracker } from '../token';
 
 const NAME_SPACE = 'gluelab';
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:control-panel',
   autoStart: true,
-  requires: [ILayoutRestorer, IGlueCanvasTracker],
+  requires: [ILayoutRestorer, IGlueSessionTracker],
   activate: (
     app: JupyterFrontEnd,
     restorer: ILayoutRestorer,
-    tracker: IGlueCanvasTracker
+    tracker: IGlueSessionTracker
   ) => {
     const controlModel = new ControlPanelModel({ tracker });
 

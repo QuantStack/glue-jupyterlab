@@ -5,14 +5,14 @@ import { CommandRegistry } from '@lumino/commands';
 import { GlueSessionModel } from './docModel';
 
 import { Widget } from '@lumino/widgets';
-import { GlueCanvasWidget } from '../canvas/glueCanvasWidget';
+import { GlueSessionWidget } from '../sessionPanel/glueSessionWidget';
 
 interface IOptios extends DocumentRegistry.IWidgetFactoryOptions {
   commands: CommandRegistry;
 }
 
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
-  GlueCanvasWidget,
+  GlueSessionWidget,
   GlueSessionModel
 > {
   constructor(options: IOptios) {
@@ -28,9 +28,9 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
    */
   protected createNewWidget(
     context: DocumentRegistry.IContext<GlueSessionModel>
-  ): GlueCanvasWidget {
+  ): GlueSessionWidget {
     const content = new Widget();
 
-    return new GlueCanvasWidget({ context, content });
+    return new GlueSessionWidget({ context, content });
   }
 }

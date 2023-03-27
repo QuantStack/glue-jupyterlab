@@ -1,10 +1,13 @@
 import { IWidgetTracker } from '@jupyterlab/apputils';
 import { Token } from '@lumino/coreutils';
 
-import { IGlueCanvasWidget } from './types';
+import { IGlueSessionWidget, IGlueSessionSharedModel } from './types';
 
-export type IGlueCanvasTracker = IWidgetTracker<IGlueCanvasWidget>;
+export interface IGlueSessionTracker
+  extends IWidgetTracker<IGlueSessionWidget> {
+  currentSharedModel(): IGlueSessionSharedModel | undefined;
+}
 
-export const IGlueCanvasTracker = new Token<IGlueCanvasTracker>(
+export const IGlueSessionTracker = new Token<IGlueSessionTracker>(
   'glueCanvasTracker'
 );
