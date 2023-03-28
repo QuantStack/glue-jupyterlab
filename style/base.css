@@ -3,3 +3,67 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.glue-Panel-tabBar ul.lm-TabBar-content {
+  flex-grow: 1;
+}
+
+.glue-Panel-tabBar li.lm-TabBar-tab {
+  flex-grow: 1;
+}
+
+.glue-Session-tabBar {
+  z-index: -1;
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-Session-tabBar > .lm-TabBar-content,
+.lm-TabPanel-tabBar > .lm-TabBar-content {
+  align-items: flex-end;
+  min-width: 0;
+  min-height: 0;
+}
+
+.glue-Session-tabBar .lm-TabBar-content {
+  flex: unset;
+}
+
+.glue-Session-tabBar[data-orientation='horizontal'] {
+  min-height: 20px;
+}
+
+.glue-Session-tabBar[data-orientation='horizontal'] {
+  flex: 1 1 auto;
+}
+
+.glue-Session-tabBar {
+  overflow: visible;
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size1);
+}
+.glue-Session-tabBar .lm-TabBar-addButton {
+  padding-bottom: 2px !important;
+}
+
+.glue-Session-tabBar .lm-TabBar-tab {
+  flex: 0 1 var(--jp-private-horizontal-tab-width);
+  align-items: center;
+  min-height: 20px;
+  min-width: 0;
+  margin-left: calc(-1 * var(--jp-border-width));
+  line-height: 20px;
+  padding: 0 8px;
+  background: var(--jp-layout-color2);
+  border: var(--jp-border-width) solid var(--jp-border-color1);
+  border-bottom: none;
+  position: relative;
+}
+
+.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current {
+  background: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+}
+
+.glue-Session-tabBar .lm-TabBar-tab:first-child {
+  margin-left: 0;
+}
