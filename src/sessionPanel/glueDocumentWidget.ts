@@ -3,7 +3,7 @@ import { Widget } from '@lumino/widgets';
 
 import { IGlueSessionModel, IGlueSessionWidget } from '../types';
 
-export class GlueSessionWidget
+export class GlueDocumentWidget
   extends DocumentWidget<Widget, IGlueSessionModel>
   implements IGlueSessionWidget
 {

@@ -1,18 +1,25 @@
-import { LabIcon, classes } from '@jupyterlab/ui-components';
+import { LabIcon, classes, TabBarSvg } from '@jupyterlab/ui-components';
 import { Widget, TabBar, StackedPanel, BoxPanel, Title } from '@lumino/widgets';
 import { find, ArrayExt } from '@lumino/algorithm';
 import { Signal, ISignal } from '@lumino/signaling';
 export class HTabPanel extends BoxPanel {
-  constructor() {
-    super({ direction: 'top-to-bottom' });
-    this._topBar = new TabBar<Widget>({
+  constructor(options: HTabPanel.IOptions) {
+    const direction = options.tabBarPosition
+      ? options.tabBarPosition === 'top'
+        ? 'top-to-bottom'
+        : 'bottom-to-top'
+      : 'top-to-bottom';
+    super({ direction });
+    const tabBarOption = options.tabBarOption ?? {
       insertBehavior: 'none',
       removeBehavior: 'none',
       allowDeselect: false,
       orientation: 'horizontal'
-    });
-    this._topBar.addClass('lm-DockPanel-tabBar');
-    this._topBar.addClass('glue-Panel-tabBar');
+    };
+    this._topBar = new TabBarSvg<Widget>(tabBarOption);
+    const tabBarClasses = options.tabBarClassList ?? [];
+    tabBarClasses.forEach(cls => this._topBar.addClass(cls));
+
     BoxPanel.setStretch(this._topBar, 0);
     this._topBar.hide();
     this._topBar.tabActivateRequested.connect(
@@ -180,5 +187,13 @@ namespace Private {
 
   export function itemCmp(first: IRankItem, second: IRankItem): number {
     return first.rank - second.rank;
+  }
+}
+
+export namespace HTabPanel {
+  export interface IOptions {
+    tabBarPosition?: 'top' | 'bottom';
+    tabBarOption?: TabBar.IOptions<Widget>;
+    tabBarClassList?: string[];
   }
 }

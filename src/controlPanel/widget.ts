@@ -19,7 +19,10 @@ export class ControlPanelWidget extends SidePanel {
     const header = new ControlPanelHeader();
     this.header.addWidget(header);
 
-    this._tabPanel = new HTabPanel();
+    this._tabPanel = new HTabPanel({
+      tabBarPosition: 'top',
+      tabBarClassList: ['lm-DockPanel-tabBar', 'glue-Panel-tabBar']
+    });
     const dataPanelModel = new DataPanelModel({});
     const data = new DataPanel({ model: dataPanelModel });
 

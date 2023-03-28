@@ -72,8 +72,6 @@ export class GlueSessionModel implements IGlueSessionModel {
   fromString(data: string): void {
     const jsonData: IDict = JSON.parse(data);
     console.log('jsonData', jsonData);
-
-    // this.sharedModel.transact(() => {});
   }
 
   toJSON(): PartialJSONObject {

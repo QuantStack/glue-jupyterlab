@@ -10,7 +10,6 @@ export class CanvasControlWidget extends Widget {
     this.node.style.background = 'var(--jp-layout-color1)';
     const inner = new Widget();
     inner.node.style.height = '100%';
-    inner.node.style.background = '#a085ff3d';
     this.node.appendChild(inner.node);
   }
   private _model: LayersPanelModel;
