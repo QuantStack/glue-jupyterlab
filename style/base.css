@@ -41,6 +41,7 @@
   color: var(--jp-ui-font-color1);
   font-size: var(--jp-ui-font-size1);
 }
+
 .glue-Session-tabBar .lm-TabBar-addButton {
   padding-bottom: 2px !important;
 }
