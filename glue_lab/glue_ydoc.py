@@ -1,4 +1,6 @@
 import json
+from typing import Any
+
 from jupyter_ydoc.ybasedoc import YBaseDoc
 
 
@@ -7,14 +9,22 @@ class YGlue(YBaseDoc):
         super().__init__(*args, **kwargs)
         self._ysource = self._ydoc.get_text("source")
         self._ysession = self._ydoc.get_map("session")
-
-    @property
-    def source(self):
+        
+    def get(self) -> str:
+        """
+        Returns the content of the document.
+        :return: Document's content.
+        :rtype: Any
+        """
         session = self._ysession.to_json()
         return json.dumps(session)
 
-    @source.setter
-    def source(self, value):
+    def set(self, value: str) -> None:
+        """
+        Sets the content of the document.
+        :param value: The content of the document.
+        :type value: Any
+        """
         session = json.loads(value)
         with self._ydoc.begin_transaction() as t:
             self._ysession.update(t, session.items())

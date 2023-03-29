@@ -1951,20 +1951,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyter/docprovider@npm:^1.0.0-alpha.5":
-  version: 1.0.0-alpha.6
-  resolution: "@jupyter/docprovider@npm:1.0.0-alpha.6"
+"@jupyter/docprovider@npm:^1.0.0-alpha.7":
+  version: 1.0.0-alpha.7
+  resolution: "@jupyter/docprovider@npm:1.0.0-alpha.7"
   dependencies:
     "@jupyter/ydoc": ^0.3.4
-    "@jupyterlab/coreutils": ^6.0.0-alpha.22
-    "@jupyterlab/services": ^7.0.0-alpha.22
+    "@jupyterlab/coreutils": ^6.0.0-beta.0
+    "@jupyterlab/services": ^7.0.0-beta.0
     "@lumino/coreutils": ^2.0.0
     "@lumino/disposable": ^2.0.0
     "@lumino/signaling": ^2.0.0
     y-protocols: ^1.0.5
     y-websocket: ^1.3.15
     yjs: ^13.5.40
-  checksum: d59d86eb37ab0a07ebabe4cd89edc45cdaeebead840c549bff59fceea828773e8d9bccc586697fe7004059f6d5faa54afee6ce0af2449b10986578b23b97821b
+  checksum: d99b5063bfc1cbdfea0679ba742b84dc243469fdfc38d8a5328232bcca2d9ef183509aa4ef72c57b78dc0a90cb9491d4885dccc4d1d8f318c0fe07c2db286672
   languageName: node
   linkType: hard
 
@@ -2194,20 +2194,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/coreutils@npm:^6.0.0-alpha.22":
-  version: 6.0.0-alpha.22
-  resolution: "@jupyterlab/coreutils@npm:6.0.0-alpha.22"
-  dependencies:
-    "@lumino/coreutils": ^2.0.0
-    "@lumino/disposable": ^2.0.0
-    "@lumino/signaling": ^2.0.0
-    minimist: ~1.2.0
-    path-browserify: ^1.0.0
-    url-parse: ~1.5.4
-  checksum: 26ed104b5c65fb6e2c813244a87b3a4aa7342363cfb08660b7fa880c8d9dc1ef58b46ec2b1c4c8409f72ba578e9caed97fb4d07a308db9d4969b97f7bd83d564
-  languageName: node
-  linkType: hard
-
 "@jupyterlab/coreutils@npm:^6.0.0-beta.0":
   version: 6.0.0-beta.0
   resolution: "@jupyterlab/coreutils@npm:6.0.0-beta.0"
@@ -2352,7 +2338,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/nbformat@npm:^3.0.0 || ^4.0.0-alpha.15, @jupyterlab/nbformat@npm:^4.0.0-alpha.22":
+"@jupyterlab/nbformat@npm:^3.0.0 || ^4.0.0-alpha.15":
   version: 4.0.0-alpha.22
   resolution: "@jupyterlab/nbformat@npm:4.0.0-alpha.22"
   dependencies:
@@ -2471,25 +2457,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/services@npm:^7.0.0-alpha.22":
-  version: 7.0.0-alpha.22
-  resolution: "@jupyterlab/services@npm:7.0.0-alpha.22"
-  dependencies:
-    "@jupyter/ydoc": ^0.3.4
-    "@jupyterlab/coreutils": ^6.0.0-alpha.22
-    "@jupyterlab/nbformat": ^4.0.0-alpha.22
-    "@jupyterlab/settingregistry": ^4.0.0-alpha.22
-    "@jupyterlab/statedb": ^4.0.0-alpha.22
-    "@lumino/coreutils": ^2.0.0
-    "@lumino/disposable": ^2.0.0
-    "@lumino/polling": ^2.0.0
-    "@lumino/properties": ^2.0.0
-    "@lumino/signaling": ^2.0.0
-    ws: ^8.11.0
-  checksum: 7b581bcc724974877e936e8a4195fd22d8edf46d68d5e562e746755d0567289d8d59a4755bcf0a702c266969eaf4a51b05ef133fd53141d6727cce68260371cb
-  languageName: node
-  linkType: hard
-
 "@jupyterlab/services@npm:^7.0.0-beta.0":
   version: 7.0.0-beta.0
   resolution: "@jupyterlab/services@npm:7.0.0-beta.0"
@@ -2509,23 +2476,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/settingregistry@npm:^4.0.0-alpha.22":
-  version: 4.0.0-alpha.22
-  resolution: "@jupyterlab/settingregistry@npm:4.0.0-alpha.22"
-  dependencies:
-    "@jupyterlab/nbformat": ^4.0.0-alpha.22
-    "@jupyterlab/statedb": ^4.0.0-alpha.22
-    "@lumino/commands": ^2.0.0
-    "@lumino/coreutils": ^2.0.0
-    "@lumino/disposable": ^2.0.0
-    "@lumino/signaling": ^2.0.0
-    "@rjsf/utils": ^5.1.0
-    ajv: ^8.12.0
-    json5: ^2.2.3
-  checksum: 08058286e3f41ac4f6cb5b57a6189a3b0864f29198504edb6cff4732e7e9c6a8470f62076dc4ced7671b6411bf95dfc1e938921d439970946b10e00fd86f3210
-  languageName: node
-  linkType: hard
-
 "@jupyterlab/settingregistry@npm:^4.0.0-beta.0":
   version: 4.0.0-beta.0
   resolution: "@jupyterlab/settingregistry@npm:4.0.0-beta.0"
@@ -2540,19 +2490,6 @@ __metadata:
     ajv: ^8.12.0
     json5: ^2.2.3
   checksum: 34bf60052ccbfc51a7cbed3fea7e2f737a88e597aab588dd8e772f4414e13c578f6ec7e939184043e00a61cab17147bf63a8afba5fbf5b51f3de7e34c47ec605
-  languageName: node
-  linkType: hard
-
-"@jupyterlab/statedb@npm:^4.0.0-alpha.22":
-  version: 4.0.0-alpha.22
-  resolution: "@jupyterlab/statedb@npm:4.0.0-alpha.22"
-  dependencies:
-    "@lumino/commands": ^2.0.0
-    "@lumino/coreutils": ^2.0.0
-    "@lumino/disposable": ^2.0.0
-    "@lumino/properties": ^2.0.0
-    "@lumino/signaling": ^2.0.0
-  checksum: 1fc1f01feea2399ab2c7d58780f9e68421dcf70844002813c6ba3eded8e5d1776d74f979aa6842ed91b3b68b20825a3cff92738f3c609a94464a24466d8e7336
   languageName: node
   linkType: hard
 
@@ -5704,7 +5641,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "glue-lab@workspace:."
   dependencies:
-    "@jupyter/docprovider": ^1.0.0-alpha.5
+    "@jupyter/docprovider": ^1.0.0-alpha.7
     "@jupyterlab/application": ^4.0.0-beta.0
     "@jupyterlab/builder": ^4.0.0-beta.0
     "@jupyterlab/coreutils": ^6.0.0-beta.0
