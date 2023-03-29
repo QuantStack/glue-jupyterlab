@@ -4,7 +4,10 @@ import {
 } from '@jupyterlab/application';
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import { ICollaborativeDrive, SharedDocumentFactory } from '@jupyter/docprovider';
+import {
+  ICollaborativeDrive,
+  SharedDocumentFactory
+} from '@jupyter/docprovider';
 
 import { IGlueSessionTracker } from '../token';
 import { GlueSessionModelFactory } from './modelFactory';
@@ -34,7 +37,11 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:document-plugin',
   autoStart: true,
   requires: [IGlueSessionTracker, ICollaborativeDrive],
-  activate: (app: JupyterFrontEnd, canvasTracker: WidgetTracker, drive: ICollaborativeDrive) => {
+  activate: (
+    app: JupyterFrontEnd,
+    canvasTracker: WidgetTracker,
+    drive: ICollaborativeDrive
+  ) => {
     const widgetFactory = new GlueCanvasWidgetFactory({
       name: 'Glue Lab',
       modelName: 'gluelab-session-model',
@@ -66,6 +73,9 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
     const glueSharedModelFactory: SharedDocumentFactory = () => {
       return new GlueSessionSharedModel();
     };
-    drive.sharedModelFactory.registerDocumentFactory('glu', glueSharedModelFactory);
+    drive.sharedModelFactory.registerDocumentFactory(
+      'glu',
+      glueSharedModelFactory
+    );
   }
 };

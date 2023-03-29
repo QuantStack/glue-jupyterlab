@@ -1,5 +1,4 @@
 import json
-from typing import Any
 
 from jupyter_ydoc.ybasedoc import YBaseDoc
 
@@ -9,7 +8,7 @@ class YGlue(YBaseDoc):
         super().__init__(*args, **kwargs)
         self._ysource = self._ydoc.get_text("source")
         self._ysession = self._ydoc.get_map("session")
-        
+
     def get(self) -> str:
         """
         Returns the content of the document.
