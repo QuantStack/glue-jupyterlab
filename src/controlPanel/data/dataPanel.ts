@@ -1,9 +1,13 @@
 import { SidePanel, ToolbarButton } from '@jupyterlab/ui-components';
+import { CommandRegistry } from '@lumino/commands';
+
+import { CommandIDs } from '../../token';
 import { DatasetsWidget } from './datasetsWidget';
 import { SubsetsWidget } from './subsetsWidget';
 import { DataPanelModel } from './dataPanelModel';
+
 export class DataPanel extends SidePanel {
-  constructor(options: { model: DataPanelModel }) {
+  constructor(options: DataPanel.IOptions) {
     super();
     this.title.label = 'Data';
     this.toolbar.addItem(
@@ -28,7 +32,7 @@ export class DataPanel extends SidePanel {
       new ToolbarButton({
         tooltip: 'Link Data',
         label: 'Link Data',
-        onClick: () => console.log('clicked')
+        onClick: () => options.commands.execute(CommandIDs.openLinkEditor)
       })
     );
     const dataset = new DatasetsWidget({ model: this._model });
@@ -39,4 +43,14 @@ export class DataPanel extends SidePanel {
   }
 
   private _model: DataPanelModel;
+}
+
+namespace DataPanel {
+  /**
+   * The DataPanel options.
+   */
+  export interface IOptions {
+    model: DataPanelModel;
+    commands: CommandRegistry;
+  }
 }

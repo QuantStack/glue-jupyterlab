@@ -1,8 +1,12 @@
 import { SidePanel, ToolbarButton } from '@jupyterlab/ui-components';
+import { CommandRegistry } from '@lumino/commands';
+
+import { CommandIDs } from '../../token';
 import { CanvasControlWidget } from './canvasControl';
 import { LayersPanelModel } from './layersPanelModel';
+
 export class LayerPanel extends SidePanel {
-  constructor(options: { model: LayersPanelModel }) {
+  constructor(options: LayerPanel.IOptions) {
     super();
     this.title.label = 'Layers';
     this._model = options.model;
@@ -19,7 +23,7 @@ export class LayerPanel extends SidePanel {
       new ToolbarButton({
         tooltip: 'Link Data',
         label: 'Link Data',
-        onClick: () => console.log('clicked')
+        onClick: () => options.commands.execute(CommandIDs.openLinkEditor)
       })
     );
     this._model.sessionChanged.connect(() => {
@@ -37,4 +41,14 @@ export class LayerPanel extends SidePanel {
     });
   }
   private _model: LayersPanelModel;
+}
+
+namespace LayerPanel {
+  /**
+   * Tha LayerPanel options.
+   */
+  export interface IOptions {
+    model: LayersPanelModel;
+    commands: CommandRegistry;
+  }
 }

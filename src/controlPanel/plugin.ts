@@ -23,7 +23,8 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
 
     const controlPanel = new ControlPanelWidget({
       model: controlModel,
-      tracker
+      tracker,
+      commands: app.commands
     });
     controlPanel.id = 'glueLab::controlPanel';
     controlPanel.title.caption = 'GlueLab';

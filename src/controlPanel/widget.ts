@@ -1,13 +1,15 @@
 import { SidePanel } from '@jupyterlab/ui-components';
+import { CommandRegistry } from '@lumino/commands';
+import { Message } from '@lumino/messaging';
+import { BoxPanel } from '@lumino/widgets';
+
+import { HTabPanel } from '../common/tabPanel';
+import { IGlueSessionTracker } from '../token';
 import { IControlPanelModel } from '../types';
 import { ControlPanelHeader } from './header';
-import { IGlueSessionTracker } from '../token';
-import { HTabPanel } from '../common/tabPanel';
-import { BoxPanel } from '@lumino/widgets';
-import { Message } from '@lumino/messaging';
 import { DataPanel } from './data/dataPanel';
-import { LayerPanel } from './layers/layerPanel';
 import { DataPanelModel } from './data/dataPanelModel';
+import { LayerPanel } from './layers/layerPanel';
 import { LayersPanelModel } from './layers/layersPanelModel';
 
 export class ControlPanelWidget extends SidePanel {
@@ -24,10 +26,16 @@ export class ControlPanelWidget extends SidePanel {
       tabBarClassList: ['lm-DockPanel-tabBar', 'glue-Panel-tabBar']
     });
     const dataPanelModel = new DataPanelModel({});
-    const data = new DataPanel({ model: dataPanelModel });
+    const data = new DataPanel({
+      model: dataPanelModel,
+      commands: options.commands
+    });
 
     const layerPanelModel = new LayersPanelModel({});
-    const canvas = new LayerPanel({ model: layerPanelModel });
+    const canvas = new LayerPanel({
+      model: layerPanelModel,
+      commands: options.commands
+    });
 
     this._tabPanel.addTab(data, 0);
     this._tabPanel.addTab(canvas, 1);
@@ -64,5 +72,6 @@ export namespace LeftPanelWidget {
   export interface IOptions {
     model: IControlPanelModel;
     tracker: IGlueSessionTracker;
+    commands: CommandRegistry;
   }
 }
