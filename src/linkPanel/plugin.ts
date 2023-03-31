@@ -8,6 +8,7 @@ import {
   MainAreaWidget,
   WidgetTracker
 } from '@jupyterlab/apputils';
+import { GlueSessionSharedModel } from '../document/sharedModel';
 import { CommandIDs, IGlueSessionTracker } from '../token';
 import { LinkWidget } from './linkWidget';
 
@@ -21,7 +22,7 @@ export const glueLinkEditorPlugin: JupyterFrontEndPlugin<void> = {
   optional: [ICommandPalette, ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
-    canvasTracker: WidgetTracker,
+    canvasTracker: IGlueSessionTracker,
     palette: ICommandPalette,
     restorer: ILayoutRestorer | null
   ) => {
@@ -35,9 +36,18 @@ export const glueLinkEditorPlugin: JupyterFrontEndPlugin<void> = {
     // Adds a commands to open the glue link editor.
     app.commands.addCommand(CommandIDs.openLinkEditor, {
       label: 'Open the glue link editor',
+      isEnabled: () => canvasTracker.currentSharedModel() !== undefined,
       execute: () => {
+        // If there is no opened glue session
+        if (!canvasTracker.currentSharedModel()) {
+          return;
+        }
+
         if (!widget || widget.isDisposed) {
-          const panel = new LinkWidget({});
+          const panel = new LinkWidget({
+            sharedModel:
+              canvasTracker.currentSharedModel() || new GlueSessionSharedModel()
+          });
           widget = new MainAreaWidget({ content: panel });
           widget.id = 'glue-link-editor-main';
           widget.addClass('glue-link-editor-main');
