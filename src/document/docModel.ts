@@ -2,7 +2,7 @@ import { IChangedArgs } from '@jupyterlab/coreutils';
 import { PartialJSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { IDict, IGlueSessionSharedModel, IGlueSessionModel } from '../types';
+import { IGlueSessionSharedModel, IGlueSessionModel } from '../types';
 import { GlueSessionSharedModel } from './sharedModel';
 
 interface IOptions {
@@ -12,6 +12,7 @@ interface IOptions {
 export class GlueSessionModel implements IGlueSessionModel {
   constructor(options: IOptions) {
     const { sharedModel } = options;
+
     if (sharedModel) {
       this._sharedModel = sharedModel;
     } else {
@@ -70,8 +71,7 @@ export class GlueSessionModel implements IGlueSessionModel {
   }
 
   fromString(data: string): void {
-    const jsonData: IDict = JSON.parse(data);
-    console.log('jsonData', jsonData);
+    /** */
   }
 
   toJSON(): PartialJSONObject {

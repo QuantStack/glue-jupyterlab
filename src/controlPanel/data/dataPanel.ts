@@ -1,9 +1,9 @@
 import { SidePanel, ToolbarButton } from '@jupyterlab/ui-components';
 import { DatasetsWidget } from './datasetsWidget';
 import { SubsetsWidget } from './subsetsWidget';
-import { DataPanelModel } from './dataPanelModel';
+import { IControlPanelModel } from '../../types';
 export class DataPanel extends SidePanel {
-  constructor(options: { model: DataPanelModel }) {
+  constructor(options: { model: IControlPanelModel }) {
     super();
     this.title.label = 'Data';
     this.toolbar.addItem(
@@ -38,5 +38,5 @@ export class DataPanel extends SidePanel {
     this.addWidget(subset);
   }
 
-  private _model: DataPanelModel;
+  private _model: IControlPanelModel;
 }

@@ -1,14 +1,14 @@
-import { MapChange, YDocument } from '@jupyter/ydoc';
+import { YDocument } from '@jupyter/ydoc';
 import { JSONExt, JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import * as Y from 'yjs';
 
 import {
   IDict,
-  IGlueSessionObjectChange,
   IGlueSessionSharedModel,
   IGlueSessionSharedModelChange
 } from '../types';
+import { IGlueSessionTabs } from '../_interface/glue.schema';
 
 export class GlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange>
@@ -18,8 +18,10 @@ export class GlueSessionSharedModel
     super();
 
     this._contents = this.ydoc.getMap<Y.Map<any>>('contents');
+    this._tabs = this.ydoc.getMap<Y.Map<Array<IDict>>>('tabs');
     this.undoManager.addToScope(this._contents);
     this._contents.observeDeep(this._contentsObserver);
+    this._tabs.observeDeep(this._tabsObserver);
   }
 
   dispose(): void {
@@ -29,9 +31,15 @@ export class GlueSessionSharedModel
   get contents(): JSONObject {
     return JSONExt.deepCopy(this._contents.toJSON());
   }
+  get tabs(): IGlueSessionTabs {
+    return JSONExt.deepCopy(this._tabs.toJSON());
+  }
 
-  get contentsChanged(): ISignal<IGlueSessionSharedModel, MapChange> {
+  get contentsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._contentsChanged;
+  }
+  get tabsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
+    return this._tabsChanged;
   }
 
   getValue(key: string): IDict | undefined {
@@ -51,36 +59,23 @@ export class GlueSessionSharedModel
   }
 
   private _contentsObserver = (events: Y.YEvent<any>[]): void => {
-    const changes: Array<{
-      name: string;
-      key: string;
-      newValue: any;
-    }> = [];
+    if (events.length > 0) {
+      const contents = this.contents;
+      this._changed.emit(contents);
+      this._contentsChanged.emit(contents);
+    }
+  };
+  private _tabsObserver = (events: Y.YEvent<any>[]): void => {
+    console.log('events', events);
 
-    events.forEach(event => {
-      const name = event.target.get('name');
-      if (name) {
-        event.keys.forEach((change, key) => {
-          changes.push({
-            name,
-            key,
-            newValue: JSONExt.deepCopy(event.target.toJSON())
-          });
-        });
-      }
-    });
-
-    this._changed.emit({ objectChange: changes });
-    this._objectsChanged.emit({ objectChange: changes });
+    if (events.length > 0) {
+      this._tabsChanged.emit({});
+    }
   };
 
   private _contents: Y.Map<any>;
+  private _tabs: Y.Map<Y.Map<Array<IDict>>>;
 
-  private _contentsChanged = new Signal<IGlueSessionSharedModel, MapChange>(
-    this
-  );
-  private _objectsChanged = new Signal<
-    IGlueSessionSharedModel,
-    IGlueSessionObjectChange
-  >(this);
+  private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
 }

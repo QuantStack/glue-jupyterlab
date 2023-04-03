@@ -1,15 +1,12 @@
 import { Widget } from '@lumino/widgets';
-import { DataPanelModel } from './dataPanelModel';
+import { IControlPanelModel } from '../../types';
 export class DatasetsWidget extends Widget {
-  constructor(options: { model: DataPanelModel }) {
+  constructor(options: { model: IControlPanelModel }) {
     super();
     this._model = options.model;
     this.title.label = 'Datasets';
-
-    this._model.sessionChanged.connect(() => {
-      /** */
-    });
+    void this._model;
   }
 
-  private _model: DataPanelModel;
+  private _model: IControlPanelModel;
 }

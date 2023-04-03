@@ -1,11 +1,11 @@
-import { SessionWidget } from './../sessionPanel/sessionWidget';
+import { SessionWidget } from '../viewPanel/sessionWidget';
 import { ABCWidgetFactory, DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { CommandRegistry } from '@lumino/commands';
 
 import { GlueSessionModel } from './docModel';
 
-import { GlueDocumentWidget } from '../sessionPanel/glueDocumentWidget';
+import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
 
 interface IOptios extends DocumentRegistry.IWidgetFactoryOptions {
   commands: CommandRegistry;
@@ -29,7 +29,8 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   protected createNewWidget(
     context: DocumentRegistry.IContext<GlueSessionModel>
   ): GlueDocumentWidget {
-    const content = new SessionWidget({});
+    const { model } = context;
+    const content = new SessionWidget({ model });
 
     return new GlueDocumentWidget({ context, content });
   }

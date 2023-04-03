@@ -1,8 +1,8 @@
 import { SidePanel, ToolbarButton } from '@jupyterlab/ui-components';
 import { CanvasControlWidget } from './canvasControl';
-import { LayersPanelModel } from './layersPanelModel';
+import { IControlPanelModel } from '../../types';
 export class LayerPanel extends SidePanel {
-  constructor(options: { model: LayersPanelModel }) {
+  constructor(options: { model: IControlPanelModel }) {
     super();
     this.title.label = 'Layers';
     this._model = options.model;
@@ -22,19 +22,19 @@ export class LayerPanel extends SidePanel {
         onClick: () => console.log('clicked')
       })
     );
-    this._model.sessionChanged.connect(() => {
+    this._model.tabsChanged.connect(() => {
       this.content.widgets.forEach(w => this.content.layout?.removeWidget(w));
 
-      const canvasList = this._model.getCanvas();
-      canvasList.forEach((item, idx) => {
+      const allTabs = this._model.getTabs();
+      Object.keys(allTabs).forEach(tabName => {
         const widget = new CanvasControlWidget({
           model: this._model,
-          data: item
+          tabName
         });
-        widget.title.label = 'Canvas ' + idx;
+        widget.title.label = tabName;
         this.addWidget(widget);
       });
     });
   }
-  private _model: LayersPanelModel;
+  private _model: IControlPanelModel;
 }
