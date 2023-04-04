@@ -23,7 +23,7 @@ jobs:
       - name: Test the extension
         run: |
           set -eux
-          jlpm
+          jlpm --verbose
           jlpm run test
 
       - name: Build the extension

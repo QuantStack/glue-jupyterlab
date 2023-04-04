@@ -50,3 +50,30 @@ export interface IControlPanelModel {
 }
 
 export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];
+
+export type DashboardCellView = {
+  /**
+   * If cell output+widget are visible in the layout.
+   */
+  hidden?: boolean;
+  /**
+   * Logical row position.
+   */
+  row?: number;
+  /**
+   * Logical column position.
+   */
+  col?: number;
+  /**
+   * Logical width.
+   */
+  width?: number;
+  /**
+   * Logical height.
+   */
+  height?: number;
+  /**
+   * Lock item.
+   */
+  locked?: boolean;
+};

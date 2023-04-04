@@ -15,6 +15,9 @@
 .glue-Session-tabBar {
   z-index: -1;
   background-color: var(--jp-layout-color2);
+  overflow: visible;
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size1);
 }
 
 .glue-Session-tabBar > .lm-TabBar-content,
@@ -30,16 +33,7 @@
 
 .glue-Session-tabBar[data-orientation='horizontal'] {
   min-height: 20px;
-}
-
-.glue-Session-tabBar[data-orientation='horizontal'] {
   flex: 1 1 auto;
-}
-
-.glue-Session-tabBar {
-  overflow: visible;
-  color: var(--jp-ui-font-color1);
-  font-size: var(--jp-ui-font-size1);
 }
 
 .glue-Session-tabBar .lm-TabBar-addButton {
@@ -67,4 +61,33 @@
 
 .glue-Session-tabBar .lm-TabBar-tab:first-child {
   margin-left: 0;
+}
+
+.glue-Session-gridhost {
+  background: var(--jp-layout-color3);
+  background-image: unset !important;
+  background-position: unset !important;
+  margin: 4px;
+  min-height: calc(100% - 8px);
+}
+
+.grid-stack-item-content {
+  color: var(--jp-content-font-color1);
+  background-color: var(--jp-layout-color1);
+}
+
+.grid-stack .grid-stack-item .grid-stack-item-content {
+  /* padding: 4px; */
+  overflow: auto;
+  border-radius: 5px;
+}
+
+.grid-item-toolbar-spacer {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.glue-Session-tab-toolbar {
+  background: var(--jp-layout-color2);
+  flex-direction: row-reverse;
 }

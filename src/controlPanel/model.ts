@@ -47,7 +47,6 @@ export class ControlPanelModel implements IControlPanelModel {
   }
 
   private _onTabsChanged(_: any, e: any): void {
-    console.log('eee', _, e);
     this._tabs = this._sessionModel?.sharedModel.tabs ?? {};
     this._tabsChanged.emit();
   }

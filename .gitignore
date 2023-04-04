@@ -125,3 +125,5 @@ dmypy.json
 *.db
 
 _interface
+*.vot
+*.fits

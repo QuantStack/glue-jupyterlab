@@ -2,14 +2,33 @@
   "type": "object",
   "description": "Viewer::Histogram",
   "title": "IGlueHistogramViewer",
-  "required": ["glueType", "layers", "pos", "session", "size", "state"],
+  "required": ["_type", "layers", "pos", "session", "size", "state"],
   "additionalProperties": false,
   "properties": {
-    "glueType": { "type": "string" },
-    "layers": { "type": "array", "items": { "type": "string" } },
-    "pos": { "type": "array", "items": { "type": "number" } },
-    "session": { "type": "string" },
-    "size": { "type": "array", "items": { "type": "number" } },
+    "_type": {
+      "const": "glue.viewers.histogram.qt.data_viewer.HistogramViewer"
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pos": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "session": {
+      "type": "string"
+    },
+    "size": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
     "state": {
       "type": "object",
       "additionalProperties": false,

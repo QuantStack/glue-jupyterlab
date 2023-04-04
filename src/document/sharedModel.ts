@@ -66,8 +66,6 @@ export class GlueSessionSharedModel
     }
   };
   private _tabsObserver = (events: Y.YEvent<any>[]): void => {
-    console.log('events', events);
-
     if (events.length > 0) {
       this._tabsChanged.emit({});
     }

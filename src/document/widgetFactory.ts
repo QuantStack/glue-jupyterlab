@@ -1,3 +1,4 @@
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { SessionWidget } from '../viewPanel/sessionWidget';
 import { ABCWidgetFactory, DocumentRegistry } from '@jupyterlab/docregistry';
 
@@ -7,17 +8,19 @@ import { GlueSessionModel } from './docModel';
 
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
 
-interface IOptios extends DocumentRegistry.IWidgetFactoryOptions {
+interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
   commands: CommandRegistry;
+  rendermime: IRenderMimeRegistry;
 }
 
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueDocumentWidget,
   GlueSessionModel
 > {
-  constructor(options: IOptios) {
-    const { ...rest } = options;
+  constructor(options: IOptions) {
+    const { rendermime, ...rest } = options;
     super(rest);
+    this._rendermime = rendermime;
   }
 
   /**
@@ -29,9 +32,13 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   protected createNewWidget(
     context: DocumentRegistry.IContext<GlueSessionModel>
   ): GlueDocumentWidget {
-    const { model } = context;
-    const content = new SessionWidget({ model });
+    const content = new SessionWidget({
+      model: context.model.sharedModel,
+      rendermime: this._rendermime
+    });
 
     return new GlueDocumentWidget({ context, content });
   }
+
+  private _rendermime: IRenderMimeRegistry;
 }

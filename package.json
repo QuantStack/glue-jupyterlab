@@ -60,7 +60,8 @@
     "@jupyterlab/application": "^4.0.0-beta.0",
     "@jupyterlab/coreutils": "^6.0.0-beta.0",
     "@jupyterlab/mainmenu": "^4.0.0-beta.0",
-    "@jupyterlab/services": "^7.0.0-beta.0"
+    "@jupyterlab/services": "^7.0.0-beta.0",
+    "gridstack": "^6.0.1"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.0-beta.0",
