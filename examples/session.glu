@@ -2,13 +2,19 @@
   "CallbackList": {
     "_type": "echo.containers.CallbackList",
     "values": [
-      "ImageLayerState"
+      "ScatterLayerState"
     ]
   },
   "CallbackList_0": {
     "_type": "echo.containers.CallbackList",
     "values": [
-      "ProfileLayerState"
+      "HistogramLayerState"
+    ]
+  },
+  "CallbackList_1": {
+    "_type": "echo.containers.CallbackList",
+    "values": [
+      "ScatterLayerState_0"
     ]
   },
   "Component": {
@@ -64,37 +70,28 @@
     "_type": "glue.core.component_id.ComponentID",
     "label": "Declination"
   },
-  "ImageLayerState": {
-    "_type": "glue.viewers.image.state.ImageLayerState",
+  "HistogramLayerState": {
+    "_type": "glue.viewers.histogram.state.HistogramLayerState",
     "values": {
       "alpha": 0.8,
-      "attribute": "PRIMARY",
-      "bias": 0.5,
-      "cmap": "LinearSegmentedColormap",
       "color": "st__#595959",
-      "contrast": 1.0,
-      "global_sync": false,
       "layer": "w5",
-      "percentile": 100,
-      "stretch": "st__linear",
-      "v_max": 2775.638916015625,
-      "v_min": 437.7067565917969,
       "visible": true,
       "zorder": 1
     }
   },
-  "ImageViewer": {
+  "HistogramViewer": {
     "_protocol": 1,
-    "_type": "glue.viewers.image.qt.data_viewer.ImageViewer",
+    "_type": "glue.viewers.histogram.qt.data_viewer.HistogramViewer",
     "layers": [
       {
-        "_type": "glue.viewers.image.layer_artist.ImageLayerArtist",
-        "state": "ImageLayerState"
+        "_type": "glue.viewers.histogram.qt.layer_artist.QThreadedHistogramLayerArtist",
+        "state": "HistogramLayerState"
       }
     ],
     "pos": [
-      903,
-      373
+      739,
+      166
     ],
     "session": "Session",
     "size": [
@@ -103,33 +100,29 @@
     ],
     "state": {
       "values": {
-        "aspect": "st__equal",
-        "color_mode": "st__Colormaps",
-        "dpi": 72,
-        "layers": "CallbackList",
-        "reference_data": "w5",
+        "aspect": "st__auto",
+        "common_n_bin": true,
+        "cumulative": false,
+        "hist_n_bin": 15,
+        "hist_x_max": 3151.745849609375,
+        "hist_x_min": 438.1081848144531,
+        "layers": "CallbackList_0",
+        "normalize": false,
         "show_axes": true,
-        "slices": [
-          0,
-          0
-        ],
-        "x_att": "Pixel Axis 1 [x]",
-        "x_att_world": "Right Ascension",
-        "x_axislabel": "st__Right Ascension",
+        "x_att": "PRIMARY",
+        "x_axislabel": "st__PRIMARY",
         "x_axislabel_size": 10,
         "x_axislabel_weight": "st__normal",
         "x_log": false,
-        "x_max": 1312.5203677946374,
-        "x_min": -313.52036779463737,
+        "x_max": 3151.745849609375,
+        "x_min": 438.1081848144531,
         "x_ticklabel_size": 8,
-        "y_att": "Pixel Axis 0 [y]",
-        "y_att_world": "Declination",
-        "y_axislabel": "st__Declination",
+        "y_axislabel": "st__Number",
         "y_axislabel_size": 10,
         "y_axislabel_weight": "st__normal",
         "y_log": false,
-        "y_max": 912.1561262024617,
-        "y_min": 86.84387379753832,
+        "y_max": 1168792.8,
+        "y_min": 0.0,
         "y_ticklabel_size": 8
       }
     }
@@ -149,7 +142,7 @@
     "kwargs": [
       []
     ],
-    "path": "../../w5/w5/w5.fits"
+    "path": "w5.fits"
   },
   "PRIMARY": {
     "_type": "glue.core.component_id.ComponentID",
@@ -165,34 +158,104 @@
     "axis": 1,
     "label": "Pixel Axis 1 [x]"
   },
-  "ProfileLayerState": {
-    "_type": "glue.viewers.profile.state.ProfileLayerState",
+  "Right Ascension": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Right Ascension"
+  },
+  "ScatterLayerState": {
+    "_type": "glue.viewers.scatter.state.ScatterLayerState",
     "values": {
       "alpha": 0.8,
-      "as_steps": true,
-      "attribute": "PRIMARY",
+      "cmap": "LinearSegmentedColormap",
+      "cmap_att": "PRIMARY",
+      "cmap_mode": "st__Fixed",
+      "cmap_vmax": 3151.745849609375,
+      "cmap_vmin": 438.1081848144531,
       "color": "st__#595959",
+      "density_contrast": 1.0,
+      "density_map": true,
+      "fill": true,
       "layer": "w5",
+      "line_visible": false,
+      "linestyle": "st__solid",
       "linewidth": 1,
-      "percentile": 100,
-      "v_max": 7402.2197265625,
-      "v_min": 468.8600158691406,
+      "markers_visible": true,
+      "points_mode": "st__auto",
+      "size": 3,
+      "size_att": "PRIMARY",
+      "size_mode": "st__Fixed",
+      "size_scaling": 1,
+      "size_vmax": 3151.745849609375,
+      "size_vmin": 438.1081848144531,
+      "stretch": "st__log",
+      "vector_arrowhead": false,
+      "vector_mode": "st__Cartesian",
+      "vector_origin": "st__middle",
+      "vector_scaling": 0.9770099572992254,
+      "vector_visible": false,
       "visible": true,
+      "vx_att": "PRIMARY",
+      "vy_att": "PRIMARY",
+      "xerr_att": "PRIMARY",
+      "xerr_visible": false,
+      "yerr_att": "PRIMARY",
+      "yerr_visible": false,
       "zorder": 1
     }
   },
-  "ProfileViewer": {
+  "ScatterLayerState_0": {
+    "_type": "glue.viewers.scatter.state.ScatterLayerState",
+    "values": {
+      "alpha": 0.8,
+      "cmap": "LinearSegmentedColormap",
+      "cmap_att": "PRIMARY",
+      "cmap_mode": "st__Fixed",
+      "cmap_vmax": 3151.745849609375,
+      "cmap_vmin": 438.1081848144531,
+      "color": "st__#595959",
+      "density_contrast": 1.0,
+      "density_map": true,
+      "fill": true,
+      "layer": "w5",
+      "line_visible": false,
+      "linestyle": "st__solid",
+      "linewidth": 1,
+      "markers_visible": true,
+      "points_mode": "st__auto",
+      "size": 3,
+      "size_att": "PRIMARY",
+      "size_mode": "st__Fixed",
+      "size_scaling": 1,
+      "size_vmax": 3151.745849609375,
+      "size_vmin": 438.1081848144531,
+      "stretch": "st__log",
+      "vector_arrowhead": false,
+      "vector_mode": "st__Cartesian",
+      "vector_origin": "st__middle",
+      "vector_scaling": 0.9770099572992254,
+      "vector_visible": false,
+      "visible": true,
+      "vx_att": "PRIMARY",
+      "vy_att": "PRIMARY",
+      "xerr_att": "PRIMARY",
+      "xerr_visible": false,
+      "yerr_att": "PRIMARY",
+      "yerr_visible": false,
+      "zorder": 1
+    }
+  },
+  "ScatterViewer": {
     "_protocol": 1,
-    "_type": "glue.viewers.profile.qt.data_viewer.ProfileViewer",
+    "_type": "glue.viewers.scatter.qt.data_viewer.ScatterViewer",
     "layers": [
       {
-        "_type": "glue.viewers.profile.qt.layer_artist.QThreadedProfileLayerArtist",
-        "state": "ProfileLayerState"
+        "_type": "glue.viewers.scatter.layer_artist.ScatterLayerArtist",
+        "state": "ScatterLayerState"
       }
     ],
     "pos": [
-      80,
-      485
+      47,
+      286
     ],
     "session": "Session",
     "size": [
@@ -201,34 +264,75 @@
     ],
     "state": {
       "values": {
+        "angle_unit": "st__radians",
         "aspect": "st__auto",
-        "function": "st__maximum",
-        "layers": "CallbackList_0",
-        "normalize": false,
-        "reference_data": "w5",
+        "dpi": 71.30820648960312,
+        "layers": "CallbackList",
+        "plot_mode": "st__rectilinear",
         "show_axes": true,
-        "x_att": "Declination",
-        "x_att_pixel": "Pixel Axis 0 [y]",
-        "x_axislabel": "st__Declination",
+        "x_att": "PRIMARY",
+        "x_axislabel": "st__PRIMARY",
         "x_axislabel_size": 10,
         "x_axislabel_weight": "st__normal",
         "x_log": false,
-        "x_max": 61.84155833513389,
-        "x_min": 58.84943461182998,
+        "x_max": 3260.291357421875,
+        "x_min": 329.56267700195315,
         "x_ticklabel_size": 8,
-        "y_axislabel": "st__Data values",
+        "y_att": "Pixel Axis 0 [y]",
+        "y_axislabel": "st__Pixel Axis 0 [y]",
         "y_axislabel_size": 10,
         "y_axislabel_weight": "st__normal",
         "y_log": false,
-        "y_max": 7402.2197265625,
-        "y_min": 468.8600158691406,
+        "y_max": 999.5,
+        "y_min": -0.5,
         "y_ticklabel_size": 8
       }
     }
   },
-  "Right Ascension": {
-    "_type": "glue.core.component_id.ComponentID",
-    "label": "Right Ascension"
+  "ScatterViewer_0": {
+    "_protocol": 1,
+    "_type": "glue.viewers.scatter.qt.data_viewer.ScatterViewer",
+    "layers": [
+      {
+        "_type": "glue.viewers.scatter.layer_artist.ScatterLayerArtist",
+        "state": "ScatterLayerState_0"
+      }
+    ],
+    "pos": [
+      0,
+      0
+    ],
+    "session": "Session",
+    "size": [
+      1600,
+      920
+    ],
+    "state": {
+      "values": {
+        "angle_unit": "st__radians",
+        "aspect": "st__auto",
+        "dpi": 71.30820648960312,
+        "layers": "CallbackList_1",
+        "plot_mode": "st__rectilinear",
+        "show_axes": true,
+        "x_att": "PRIMARY",
+        "x_axislabel": "st__PRIMARY",
+        "x_axislabel_size": 10,
+        "x_axislabel_weight": "st__normal",
+        "x_log": false,
+        "x_max": 3260.291357421875,
+        "x_min": 329.56267700195315,
+        "x_ticklabel_size": 8,
+        "y_att": "Pixel Axis 0 [y]",
+        "y_axislabel": "st__Pixel Axis 0 [y]",
+        "y_axislabel_size": 10,
+        "y_axislabel_weight": "st__normal",
+        "y_log": false,
+        "y_max": 999.5,
+        "y_min": -0.5,
+        "y_ticklabel_size": 8
+      }
+    }
   },
   "Session": {
     "_type": "glue.core.session.Session"
@@ -241,30 +345,34 @@
     "_type": "glue.app.qt.application.GlueApplication",
     "data": "DataCollection",
     "plugins": [
-      "glue.viewers.scatter.qt",
-      "glue.io.formats.fits",
-      "glue.io.qt.directory_importer",
-      "glue.viewers.table.qt",
-      "glue.plugins.wcs_autolinking",
-      "glue.plugins.tools.pv_slicer.qt",
       "glue.viewers.image.qt",
-      "glue.core.data_exporters",
-      "glue.plugins.dendro_viewer.qt",
-      "glue.plugins.export_d3po",
-      "glue.viewers.profile.qt",
-      "glue_vispy_viewers.scatter",
-      "glue.plugins.coordinate_helpers",
       "glue.viewers.histogram.qt",
-      "glue.plugins.tools"
+      "glue.plugins.export_d3po",
+      "glue.io.formats.fits",
+      "glue.plugins.coordinate_helpers",
+      "glue.plugins.tools.pv_slicer.qt",
+      "glue.plugins.dendro_viewer.qt",
+      "glue.viewers.table.qt",
+      "glue.core.data_exporters",
+      "glue.io.qt.directory_importer",
+      "glue.viewers.scatter.qt",
+      "glue.plugins.wcs_autolinking",
+      "glue_vispy_viewers.scatter",
+      "glue.plugins.tools",
+      "glue.viewers.profile.qt"
     ],
     "session": "Session",
     "tab_names": [
-      "Tab 1"
+      "Tab 1",
+      "Tab 2"
     ],
     "viewers": [
       [
-        "ImageViewer",
-        "ProfileViewer"
+        "ScatterViewer",
+        "HistogramViewer"
+      ],
+      [
+        "ScatterViewer_0"
       ]
     ]
   },
@@ -462,6 +570,6 @@
       "preferred_cmap": null
     },
     "subsets": [],
-    "uuid": "4ca8d830-fd83-4356-8202-3dbce5b41c31"
+    "uuid": "08c2614b-7315-4390-a688-e0a564161676"
   }
 }

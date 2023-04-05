@@ -123,3 +123,7 @@ dmypy.json
 
 .yarn/
 *.db
+
+_interface
+*.vot
+*.fits

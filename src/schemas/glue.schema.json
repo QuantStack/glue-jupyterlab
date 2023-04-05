@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "title": "IGlueSession",
+  "required": ["contents", "tabs"],
+  "additionalProperties": false,
+  "properties": {
+    "contents": {
+      "type": "object"
+    },
+    "tabs": {
+      "$ref": "#/definitions/tabs"
+    },
+    "loadLog": {
+      "type": "object"
+    }
+  },
+  "definitions": {
+    "tabs": {
+      "title": "IGlueSessionTabs",
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "./viewers/scatter.schema.json"
+              },
+              {
+                "$ref": "./viewers/histogram.schema.json"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

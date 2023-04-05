@@ -1,3 +1,4 @@
+import { IGlueSessionSharedModel } from './../types';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { Contents } from '@jupyterlab/services';
 
@@ -68,8 +69,10 @@ export class GlueSessionModelFactory
    * @param modelDB Model database
    * @returns The model
    */
-  createNew(): GlueSessionModel {
-    const model = new GlueSessionModel({});
+  createNew(options: {
+    sharedModel: IGlueSessionSharedModel;
+  }): GlueSessionModel {
+    const model = new GlueSessionModel(options);
     return model;
   }
 

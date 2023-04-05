@@ -3,6 +3,7 @@ import { DocumentRegistry, IDocumentWidget } from '@jupyterlab/docregistry';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
+import { IGlueSessionTabs } from './_interface/glue.schema';
 
 export interface IDict<T = any> {
   [key: string]: T;
@@ -29,6 +30,8 @@ export interface IGlueSessionSharedModelChange {
 export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
+  tabs: IGlueSessionTabs;
+  tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {
@@ -42,4 +45,35 @@ export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
   glueSessionChanged: ISignal<IControlPanelModel, IGlueSessionWidget | null>;
+  tabsChanged: ISignal<IControlPanelModel, void>;
+  getTabs(): IGlueSessionTabs;
 }
+
+export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];
+
+export type DashboardCellView = {
+  /**
+   * If cell output+widget are visible in the layout.
+   */
+  hidden?: boolean;
+  /**
+   * Logical row position.
+   */
+  row?: number;
+  /**
+   * Logical column position.
+   */
+  col?: number;
+  /**
+   * Logical width.
+   */
+  width?: number;
+  /**
+   * Logical height.
+   */
+  height?: number;
+  /**
+   * Lock item.
+   */
+  locked?: boolean;
+};

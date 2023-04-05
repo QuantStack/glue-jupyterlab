@@ -1,3 +1,4 @@
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
@@ -36,9 +37,10 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
 export const gluePlugin: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:document-plugin',
   autoStart: true,
-  requires: [IGlueSessionTracker, ICollaborativeDrive],
+  requires: [IRenderMimeRegistry, IGlueSessionTracker, ICollaborativeDrive],
   activate: (
     app: JupyterFrontEnd,
+    rendermime: IRenderMimeRegistry,
     canvasTracker: WidgetTracker,
     drive: ICollaborativeDrive
   ) => {
@@ -47,7 +49,8 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       modelName: 'gluelab-session-model',
       fileTypes: ['glu'],
       defaultFor: ['glu'],
-      commands: app.commands
+      commands: app.commands,
+      rendermime
     });
     widgetFactory.widgetCreated.connect((_, widget) => {
       widget.context.pathChanged.connect(() => {
