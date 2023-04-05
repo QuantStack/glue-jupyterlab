@@ -8,16 +8,11 @@ import { GlueSessionModel } from './docModel';
 
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
 
-interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
-  commands: CommandRegistry;
-  rendermime: IRenderMimeRegistry;
-}
-
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueDocumentWidget,
   GlueSessionModel
 > {
-  constructor(options: IOptions) {
+  constructor(options: GlueCanvasWidgetFactory.IOptions) {
     const { rendermime, ...rest } = options;
     super(rest);
     this._rendermime = rendermime;
@@ -34,11 +29,18 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   ): GlueDocumentWidget {
     const content = new SessionWidget({
       model: context.model.sharedModel,
-      rendermime: this._rendermime
+      rendermime: this._rendermime,
+      sessionContext: context.sessionContext
     });
-
     return new GlueDocumentWidget({ context, content });
   }
 
   private _rendermime: IRenderMimeRegistry;
+}
+
+export namespace GlueCanvasWidgetFactory {
+  export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
+    commands: CommandRegistry;
+    rendermime: IRenderMimeRegistry;
+  }
 }

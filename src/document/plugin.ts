@@ -50,7 +50,9 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       fileTypes: ['glu'],
       defaultFor: ['glu'],
       commands: app.commands,
-      rendermime
+      rendermime,
+      preferKernel: true,
+      canStartKernel: true
     });
     widgetFactory.widgetCreated.connect((_, widget) => {
       widget.context.pathChanged.connect(() => {

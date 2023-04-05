@@ -1,3 +1,4 @@
+import { ISessionContext } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { BoxPanel } from '@lumino/widgets';
 import { HTabPanel } from '../common/tabPanel';
@@ -11,6 +12,7 @@ export class SessionWidget extends BoxPanel {
     super({ direction: 'top-to-bottom' });
     this._model = options.model;
     this._rendermime = options.rendermime;
+    this._sessionContext = options.sessionContext;
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
       tabBarPosition: 'bottom',
@@ -35,7 +37,8 @@ export class SessionWidget extends BoxPanel {
       const model = new TabModel({
         tabName,
         tabData,
-        rendermime: this._rendermime
+        rendermime: this._rendermime,
+        sessionContext: this._sessionContext
       });
       const tabWidget = new TabView({ model });
 
@@ -47,11 +50,13 @@ export class SessionWidget extends BoxPanel {
   private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
+  private _sessionContext: ISessionContext;
 }
 
 export namespace SessionWidget {
   export interface IOptions {
     model: IGlueSessionSharedModel;
     rendermime: IRenderMimeRegistry;
+    sessionContext: ISessionContext;
   }
 }
