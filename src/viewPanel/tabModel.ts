@@ -4,14 +4,19 @@ import { GridStackItem } from './gridStackItem';
 import { OutputAreaModel, SimplifiedOutputArea } from '@jupyterlab/outputarea';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { UUID } from '@lumino/coreutils';
-import { ISessionContext } from '@jupyterlab/apputils';
+import { INotebookTracker } from '@jupyterlab/notebook';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { GlueSessionModel } from '../document/docModel';
+import { mockNotebook } from '../tools';
+
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
     const { tabName, tabData, rendermime } = options;
     this._tabData = tabData;
     this._tabName = tabName;
     this._rendermime = rendermime;
-    this._sessionContext = options.sessionContext;
+    this._notebookTracker = options.notebookTracker;
+    this._context = options.context;
   }
 
   get tabName(): string {
@@ -26,64 +31,76 @@ export class TabModel implements IDisposable {
     return this._isDisposed;
   }
 
+  async initialize(): Promise<void> {
+    const panel = mockNotebook(this._rendermime, this._context);
+    await this._context?.sessionContext.initialize();
+    await this._context?.sessionContext.ready;
+    //TODO Shameless hack while waiting for ipywidgets update!
+    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    this._notebookTracker.widgetAdded.emit(panel);
+    const kernel = this._context?.sessionContext.session?.kernel;
+    if (kernel) {
+      const future = kernel.requestExecute(
+        { code: 'import glue_jupyter as gj\napp = gj.jglue()' },
+        false
+      );
+      await future.done;
+    }
+  }
+
   dispose(): void {
     if (this._isDisposed) {
       return;
     }
   }
 
-  *createView(): Generator<GridStackItem | undefined> {
+  async *createView(): AsyncGenerator<GridStackItem | undefined> {
     const viewList = this.tabData;
     for (const view of viewList) {
       const viewId = UUID.uuid4();
-      yield this._createView(viewId, view);
+      yield await this._createView(viewId, view);
     }
   }
 
-  _createView(
+  async _createView(
     viewId: string,
     viewData: IGlueSessionViewerTypes
-  ): GridStackItem | undefined {
+  ): Promise<GridStackItem | undefined> {
     let item: GridStackItem | undefined = undefined;
     switch (viewData._type) {
-      case 'glue.viewers.histogram.qt.data_viewer.HistogramViewer': {
-        const outputAreaModel = new OutputAreaModel({ trusted: true });
-        const out = new SimplifiedOutputArea({
-          model: outputAreaModel,
-          rendermime: this._rendermime
-        });
-
-        item = new GridStackItem({
-          cellIdentity: viewId,
-          cell: out,
-          itemTitle: 'Histogram'
-        });
-        const cellOutput = item.cellOutput as SimplifiedOutputArea;
-        if (this._sessionContext) {
-          this._sessionContext.initialize().then(() => {
-            SimplifiedOutputArea.execute(
-              'import ipywidgets\nipywidgets.IntSlider()',
-              cellOutput,
-              this._sessionContext!
-            )
-              .then(e => {
-                console.log('Computed', e);
-              })
-              .catch(console.error);
-          });
-        }
-        break;
-      }
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
         const outputAreaModel = new OutputAreaModel({ trusted: true });
         const out = new SimplifiedOutputArea({
           model: outputAreaModel,
           rendermime: this._rendermime
         });
+
         item = new GridStackItem({
           cellIdentity: viewId,
           cell: out,
           itemTitle: '2D Scatter'
+        });
+        const cellOutput = item.cellOutput as SimplifiedOutputArea;
+        if (this._context) {
+          SimplifiedOutputArea.execute(
+            'data_catalog = app.load_data("w5_psc.csv")\nscatter_viewer = app.scatter2d(x="[4.5]-[5.8]", y="[8.0]", data=data_catalog)',
+            cellOutput,
+            this._context.sessionContext
+          );
+        }
+        break;
+      }
+      case 'glue.viewers.histogram.qt.data_viewer.HistogramViewer': {
+        const outputAreaModel = new OutputAreaModel({ trusted: true });
+        const out = new SimplifiedOutputArea({
+          model: outputAreaModel,
+          rendermime: this._rendermime
+        });
+        item = new GridStackItem({
+          cellIdentity: viewId,
+          cell: out,
+          itemTitle: 'Histogram'
         });
         break;
       }
@@ -94,7 +111,8 @@ export class TabModel implements IDisposable {
   private _tabData: IGlueSessionViewerTypes[];
   private _tabName: string;
   private _rendermime: IRenderMimeRegistry;
-  private _sessionContext?: ISessionContext;
+  private _context?: DocumentRegistry.IContext<GlueSessionModel>;
+  private _notebookTracker: INotebookTracker;
 }
 
 export namespace TabModel {
@@ -102,6 +120,7 @@ export namespace TabModel {
     tabName: string;
     tabData: IGlueSessionViewerTypes[];
     rendermime: IRenderMimeRegistry;
-    sessionContext: ISessionContext;
+    context: DocumentRegistry.IContext<GlueSessionModel>;
+    notebookTracker: INotebookTracker;
   }
 }

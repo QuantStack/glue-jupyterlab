@@ -3,6 +3,7 @@ import { TabModel } from './tabModel';
 import { GridStack } from 'gridstack';
 import { GridStackItem } from './gridStackItem';
 import { MessageLoop } from '@lumino/messaging';
+
 export class TabView extends Panel {
   constructor(options: TabView.IOptions) {
     super();
@@ -27,10 +28,11 @@ export class TabView extends Panel {
       },
       this._gridHost
     );
-
-    this.render()
-      .catch(console.error)
-      .then(() => window.dispatchEvent(new Event('resize')));
+    this._model?.initialize().then(() => {
+      this.render()
+        .catch(console.error)
+        .then(() => window.dispatchEvent(new Event('resize')));
+    });
   }
 
   async render(): Promise<void> {
@@ -38,13 +40,15 @@ export class TabView extends Panel {
     if (!viewWidgets) {
       return;
     }
-    for (const view of viewWidgets) {
+    for await (const view of viewWidgets) {
       if (view) {
         this.addGridItem(view);
       }
     }
   }
-
+  protected onResize(msg: Widget.ResizeMessage): void {
+    window.dispatchEvent(new Event('resize'));
+  }
   addGridItem(out: GridStackItem): void {
     this._gridElements.push(out);
 
@@ -56,8 +60,8 @@ export class TabView extends Panel {
       noMove: false,
       noResize: false,
       locked: false,
-      w: 4,
-      h: 8
+      w: 6,
+      h: 12
     };
     // out.node.style.background = '#34aadc'
     MessageLoop.sendMessage(out, Widget.Msg.BeforeAttach);

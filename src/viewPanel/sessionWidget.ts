@@ -1,18 +1,21 @@
-import { ISessionContext } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { INotebookTracker } from '@jupyterlab/notebook';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { BoxPanel } from '@lumino/widgets';
 import { HTabPanel } from '../common/tabPanel';
 import { IGlueSessionSharedModel } from '../types';
 import { TabView } from './tabView';
 import { TabModel } from './tabModel';
 import { LinkWidget } from '../linkPanel/linkPanel';
+import { GlueSessionModel } from '../document/docModel';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
     this._model = options.model;
     this._rendermime = options.rendermime;
-    this._sessionContext = options.sessionContext;
+    this._notebookTracker = options.notebookTracker;
+    this._context = options.context;
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
       tabBarPosition: 'bottom',
@@ -32,13 +35,18 @@ export class SessionWidget extends BoxPanel {
     this._model.tabsChanged.connect(this._onTabsChanged, this);
   }
 
+  get rendermime(): IRenderMimeRegistry {
+    return this._rendermime;
+  }
+
   private _onTabsChanged(): void {
     Object.entries(this._model.tabs).forEach(([tabName, tabData], idx) => {
       const model = new TabModel({
         tabName,
         tabData,
         rendermime: this._rendermime,
-        sessionContext: this._sessionContext
+        context: this._context,
+        notebookTracker: this._notebookTracker
       });
       const tabWidget = new TabView({ model });
 
@@ -50,13 +58,15 @@ export class SessionWidget extends BoxPanel {
   private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
-  private _sessionContext: ISessionContext;
+  private _context: DocumentRegistry.IContext<GlueSessionModel>;
+  private _notebookTracker: INotebookTracker;
 }
 
 export namespace SessionWidget {
   export interface IOptions {
     model: IGlueSessionSharedModel;
     rendermime: IRenderMimeRegistry;
-    sessionContext: ISessionContext;
+    context: DocumentRegistry.IContext<GlueSessionModel>;
+    notebookTracker: INotebookTracker;
   }
 }

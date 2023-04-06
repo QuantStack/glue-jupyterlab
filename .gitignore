@@ -125,5 +125,6 @@ dmypy.json
 *.db
 
 _interface
-*.vot
-*.fits
+examples/*.vot
+examples/*.fits
+examples/*.csv

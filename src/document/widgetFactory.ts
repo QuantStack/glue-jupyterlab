@@ -7,15 +7,17 @@ import { CommandRegistry } from '@lumino/commands';
 import { GlueSessionModel } from './docModel';
 
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
+import { INotebookTracker } from '@jupyterlab/notebook';
 
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueDocumentWidget,
   GlueSessionModel
 > {
   constructor(options: GlueCanvasWidgetFactory.IOptions) {
-    const { rendermime, ...rest } = options;
+    const { rendermime, notebookTracker, ...rest } = options;
     super(rest);
     this._rendermime = rendermime;
+    this._notebookTracker = notebookTracker;
   }
 
   /**
@@ -30,17 +32,20 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
     const content = new SessionWidget({
       model: context.model.sharedModel,
       rendermime: this._rendermime,
-      sessionContext: context.sessionContext
+      notebookTracker: this._notebookTracker,
+      context
     });
     return new GlueDocumentWidget({ context, content });
   }
 
   private _rendermime: IRenderMimeRegistry;
+  private _notebookTracker: INotebookTracker;
 }
 
 export namespace GlueCanvasWidgetFactory {
   export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
     commands: CommandRegistry;
     rendermime: IRenderMimeRegistry;
+    notebookTracker: INotebookTracker;
   }
 }
