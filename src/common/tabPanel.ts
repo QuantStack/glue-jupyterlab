@@ -3,9 +3,6 @@ import { Widget, TabBar, StackedPanel, BoxPanel, Title } from '@lumino/widgets';
 import { find, ArrayExt } from '@lumino/algorithm';
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { LinkWidget } from '../linkPanel/linkPanel';
-import { IGlueSessionSharedModel } from '../types';
-
 export class HTabPanel extends BoxPanel {
   constructor(options: HTabPanel.IOptions) {
     const direction = options.tabBarPosition
@@ -37,11 +34,6 @@ export class HTabPanel extends BoxPanel {
 
     this.addWidget(this._topBar);
     this.addWidget(this._stackedPanel);
-
-    if (options.sharedModel) {
-      this._linkWidget = new LinkWidget({ sharedModel: options.sharedModel });
-      this.addTab(this._linkWidget, 0);
-    }
   }
 
   /**
@@ -176,7 +168,6 @@ export class HTabPanel extends BoxPanel {
   private _items = new Array<Private.IRankItem>();
   private _updated: Signal<this, void> = new Signal(this);
   private _isHiddenByUser = false;
-  private _linkWidget: LinkWidget | undefined = undefined;
 }
 
 namespace Private {
@@ -202,7 +193,6 @@ namespace Private {
 
 export namespace HTabPanel {
   export interface IOptions {
-    sharedModel?: IGlueSessionSharedModel;
     tabBarPosition?: 'top' | 'bottom';
     tabBarOption?: TabBar.IOptions<Widget>;
     tabBarClassList?: string[];

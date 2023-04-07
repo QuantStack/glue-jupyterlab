@@ -4,6 +4,7 @@ import { HTabPanel } from '../common/tabPanel';
 import { IGlueSessionSharedModel } from '../types';
 import { TabView } from './tabView';
 import { TabModel } from './tabModel';
+import { LinkWidget } from '../linkPanel/linkPanel';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -12,14 +13,17 @@ export class SessionWidget extends BoxPanel {
     this._rendermime = options.rendermime;
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
-      sharedModel: this._model,
       tabBarPosition: 'bottom',
       tabBarClassList,
       tabBarOption: {
         addButtonEnabled: true
       }
     });
-    this._tabPanel.activateTab(0);
+
+    if (this._model) {
+      this._linkWidget = new LinkWidget({ sharedModel: this._model });
+      this._tabPanel.addTab(this._linkWidget, 0);
+    }
 
     this.addWidget(this._tabPanel);
     BoxPanel.setStretch(this._tabPanel, 1);
@@ -35,10 +39,12 @@ export class SessionWidget extends BoxPanel {
       });
       const tabWidget = new TabView({ model });
 
-      this._tabPanel.addTab(tabWidget, idx);
+      this._tabPanel.addTab(tabWidget, idx + 1);
     });
+    this._tabPanel.activateTab(1);
   }
   private _tabPanel: HTabPanel;
+  private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
 }
