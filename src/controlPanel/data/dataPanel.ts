@@ -23,14 +23,6 @@ export class DataPanel extends SidePanel {
         onClick: () => console.log('clicked')
       })
     );
-    this.toolbar.addItem(
-      'Link data',
-      new ToolbarButton({
-        tooltip: 'Link Data',
-        label: 'Link Data',
-        onClick: () => console.log('clicked')
-      })
-    );
     const dataset = new DatasetsWidget({ model: this._model });
     this.addWidget(dataset);
 
