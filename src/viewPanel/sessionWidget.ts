@@ -12,6 +12,7 @@ export class SessionWidget extends BoxPanel {
     this._rendermime = options.rendermime;
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
+      sharedModel: this._model,
       tabBarPosition: 'bottom',
       tabBarClassList,
       tabBarOption: {

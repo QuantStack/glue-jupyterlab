@@ -63,6 +63,15 @@
   margin-left: 0;
 }
 
+.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-title {
+  flex: none;
+  background-color: var(--jp-brand-color1);
+}
+
+.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-title {
+  background: var(--jp-brand-color2);
+}
+
 .glue-Session-gridhost {
   background: var(--jp-layout-color3);
   background-image: unset !important;
