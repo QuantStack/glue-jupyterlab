@@ -8,9 +8,8 @@ import { IGlueSessionSharedModel } from '../types';
  */
 export class LinkWidget extends BoxPanel {
   constructor(options: LinkWidget.IOptions) {
-    super({ ...options, direction: 'left-to-right' });
+    super({ direction: 'left-to-right' });
     this._sharedModel = options.sharedModel;
-    this.id = 'glue-link-editor';
     this.addClass('glue-link-editor');
     this.title.label = 'Link Data';
     this.title.className = 'glue-LinkEditor-title';
