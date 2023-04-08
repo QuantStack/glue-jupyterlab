@@ -2,6 +2,7 @@ import { LabIcon, classes, TabBarSvg } from '@jupyterlab/ui-components';
 import { Widget, TabBar, StackedPanel, BoxPanel, Title } from '@lumino/widgets';
 import { find, ArrayExt } from '@lumino/algorithm';
 import { Signal, ISignal } from '@lumino/signaling';
+
 export class HTabPanel extends BoxPanel {
   constructor(options: HTabPanel.IOptions) {
     const direction = options.tabBarPosition

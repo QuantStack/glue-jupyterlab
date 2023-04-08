@@ -14,14 +14,6 @@ export class LayerPanel extends SidePanel {
         onClick: () => console.log('clicked')
       })
     );
-    this.toolbar.addItem(
-      'Link data',
-      new ToolbarButton({
-        tooltip: 'Link Data',
-        label: 'Link Data',
-        onClick: () => console.log('clicked')
-      })
-    );
     this._model.tabsChanged.connect(() => {
       this.content.widgets.forEach(w => this.content.layout?.removeWidget(w));
 
