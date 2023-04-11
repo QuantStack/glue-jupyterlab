@@ -39,8 +39,7 @@ export class SessionWidget extends BoxPanel {
     BoxPanel.setStretch(this._tabPanel, 1);
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
-
-    this._startKernel();
+    this._model.loadLogChanged.connect(this._startKernel, this);
   }
 
   get rendermime(): IRenderMimeRegistry {
@@ -57,6 +56,8 @@ export class SessionWidget extends BoxPanel {
     this._notebookTracker.widgetAdded.emit(panel);
     const kernel = this._context?.sessionContext.session?.kernel;
 
+    console.log(this._model);
+
     if (!kernel) {
       void showDialog({
         title: 'Error',
@@ -66,15 +67,51 @@ export class SessionWidget extends BoxPanel {
       return;
     }
 
+    const factory = this._model.loadLog.factory?.function;
+    if (!factory) {
+      void showDialog({
+        title: 'Error',
+        body: 'Failed to load GLue session, no data factory specified',
+        buttons: [Dialog.cancelButton()]
+      });
+      return;
+    }
+
+    // TODO: dataPath is relative to the session file, so we need the kernel to be started relative to that session file!
+    const dataPath = this._model.loadLog.path;
+
+    const code = `
+    from importlib import import_module
+    from pathlib import Path
+
+    # TODO: the DataCollection should be specified from the .glue file?
+    from glue.core.data_collection import DataCollection
+
+    import glue_jupyter as gj
+
+    # factory = Path("${factory}")
+    # module = factory.with_suffix("")
+    # func = factory.suffix[1:]
+
+    app = gj.jglue()
+
+    # data = getattr(import_module(str(module)), func)("${dataPath}")[0]
+    # data_collection = DataCollection(data)
+
+    # TODO: Load the data with the specified loader in the factory?
+    data = app.load_data("${dataPath}")
+    `;
+
     const future = kernel.requestExecute(
-      { code: 'import glue_jupyter as gj\napp = gj.jglue()' },
+      { code },
       false
     );
+    future.onReply = (msg) => {
+      console.log(msg);
+    };
     await future.done;
-    console.log(this._model);
-    // this.loadData();
 
-    this._kernelStarted.resolve();
+    this._dataLoaded.resolve();
   }
 
   private _onTabsChanged(): void {
@@ -86,7 +123,7 @@ export class SessionWidget extends BoxPanel {
           rendermime: this._rendermime,
           context: this._context,
           notebookTracker: this._notebookTracker,
-          kernelStarted: this._kernelStarted
+          dataLoaded: this._dataLoaded
         });
         const tabWidget = new TabView({ model });
 
@@ -96,7 +133,7 @@ export class SessionWidget extends BoxPanel {
     this._tabPanel.activateTab(1);
   }
 
-  private _kernelStarted: PromiseDelegate<void> = new PromiseDelegate<void>();
+  private _dataLoaded: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;

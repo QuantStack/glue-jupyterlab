@@ -17,7 +17,7 @@ export class TabModel implements IDisposable {
     this._tabName = tabName;
     this._rendermime = rendermime;
     this._context = options.context;
-    this._kernelStarted = options.kernelStarted;
+    this._dataLoaded = options.dataLoaded;
   }
 
   get tabName(): string {
@@ -54,7 +54,7 @@ export class TabModel implements IDisposable {
   ): Promise<GridStackItem | undefined> {
     let item: GridStackItem | undefined = undefined;
 
-    await this._kernelStarted.promise;
+    await this._dataLoaded.promise;
 
     switch (viewData._type) {
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
@@ -72,7 +72,40 @@ export class TabModel implements IDisposable {
         const cellOutput = item.cellOutput as SimplifiedOutputArea;
         if (this._context) {
           SimplifiedOutputArea.execute(
-            'data_catalog = app.load_data("w5_psc.csv")\nscatter_viewer = app.scatter2d(x="[4.5]-[5.8]", y="[8.0]", data=data_catalog)',
+            `
+            scatter = app.scatter2d(data=data)
+
+            state = {
+                "angle_unit": "radians",
+                "aspect": "auto",
+                "dpi": 71.30820648960312,
+                # "layers": "CallbackList",
+                "plot_mode": "rectilinear",
+                "show_axes": True,
+                "x_att": "PRIMARY",
+                "x_axislabel": "PRIMARY",
+                "x_axislabel_size": 10,
+                "x_axislabel_weight": "normal",
+                "x_log": False,
+                "x_max": 3260.291357421875,
+                "x_min": 329.56267700195315,
+                "x_ticklabel_size": 8,
+                "y_att": "Pixel Axis 0 [y]",
+                "y_axislabel": "Pixel Axis 0 [y]",
+                "y_axislabel_size": 10,
+                "y_axislabel_weight": "normal",
+                "y_log": False,
+                "y_max": 999.5,
+                "y_min": -0.5,
+                "y_ticklabel_size": 8
+            }
+
+            for key, value in state.items():
+                try:
+                    setattr(scatter.state, key, value)
+                except:
+                    pass
+            `,
             cellOutput,
             this._context.sessionContext
           );
@@ -101,7 +134,7 @@ export class TabModel implements IDisposable {
   private _tabName: string;
   private _rendermime: IRenderMimeRegistry;
   private _context?: DocumentRegistry.IContext<GlueSessionModel>;
-  private _kernelStarted: PromiseDelegate<void>;
+  private _dataLoaded: PromiseDelegate<void>;
 }
 
 export namespace TabModel {
@@ -111,6 +144,6 @@ export namespace TabModel {
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
-    kernelStarted: PromiseDelegate<void>;
+    dataLoaded: PromiseDelegate<void>;
   }
 }
