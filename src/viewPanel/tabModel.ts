@@ -7,7 +7,6 @@ import { UUID } from '@lumino/coreutils';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { GlueSessionModel } from '../document/docModel';
-import { mockNotebook } from '../tools';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
@@ -15,7 +14,6 @@ export class TabModel implements IDisposable {
     this._tabData = tabData;
     this._tabName = tabName;
     this._rendermime = rendermime;
-    this._notebookTracker = options.notebookTracker;
     this._context = options.context;
   }
 
@@ -32,21 +30,7 @@ export class TabModel implements IDisposable {
   }
 
   async initialize(): Promise<void> {
-    const panel = mockNotebook(this._rendermime, this._context);
-    await this._context?.sessionContext.initialize();
-    await this._context?.sessionContext.ready;
-    //TODO Shameless hack while waiting for ipywidgets update!
-    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    this._notebookTracker.widgetAdded.emit(panel);
-    const kernel = this._context?.sessionContext.session?.kernel;
-    if (kernel) {
-      const future = kernel.requestExecute(
-        { code: 'import glue_jupyter as gj\napp = gj.jglue()' },
-        false
-      );
-      await future.done;
-    }
+
   }
 
   dispose(): void {
@@ -112,7 +96,6 @@ export class TabModel implements IDisposable {
   private _tabName: string;
   private _rendermime: IRenderMimeRegistry;
   private _context?: DocumentRegistry.IContext<GlueSessionModel>;
-  private _notebookTracker: INotebookTracker;
 }
 
 export namespace TabModel {

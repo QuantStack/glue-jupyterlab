@@ -1,0 +1,9 @@
+{
+    "type": "object",
+    "title": "ILoadLogFactory",
+    "properties": {
+      "function": {
+        "type": "string"
+      }
+    }
+  }

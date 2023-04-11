@@ -11,7 +11,7 @@
       "$ref": "#/definitions/tabs"
     },
     "loadLog": {
-      "type": "object"
+      "$ref": "#/definitions/loadlog"
     }
   },
   "definitions": {
@@ -34,6 +34,29 @@
         }
       },
       "additionalProperties": false
+    },
+    "loadlog": {
+      "title": "IGlueSessionLoagLog",
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "factory": {
+          "$ref": "./loadlog/factory.schema.json"
+        },
+        "force_coords": {
+          "type": "boolean"
+        },
+        "kwargs": {
+          "type": "array",
+          "default": [],
+          "description": "The height of the box",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
     }
   }
 }

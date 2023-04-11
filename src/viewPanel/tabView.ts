@@ -28,11 +28,9 @@ export class TabView extends Panel {
       },
       this._gridHost
     );
-    this._model?.initialize().then(() => {
-      this.render()
-        .catch(console.error)
-        .then(() => window.dispatchEvent(new Event('resize')));
-    });
+    this.render()
+      .catch(console.error)
+      .then(() => window.dispatchEvent(new Event('resize')));
   }
 
   async render(): Promise<void> {
@@ -46,9 +44,11 @@ export class TabView extends Panel {
       }
     }
   }
+
   protected onResize(msg: Widget.ResizeMessage): void {
     window.dispatchEvent(new Event('resize'));
   }
+
   addGridItem(out: GridStackItem): void {
     this._gridElements.push(out);
 

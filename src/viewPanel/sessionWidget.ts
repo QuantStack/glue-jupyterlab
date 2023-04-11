@@ -1,13 +1,17 @@
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import { INotebookTracker } from '@jupyterlab/notebook';
-import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { BoxPanel } from '@lumino/widgets';
+
+import { Dialog, showDialog } from '@jupyterlab/apputils';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { INotebookTracker } from '@jupyterlab/notebook';
+
 import { HTabPanel } from '../common/tabPanel';
 import { IGlueSessionSharedModel } from '../types';
+import { GlueSessionModel } from '../document/docModel';
+import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
 import { TabModel } from './tabModel';
 import { LinkWidget } from '../linkPanel/linkPanel';
-import { GlueSessionModel } from '../document/docModel';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -32,11 +36,42 @@ export class SessionWidget extends BoxPanel {
 
     this.addWidget(this._tabPanel);
     BoxPanel.setStretch(this._tabPanel, 1);
-    this._model.tabsChanged.connect(this._onTabsChanged, this);
+
+    this._initialize();
   }
 
   get rendermime(): IRenderMimeRegistry {
     return this._rendermime;
+  }
+
+  private async _initialize() {
+    const panel = mockNotebook(this._rendermime, this._context);
+    await this._context?.sessionContext.initialize();
+    await this._context?.sessionContext.ready;
+    // TODO: Make ipywidgets independent from a Notebook context
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this._notebookTracker.widgetAdded.emit(panel);
+    const kernel = this._context?.sessionContext.session?.kernel;
+
+    if (!kernel) {
+      void showDialog({
+        title: 'Error',
+        body: 'Failed to start the kernel for the GLue session',
+        buttons: [Dialog.cancelButton()]
+      });
+      return;
+    }
+
+    const future = kernel.requestExecute(
+      { code: 'import glue_jupyter as gj\napp = gj.jglue()' },
+      false
+    );
+    await future.done;
+    console.log(this._model);
+    // this.loadData();
+
+    this._model.tabsChanged.connect(this._onTabsChanged, this);
   }
 
   private _onTabsChanged(): void {
@@ -54,6 +89,7 @@ export class SessionWidget extends BoxPanel {
     });
     this._tabPanel.activateTab(1);
   }
+
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;
