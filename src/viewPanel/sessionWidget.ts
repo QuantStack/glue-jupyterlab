@@ -1,3 +1,4 @@
+import { PromiseDelegate } from '@lumino/coreutils';
 import { BoxPanel } from '@lumino/widgets';
 
 import { Dialog, showDialog } from '@jupyterlab/apputils';
@@ -37,14 +38,16 @@ export class SessionWidget extends BoxPanel {
     this.addWidget(this._tabPanel);
     BoxPanel.setStretch(this._tabPanel, 1);
 
-    this._initialize();
+    this._model.tabsChanged.connect(this._onTabsChanged, this);
+
+    this._startKernel();
   }
 
   get rendermime(): IRenderMimeRegistry {
     return this._rendermime;
   }
 
-  private async _initialize() {
+  private async _startKernel() {
     const panel = mockNotebook(this._rendermime, this._context);
     await this._context?.sessionContext.initialize();
     await this._context?.sessionContext.ready;
@@ -71,25 +74,29 @@ export class SessionWidget extends BoxPanel {
     console.log(this._model);
     // this.loadData();
 
-    this._model.tabsChanged.connect(this._onTabsChanged, this);
+    this._kernelStarted.resolve();
   }
 
   private _onTabsChanged(): void {
-    Object.entries(this._model.tabs).forEach(([tabName, tabData], idx) => {
-      const model = new TabModel({
-        tabName,
-        tabData,
-        rendermime: this._rendermime,
-        context: this._context,
-        notebookTracker: this._notebookTracker
-      });
-      const tabWidget = new TabView({ model });
+    Object.entries(this._model.tabs).forEach(
+      async ([tabName, tabData], idx) => {
+        const model = new TabModel({
+          tabName,
+          tabData,
+          rendermime: this._rendermime,
+          context: this._context,
+          notebookTracker: this._notebookTracker,
+          kernelStarted: this._kernelStarted
+        });
+        const tabWidget = new TabView({ model });
 
-      this._tabPanel.addTab(tabWidget, idx + 1);
-    });
+        this._tabPanel.addTab(tabWidget, idx + 1);
+      }
+    );
     this._tabPanel.activateTab(1);
   }
 
+  private _kernelStarted: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkWidget | undefined = undefined;
   private _model: IGlueSessionSharedModel;

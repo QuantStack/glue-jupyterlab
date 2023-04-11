@@ -1,12 +1,14 @@
+import { PromiseDelegate, UUID } from '@lumino/coreutils';
 import { IDisposable } from '@lumino/disposable';
-import { IGlueSessionViewerTypes } from '../types';
-import { GridStackItem } from './gridStackItem';
+
 import { OutputAreaModel, SimplifiedOutputArea } from '@jupyterlab/outputarea';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import { UUID } from '@lumino/coreutils';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
+
+import { IGlueSessionViewerTypes } from '../types';
 import { GlueSessionModel } from '../document/docModel';
+import { GridStackItem } from './gridStackItem';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
@@ -15,6 +17,7 @@ export class TabModel implements IDisposable {
     this._tabName = tabName;
     this._rendermime = rendermime;
     this._context = options.context;
+    this._kernelStarted = options.kernelStarted;
   }
 
   get tabName(): string {
@@ -29,9 +32,7 @@ export class TabModel implements IDisposable {
     return this._isDisposed;
   }
 
-  async initialize(): Promise<void> {
-
-  }
+  async initialize(): Promise<void> {}
 
   dispose(): void {
     if (this._isDisposed) {
@@ -52,6 +53,9 @@ export class TabModel implements IDisposable {
     viewData: IGlueSessionViewerTypes
   ): Promise<GridStackItem | undefined> {
     let item: GridStackItem | undefined = undefined;
+
+    await this._kernelStarted.promise;
+
     switch (viewData._type) {
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
         const outputAreaModel = new OutputAreaModel({ trusted: true });
@@ -91,11 +95,13 @@ export class TabModel implements IDisposable {
     }
     return item;
   }
+
   private _isDisposed = false;
   private _tabData: IGlueSessionViewerTypes[];
   private _tabName: string;
   private _rendermime: IRenderMimeRegistry;
   private _context?: DocumentRegistry.IContext<GlueSessionModel>;
+  private _kernelStarted: PromiseDelegate<void>;
 }
 
 export namespace TabModel {
@@ -105,5 +111,6 @@ export namespace TabModel {
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
+    kernelStarted: PromiseDelegate<void>;
   }
 }
