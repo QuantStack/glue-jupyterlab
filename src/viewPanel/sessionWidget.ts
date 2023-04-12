@@ -56,22 +56,10 @@ export class SessionWidget extends BoxPanel {
     this._notebookTracker.widgetAdded.emit(panel);
     const kernel = this._context?.sessionContext.session?.kernel;
 
-    console.log(this._model);
-
     if (!kernel) {
       void showDialog({
         title: 'Error',
         body: 'Failed to start the kernel for the GLue session',
-        buttons: [Dialog.cancelButton()]
-      });
-      return;
-    }
-
-    const factory = this._model.loadLog.factory?.function;
-    if (!factory) {
-      void showDialog({
-        title: 'Error',
-        body: 'Failed to load GLue session, no data factory specified',
         buttons: [Dialog.cancelButton()]
       });
       return;
