@@ -32,8 +32,6 @@ export class TabModel implements IDisposable {
     return this._isDisposed;
   }
 
-  async initialize(): Promise<void> {}
-
   dispose(): void {
     if (this._isDisposed) {
       return;
