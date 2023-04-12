@@ -56,6 +56,21 @@ export class TabModel implements IDisposable {
 
     await this._dataLoaded.promise;
 
+    // Extract plot state
+    const state: { [k: string]: any; } = {};
+    if (viewData.state.values) {
+      for (const prop in viewData.state.values) {
+        const value = viewData.state.values[prop];
+        // TODO Why do we need to do this??
+        if (typeof value === "string" && value.startsWith("st__")) {
+          state[prop] = value.slice(4);
+          continue;
+        }
+
+        state[prop] = value;
+      }
+    }
+
     switch (viewData._type) {
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
         const outputAreaModel = new OutputAreaModel({ trusted: true });
@@ -73,32 +88,11 @@ export class TabModel implements IDisposable {
         if (this._context) {
           SimplifiedOutputArea.execute(
             `
+            import json
+
             scatter = app.scatter2d(data=data)
 
-            state = {
-                "angle_unit": "radians",
-                "aspect": "auto",
-                "dpi": 71.30820648960312,
-                # "layers": "CallbackList",
-                "plot_mode": "rectilinear",
-                "show_axes": True,
-                "x_att": "PRIMARY",
-                "x_axislabel": "PRIMARY",
-                "x_axislabel_size": 10,
-                "x_axislabel_weight": "normal",
-                "x_log": False,
-                "x_max": 3260.291357421875,
-                "x_min": 329.56267700195315,
-                "x_ticklabel_size": 8,
-                "y_att": "Pixel Axis 0 [y]",
-                "y_axislabel": "Pixel Axis 0 [y]",
-                "y_axislabel_size": 10,
-                "y_axislabel_weight": "normal",
-                "y_log": False,
-                "y_max": 999.5,
-                "y_min": -0.5,
-                "y_ticklabel_size": 8
-            }
+            state = json.loads('${JSON.stringify(state)}')
 
             for key, value in state.items():
                 try:
