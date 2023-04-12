@@ -81,24 +81,10 @@ export class SessionWidget extends BoxPanel {
     const dataPath = this._model.loadLog.path;
 
     const code = `
-    from importlib import import_module
-    from pathlib import Path
-
-    # TODO: the DataCollection should be specified from the .glue file?
-    from glue.core.data_collection import DataCollection
-
     import glue_jupyter as gj
-
-    # factory = Path("${factory}")
-    # module = factory.with_suffix("")
-    # func = factory.suffix[1:]
 
     app = gj.jglue()
 
-    # data = getattr(import_module(str(module)), func)("${dataPath}")[0]
-    # data_collection = DataCollection(data)
-
-    # TODO: Load the data with the specified loader in the factory?
     data = app.load_data("${dataPath}")
     `;
 
