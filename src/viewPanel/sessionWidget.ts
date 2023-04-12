@@ -102,11 +102,8 @@ export class SessionWidget extends BoxPanel {
     data = app.load_data("${dataPath}")
     `;
 
-    const future = kernel.requestExecute(
-      { code },
-      false
-    );
-    future.onReply = (msg) => {
+    const future = kernel.requestExecute({ code }, false);
+    future.onReply = msg => {
       console.log(msg);
     };
     await future.done;

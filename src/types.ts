@@ -3,7 +3,10 @@ import { DocumentRegistry, IDocumentWidget } from '@jupyterlab/docregistry';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
-import { IGlueSessionLoagLog, IGlueSessionTabs } from './_interface/glue.schema';
+import {
+  IGlueSessionLoagLog,
+  IGlueSessionTabs
+} from './_interface/glue.schema';
 
 export interface IDict<T = any> {
   [key: string]: T;

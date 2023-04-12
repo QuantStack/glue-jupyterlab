@@ -57,12 +57,12 @@ export class TabModel implements IDisposable {
     await this._dataLoaded.promise;
 
     // Extract plot state
-    const state: { [k: string]: any; } = {};
+    const state: { [k: string]: any } = {};
     if (viewData.state.values) {
       for (const prop in viewData.state.values) {
         const value = viewData.state.values[prop];
         // TODO Why do we need to do this??
-        if (typeof value === "string" && value.startsWith("st__")) {
+        if (typeof value === 'string' && value.startsWith('st__')) {
           state[prop] = value.slice(4);
           continue;
         }

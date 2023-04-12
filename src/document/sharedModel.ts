@@ -8,7 +8,10 @@ import {
   IGlueSessionSharedModel,
   IGlueSessionSharedModelChange
 } from '../types';
-import { IGlueSessionLoagLog, IGlueSessionTabs } from '../_interface/glue.schema';
+import {
+  IGlueSessionLoagLog,
+  IGlueSessionTabs
+} from '../_interface/glue.schema';
 
 export class GlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange>
