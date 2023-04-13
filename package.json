@@ -7,9 +7,9 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/trungleduc/glue-lab",
+  "homepage": "https://github.com/QuantStack/glue-lab",
   "bugs": {
-    "url": "https://github.com/trungleduc/glue-lab/issues"
+    "url": "https://github.com/QuantStack/glue-lab/issues"
   },
   "license": "BSD-3-Clause",
   "author": {
@@ -25,7 +25,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trungleduc/glue-lab.git"
+    "url": "https://github.com/QuantStack/glue-lab.git"
   },
   "scripts": {
     "build": "jlpm build:schema && jlpm build:lib && jlpm build:labextension:dev",
