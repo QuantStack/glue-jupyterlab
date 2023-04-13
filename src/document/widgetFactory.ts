@@ -2,25 +2,20 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { SessionWidget } from '../viewPanel/sessionWidget';
 import { ABCWidgetFactory, DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { CommandRegistry } from '@lumino/commands';
-
 import { GlueSessionModel } from './docModel';
 
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
-
-interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
-  commands: CommandRegistry;
-  rendermime: IRenderMimeRegistry;
-}
+import { INotebookTracker } from '@jupyterlab/notebook';
 
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueDocumentWidget,
   GlueSessionModel
 > {
-  constructor(options: IOptions) {
-    const { rendermime, ...rest } = options;
+  constructor(options: GlueCanvasWidgetFactory.IOptions) {
+    const { rendermime, notebookTracker, ...rest } = options;
     super(rest);
     this._rendermime = rendermime;
+    this._notebookTracker = notebookTracker;
   }
 
   /**
@@ -34,11 +29,20 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   ): GlueDocumentWidget {
     const content = new SessionWidget({
       model: context.model.sharedModel,
-      rendermime: this._rendermime
+      rendermime: this._rendermime,
+      notebookTracker: this._notebookTracker,
+      context
     });
-
     return new GlueDocumentWidget({ context, content });
   }
 
   private _rendermime: IRenderMimeRegistry;
+  private _notebookTracker: INotebookTracker;
+}
+
+export namespace GlueCanvasWidgetFactory {
+  export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
+    rendermime: IRenderMimeRegistry;
+    notebookTracker: INotebookTracker;
+  }
 }

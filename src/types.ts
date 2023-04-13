@@ -31,6 +31,7 @@ export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
   tabs: IGlueSessionTabs;
+  contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
 }
 
@@ -77,3 +78,7 @@ export type DashboardCellView = {
    */
   locked?: boolean;
 };
+
+export interface ILoadLog {
+  path: string;
+}

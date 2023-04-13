@@ -1,3 +1,5 @@
+import { Signal, ISignal } from '@lumino/signaling';
+
 import {
   IControlPanelModel,
   IGlueSessionWidget,
@@ -5,7 +7,6 @@ import {
   IGlueSessionModel
 } from '../types';
 import { IGlueSessionTracker } from '../token';
-import { Signal, ISignal } from '@lumino/signaling';
 import { IGlueSessionTabs } from '../_interface/glue.schema';
 
 export class ControlPanelModel implements IControlPanelModel {
@@ -27,6 +28,7 @@ export class ControlPanelModel implements IControlPanelModel {
       this._glueSessionChanged.emit(changed);
     });
   }
+
   get sharedModel(): IGlueSessionSharedModel | undefined {
     return this._tracker.currentSharedModel();
   }

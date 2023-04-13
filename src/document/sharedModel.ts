@@ -31,6 +31,7 @@ export class GlueSessionSharedModel
   get contents(): JSONObject {
     return JSONExt.deepCopy(this._contents.toJSON());
   }
+
   get tabs(): IGlueSessionTabs {
     return JSONExt.deepCopy(this._tabs.toJSON());
   }
@@ -38,6 +39,7 @@ export class GlueSessionSharedModel
   get contentsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._contentsChanged;
   }
+
   get tabsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._tabsChanged;
   }
@@ -65,6 +67,7 @@ export class GlueSessionSharedModel
       this._contentsChanged.emit(contents);
     }
   };
+
   private _tabsObserver = (events: Y.YEvent<any>[]): void => {
     if (events.length > 0) {
       this._tabsChanged.emit({});

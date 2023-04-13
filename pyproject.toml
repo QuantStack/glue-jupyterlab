@@ -24,7 +24,9 @@ classifiers = [
 ]
 dependencies = [
     "jupyter_server>=1.21,<3",
-    "jupyter_collaboration>=1.0.0a7"
+    "jupyter_collaboration>=1.0.0a7",
+    "glue-core",
+    "glue-jupyter"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 

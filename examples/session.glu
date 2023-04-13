@@ -17,10 +17,86 @@
       "ScatterLayerState_0"
     ]
   },
+  "CallbackList_2": {
+    "_type": "echo.containers.CallbackList",
+    "values": [
+      "ScatterLayerState_1"
+    ]
+  },
+  "CategoricalComponent": {
+    "_type": "glue.core.component.CategoricalComponent",
+    "log": "LoadLog_0",
+    "log_item": 12
+  },
   "Component": {
     "_type": "glue.core.component.Component",
     "log": "LoadLog",
     "log_item": 4
+  },
+  "Component_0": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 1
+  },
+  "Component_1": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 2
+  },
+  "Component_10": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 11
+  },
+  "Component_11": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 13
+  },
+  "Component_12": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 14
+  },
+  "Component_2": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 3
+  },
+  "Component_3": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 4
+  },
+  "Component_4": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 5
+  },
+  "Component_5": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 6
+  },
+  "Component_6": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 7
+  },
+  "Component_7": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 8
+  },
+  "Component_8": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 9
+  },
+  "Component_9": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 10
   },
   "CoordinateComponent": {
     "_type": "glue.core.component.CoordinateComponent",
@@ -42,6 +118,15 @@
     "axis": 1,
     "world": true
   },
+  "CoordinateComponent_3": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 0,
+    "world": false
+  },
+  "DEJ2000": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "DEJ2000"
+  },
   "DataCollection": {
     "_protocol": 4,
     "_type": "glue.core.data_collection.DataCollection",
@@ -50,17 +135,48 @@
       "Pixel Axis 1 [x]",
       "Declination",
       "Right Ascension",
-      "PRIMARY"
+      "PRIMARY",
+      "Pixel Axis 0 [x]",
+      "ID",
+      "RAJ2000",
+      "DEJ2000",
+      "Jmag",
+      "Hmag",
+      "Ksmag",
+      "[3.6]",
+      "[4.5]",
+      "[5.8]",
+      "[8.0]",
+      "[24]",
+      "Type",
+      "[4.5]-[5.8]",
+      "[5.8]-[8.0]"
     ],
     "components": [
       "CoordinateComponent",
       "CoordinateComponent_0",
       "CoordinateComponent_1",
       "CoordinateComponent_2",
-      "Component"
+      "Component",
+      "CoordinateComponent_3",
+      "Component_0",
+      "Component_1",
+      "Component_2",
+      "Component_3",
+      "Component_4",
+      "Component_5",
+      "Component_6",
+      "Component_7",
+      "Component_8",
+      "Component_9",
+      "Component_10",
+      "CategoricalComponent",
+      "Component_11",
+      "Component_12"
     ],
     "data": [
-      "w5"
+      "w5",
+      "w5_psc"
     ],
     "groups": [],
     "links": [],
@@ -77,7 +193,7 @@
       "color": "st__#595959",
       "layer": "w5",
       "visible": true,
-      "zorder": 1
+      "zorder": 2
     }
   },
   "HistogramViewer": {
@@ -99,6 +215,16 @@
       400
     ],
     "state": {
+      "legend": {
+        "alpha": 0.5858585858585859,
+        "fontsize": 10,
+        "frame_color": "#FFFFFF",
+        "location": "draggable",
+        "show_edge": true,
+        "text_color": "#000000",
+        "title": "",
+        "visible": false
+      },
       "values": {
         "aspect": "st__auto",
         "common_n_bin": true,
@@ -127,7 +253,27 @@
       }
     }
   },
+  "Hmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Hmag"
+  },
+  "ID": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "ID"
+  },
+  "Jmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Jmag"
+  },
+  "Ksmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Ksmag"
+  },
   "LinearSegmentedColormap": {
+    "_type": "matplotlib.colors.LinearSegmentedColormap",
+    "cmap": "gray"
+  },
+  "LinearSegmentedColormap_0": {
     "_type": "matplotlib.colors.LinearSegmentedColormap",
     "cmap": "gray"
   },
@@ -144,9 +290,27 @@
     ],
     "path": "w5.fits"
   },
+  "LoadLog_0": {
+    "_protocol": 2,
+    "_type": "glue.core.data_factories.helpers.LoadLog",
+    "factory": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.data_factories.tables.tabular_data"
+    },
+    "force_coords": false,
+    "kwargs": [
+      []
+    ],
+    "path": "w5_psc.csv"
+  },
   "PRIMARY": {
     "_type": "glue.core.component_id.ComponentID",
     "label": "PRIMARY"
+  },
+  "Pixel Axis 0 [x]": {
+    "_type": "glue.core.component_id.PixelComponentID",
+    "axis": 0,
+    "label": "Pixel Axis 0 [x]"
   },
   "Pixel Axis 0 [y]": {
     "_type": "glue.core.component_id.PixelComponentID",
@@ -157,6 +321,10 @@
     "_type": "glue.core.component_id.PixelComponentID",
     "axis": 1,
     "label": "Pixel Axis 1 [x]"
+  },
+  "RAJ2000": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "RAJ2000"
   },
   "Right Ascension": {
     "_type": "glue.core.component_id.ComponentID",
@@ -200,10 +368,51 @@
       "xerr_visible": false,
       "yerr_att": "PRIMARY",
       "yerr_visible": false,
-      "zorder": 1
+      "zorder": 2
     }
   },
   "ScatterLayerState_0": {
+    "_type": "glue.viewers.scatter.state.ScatterLayerState",
+    "values": {
+      "alpha": 0.8,
+      "cmap": "LinearSegmentedColormap_0",
+      "cmap_att": "ID",
+      "cmap_mode": "st__Fixed",
+      "cmap_vmax": 17766,
+      "cmap_vmin": 2,
+      "color": "st__#595959",
+      "density_contrast": 1.0,
+      "density_map": false,
+      "fill": true,
+      "layer": "w5_psc",
+      "line_visible": false,
+      "linestyle": "st__solid",
+      "linewidth": 1,
+      "markers_visible": true,
+      "points_mode": "st__auto",
+      "size": 3,
+      "size_att": "ID",
+      "size_mode": "st__Fixed",
+      "size_scaling": 1,
+      "size_vmax": 17766,
+      "size_vmin": 2,
+      "stretch": "st__log",
+      "vector_arrowhead": false,
+      "vector_mode": "st__Cartesian",
+      "vector_origin": "st__middle",
+      "vector_scaling": 0.9770099572992254,
+      "vector_visible": false,
+      "visible": true,
+      "vx_att": "ID",
+      "vy_att": "ID",
+      "xerr_att": "ID",
+      "xerr_visible": false,
+      "yerr_att": "ID",
+      "yerr_visible": false,
+      "zorder": 1
+    }
+  },
+  "ScatterLayerState_1": {
     "_type": "glue.viewers.scatter.state.ScatterLayerState",
     "values": {
       "alpha": 0.8,
@@ -241,7 +450,7 @@
       "xerr_visible": false,
       "yerr_att": "PRIMARY",
       "yerr_visible": false,
-      "zorder": 1
+      "zorder": 2
     }
   },
   "ScatterViewer": {
@@ -263,6 +472,16 @@
       400
     ],
     "state": {
+      "legend": {
+        "alpha": 0.5858585858585859,
+        "fontsize": 10,
+        "frame_color": "#FFFFFF",
+        "location": "draggable",
+        "show_edge": true,
+        "text_color": "#000000",
+        "title": "",
+        "visible": false
+      },
       "values": {
         "angle_unit": "st__radians",
         "aspect": "st__auto",
@@ -299,6 +518,61 @@
       }
     ],
     "pos": [
+      830,
+      660
+    ],
+    "session": "Session",
+    "size": [
+      600,
+      400
+    ],
+    "state": {
+      "legend": {
+        "alpha": 0.5858585858585859,
+        "fontsize": 10,
+        "frame_color": "#FFFFFF",
+        "location": "draggable",
+        "show_edge": true,
+        "text_color": "#000000",
+        "title": "",
+        "visible": false
+      },
+      "values": {
+        "angle_unit": "st__radians",
+        "aspect": "st__auto",
+        "dpi": 71.30820648960312,
+        "layers": "CallbackList_1",
+        "plot_mode": "st__rectilinear",
+        "show_axes": true,
+        "x_att": "ID",
+        "x_axislabel": "st__ID",
+        "x_axislabel_size": 10,
+        "x_axislabel_weight": "st__normal",
+        "x_log": false,
+        "x_max": 18476.56,
+        "x_min": -708.5600000000001,
+        "x_ticklabel_size": 8,
+        "y_att": "RAJ2000",
+        "y_axislabel": "st__RAJ2000",
+        "y_axislabel_size": 10,
+        "y_axislabel_weight": "st__normal",
+        "y_log": false,
+        "y_max": 46.20463864,
+        "y_min": 40.90217236,
+        "y_ticklabel_size": 8
+      }
+    }
+  },
+  "ScatterViewer_1": {
+    "_protocol": 1,
+    "_type": "glue.viewers.scatter.qt.data_viewer.ScatterViewer",
+    "layers": [
+      {
+        "_type": "glue.viewers.scatter.layer_artist.ScatterLayerArtist",
+        "state": "ScatterLayerState_1"
+      }
+    ],
+    "pos": [
       0,
       0
     ],
@@ -308,11 +582,21 @@
       920
     ],
     "state": {
+      "legend": {
+        "alpha": 0.5858585858585859,
+        "fontsize": 10,
+        "frame_color": "#FFFFFF",
+        "location": "draggable",
+        "show_edge": true,
+        "text_color": "#000000",
+        "title": "",
+        "visible": false
+      },
       "values": {
         "angle_unit": "st__radians",
         "aspect": "st__auto",
         "dpi": 71.30820648960312,
-        "layers": "CallbackList_1",
+        "layers": "CallbackList_2",
         "plot_mode": "st__rectilinear",
         "show_axes": true,
         "x_att": "PRIMARY",
@@ -337,29 +621,62 @@
   "Session": {
     "_type": "glue.core.session.Session"
   },
+  "Type": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Type"
+  },
   "WCS": {
     "_type": "astropy.wcs.wcs.WCS",
     "header": "WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                500.5 / Pixel coordinate of reference point            CRPIX2  =                500.5 / Pixel coordinate of reference point            CDELT1  =               -0.003 / [deg] Coordinate increment at reference point  CDELT2  =                0.003 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               CRVAL1  =                43.46 / [deg] Coordinate value at reference point      CRVAL2  =                60.38 / [deg] Coordinate value at reference point      LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =                60.38 / [deg] Native latitude of celestial pole        MJDREF  =                  0.0 / [d] MJD of fiducial time                       RADESYS = 'FK5'                / Equatorial coordinate system                   EQUINOX =               2000.0 / [yr] Equinox of equatorial coordinates         END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+  },
+  "[24]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[24]"
+  },
+  "[3.6]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[3.6]"
+  },
+  "[4.5]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[4.5]"
+  },
+  "[4.5]-[5.8]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[4.5]-[5.8]"
+  },
+  "[5.8]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[5.8]"
+  },
+  "[5.8]-[8.0]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[5.8]-[8.0]"
+  },
+  "[8.0]": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "[8.0]"
   },
   "__main__": {
     "_type": "glue.app.qt.application.GlueApplication",
     "data": "DataCollection",
     "plugins": [
-      "glue.viewers.image.qt",
-      "glue.viewers.histogram.qt",
-      "glue.plugins.export_d3po",
-      "glue.io.formats.fits",
       "glue.plugins.coordinate_helpers",
-      "glue.plugins.tools.pv_slicer.qt",
+      "casa_formats_io.glue_factory",
       "glue.plugins.dendro_viewer.qt",
       "glue.viewers.table.qt",
       "glue.core.data_exporters",
-      "glue.io.qt.directory_importer",
+      "glue.io.formats.fits",
       "glue.viewers.scatter.qt",
-      "glue.plugins.wcs_autolinking",
+      "glue.viewers.histogram.qt",
+      "glue.io.qt.directory_importer",
+      "glue.viewers.profile.qt",
       "glue_vispy_viewers.scatter",
-      "glue.plugins.tools",
-      "glue.viewers.profile.qt"
+      "glue.plugins.tools.pv_slicer.qt",
+      "glue.viewers.image.qt",
+      "glue.plugins.export_d3po",
+      "glue.plugins.wcs_autolinking",
+      "glue.plugins.tools"
     ],
     "session": "Session",
     "tab_names": [
@@ -369,10 +686,11 @@
     "viewers": [
       [
         "ScatterViewer",
-        "HistogramViewer"
+        "HistogramViewer",
+        "ScatterViewer_0"
       ],
       [
-        "ScatterViewer_0"
+        "ScatterViewer_1"
       ]
     ]
   },
@@ -566,10 +884,110 @@
       "linestyle": "solid",
       "linewidth": 1,
       "marker": "o",
+      "markersize": 3
+    },
+    "subsets": [],
+    "uuid": "08c2614b-7315-4390-a688-e0a564161676"
+  },
+  "w5_psc": {
+    "_key_joins": [],
+    "_protocol": 5,
+    "_type": "glue.core.data.Data",
+    "components": [
+      [
+        "Pixel Axis 0 [x]",
+        "CoordinateComponent_3"
+      ],
+      [
+        "ID",
+        "Component_0"
+      ],
+      [
+        "RAJ2000",
+        "Component_1"
+      ],
+      [
+        "DEJ2000",
+        "Component_2"
+      ],
+      [
+        "Jmag",
+        "Component_3"
+      ],
+      [
+        "Hmag",
+        "Component_4"
+      ],
+      [
+        "Ksmag",
+        "Component_5"
+      ],
+      [
+        "[3.6]",
+        "Component_6"
+      ],
+      [
+        "[4.5]",
+        "Component_7"
+      ],
+      [
+        "[5.8]",
+        "Component_8"
+      ],
+      [
+        "[8.0]",
+        "Component_9"
+      ],
+      [
+        "[24]",
+        "Component_10"
+      ],
+      [
+        "Type",
+        "CategoricalComponent"
+      ],
+      [
+        "[4.5]-[5.8]",
+        "Component_11"
+      ],
+      [
+        "[5.8]-[8.0]",
+        "Component_12"
+      ]
+    ],
+    "label": "w5_psc",
+    "meta": {
+      "_type": "collections.OrderedDict",
+      "contents": {}
+    },
+    "primary_owner": [
+      "Pixel Axis 0 [x]",
+      "ID",
+      "RAJ2000",
+      "DEJ2000",
+      "Jmag",
+      "Hmag",
+      "Ksmag",
+      "[3.6]",
+      "[4.5]",
+      "[5.8]",
+      "[8.0]",
+      "[24]",
+      "Type",
+      "[4.5]-[5.8]",
+      "[5.8]-[8.0]"
+    ],
+    "style": {
+      "_type": "glue.core.visual.VisualAttributes",
+      "alpha": 0.8,
+      "color": "#595959",
+      "linestyle": "solid",
+      "linewidth": 1,
+      "marker": "o",
       "markersize": 3,
       "preferred_cmap": null
     },
     "subsets": [],
-    "uuid": "08c2614b-7315-4390-a688-e0a564161676"
+    "uuid": "9b99d6e7-a786-451c-95e2-bc5819f779ce"
   }
 }

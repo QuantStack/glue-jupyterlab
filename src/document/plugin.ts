@@ -15,6 +15,7 @@ import { GlueSessionModelFactory } from './modelFactory';
 import { GlueSessionTracker } from './tracker';
 import { GlueCanvasWidgetFactory } from './widgetFactory';
 import { GlueSessionSharedModel } from './sharedModel';
+import { INotebookTracker } from '@jupyterlab/notebook';
 
 const NAME_SPACE = 'gluelab';
 
@@ -37,20 +38,28 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
 export const gluePlugin: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:document-plugin',
   autoStart: true,
-  requires: [IRenderMimeRegistry, IGlueSessionTracker, ICollaborativeDrive],
+  requires: [
+    IRenderMimeRegistry,
+    IGlueSessionTracker,
+    ICollaborativeDrive,
+    INotebookTracker
+  ],
   activate: (
     app: JupyterFrontEnd,
     rendermime: IRenderMimeRegistry,
     canvasTracker: WidgetTracker,
-    drive: ICollaborativeDrive
+    drive: ICollaborativeDrive,
+    notebookTracker: INotebookTracker
   ) => {
     const widgetFactory = new GlueCanvasWidgetFactory({
       name: 'Glue Lab',
       modelName: 'gluelab-session-model',
       fileTypes: ['glu'],
       defaultFor: ['glu'],
-      commands: app.commands,
-      rendermime
+      rendermime,
+      notebookTracker,
+      preferKernel: true,
+      canStartKernel: true
     });
     widgetFactory.widgetCreated.connect((_, widget) => {
       widget.context.pathChanged.connect(() => {
