@@ -12,13 +12,13 @@ import { GridStackItem } from './gridStackItem';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
-    const { tabName, tabData, rendermime, model } = options;
+    const { tabName, tabData, rendermime, model, context, dataLoaded} = options;
     this._tabData = tabData;
     this._tabName = tabName;
     this._model = model;
     this._rendermime = rendermime;
-    this._context = options.context;
-    this._dataLoaded = options.dataLoaded;
+    this._context = context;
+    this._dataLoaded = dataLoaded;
   }
 
   get tabName(): string {
