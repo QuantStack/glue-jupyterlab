@@ -40,7 +40,8 @@ export class SessionWidget extends BoxPanel {
     BoxPanel.setStretch(this._tabPanel, 1);
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
-    this._model.contentsChanged.connect(this._startKernel, this);
+
+    this._startKernel();
   }
 
   get rendermime(): IRenderMimeRegistry {
@@ -65,6 +66,12 @@ export class SessionWidget extends BoxPanel {
       });
       return;
     }
+
+    this._model.contentsChanged.connect(this._loadData, this);
+  }
+
+  private async _loadData() {
+    const kernel = this._context?.sessionContext.session?.kernel!;
 
     // Extract session path
     let sessionPath: string;
