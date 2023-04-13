@@ -74,7 +74,7 @@ export class SessionWidget extends BoxPanel {
     const kernel = this._context?.sessionContext.session?.kernel;
 
     if (!kernel) {
-      console.error("No kernel running");
+      console.error('No kernel running');
       return;
     }
 
