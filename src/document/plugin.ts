@@ -56,7 +56,6 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       modelName: 'gluelab-session-model',
       fileTypes: ['glu'],
       defaultFor: ['glu'],
-      commands: app.commands,
       rendermime,
       notebookTracker,
       preferKernel: true,

@@ -2,8 +2,6 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { SessionWidget } from '../viewPanel/sessionWidget';
 import { ABCWidgetFactory, DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { CommandRegistry } from '@lumino/commands';
-
 import { GlueSessionModel } from './docModel';
 
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
@@ -44,7 +42,6 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
 
 export namespace GlueCanvasWidgetFactory {
   export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
-    commands: CommandRegistry;
     rendermime: IRenderMimeRegistry;
     notebookTracker: INotebookTracker;
   }
