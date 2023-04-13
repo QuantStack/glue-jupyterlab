@@ -1,6 +1,6 @@
 # Glue JupyterLab Extension
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/trungleduc/glue-lab/main?urlpath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/glue-lab/main?urlpath=lab)
 
 ## Overview
 
