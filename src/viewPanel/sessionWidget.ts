@@ -71,7 +71,12 @@ export class SessionWidget extends BoxPanel {
   }
 
   private async _loadData() {
-    const kernel = this._context?.sessionContext.session?.kernel!;
+    const kernel = this._context?.sessionContext.session?.kernel;
+
+    if (!kernel) {
+      console.error("No kernel running");
+      return;
+    }
 
     // Extract session path
     let sessionPath: string;
