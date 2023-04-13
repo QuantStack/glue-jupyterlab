@@ -11,7 +11,7 @@
     "layers": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "object"
       }
     },
     "pos": {

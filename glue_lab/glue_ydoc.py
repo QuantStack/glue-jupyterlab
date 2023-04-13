@@ -10,7 +10,6 @@ class YGlue(YBaseDoc):
         self._ysource = self._ydoc.get_text("source")
         self._ycontents = self._ydoc.get_map("contents")
         self._ytabs = self._ydoc.get_map("tabs")
-        self._yloadLog = self._ydoc.get_map("loadLog")
 
     def get(self) -> str:
         """
@@ -20,8 +19,7 @@ class YGlue(YBaseDoc):
         """
         contents = self._ycontents.to_json()
         tabs = self._ytabs.to_json()
-        loadLog = self._yloadLog.to_json()
-        return json.dumps(dict(contents=contents, tabs=tabs, loadLog=loadLog))
+        return json.dumps(dict(contents=contents, tabs=tabs))
 
     def set(self, value: str) -> None:
         """
@@ -39,12 +37,9 @@ class YGlue(YBaseDoc):
             for viewer in viewers[idx]:
                 tabs[tab].append(contents.get(viewer, {}))
 
-        loadLog = contents.get("LoadLog", {})
-
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
             self._ytabs.update(t, tabs.items())
-            self._yloadLog.update(t, loadLog.items())
 
     def observe(self, callback):
         self.unobserve()
@@ -52,4 +47,3 @@ class YGlue(YBaseDoc):
         self._subscriptions[self._ysource] = self._ysource.observe(callback)
         self._subscriptions[self._ycontents] = self._ycontents.observe_deep(callback)
         self._subscriptions[self._ytabs] = self._ytabs.observe_deep(callback)
-        self._subscriptions[self._yloadLog] = self._yloadLog.observe_deep(callback)

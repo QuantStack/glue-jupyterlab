@@ -3,10 +3,7 @@ import { DocumentRegistry, IDocumentWidget } from '@jupyterlab/docregistry';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
-import {
-  IGlueSessionLoagLog,
-  IGlueSessionTabs
-} from './_interface/glue.schema';
+import { IGlueSessionTabs } from './_interface/glue.schema';
 
 export interface IDict<T = any> {
   [key: string]: T;
@@ -34,9 +31,8 @@ export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
   tabs: IGlueSessionTabs;
-  loadLog: IGlueSessionLoagLog;
+  contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
-  loadLogChanged: ISignal<IGlueSessionSharedModel, IDict>;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {
@@ -82,3 +78,7 @@ export type DashboardCellView = {
    */
   locked?: boolean;
 };
+
+export interface ILoadLog {
+  path: string;
+}

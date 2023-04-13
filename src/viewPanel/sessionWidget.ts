@@ -7,12 +7,13 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { HTabPanel } from '../common/tabPanel';
-import { IGlueSessionSharedModel } from '../types';
+import { IGlueSessionSharedModel, ILoadLog } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
 import { TabModel } from './tabModel';
 import { LinkWidget } from '../linkPanel/linkPanel';
+import { PathExt } from '@jupyterlab/coreutils';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -39,7 +40,7 @@ export class SessionWidget extends BoxPanel {
     BoxPanel.setStretch(this._tabPanel, 1);
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
-    this._model.loadLogChanged.connect(this._startKernel, this);
+    this._model.contentsChanged.connect(this._startKernel, this);
   }
 
   get rendermime(): IRenderMimeRegistry {
@@ -66,14 +67,34 @@ export class SessionWidget extends BoxPanel {
     }
 
     // TODO: dataPath is relative to the session file, so we need the kernel to be started relative to that session file!
-    const dataPath = this._model.loadLog.path;
+    const dataPaths: { [k: string]: string } = {};
+    if ('LoadLog' in this._model.contents) {
+      const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
+        .path;
+      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
+        path;
+    }
+    let i = 0;
+    while (`LoadLog_${i}` in this._model.contents) {
+      const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
+        .path;
+      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
+        path;
+      i++;
+    }
 
+    // TODO Handle loading errors and report in the UI?
     const code = `
+    import json
     import glue_jupyter as gj
 
     app = gj.jglue()
 
-    data = app.load_data("${dataPath}")
+    data_paths = json.loads('${JSON.stringify(dataPaths)}')
+
+    data = {}
+    for name, path in data_paths.items():
+        data[name] = app.load_data(path)
     `;
 
     const future = kernel.requestExecute({ code }, false);
@@ -91,6 +112,7 @@ export class SessionWidget extends BoxPanel {
         const model = new TabModel({
           tabName,
           tabData,
+          model: this._model,
           rendermime: this._rendermime,
           context: this._context,
           notebookTracker: this._notebookTracker,

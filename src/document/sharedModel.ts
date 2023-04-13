@@ -8,10 +8,7 @@ import {
   IGlueSessionSharedModel,
   IGlueSessionSharedModelChange
 } from '../types';
-import {
-  IGlueSessionLoagLog,
-  IGlueSessionTabs
-} from '../_interface/glue.schema';
+import { IGlueSessionTabs } from '../_interface/glue.schema';
 
 export class GlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange>
@@ -22,11 +19,9 @@ export class GlueSessionSharedModel
 
     this._contents = this.ydoc.getMap<Y.Map<any>>('contents');
     this._tabs = this.ydoc.getMap<Y.Map<Array<IDict>>>('tabs');
-    this._loadLog = this.ydoc.getMap<Y.Map<Array<IDict>>>('loadLog');
     this.undoManager.addToScope(this._contents);
     this._contents.observeDeep(this._contentsObserver);
     this._tabs.observeDeep(this._tabsObserver);
-    this._loadLog.observeDeep(this._loadLogObserver);
   }
 
   dispose(): void {
@@ -41,20 +36,12 @@ export class GlueSessionSharedModel
     return JSONExt.deepCopy(this._tabs.toJSON());
   }
 
-  get loadLog(): IGlueSessionLoagLog {
-    return JSONExt.deepCopy(this._loadLog.toJSON());
-  }
-
   get contentsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._contentsChanged;
   }
 
   get tabsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._tabsChanged;
-  }
-
-  get loadLogChanged(): ISignal<IGlueSessionSharedModel, IDict> {
-    return this._loadLogChanged;
   }
 
   getValue(key: string): IDict | undefined {
@@ -87,17 +74,9 @@ export class GlueSessionSharedModel
     }
   };
 
-  private _loadLogObserver = (events: Y.YEvent<any>[]): void => {
-    if (events.length > 0) {
-      this._loadLogChanged.emit({});
-    }
-  };
-
   private _contents: Y.Map<any>;
   private _tabs: Y.Map<Y.Map<Array<IDict>>>;
-  private _loadLog: Y.Map<any>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
-  private _loadLogChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
 }

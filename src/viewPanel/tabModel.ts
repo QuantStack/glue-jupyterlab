@@ -1,4 +1,4 @@
-import { PromiseDelegate, UUID } from '@lumino/coreutils';
+import { JSONObject, PromiseDelegate, UUID } from '@lumino/coreutils';
 import { IDisposable } from '@lumino/disposable';
 
 import { OutputAreaModel, SimplifiedOutputArea } from '@jupyterlab/outputarea';
@@ -6,15 +6,16 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { IGlueSessionViewerTypes } from '../types';
+import { IGlueSessionSharedModel, IGlueSessionViewerTypes } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { GridStackItem } from './gridStackItem';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
-    const { tabName, tabData, rendermime } = options;
+    const { tabName, tabData, rendermime, model } = options;
     this._tabData = tabData;
     this._tabName = tabName;
+    this._model = model;
     this._rendermime = rendermime;
     this._context = options.context;
     this._dataLoaded = options.dataLoaded;
@@ -68,6 +69,27 @@ export class TabModel implements IDisposable {
         state[prop] = value;
       }
     }
+    // Merging the state with what's specified in "layers"
+    // Only taking the state of the first layer
+    // TODO Support multiple layers??
+    if (
+      viewData.layers &&
+      viewData.layers[0]['state'] in this._model.contents
+    ) {
+      const extraState = (
+        this._model.contents[viewData.layers[0]['state']] as JSONObject
+      ).values as JSONObject;
+      for (const prop in extraState) {
+        const value = extraState[prop];
+        // TODO Why do we need to do this??
+        if (typeof value === 'string' && value.startsWith('st__')) {
+          state[prop] = value.slice(4);
+          continue;
+        }
+
+        state[prop] = value;
+      }
+    }
 
     switch (viewData._type) {
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
@@ -86,11 +108,9 @@ export class TabModel implements IDisposable {
         if (this._context) {
           SimplifiedOutputArea.execute(
             `
-            import json
-
-            scatter = app.scatter2d(data=data)
-
             state = json.loads('${JSON.stringify(state)}')
+
+            scatter = app.scatter2d(data=data[state["layer"]])
 
             for key, value in state.items():
                 try:
@@ -124,6 +144,7 @@ export class TabModel implements IDisposable {
   private _isDisposed = false;
   private _tabData: IGlueSessionViewerTypes[];
   private _tabName: string;
+  private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
   private _context?: DocumentRegistry.IContext<GlueSessionModel>;
   private _dataLoaded: PromiseDelegate<void>;
@@ -133,6 +154,7 @@ export namespace TabModel {
   export interface IOptions {
     tabName: string;
     tabData: IGlueSessionViewerTypes[];
+    model: IGlueSessionSharedModel;
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
