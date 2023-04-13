@@ -67,6 +67,21 @@ export class SessionWidget extends BoxPanel {
       return;
     }
 
+    // TODO Handle loading errors and report in the UI?
+    const code = `
+    import json
+    import glue_jupyter as gj
+
+    app = gj.jglue()
+    `;
+
+    const future = kernel.requestExecute({ code }, false);
+    future.onReply = msg => {
+      console.log(msg);
+    };
+    await future.done;
+
+    await this._loadData();
     this._model.contentsChanged.connect(this._loadData, this);
   }
 
@@ -74,7 +89,7 @@ export class SessionWidget extends BoxPanel {
     const kernel = this._context?.sessionContext.session?.kernel;
 
     if (!kernel) {
-      console.error('No kernel running');
+      console.error("No kernel running");
       return;
     }
 
@@ -103,13 +118,12 @@ export class SessionWidget extends BoxPanel {
       i++;
     }
 
+    if (!dataPaths) {
+      return;
+    }
+
     // TODO Handle loading errors and report in the UI?
     const code = `
-    import json
-    import glue_jupyter as gj
-
-    app = gj.jglue()
-
     data_paths = json.loads('${JSON.stringify(dataPaths)}')
 
     data = {}
