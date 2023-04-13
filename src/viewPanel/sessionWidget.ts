@@ -66,20 +66,28 @@ export class SessionWidget extends BoxPanel {
       return;
     }
 
-    // TODO: dataPath is relative to the session file, so we need the kernel to be started relative to that session file!
+    // Extract session path
+    let sessionPath: string;
+    if (this._context.path.includes(':')) {
+      sessionPath = this._context.path.split(':')[1];
+    } else {
+      sessionPath = this._context.path;
+    }
+
+    // Extract paths to datasets
     const dataPaths: { [k: string]: string } = {};
     if ('LoadLog' in this._model.contents) {
       const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
         .path;
       dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        path;
+        PathExt.join(PathExt.dirname(sessionPath), path);
     }
     let i = 0;
     while (`LoadLog_${i}` in this._model.contents) {
       const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
         .path;
       dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        path;
+        PathExt.join(PathExt.dirname(sessionPath), path);
       i++;
     }
 
