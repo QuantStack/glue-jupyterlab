@@ -4,12 +4,12 @@
   "description": "JupyterLab gluepyter Integration Tests",
   "private": true,
   "scripts": {
-    "start": "jupyter lab --config jupyter_server_test_config.py",
+    "start": "jupyter lab ../examples --config jupyter_server_test_config.py",
     "test": "npx playwright test",
     "test:update": "npx playwright test --update-snapshots"
   },
   "devDependencies": {
     "@jupyterlab/galata": "^5.0.0-beta.0",
     "@playwright/test": "^1.32.0"
-}
+  }
 }

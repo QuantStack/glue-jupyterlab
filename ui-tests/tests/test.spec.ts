@@ -6,12 +6,56 @@ import { expect, test } from '@jupyterlab/galata';
  */
 test.use({ autoGoto: false });
 
-test('should emit an activation console message', async ({ page }) => {
-  const logs: string[] = [];
-
-  page.on('console', message => {
-    logs.push(message.text());
-  });
-
+test('should render session file', async ({ page }) => {
   await page.goto();
+
+  await expect(page.getByText('session.glu')).toBeVisible();
+  await page.getByText('session.glu').dblclick();
+
+  // TODO Wait for spinner to not be visible once we have one
+  await page.waitForSelector('.bqplot');
+
+  expect(
+    await page.screenshot({ mask: [page.locator('.bqplot')] })
+  ).toMatchSnapshot('session-tab1.png');
+});
+
+test('should switch tab', async ({ page }) => {
+  await page.goto();
+
+  await expect(page.getByText('session.glu')).toBeVisible();
+  await page.getByText('session.glu').dblclick();
+
+  // TODO Wait for spinner to not be visible once we have one
+  await page.waitForSelector('.bqplot');
+
+  // Switch tab
+  page
+    .locator(
+      '.glue-Session-tabBar > .lm-TabBar-content > .lm-TabBar-tab:nth-of-type(3)'
+    )
+    .click();
+
+  await page.waitForSelector('.bqplot');
+
+  expect(
+    await page.screenshot({ mask: [page.locator('.bqplot')] })
+  ).toMatchSnapshot('session-tab2.png');
+});
+
+test('should open link editor', async ({ page }) => {
+  await page.goto();
+
+  await expect(page.getByText('session.glu')).toBeVisible();
+  await page.getByText('session.glu').dblclick();
+
+  // TODO Wait for spinner to not be visible once we have one
+  await page.waitForSelector('.bqplot');
+
+  // Switch to link editor
+  await (await page.waitForSelector('text="Link Data"')).click();
+
+  expect(
+    await page.screenshot({ mask: [page.locator('.bqplot')] })
+  ).toMatchSnapshot('link-editor.png');
 });
