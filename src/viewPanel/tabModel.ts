@@ -125,17 +125,62 @@ export class TabModel implements IDisposable {
         }
         break;
       }
+      case 'glue.viewers.image.qt.data_viewer.ImageViewer': {
+        const outputAreaModel = new OutputAreaModel({ trusted: true });
+        const out = new SimplifiedOutputArea({
+          model: outputAreaModel,
+          rendermime: this._rendermime
+        });
+
+        item = new GridStackItem({
+          cellIdentity: viewId,
+          cell: out,
+          itemTitle: 'Image'
+        });
+        const cellOutput = item.cellOutput as SimplifiedOutputArea;
+        if (this._context) {
+          SimplifiedOutputArea.execute(
+            `
+            state = json.loads('${JSON.stringify(state)}')
+
+            image = app.imshow(data=data[state["layer"]])
+            `,
+            cellOutput,
+            this._context.sessionContext
+          );
+        }
+        break;
+      }
       case 'glue.viewers.histogram.qt.data_viewer.HistogramViewer': {
         const outputAreaModel = new OutputAreaModel({ trusted: true });
         const out = new SimplifiedOutputArea({
           model: outputAreaModel,
           rendermime: this._rendermime
         });
+
         item = new GridStackItem({
           cellIdentity: viewId,
           cell: out,
           itemTitle: 'Histogram'
         });
+        const cellOutput = item.cellOutput as SimplifiedOutputArea;
+        if (this._context) {
+          SimplifiedOutputArea.execute(
+            `
+            state = json.loads('${JSON.stringify(state)}')
+
+            hist = app.histogram1d(data=data[state["layer"]])
+
+            for key, value in state.items():
+                try:
+                    setattr(hist.state, key, value)
+                except:
+                    pass
+            `,
+            cellOutput,
+            this._context.sessionContext
+          );
+        }
         break;
       }
     }

@@ -69,6 +69,11 @@ export class SessionWidget extends BoxPanel {
 
     // TODO Handle loading errors and report in the UI?
     const code = `
+    # Ignoring warnings so they don't show up in viewers
+    # TODO don't suppress warnings but redirect them?
+    import warnings
+    warnings.filterwarnings("ignore")
+
     import json
     import glue_jupyter as gj
 

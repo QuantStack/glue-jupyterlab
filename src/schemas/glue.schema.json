@@ -25,6 +25,9 @@
               },
               {
                 "$ref": "./viewers/histogram.schema.json"
+              },
+              {
+                "$ref": "./viewers/image.schema.json"
               }
             ]
           }
