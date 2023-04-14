@@ -94,6 +94,16 @@
 .grid-stack-item-content {
   color: var(--jp-content-font-color1);
   background-color: var(--jp-layout-color1);
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-item-widget {
+  height: 100%;
+}
+
+.grid-item-widget > .jp-OutputArea-output {
+  display: block;
 }
 
 .grid-stack .grid-stack-item .grid-stack-item-content {
