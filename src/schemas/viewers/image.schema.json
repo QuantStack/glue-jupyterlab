@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "description": "Viewer::Image",
+  "title": "IGlueImageViewer",
+  "required": ["_type", "layers", "pos", "session", "size", "state"],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "const": "glue.viewers.image.qt.data_viewer.ImageViewer"
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "pos": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "session": {
+      "type": "string"
+    },
+    "size": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "values": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
