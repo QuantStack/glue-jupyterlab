@@ -44,7 +44,15 @@ class YGlue(YBaseDoc):
 
     def observe(self, callback: Callable[[str, Any], None]):
         self.unobserve()
-        self._subscriptions[self._ystate] = self._ystate.observe(partial(callback, "state"))
-        self._subscriptions[self._ysource] = self._ysource.observe(partial(callback, "source"))
-        self._subscriptions[self._ycontents] = self._ycontents.observe(partial(callback, "contents"))
-        self._subscriptions[self._ytabs] = self._ytabs.observe(partial(callback, "tabs"))
+        self._subscriptions[self._ystate] = self._ystate.observe(
+            partial(callback, "state")
+        )
+        self._subscriptions[self._ysource] = self._ysource.observe(
+            partial(callback, "source")
+        )
+        self._subscriptions[self._ycontents] = self._ycontents.observe(
+            partial(callback, "contents")
+        )
+        self._subscriptions[self._ytabs] = self._ytabs.observe(
+            partial(callback, "tabs")
+        )
