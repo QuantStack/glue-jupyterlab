@@ -1,7 +1,7 @@
-import { JSONObject } from '@lumino/coreutils';
 import { BoxPanel } from '@lumino/widgets';
 
 import { IGlueSessionSharedModel } from '../types';
+import { LinkedDataset } from './widgets/linkedDataset';
 
 /**
  * The link editor widget.
@@ -14,31 +14,12 @@ export class LinkEditor extends BoxPanel {
     this.title.label = 'Link Data';
     this.title.className = 'glue-LinkEditor-tab';
 
-    this.node.innerText = 'Link editor widget';
-    this._sharedModel.changed.connect(this._onSharedModelChanged, this);
+    const linkedDataset = new LinkedDataset({ sharedModel: this._sharedModel });
+    this.addWidget(linkedDataset);
   }
 
   get sharedModel(): IGlueSessionSharedModel {
     return this._sharedModel;
-  }
-
-  private _onSharedModelChanged() {
-    if (!this._sharedModel.contents.__main__) {
-      this.node.innerText = `Link editor widget for ${
-        this._sharedModel.state.path || '(no session)'
-      }\nNo data`;
-      return;
-    }
-
-    const dataCollection: string =
-      ((this._sharedModel.contents.__main__ as JSONObject).data as string) ||
-      '';
-    const dataNames: string[] = (
-      this._sharedModel.contents[dataCollection] as JSONObject
-    ).data as string[];
-    this.node.innerText = `Link editor widget for ${
-      this._sharedModel.state.path || '(no session)'
-    }\nExisting data: ${JSON.stringify(dataNames)}`;
   }
 
   private _sharedModel: IGlueSessionSharedModel;

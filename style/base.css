@@ -148,3 +148,15 @@
   background: var(--jp-layout-color2);
   flex-direction: row-reverse;
 }
+
+.glue-LinkEditor-title {
+  background-color: var(--jp-border-color0);
+}
+
+.glue-LinkedDataset-type {
+  justify-content: space-around;
+}
+
+.glue-LinkedDataset-type .selected {
+  text-decoration: underline;
+}
