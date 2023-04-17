@@ -6,13 +6,13 @@ import { IGlueSessionSharedModel } from '../types';
 /**
  * The link editor widget.
  */
-export class LinkWidget extends BoxPanel {
+export class LinkEditor extends BoxPanel {
   constructor(options: LinkWidget.IOptions) {
     super({ direction: 'left-to-right' });
     this._sharedModel = options.sharedModel;
-    this.addClass('glue-link-editor');
+    this.addClass('glue-linkEditor');
     this.title.label = 'Link Data';
-    this.title.className = 'glue-LinkEditor-title';
+    this.title.className = 'glue-LinkEditor-tab';
 
     this.node.innerText = 'Link editor widget';
     this._sharedModel.changed.connect(this._onSharedModelChanged, this);

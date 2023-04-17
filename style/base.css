@@ -96,17 +96,17 @@
   margin-left: 0;
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-title {
+.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-tab {
   flex: none;
   background-color: var(--jp-brand-color1);
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-title:hover {
+.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-tab:hover {
   background-color: var(--jp-brand-color2);
   cursor: pointer;
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-title {
+.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-tab {
   background: var(--jp-brand-color2);
 }
 
