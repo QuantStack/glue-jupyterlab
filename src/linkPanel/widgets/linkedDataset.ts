@@ -3,7 +3,7 @@ import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { ReactWidget, Toolbar } from '@jupyterlab/ui-components';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, SplitPanel, StackedPanel, Widget } from '@lumino/widgets';
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { DatasetSwitcherComponent } from './datasetSwitcher';
 
@@ -72,16 +72,15 @@ export class LinkedDataset extends LinkEditorWidget {
       linkType.node.innerHTML = `<a href="#">${type}</a>`;
       this._toolbarTypes.push({ name: type, widget: linkType });
     });
-
     mainContent.addWidget(linkTypes);
-
+    BoxPanel.setStretch(linkTypes, 0);
     const mainContentPanels = new StackedPanel();
     const createdLinksContent = this._createdLinksContent();
     const inferredLinksContent = this._inferredLinksContent();
 
     mainContentPanels.addWidget(createdLinksContent);
     mainContentPanels.addWidget(inferredLinksContent);
-
+    BoxPanel.setStretch(mainContentPanels, 1);
     Array.from(this._toolbarTypes).forEach((item, index) => {
       linkTypes.addItem(item.name, item.widget);
       if (index === 0) {
@@ -103,8 +102,8 @@ export class LinkedDataset extends LinkEditorWidget {
     return mainContent;
   }
 
-  _createdLinksContent(): BoxPanel {
-    const createdLinks = new BoxPanel();
+  _createdLinksContent(): SplitPanel {
+    const createdLinks = new SplitPanel({ orientation: 'vertical' });
     const datasetSelection = new Toolbar();
     datasetSelection.addClass('glue-LinkedDataset-select');
     this._datasetSwitchers.forEach(switcher => {

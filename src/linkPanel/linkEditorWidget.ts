@@ -1,7 +1,7 @@
-import { Panel, Widget } from '@lumino/widgets';
+import { BoxPanel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 
-export class LinkEditorWidget extends Panel {
+export class LinkEditorWidget extends BoxPanel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
     this._sharedModel = options.sharedModel;
@@ -9,7 +9,8 @@ export class LinkEditorWidget extends Panel {
     this._content.addClass('glue-LinkEditor-content');
     this.addWidget(this._titleWidget);
     this.addWidget(this._content);
-
+    BoxPanel.setStretch(this._titleWidget, 0);
+    BoxPanel.setStretch(this._content, 1);
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
   }
 
@@ -20,7 +21,7 @@ export class LinkEditorWidget extends Panel {
     return this._titleWidget.node.innerText;
   }
 
-  get content(): Panel {
+  get content(): BoxPanel {
     return this._content;
   }
 
@@ -30,11 +31,11 @@ export class LinkEditorWidget extends Panel {
 
   protected _sharedModel: IGlueSessionSharedModel;
   private _titleWidget = new Widget();
-  private _content = new Panel();
+  private _content = new BoxPanel();
 }
 
 export namespace LinkEditorWidget {
-  export interface IOptions extends Panel.IOptions {
+  export interface IOptions extends BoxPanel.IOptions {
     sharedModel: IGlueSessionSharedModel;
   }
 }

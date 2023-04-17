@@ -151,6 +151,7 @@
 
 .glue-LinkEditor-title {
   background-color: var(--jp-border-color0);
+  min-height: 25px;
 }
 
 .glue-LinkedDataset-type {
