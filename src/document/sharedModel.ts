@@ -17,11 +17,11 @@ export class GlueSessionSharedModel
   constructor() {
     super();
 
-    this._contents = this.ydoc.getMap<Y.Map<any>>('contents');
-    this._tabs = this.ydoc.getMap<Y.Map<Array<IDict>>>('tabs');
+    this._contents = this.ydoc.getMap<any>('contents');
+    this._tabs = this.ydoc.getMap<Array<IDict>>('tabs');
     this.undoManager.addToScope(this._contents);
-    this._contents.observeDeep(this._contentsObserver);
-    this._tabs.observeDeep(this._tabsObserver);
+    this._contents.observe(this._contentsObserver);
+    this._tabs.observe(this._tabsObserver);
   }
 
   dispose(): void {
@@ -60,22 +60,18 @@ export class GlueSessionSharedModel
     return new GlueSessionSharedModel();
   }
 
-  private _contentsObserver = (events: Y.YEvent<any>[]): void => {
-    if (events.length > 0) {
-      const contents = this.contents;
-      this._changed.emit(contents);
-      this._contentsChanged.emit(contents);
-    }
+  private _contentsObserver = (event: Y.YMapEvent<any>): void => {
+    const contents = this.contents;
+    this._changed.emit(contents);
+    this._contentsChanged.emit(contents);
   };
 
-  private _tabsObserver = (events: Y.YEvent<any>[]): void => {
-    if (events.length > 0) {
-      this._tabsChanged.emit({});
-    }
+  private _tabsObserver = (event: Y.YMapEvent<Array<IDict>>): void => {
+    this._tabsChanged.emit({});
   };
 
   private _contents: Y.Map<any>;
-  private _tabs: Y.Map<Y.Map<Array<IDict>>>;
+  private _tabs: Y.Map<Array<IDict>>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);

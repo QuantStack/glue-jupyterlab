@@ -1,5 +1,6 @@
 import json
-from typing import Dict, List
+from typing import Dict, List, Any, Callable
+from functools import partial
 
 from jupyter_ydoc.ybasedoc import YBaseDoc
 
@@ -41,9 +42,9 @@ class YGlue(YBaseDoc):
             self._ycontents.update(t, contents.items())
             self._ytabs.update(t, tabs.items())
 
-    def observe(self, callback):
+    def observe(self, callback: Callable[[str, Any], None]):
         self.unobserve()
-        self._subscriptions[self._ystate] = self._ystate.observe(callback)
-        self._subscriptions[self._ysource] = self._ysource.observe(callback)
-        self._subscriptions[self._ycontents] = self._ycontents.observe_deep(callback)
-        self._subscriptions[self._ytabs] = self._ytabs.observe_deep(callback)
+        self._subscriptions[self._ystate] = self._ystate.observe(partial(callback, "state"))
+        self._subscriptions[self._ysource] = self._ysource.observe(partial(callback, "source"))
+        self._subscriptions[self._ycontents] = self._ycontents.observe(partial(callback, "contents"))
+        self._subscriptions[self._ytabs] = self._ytabs.observe(partial(callback, "tabs"))
