@@ -40,6 +40,21 @@ export class ControlPanelModel implements IControlPanelModel {
     return this._glueSessionChanged;
   }
 
+  get selectedDataset(): string | null {
+    return this._selectedDataset;
+  }
+
+  set selectedDataset(value: string | null) {
+    if (value !== this._selectedDataset) {
+      this._selectedDataset = value;
+      this._selectedDatasetChanged.emit();
+    }
+  }
+
+  get selectedDatasetChanged(): ISignal<IControlPanelModel, void> {
+    return this._selectedDatasetChanged;
+  }
+
   get tabsChanged(): ISignal<IControlPanelModel, void> {
     return this._tabsChanged;
   }
@@ -59,6 +74,8 @@ export class ControlPanelModel implements IControlPanelModel {
     IGlueSessionWidget | null
   >(this);
   private _tabsChanged = new Signal<IControlPanelModel, void>(this);
+  private _selectedDataset: string | null = null;
+  private _selectedDatasetChanged = new Signal<IControlPanelModel, void>(this);
 
   private _sessionModel?: IGlueSessionModel;
   private _tabs: IGlueSessionTabs = {};

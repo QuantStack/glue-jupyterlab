@@ -12,6 +12,29 @@
   flex-grow: 1;
 }
 
+.glue-Control-datasets-container {
+  padding: 0;
+  margin: 0;
+}
+
+.glue-Control-datasets-item {
+  display: flex;
+  flex-direction: row;
+  color: var(--jp-ui-font-color1);
+  height: 24px;
+  line-height: 24px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+.glue-Control-datasets-item:hover {
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-Control-datasets-item-selected {
+  background-color: var(--jp-layout-color2);
+}
+
 .glue-Session-tabBar {
   z-index: -1;
   background-color: var(--jp-layout-color2);

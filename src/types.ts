@@ -46,6 +46,8 @@ export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
   glueSessionChanged: ISignal<IControlPanelModel, IGlueSessionWidget | null>;
+  selectedDataset: string | null;
+  selectedDatasetChanged: ISignal<IControlPanelModel, void>;
   tabsChanged: ISignal<IControlPanelModel, void>;
   getTabs(): IGlueSessionTabs;
 }
