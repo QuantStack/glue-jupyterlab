@@ -3,6 +3,7 @@ import { BoxPanel } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { LinkedDataset } from './widgets/linkedDataset';
 import { Linking } from './widgets/linking';
+import { Summary } from './widgets/summary';
 
 /**
  * The link editor widget.
@@ -23,6 +24,7 @@ export class LinkEditor extends BoxPanel {
         linkedDataset: linkedDataset
       })
     );
+    this.addWidget(new Summary({ sharedModel: this._sharedModel }));
   }
 
   get sharedModel(): IGlueSessionSharedModel {
