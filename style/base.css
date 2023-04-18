@@ -32,7 +32,11 @@
 }
 
 .glue-Control-datasets-item-selected {
-  background-color: var(--jp-layout-color2);
+  background-color: var(--jp-brand-color1);
+}
+
+.glue-Control-datasets-item-selected:hover {
+  background-color: var(--jp-brand-color1);
 }
 
 .glue-Session-tabBar {
