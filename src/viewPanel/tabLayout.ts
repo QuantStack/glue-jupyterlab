@@ -22,7 +22,7 @@ export class TabLayout extends Layout {
 
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
-	this._gridHost.classList.add('glue-Session-gridhost');
+    this._gridHost.classList.add('glue-Session-gridhost');
 
     this._grid = GridStack.init(
       {
@@ -37,7 +37,7 @@ export class TabLayout extends Layout {
         alwaysShowResizeHandle:
           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
             navigator.userAgent
-          ),
+          )
       },
       this._gridHost
     );
@@ -108,7 +108,7 @@ export class TabLayout extends Layout {
    */
   protected onUpdateRequest(msg: Message): void {
     const items = this._grid?.getGridItems();
-    items?.forEach((item) => {
+    items?.forEach(item => {
       this._grid.removeWidget(item, true, false);
       this._grid.addWidget(item);
     });
@@ -178,7 +178,7 @@ export class TabLayout extends Layout {
    * @param item - The cell widget.
    */
   addGridItem(item: GridStackItem): void {
-	const id = item.cellIdentity;
+    const id = item.cellIdentity;
 
     const options = {
       id,
@@ -206,11 +206,11 @@ export class TabLayout extends Layout {
    */
   updateGridItem(id: string, info: any): void {
     const items = this._grid.getGridItems();
-    const item = items?.find((value) => value.gridstackNode?.id === id);
+    const item = items?.find(value => value.gridstackNode?.id === id);
     this._grid.update(item!, {
       w: info.w,
       h: info.h,
-	  autoPosition: true,
+      autoPosition: true
     });
   }
 
@@ -221,10 +221,10 @@ export class TabLayout extends Layout {
    */
   removeGridItem(id: string): void {
     const items = this._grid.getGridItems();
-    const item = items?.find((value) => value.gridstackNode?.id === id);
+    const item = items?.find(value => value.gridstackNode?.id === id);
 
     if (item) {
-      this._gridItems = this._gridItems.filter((obj) => obj.cellIdentity !== id);
+      this._gridItems = this._gridItems.filter(obj => obj.cellIdentity !== id);
       this._grid.removeWidget(item, true, false);
     }
   }
@@ -240,7 +240,7 @@ export class TabLayout extends Layout {
    * Handle remove event messages sent from gridstack.
    */
   private _onRemoved(event: Event, items: GridStackNode[]): void {
-    items.forEach((el) => {
+    items.forEach(el => {
       //this._model.hideCell(el.id as string);
     });
   }
@@ -249,7 +249,9 @@ export class TabLayout extends Layout {
    * Handle resize event messages sent from gridstack.
    */
   private _onResize(event: Event, item: GridStackNode): void {
-    const widget = this._gridItems.find((value) => value.cellIdentity === item.id);
+    const widget = this._gridItems.find(
+      value => value.cellIdentity === item.id
+    );
     if (widget) {
       MessageLoop.sendMessage(widget, Widget.Msg.UpdateRequest);
     }
@@ -259,7 +261,7 @@ export class TabLayout extends Layout {
    * Handle resize-stop event messages in the layout.
    */
   private _onResizeStops = (): void => {
-    this._gridItems.forEach((item) => {
+    this._gridItems.forEach(item => {
       MessageLoop.sendMessage(item, Widget.Msg.UpdateRequest);
     });
   };

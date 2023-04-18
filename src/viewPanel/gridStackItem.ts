@@ -7,20 +7,20 @@ export class GridStackItem extends Panel {
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
     this.addClass('grid-stack-item');
-    
+
     const { cellIdentity, cell, itemTitle = '' } = options;
     this._cellOutput = cell;
     this.cellIdentity = cellIdentity;
-    
+
     const content = new Panel();
     content.addClass('grid-stack-item-content');
-    
+
     this._toolbar = this._createToolbar(itemTitle);
     content.addWidget(this._toolbar);
 
     cell.addClass('grid-item-widget');
     content.addWidget(cell);
-    
+
     this.addWidget(content);
   }
 

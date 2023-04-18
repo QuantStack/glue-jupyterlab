@@ -19,7 +19,7 @@ export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
     this.addClass('grid-panel');
-    
+
     this._model = options.model;
     this._rendermime = options.rendermime;
     this._notebookTracker = options.notebookTracker;

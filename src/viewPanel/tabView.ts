@@ -3,17 +3,16 @@ import { Widget } from '@lumino/widgets';
 import { TabModel } from './tabModel';
 import { TabLayout } from './tabLayout';
 
-
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
     super();
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
     this.addClass('grid-editor');
-    
+
     this._model = options.model;
     this.title.label = this._model?.tabName ?? '';
-    
+
     this.layout = new TabLayout();
 
     this._model?.ready.connect(() => {
