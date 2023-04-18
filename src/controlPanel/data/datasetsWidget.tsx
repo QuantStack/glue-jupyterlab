@@ -96,7 +96,7 @@ export class DatasetsWidget extends ReactWidget {
     }
   }
 
-  private _getDatasetItem(id: string) {
+  private _getDatasetItem(id: string): JSX.Element {
     const className = `glue-Control-datasets-item ${
       id === this._model.selectedDataset
         ? 'glue-Control-datasets-item-selected'
@@ -109,7 +109,7 @@ export class DatasetsWidget extends ReactWidget {
     );
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <ul
         className="glue-Control-datasets-container"
