@@ -11,7 +11,6 @@ import { CommandIDs } from './commands';
 
 const NAME_SPACE = 'gluelab';
 
-
 export const controlPanel: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:control-panel',
   autoStart: true,

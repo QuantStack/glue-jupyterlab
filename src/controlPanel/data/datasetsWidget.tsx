@@ -25,7 +25,7 @@ export class DatasetsWidget extends ReactWidget {
     // Construct the context menu.
     this._menu = new Menu({ commands });
     const viewerSubmenu = new Menu({ commands });
-    viewerSubmenu.title.label = 'New Viewer'
+    viewerSubmenu.title.label = 'New Viewer';
     viewerSubmenu.title.iconClass = 'fa fa-caret-right';
     viewerSubmenu.addItem({ command: CommandIDs.new1DHistogram });
     viewerSubmenu.addItem({ command: CommandIDs.new2DScatter });
