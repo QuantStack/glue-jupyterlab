@@ -161,3 +161,23 @@
 .glue-LinkedDataset-type .selected {
   text-decoration: underline;
 }
+
+.glue-LinkEditor-linking .lm-StackedPanel .jp-Toolbar {
+  justify-content: space-between;
+}
+
+.glue-LinkEditor-linking .glue-LinkEditor-linkingDatasetName {
+  flex-grow: 1;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.glue-LinkEditor-linking .jp-ToolbarButtonComponent {
+  background-color: var(--jp-border-color1);
+  margin-right: 10px;
+}
+
+.glue-LinkEditor-linking .jp-ToolbarButtonComponent:hover {
+  background-color: var(--jp-border-color2);
+  cursor: pointer;
+}

@@ -65,14 +65,18 @@ export class LinkedDataset extends LinkEditorWidget {
     const linkTypes = new Toolbar();
     linkTypes.addClass('glue-LinkedDataset-type');
 
-    const types = ['Created links', 'Inferred links'];
-    types.forEach(type => {
+    const tabNames = ['Created links', 'Inferred links'];
+    const tabs: IObservableList<ToolbarRegistry.IToolbarItem> =
+      new ObservableList<ToolbarRegistry.IToolbarItem>();
+    tabNames.forEach(type => {
       const linkType = new Widget();
       linkType.addClass('glue-LinkEditor-linkType');
       linkType.node.innerHTML = `<a href="#">${type}</a>`;
-      this._toolbarTypes.push({ name: type, widget: linkType });
+      tabs.push({ name: type, widget: linkType });
     });
+
     mainContent.addWidget(linkTypes);
+
     BoxPanel.setStretch(linkTypes, 0);
     const mainContentPanels = new StackedPanel();
     const createdLinksContent = this._createdLinksContent();
@@ -81,7 +85,7 @@ export class LinkedDataset extends LinkEditorWidget {
     mainContentPanels.addWidget(createdLinksContent);
     mainContentPanels.addWidget(inferredLinksContent);
     BoxPanel.setStretch(mainContentPanels, 1);
-    Array.from(this._toolbarTypes).forEach((item, index) => {
+    Array.from(tabs).forEach((item, index) => {
       linkTypes.addItem(item.name, item.widget);
       if (index === 0) {
         item.widget.addClass('selected');
@@ -89,9 +93,7 @@ export class LinkedDataset extends LinkEditorWidget {
 
       item.widget.node.onclick = () => {
         mainContentPanels.widgets.forEach(widget => widget.hide());
-        Array.from(this._toolbarTypes).forEach(item =>
-          item.widget.removeClass('selected')
-        );
+        Array.from(tabs).forEach(item => item.widget.removeClass('selected'));
         mainContentPanels.widgets[index].show();
         item.widget.addClass('selected');
       };
@@ -133,6 +135,4 @@ export class LinkedDataset extends LinkEditorWidget {
   private _datasetSwitchers: DatasetSwitcherComponent[];
   private _selections: [string, string] = ['', ''];
   private _selectionChanged = new Signal<this, [string, string]>(this);
-  private _toolbarTypes: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
 }
