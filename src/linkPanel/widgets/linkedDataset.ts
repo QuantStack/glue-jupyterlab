@@ -3,7 +3,7 @@ import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { ReactWidget, Toolbar } from '@jupyterlab/ui-components';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { BoxPanel, SplitPanel, StackedPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { DatasetSwitcherComponent } from './datasetSwitcher';
 
@@ -102,8 +102,8 @@ export class LinkedDataset extends LinkEditorWidget {
     return mainContent;
   }
 
-  _createdLinksContent(): SplitPanel {
-    const createdLinks = new SplitPanel({ orientation: 'vertical' });
+  _createdLinksContent(): BoxPanel {
+    const createdLinks = new BoxPanel();
     const datasetSelection = new Toolbar();
     datasetSelection.addClass('glue-LinkedDataset-select');
     this._datasetSwitchers.forEach(switcher => {
@@ -117,6 +117,9 @@ export class LinkedDataset extends LinkEditorWidget {
     const links = new Widget();
     links.node.innerText = 'The created links';
     createdLinks.addWidget(links);
+
+    BoxPanel.setStretch(datasetSelection, 0);
+    BoxPanel.setStretch(links, 1);
     return createdLinks;
   }
 
