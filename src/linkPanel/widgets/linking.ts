@@ -1,11 +1,12 @@
 import { ToolbarRegistry } from '@jupyterlab/apputils';
 import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { ReactWidget, Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
-import { BoxPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { AdvancedLinking } from './advancedLinkinkChoices';
+import { AdvancedLinking } from './advancedLinkingChoices';
 import { LinkedDataset } from './linkedDataset';
+import { JSONObject } from '@lumino/coreutils';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
@@ -25,7 +26,6 @@ export class Linking extends LinkEditorWidget {
       ])
     );
 
-    // this.content.addWidget(this._mainContent(linkedDataset.selections));
     linkedDataset.selectionChanged.connect(this.updateDataset, this);
 
     if (linkedDataset.selections) {
@@ -34,23 +34,74 @@ export class Linking extends LinkEditorWidget {
   }
 
   updateDataset(_sender: LinkedDataset, dataset: string[]): void {
-    console.log('Update Identity');
     // Update identity toolbar items
     this._identityToolbar.get(0).widget.node.innerText = dataset[0];
     this._identityToolbar.get(1).widget.node.innerText = dataset[1];
-    console.log(dataset);
 
-    // Update identity variables list
-    this._identityVariables[0].node.innerText = `Variables of ${dataset[0]}`;
-    this._identityVariables[1].node.innerText = `Variables of ${dataset[1]}`;
+    // Update identity attributes list.
+    dataset.forEach((dataName, index) => {
+      // Remove all the existing widgets.
+      while (this._identityAttributes[index].widgets.length) {
+        this._identityAttributes[index].widgets[0].dispose();
+      }
+
+      // Get the dataset object from model.
+      const datasetDefinition: JSONObject = this._sharedModel.contents[
+        dataName
+      ] as JSONObject;
+
+      // Add a new widget for each attribute
+      if (datasetDefinition) {
+        let attributes: string[] = (
+          datasetDefinition.components as string[][]
+        ).map(component => component[0]);
+
+        attributes = attributes.sort();
+        attributes.forEach(value => {
+          const attribute = new Widget();
+          attribute.title.label = value;
+          attribute.addClass('glue-LinkEditor-attribute');
+          attribute.node.innerText = value;
+          attribute.node.onclick = () => {
+            this.onAttributeClicked(attribute, index);
+          };
+          this._identityAttributes[index].addWidget(attribute);
+        });
+      }
+    });
   }
 
   onSharedModelChanged(): void {
     return;
   }
 
+  onAttributeClicked(attribute: Widget, index: number): void {
+    const isSelected = attribute.hasClass('selected');
+
+    // Remove sibling attribute selected class.
+    (attribute.parent as Panel).widgets
+      .filter(widget => widget.hasClass('selected'))
+      .forEach(widget => widget.removeClass('selected'));
+
+    // Select the attribute.
+    if (!isSelected) {
+      attribute.addClass('selected');
+      this._selectedAttributes[index] = attribute.title.label;
+    } else {
+      this._selectedAttributes[index] = '';
+    }
+
+    // Enable/disable the Glue button.
+    (
+      this._identityToolbar.get(this._identityToolbar.length - 1)
+        .widget as ToolbarButton
+    ).enabled = this._selectedAttributes.every(value => value !== '');
+  }
+
   glueIdentity = (): void => {
-    console.log('Glue identity clicked');
+    console.log(
+      `Glue identity: ${this._selectedAttributes[0]} <-> ${this._selectedAttributes[1]}`
+    );
   };
 
   advancedLinkChanged = (sender: AdvancedLinking, linkType: string): void => {
@@ -66,7 +117,7 @@ export class Linking extends LinkEditorWidget {
     panel.title.label = 'Identity linking';
 
     const glueToolbar = new Toolbar();
-    const variables = new BoxPanel({ direction: 'left-to-right' });
+    const attributes = new BoxPanel({ direction: 'left-to-right' });
 
     selections.forEach((selection, index) => {
       const datasetName = new Widget();
@@ -77,15 +128,13 @@ export class Linking extends LinkEditorWidget {
         widget: datasetName
       });
 
-      this._identityVariables[
-        index
-      ].node.innerText = `Variables of ${selection}`;
-      variables.addWidget(this._identityVariables[index]);
+      attributes.addWidget(this._identityAttributes[index]);
     });
 
     const glueButton = new ToolbarButton({
       label: 'GLUE',
       tooltip: 'Glue selection',
+      enabled: false,
       onClick: this.glueIdentity
     });
     this._identityToolbar.push({ name: 'Glue', widget: glueButton });
@@ -96,10 +145,10 @@ export class Linking extends LinkEditorWidget {
 
     panel.addWidget(glueToolbar);
 
-    panel.addWidget(variables);
+    panel.addWidget(attributes);
 
     BoxPanel.setStretch(glueToolbar, 0);
-    BoxPanel.setStretch(variables, 1);
+    BoxPanel.setStretch(attributes, 1);
 
     panel.hide();
 
@@ -111,7 +160,7 @@ export class Linking extends LinkEditorWidget {
     panel.title.label = 'Advanced linking';
 
     const glueToolbar = new Toolbar();
-    const variables = new BoxPanel({ direction: 'left-to-right' });
+    const attributes = new BoxPanel({ direction: 'left-to-right' });
 
     const advancedSelect = new AdvancedLinking({});
     this._advancedToolbar.push({
@@ -132,22 +181,23 @@ export class Linking extends LinkEditorWidget {
 
     advancedSelect.onChange.connect(this.advancedLinkChanged, this);
     panel.addWidget(glueToolbar);
-    panel.addWidget(variables);
+    panel.addWidget(attributes);
 
     BoxPanel.setStretch(glueToolbar, 0);
-    BoxPanel.setStretch(variables, 1);
+    BoxPanel.setStretch(attributes, 1);
 
     panel.hide();
 
     return panel;
   }
 
+  private _selectedAttributes = ['', ''];
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
-  private _identityVariables = [new BoxPanel(), new BoxPanel()];
+  private _identityAttributes = [new Panel(), new Panel()];
   private _advancedToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
-  // private _advancedVariables = [new BoxPanel(), new BoxPanel()];
+  // private _advancedAttributes = [new BoxPanel(), new BoxPanel()];
 }
 
 namespace Linking {

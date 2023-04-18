@@ -165,6 +165,8 @@
 
 .glue-LinkEditor-tabToolbar .selected {
   text-decoration: underline;
+  color: var(--jp-content-link-color);
+  font-weight: bold;
 }
 
 .glue-LinkEditor-linking .lm-StackedPanel .jp-Toolbar {
@@ -185,4 +187,21 @@
 .glue-LinkEditor-linking .jp-ToolbarButtonComponent:hover {
   background-color: var(--jp-layout-color2);
   cursor: pointer;
+}
+
+.glue-LinkEditor-attribute {
+  padding: 0.5em;
+}
+
+.glue-LinkEditor-attribute:hover {
+  cursor: pointer;
+}
+
+.glue-LinkEditor-attribute:not(.selected):hover {
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-attribute.selected {
+  background-color: var(--jp-brand-color4);
+  color: var(--jp-content-link-color);
 }
