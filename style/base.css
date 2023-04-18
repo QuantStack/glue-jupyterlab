@@ -150,8 +150,14 @@
 }
 
 .glue-LinkEditor-title {
-  background-color: var(--jp-border-color0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--jp-layout-color4);
   min-height: 25px;
+  color: var(--jp-ui-inverse-font-color0);
+  font-weight: bold;
+
 }
 
 .glue-LinkedDataset-type {
@@ -173,11 +179,11 @@
 }
 
 .glue-LinkEditor-linking .jp-ToolbarButtonComponent {
-  background-color: var(--jp-border-color1);
+  background-color: var(--jp-layout-color3);
   margin-right: 10px;
 }
 
 .glue-LinkEditor-linking .jp-ToolbarButtonComponent:hover {
-  background-color: var(--jp-border-color2);
+  background-color: var(--jp-layout-color2);
   cursor: pointer;
 }
