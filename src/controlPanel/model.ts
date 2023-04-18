@@ -9,6 +9,7 @@ import {
 import { IGlueSessionTracker } from '../token';
 import { IGlueSessionTabs } from '../_interface/glue.schema';
 
+
 export class ControlPanelModel implements IControlPanelModel {
   constructor(options: ControlPanelModel.IOptions) {
     this._tracker = options.tracker;

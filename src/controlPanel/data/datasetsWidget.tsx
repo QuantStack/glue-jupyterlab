@@ -7,6 +7,7 @@ import { Menu } from '@lumino/widgets';
 import { ReactWidget } from '@jupyterlab/ui-components';
 
 import { IControlPanelModel, IGlueSessionSharedModel } from '../../types';
+import { CommandIDs } from '../commands';
 
 export class DatasetsWidget extends ReactWidget {
   constructor(options: {
@@ -21,9 +22,15 @@ export class DatasetsWidget extends ReactWidget {
 
     this._model.glueSessionChanged.connect(this._sessionChanged, this);
 
-    // Create a context menu.
+    // Construct the context menu.
     this._menu = new Menu({ commands });
-    this._menu.addItem({ command: 'new-viewer' });
+    const viewerSubmenu = new Menu({ commands });
+    viewerSubmenu.title.label = 'New Viewer'
+    viewerSubmenu.title.iconClass = 'fa fa-caret-right';
+    viewerSubmenu.addItem({ command: CommandIDs.new1DHistogram });
+    viewerSubmenu.addItem({ command: CommandIDs.new2DScatter });
+    viewerSubmenu.addItem({ command: CommandIDs.new2DImage });
+    this._menu.addItem({ type: 'submenu', submenu: viewerSubmenu });
 
     this._model.selectedDatasetChanged.connect(this.update, this);
   }
@@ -89,26 +96,26 @@ export class DatasetsWidget extends ReactWidget {
     }
   }
 
-  render() {
-    const getDatasetItem = (id: string) => {
-      const className = `glue-Control-datasets-item ${
-        id === this._model.selectedDataset
-          ? 'glue-Control-datasets-item-selected'
-          : ''
-      }`;
-      return (
-        <li id={id} className={className} onClick={this._onClick.bind(this)}>
-          {id}
-        </li>
-      );
-    };
+  private _getDatasetItem(id: string) {
+    const className = `glue-Control-datasets-item ${
+      id === this._model.selectedDataset
+        ? 'glue-Control-datasets-item-selected'
+        : ''
+    }`;
+    return (
+      <li id={id} className={className} onClick={this._onClick.bind(this)}>
+        {id}
+      </li>
+    );
+  }
 
+  render() {
     return (
       <ul
         className="glue-Control-datasets-container"
         onContextMenu={this._contextMenu.bind(this)}
       >
-        {this._dataNames.map(getDatasetItem)}
+        {this._dataNames.map(this._getDatasetItem.bind(this))}
       </ul>
     );
   }

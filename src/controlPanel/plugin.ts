@@ -7,8 +7,10 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { IGlueSessionTracker } from '../token';
+import { CommandIDs } from './commands';
 
 const NAME_SPACE = 'gluelab';
+
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {
   id: 'glue-lab:control-panel',
@@ -39,19 +41,28 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
 
     shell.add(controlPanel, 'left', { rank: 2000 });
 
-    commands.addCommand('new-viewer', {
-      label: 'New Viewer',
+    commands.addCommand(CommandIDs.new1DHistogram, {
+      label: '1D Histogram',
       iconClass: 'fa fa-chart-bar',
-      mnemonic: 0,
       execute: () => {
         console.log('create new viewer for', controlModel.selectedDataset);
       }
     });
 
-    commands.addKeyBinding({
-      keys: ['Enter'],
-      selector: '.glue-Control-datasets-item',
-      command: 'new-viewer'
+    commands.addCommand(CommandIDs.new2DScatter, {
+      label: '2D Scatter',
+      iconClass: 'fa fa-circle',
+      execute: () => {
+        console.log('create new viewer for', controlModel.selectedDataset);
+      }
+    });
+
+    commands.addCommand(CommandIDs.new2DImage, {
+      label: '2D Image',
+      iconClass: 'fa fa-image',
+      execute: () => {
+        console.log('create new viewer for', controlModel.selectedDataset);
+      }
     });
   }
 };
