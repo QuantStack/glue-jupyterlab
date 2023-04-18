@@ -40,6 +40,7 @@ export class LinkWidget extends BoxPanel {
       this._sharedModel.state.path || '(no session)'
     }\nExisting data: ${JSON.stringify(dataNames)}`;
   }
+
   private _sharedModel: IGlueSessionSharedModel;
 }
 
