@@ -1,4 +1,7 @@
-import { BoxPanel, Widget } from '@lumino/widgets';
+import { ToolbarRegistry } from '@jupyterlab/apputils';
+import { IObservableList, ObservableList } from '@jupyterlab/observables';
+import { Toolbar } from '@jupyterlab/ui-components';
+import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 
 export class LinkEditorWidget extends BoxPanel {
@@ -25,11 +28,53 @@ export class LinkEditorWidget extends BoxPanel {
     return this._content;
   }
 
+  protected mainContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
+    const mainContent = new BoxPanel();
+
+    const tabToolbar = new Toolbar();
+    tabToolbar.addClass('glue-LinkEditor-tabToolbar');
+    const mainContentPanels = new StackedPanel();
+
+    items.forEach(item => {
+      const tabWidget = new Widget();
+      tabWidget.addClass('glue-LinkEditor-linkType');
+      tabWidget.node.innerHTML = `<a href="#">${item.name}</a>`;
+      this._tabToolbar.push({ name: item.name, widget: tabWidget });
+
+      mainContentPanels.addWidget(item.widget);
+    });
+
+    mainContent.addWidget(tabToolbar);
+    mainContent.addWidget(mainContentPanels);
+    BoxPanel.setStretch(tabToolbar, 0);
+    BoxPanel.setStretch(mainContentPanels, 1);
+    Array.from(this._tabToolbar).forEach((item, index) => {
+      tabToolbar.addItem(item.name, item.widget);
+      if (index === 0) {
+        item.widget.addClass('selected');
+        mainContentPanels.widgets[index].show();
+      }
+
+      item.widget.node.onclick = () => {
+        mainContentPanels.widgets.forEach(widget => widget.hide());
+        Array.from(this._tabToolbar).forEach(item =>
+          item.widget.removeClass('selected')
+        );
+        mainContentPanels.widgets[index].show();
+        item.widget.addClass('selected');
+      };
+    });
+
+    return mainContent;
+  }
+
   onSharedModelChanged(): void {
     /** no-op */
   }
 
   protected _sharedModel: IGlueSessionSharedModel;
+  protected _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
+    new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _titleWidget = new Widget();
   private _content = new BoxPanel();
 }
@@ -37,5 +82,10 @@ export class LinkEditorWidget extends BoxPanel {
 export namespace LinkEditorWidget {
   export interface IOptions extends BoxPanel.IOptions {
     sharedModel: IGlueSessionSharedModel;
+  }
+
+  export interface IMainContentItems {
+    name: string;
+    widget: Widget;
   }
 }

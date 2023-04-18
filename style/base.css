@@ -159,11 +159,11 @@
   font-weight: bold;
 }
 
-.glue-LinkedDataset-type {
+.glue-LinkEditor-tabToolbar {
   justify-content: space-around;
 }
 
-.glue-LinkedDataset-type .selected {
+.glue-LinkEditor-tabToolbar .selected {
   text-decoration: underline;
 }
 

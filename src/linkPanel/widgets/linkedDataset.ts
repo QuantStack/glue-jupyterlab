@@ -1,9 +1,8 @@
-import { ToolbarRegistry } from '@jupyterlab/apputils';
-import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { ReactWidget, Toolbar } from '@jupyterlab/ui-components';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, Widget } from '@lumino/widgets';
+
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { DatasetSwitcherComponent } from './datasetSwitcher';
 
@@ -22,7 +21,12 @@ export class LinkedDataset extends LinkEditorWidget {
       switcher.onChange.connect(this.onSelectionChanged, this);
     });
 
-    this.content.addWidget(this._mainContent());
+    this.content.addWidget(
+      this.mainContent([
+        { name: 'Created Links', widget: this._createdLinksContent() },
+        { name: 'Inferred Links', widget: this._inferredLinksContent() }
+      ])
+    );
   }
 
   get selections(): [string, string] {
@@ -59,51 +63,6 @@ export class LinkedDataset extends LinkEditorWidget {
     });
   }
 
-  _mainContent(): BoxPanel {
-    const mainContent = new BoxPanel();
-
-    const linkTypes = new Toolbar();
-    linkTypes.addClass('glue-LinkedDataset-type');
-
-    const tabNames = ['Created links', 'Inferred links'];
-    const tabs: IObservableList<ToolbarRegistry.IToolbarItem> =
-      new ObservableList<ToolbarRegistry.IToolbarItem>();
-    tabNames.forEach(type => {
-      const linkType = new Widget();
-      linkType.addClass('glue-LinkEditor-linkType');
-      linkType.node.innerHTML = `<a href="#">${type}</a>`;
-      tabs.push({ name: type, widget: linkType });
-    });
-
-    mainContent.addWidget(linkTypes);
-
-    BoxPanel.setStretch(linkTypes, 0);
-    const mainContentPanels = new StackedPanel();
-    const createdLinksContent = this._createdLinksContent();
-    const inferredLinksContent = this._inferredLinksContent();
-
-    mainContentPanels.addWidget(createdLinksContent);
-    mainContentPanels.addWidget(inferredLinksContent);
-    BoxPanel.setStretch(mainContentPanels, 1);
-    Array.from(tabs).forEach((item, index) => {
-      linkTypes.addItem(item.name, item.widget);
-      if (index === 0) {
-        item.widget.addClass('selected');
-      }
-
-      item.widget.node.onclick = () => {
-        mainContentPanels.widgets.forEach(widget => widget.hide());
-        Array.from(tabs).forEach(item => item.widget.removeClass('selected'));
-        mainContentPanels.widgets[index].show();
-        item.widget.addClass('selected');
-      };
-    });
-
-    mainContent.addWidget(mainContentPanels);
-
-    return mainContent;
-  }
-
   _createdLinksContent(): BoxPanel {
     const createdLinks = new BoxPanel();
     const datasetSelection = new Toolbar();
@@ -122,6 +81,7 @@ export class LinkedDataset extends LinkEditorWidget {
 
     BoxPanel.setStretch(datasetSelection, 0);
     BoxPanel.setStretch(links, 1);
+    createdLinks.hide();
     return createdLinks;
   }
 

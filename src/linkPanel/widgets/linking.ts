@@ -1,21 +1,31 @@
-import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
-import { LinkEditorWidget } from '../linkEditorWidget';
-// import { JSONObject } from '@lumino/coreutils';
-import { LinkedDataset } from './linkedDataset';
 import { ToolbarRegistry } from '@jupyterlab/apputils';
 import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { ReactWidget, Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
-import { AdvancedLinking } from './advancedLinkinkChoices';
+import { BoxPanel, Widget } from '@lumino/widgets';
 
-export class LinkingWidget extends LinkEditorWidget {
-  constructor(options: LinkingWidget.IOptions) {
+import { LinkEditorWidget } from '../linkEditorWidget';
+import { AdvancedLinking } from './advancedLinkinkChoices';
+import { LinkedDataset } from './linkedDataset';
+
+export class Linking extends LinkEditorWidget {
+  constructor(options: Linking.IOptions) {
     super(options);
     const { linkedDataset } = options;
     this.addClass('glue-LinkEditor-linking');
 
     this.titleValue = 'Linking';
 
-    this.content.addWidget(this._mainContent(linkedDataset.selections));
+    this.content.addWidget(
+      this.mainContent([
+        {
+          name: 'Identity Linking',
+          widget: this._identityLinking(linkedDataset.selections)
+        },
+        { name: 'Advanced Linking', widget: this._advancedLinking() }
+      ])
+    );
+
+    // this.content.addWidget(this._mainContent(linkedDataset.selections));
     linkedDataset.selectionChanged.connect(this.updateDataset, this);
 
     if (linkedDataset.selections) {
@@ -50,52 +60,6 @@ export class LinkingWidget extends LinkEditorWidget {
   glueAdvanced = (): void => {
     console.log('Glue advanced clicked');
   };
-
-  _mainContent(selections: [string, string]): BoxPanel {
-    const mainContent = new BoxPanel();
-
-    const linkTypes = new Toolbar();
-    linkTypes.addClass('glue-LinkedDataset-type');
-
-    const tabNames = ['Identity linking', 'Advanced linking'];
-    tabNames.forEach(type => {
-      const linkType = new Widget();
-      linkType.addClass('glue-LinkEditor-linkType');
-      linkType.node.innerHTML = `<a href="#">${type}</a>`;
-      this._tabToolbar.push({ name: type, widget: linkType });
-    });
-
-    mainContent.addWidget(linkTypes);
-
-    BoxPanel.setStretch(linkTypes, 0);
-    const mainContentPanels = new StackedPanel();
-    const createdLinksContent = this._identityLinking(selections);
-    const inferredLinksContent = this._advancedLinking();
-
-    mainContentPanels.addWidget(createdLinksContent);
-    mainContentPanels.addWidget(inferredLinksContent);
-    BoxPanel.setStretch(mainContentPanels, 1);
-    Array.from(this._tabToolbar).forEach((item, index) => {
-      linkTypes.addItem(item.name, item.widget);
-      if (index === 0) {
-        item.widget.addClass('selected');
-        mainContentPanels.widgets[index].show();
-      }
-
-      item.widget.node.onclick = () => {
-        mainContentPanels.widgets.forEach(widget => widget.hide());
-        Array.from(this._tabToolbar).forEach(item =>
-          item.widget.removeClass('selected')
-        );
-        mainContentPanels.widgets[index].show();
-        item.widget.addClass('selected');
-      };
-    });
-
-    mainContent.addWidget(mainContentPanels);
-
-    return mainContent;
-  }
 
   _identityLinking(selections: [string, string]): BoxPanel {
     const panel = new BoxPanel();
@@ -178,8 +142,6 @@ export class LinkingWidget extends LinkEditorWidget {
     return panel;
   }
 
-  private _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityVariables = [new BoxPanel(), new BoxPanel()];
@@ -188,7 +150,7 @@ export class LinkingWidget extends LinkEditorWidget {
   // private _advancedVariables = [new BoxPanel(), new BoxPanel()];
 }
 
-namespace LinkingWidget {
+namespace Linking {
   export interface IOptions extends LinkEditorWidget.IOptions {
     linkedDataset: LinkedDataset;
   }
