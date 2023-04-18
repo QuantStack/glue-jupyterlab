@@ -9,6 +9,7 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { IGlueSessionSharedModel, IGlueSessionViewerTypes } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { GridStackItem } from './gridStackItem';
+import { ISignal, Signal } from '@lumino/signaling';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
@@ -20,6 +21,19 @@ export class TabModel implements IDisposable {
     this._rendermime = rendermime;
     this._context = context;
     this._dataLoaded = dataLoaded;
+
+    this._ready = new Signal<this, null>(this);
+
+    this._context.sessionContext.ready.then(() => {
+      this._ready.emit(null);
+    });
+  }
+
+  /**
+   * A signal emitted when the model is ready.
+   */
+  get ready(): ISignal<this, null> {
+    return this._ready;
   }
 
   get tabName(): string {
@@ -188,6 +202,7 @@ export class TabModel implements IDisposable {
   }
 
   private _isDisposed = false;
+  private _ready: Signal<this, null>;
   private _tabData: IGlueSessionViewerTypes[];
   private _tabName: string;
   private _model: IGlueSessionSharedModel;

@@ -1,22 +1,29 @@
 import { Panel, Widget } from '@lumino/widgets';
 import { Toolbar, ToolbarButton, closeIcon } from '@jupyterlab/ui-components';
+
 export class GridStackItem extends Panel {
   constructor(options: GridStackItem.IOptions) {
     super();
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
     this.addClass('grid-stack-item');
+    
     const { cellIdentity, cell, itemTitle = '' } = options;
-    this._toolbar = this._createToolbar(itemTitle);
-    const content = new Panel();
-    content.addClass('grid-stack-item-content');
-    cell.addClass('grid-item-widget');
-    content.addWidget(this._toolbar);
-    content.addWidget(cell);
-    this.addWidget(content);
     this._cellOutput = cell;
     this.cellIdentity = cellIdentity;
+    
+    const content = new Panel();
+    content.addClass('grid-stack-item-content');
+    
+    this._toolbar = this._createToolbar(itemTitle);
+    content.addWidget(this._toolbar);
+
+    cell.addClass('grid-item-widget');
+    content.addWidget(cell);
+    
+    this.addWidget(content);
   }
+
   readonly cellIdentity: string;
 
   get cellOutput(): Widget {

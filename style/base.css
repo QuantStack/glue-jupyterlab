@@ -110,6 +110,18 @@
   background: var(--jp-brand-color2);
 }
 
+.grid-panel {
+  padding: 0px;
+}
+
+.grid-editor {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--jp-layout-color2);
+}
+
 .glue-Session-gridhost {
   background: var(--jp-layout-color3);
   background-image: unset !important;
