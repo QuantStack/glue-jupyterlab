@@ -149,6 +149,10 @@
   flex-direction: row-reverse;
 }
 
+.glue-LinkEditor-widget {
+  border: solid 2px var(--jp-border-color1);
+}
+
 .glue-LinkEditor-title {
   display: flex;
   justify-content: center;

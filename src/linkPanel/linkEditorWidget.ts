@@ -8,6 +8,7 @@ export class LinkEditorWidget extends BoxPanel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
     this._sharedModel = options.sharedModel;
+    this.addClass('glue-LinkEditor-widget');
     this._titleWidget.addClass('glue-LinkEditor-title');
     this._content.addClass('glue-LinkEditor-content');
     this.addWidget(this._titleWidget);
