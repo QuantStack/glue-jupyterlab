@@ -1,5 +1,4 @@
 import { ReactWidget, Toolbar } from '@jupyterlab/ui-components';
-import { JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { BoxPanel, Widget } from '@lumino/widgets';
 
@@ -45,21 +44,8 @@ export class LinkedDataset extends LinkEditorWidget {
   }
 
   onSharedModelChanged(): void {
-    if (!this._sharedModel.contents.__main__) {
-      this._datasetSwitchers.forEach(switcher => {
-        switcher.datasetList = [];
-      });
-      return;
-    }
-
-    const dataCollection: string =
-      ((this._sharedModel.contents.__main__ as JSONObject).data as string) ||
-      '';
-    const datasetNames: string[] = (
-      this._sharedModel.contents[dataCollection] as JSONObject
-    ).data as string[];
     this._datasetSwitchers.forEach(switcher => {
-      switcher.datasetList = datasetNames;
+      switcher.datasetList = Object.keys(this._sharedModel.dataset);
     });
   }
 

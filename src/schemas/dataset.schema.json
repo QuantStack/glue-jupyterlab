@@ -2,7 +2,7 @@
   "type": "object",
   "description": "Dataset",
   "title": "IDataset",
-  "required": ["_type", "components", "coords", "label", "primary_owner"],
+  "required": ["_type", "components", "label", "primary_owner"],
   "additionalProperties": false,
   "properties": {
     "_type": {

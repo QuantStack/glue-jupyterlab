@@ -6,7 +6,6 @@ import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { AdvancedLinking } from './advancedLinkingChoices';
 import { LinkedDataset } from './linkedDataset';
-import { JSONObject } from '@lumino/coreutils';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
@@ -48,27 +47,21 @@ export class Linking extends LinkEditorWidget {
         this._identityAttributes[index].widgets[0].dispose();
       }
 
-      // Get the dataset object from model.
-      const datasetDefinition: JSONObject = this._sharedModel.contents[
-        dataName
-      ] as JSONObject;
-
       // Add a new widget for each attribute.
-      if (datasetDefinition) {
-        let attributes: string[] = datasetDefinition.primary_owner as string[];
+      let attributes: string[] =
+        this._sharedModel.dataset[dataName].primary_owner;
 
-        attributes = attributes.sort();
-        attributes.forEach(value => {
-          const attribute = new Widget();
-          attribute.title.label = value;
-          attribute.addClass('glue-LinkEditor-attribute');
-          attribute.node.innerText = value;
-          attribute.node.onclick = () => {
-            this.onAttributeClicked(attribute, index);
-          };
-          this._identityAttributes[index].addWidget(attribute);
-        });
-      }
+      attributes = attributes.sort();
+      attributes.forEach(value => {
+        const attribute = new Widget();
+        attribute.title.label = value;
+        attribute.addClass('glue-LinkEditor-attribute');
+        attribute.node.innerText = value;
+        attribute.node.onclick = () => {
+          this.onAttributeClicked(attribute, index);
+        };
+        this._identityAttributes[index].addWidget(attribute);
+      });
 
       // Updates the current dataset.
       this._currentDataset[index] = dataName;
