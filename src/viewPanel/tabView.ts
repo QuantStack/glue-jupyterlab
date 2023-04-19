@@ -1,78 +1,41 @@
-import { Panel, Widget } from '@lumino/widgets';
-import { TabModel } from './tabModel';
-import { GridStack } from 'gridstack';
-import { GridStackItem } from './gridStackItem';
-import { MessageLoop } from '@lumino/messaging';
+import { Widget } from '@lumino/widgets';
 
-export class TabView extends Panel {
+import { TabModel } from './tabModel';
+import { TabLayout } from './tabLayout';
+
+export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
     super();
+    this.removeClass('lm-Widget');
+    this.removeClass('p-Widget');
+    this.addClass('grid-editor');
+
     this._model = options.model;
     this.title.label = this._model?.tabName ?? '';
-    this._gridHost = document.createElement('div');
-    this._gridHost.className = 'grid-stack';
-    this._gridHost.classList.add('glue-Session-gridhost');
-    this.node.appendChild(this._gridHost);
-    this.node.style.overflow = 'auto';
-    this._grid = GridStack.init(
-      {
-        float: true,
-        column: 12,
-        margin: 3,
-        cellHeight: 40,
-        styleInHead: true,
-        disableOneColumnMode: true,
-        draggable: {
-          handle: '.glue-Session-tab-toolbar'
-        }
-      },
-      this._gridHost
-    );
-    this.render()
-      .catch(console.error)
-      .then(() => window.dispatchEvent(new Event('resize')));
+
+    this.layout = new TabLayout();
+
+    this._model?.ready.connect(() => {
+      this._initGridItems();
+    });
   }
 
-  async render(): Promise<void> {
+  /**
+   * Initialize the `GridstackItemWidget` from Notebook's metadata.
+   */
+  private async _initGridItems(): Promise<void> {
     const viewWidgets = this._model?.createView();
     if (!viewWidgets) {
       return;
     }
     for await (const view of viewWidgets) {
       if (view) {
-        this.addGridItem(view);
+        (this.layout as TabLayout).addGridItem(view);
       }
     }
   }
 
-  protected onResize(msg: Widget.ResizeMessage): void {
-    window.dispatchEvent(new Event('resize'));
-  }
-
-  addGridItem(out: GridStackItem): void {
-    this._gridElements.push(out);
-
-    const id = out.cellIdentity;
-
-    const options: { [key: string]: any } = {
-      id,
-      autoPosition: true,
-      noMove: false,
-      noResize: false,
-      locked: false,
-      w: 6,
-      h: 12
-    };
-    // out.node.style.background = '#34aadc'
-    MessageLoop.sendMessage(out, Widget.Msg.BeforeAttach);
-    this._grid.addWidget(out.node, options);
-    MessageLoop.sendMessage(out, Widget.Msg.AfterAttach);
-  }
-
   private _model?: TabModel;
-  private _gridHost: HTMLElement;
-  private _grid: GridStack;
-  private _gridElements: GridStackItem[] = [];
 }
 
 export namespace TabView {
