@@ -11,7 +11,6 @@ import { IGlueSessionSharedModel, ILoadLog } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
-import { TabModel } from './tabModel';
 import { LinkEditor } from '../linkPanel/linkEditor';
 import { PathExt } from '@jupyterlab/coreutils';
 
@@ -148,22 +147,38 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _onTabsChanged(): void {
-    this._model.getTabNames().forEach(async (tabName, idx) => {
-      const model = new TabModel({
+    const tabNames = this._model.getTabNames();
+
+    tabNames.forEach((tabName, idx) => {
+      // Tab already exists, we don't do anything
+      if (tabName in this._tabViews) {
+        return;
+      }
+
+      // Tab does not exist, we create it
+      const tabWidget = (this._tabViews[tabName] = new TabView({
         tabName,
         model: this._model,
         rendermime: this._rendermime,
         context: this._context,
         notebookTracker: this._notebookTracker,
         dataLoaded: this._dataLoaded
-      });
-      const tabWidget = new TabView({ model });
+      }));
 
       this._tabPanel.addTab(tabWidget, idx + 1);
     });
+
+    // TODO Remove leftover tabs
+    // for (const tabName in Object.keys(this._tabViews)) {
+    //   if (!(tabName in tabNames)) {
+    //     todo
+    //   }
+    // }
+
     this._tabPanel.activateTab(1);
   }
 
+  private _tabViews: { [k: string]: TabView } = {};
   private _dataLoaded: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkEditor | undefined = undefined;

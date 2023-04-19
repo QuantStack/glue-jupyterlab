@@ -44,7 +44,24 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
       label: '1D Histogram',
       iconClass: 'fa fa-chart-bar',
       execute: () => {
-        console.log('create new viewer for', controlModel.selectedDataset);
+        if (!controlModel.sharedModel) {
+          return;
+        }
+
+        // TODO Add to the currently focused tab instead of always the first one!
+        const tabs = Object.keys(controlModel.sharedModel.tabs);
+
+        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+          _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
+          pos: [0, 0],
+          session: 'Session',
+          size: [600, 400],
+          state: {
+            values: {
+              layer: controlModel.selectedDataset
+            }
+          }
+        });
       }
     });
 
@@ -52,7 +69,24 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
       label: '2D Scatter',
       iconClass: 'fa fa-circle',
       execute: () => {
-        console.log('create new viewer for', controlModel.selectedDataset);
+        if (!controlModel.sharedModel) {
+          return;
+        }
+
+        // TODO Add to the currently focused tab instead of always the first one!
+        const tabs = Object.keys(controlModel.sharedModel.tabs);
+
+        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+          _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
+          pos: [0, 0],
+          session: 'Session',
+          size: [600, 400],
+          state: {
+            values: {
+              layer: controlModel.selectedDataset
+            }
+          }
+        });
       }
     });
 
@@ -60,7 +94,24 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
       label: '2D Image',
       iconClass: 'fa fa-image',
       execute: () => {
-        console.log('create new viewer for', controlModel.selectedDataset);
+        if (!controlModel.sharedModel) {
+          return;
+        }
+
+        // TODO Add to the currently focused tab instead of always the first one!
+        const tabs = Object.keys(controlModel.sharedModel.tabs);
+
+        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+          _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
+          pos: [0, 0],
+          session: 'Session',
+          size: [600, 400],
+          state: {
+            values: {
+              layer: controlModel.selectedDataset
+            }
+          }
+        });
       }
     });
   }

@@ -39,7 +39,6 @@ export interface IGlueSessionSharedModel
   dataset: IGlueSessionDataset;
   links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;
-
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
