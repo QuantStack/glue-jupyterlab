@@ -40,7 +40,7 @@ class YGlue(YBaseDoc):
             for viewer in viewers[idx]:
                 tabs[tab].append(contents.get(viewer, {}))
 
-        data_collection_name: str = contents.get("__main__", {}).get("data", '')
+        data_collection_name: str = contents.get("__main__", {}).get("data", "")
         data_names: List[str] = []
         link_names: List[str] = []
         if data_collection_name:
