@@ -12,7 +12,7 @@ import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
 import { TabModel } from './tabModel';
-import { LinkWidget } from '../linkPanel/linkPanel';
+import { LinkEditor } from '../linkPanel/linkEditor';
 import { PathExt } from '@jupyterlab/coreutils';
 
 export class SessionWidget extends BoxPanel {
@@ -34,7 +34,7 @@ export class SessionWidget extends BoxPanel {
     });
 
     if (this._model) {
-      this._linkWidget = new LinkWidget({ sharedModel: this._model });
+      this._linkWidget = new LinkEditor({ sharedModel: this._model });
       this._tabPanel.addTab(this._linkWidget, 0);
     }
 
@@ -169,7 +169,7 @@ export class SessionWidget extends BoxPanel {
 
   private _dataLoaded: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
-  private _linkWidget: LinkWidget | undefined = undefined;
+  private _linkWidget: LinkEditor | undefined = undefined;
   private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
   private _context: DocumentRegistry.IContext<GlueSessionModel>;

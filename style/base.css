@@ -96,17 +96,17 @@
   margin-left: 0;
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-title {
+.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-tab {
   flex: none;
   background-color: var(--jp-brand-color1);
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-title:hover {
+.glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-tab:hover {
   background-color: var(--jp-brand-color2);
   cursor: pointer;
 }
 
-.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-title {
+.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-tab {
   background: var(--jp-brand-color2);
 }
 
@@ -159,4 +159,65 @@
 .glue-Session-tab-toolbar {
   background: var(--jp-layout-color2);
   flex-direction: row-reverse;
+}
+
+.glue-LinkEditor-widget {
+  border: solid 2px var(--jp-border-color1);
+}
+
+.glue-LinkEditor-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--jp-layout-color2);
+  min-height: 25px;
+  color: var(--jp-ui-font-color1);
+  font-weight: bold;
+}
+
+.glue-LinkEditor-tabToolbar {
+  justify-content: space-around;
+}
+
+.glue-LinkEditor-tabToolbar .selected {
+  text-decoration: underline;
+  color: var(--jp-content-link-color);
+  font-weight: bold;
+}
+
+.glue-LinkEditor-linking .lm-StackedPanel .jp-Toolbar {
+  justify-content: space-between;
+}
+
+.glue-LinkEditor-linking .glue-LinkEditor-linkingDatasetName {
+  flex-grow: 1;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.glue-LinkEditor-linking .jp-ToolbarButtonComponent {
+  background-color: var(--jp-layout-color3);
+  margin-right: 10px;
+}
+
+.glue-LinkEditor-linking .jp-ToolbarButtonComponent:hover {
+  background-color: var(--jp-layout-color2);
+  cursor: pointer;
+}
+
+.glue-LinkEditor-attribute {
+  padding: 0.5em;
+}
+
+.glue-LinkEditor-attribute:hover {
+  cursor: pointer;
+}
+
+.glue-LinkEditor-attribute:not(.selected):hover {
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-attribute.selected {
+  background-color: var(--jp-brand-color4);
+  color: var(--jp-content-link-color);
 }
