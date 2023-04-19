@@ -33,13 +33,16 @@ export class Linking extends LinkEditorWidget {
     }
   }
 
-  updateDataset(_sender: LinkedDataset, dataset: string[]): void {
-    // Update identity toolbar items
-    this._identityToolbar.get(0).widget.node.innerText = dataset[0];
-    this._identityToolbar.get(1).widget.node.innerText = dataset[1];
-
-    // Update identity attributes list.
+  updateDataset(_sender: LinkedDataset, dataset: [string, string]): void {
     dataset.forEach((dataName, index) => {
+      // no-op if the dataset did not change.
+      if (dataName === this._currentDataset[index]) {
+        return;
+      }
+
+      // Update identity toolbar item.
+      this._identityToolbar.get(index).widget.node.innerText = dataset[index];
+
       // Remove all the existing widgets.
       while (this._identityAttributes[index].widgets.length) {
         this._identityAttributes[index].widgets[0].dispose();
@@ -50,11 +53,9 @@ export class Linking extends LinkEditorWidget {
         dataName
       ] as JSONObject;
 
-      // Add a new widget for each attribute
+      // Add a new widget for each attribute.
       if (datasetDefinition) {
-        let attributes: string[] = (
-          datasetDefinition.components as string[][]
-        ).map(component => component[0]);
+        let attributes: string[] = datasetDefinition.primary_owner as string[];
 
         attributes = attributes.sort();
         attributes.forEach(value => {
@@ -68,6 +69,9 @@ export class Linking extends LinkEditorWidget {
           this._identityAttributes[index].addWidget(attribute);
         });
       }
+
+      // Updates the current dataset.
+      this._currentDataset[index] = dataName;
     });
   }
 
@@ -191,13 +195,14 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
+  private _currentDataset = ['', ''];
   private _selectedAttributes = ['', ''];
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityAttributes = [new Panel(), new Panel()];
   private _advancedToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
-  // private _advancedAttributes = [new BoxPanel(), new BoxPanel()];
+  // private _advancedAttributes = [new Panel(), new Panel()];
 }
 
 namespace Linking {
