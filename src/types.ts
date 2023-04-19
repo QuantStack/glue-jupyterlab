@@ -3,7 +3,11 @@ import { DocumentRegistry, IDocumentWidget } from '@jupyterlab/docregistry';
 import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
-import { IGlueSessionTabs } from './_interface/glue.schema';
+import {
+  IGlueSessionDataset,
+  IGlueSessionLinks,
+  IGlueSessionTabs
+} from './_interface/glue.schema';
 
 export interface IDict<T = any> {
   [key: string]: T;
@@ -30,6 +34,8 @@ export interface IGlueSessionSharedModelChange {
 export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
+  dataset: IGlueSessionDataset;
+  links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;

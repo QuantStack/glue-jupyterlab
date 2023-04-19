@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "description": "ComponentLink",
+  "title": "IComponentLink",
+  "required": ["_type", "frm", "to"],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "const": "glue.core.component_link.ComponentLink"
+    },
+    "frm": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "inverse": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "using": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
