@@ -35,7 +35,7 @@ export class LinkEditor extends BoxPanel {
 }
 
 namespace LinkWidget {
-  export interface IOptions extends BoxPanel.IOptions {
+  export interface IOptions {
     sharedModel: IGlueSessionSharedModel;
   }
 }

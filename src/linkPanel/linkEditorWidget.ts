@@ -81,7 +81,7 @@ export class LinkEditorWidget extends BoxPanel {
 }
 
 export namespace LinkEditorWidget {
-  export interface IOptions extends BoxPanel.IOptions {
+  export interface IOptions {
     sharedModel: IGlueSessionSharedModel;
   }
 

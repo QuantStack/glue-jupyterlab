@@ -2,10 +2,7 @@ import { HTMLSelect, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal, Signal } from '@lumino/signaling';
 import React from 'react';
 
-export class DatasetSwitcherComponent extends React.Component<
-  DatasetSwitcherComponent.IProps,
-  { dataset: string[] }
-> {
+export class DatasetSwitcherComponent extends React.Component<DatasetSwitcherComponent.IProps> {
   constructor(props: DatasetSwitcherComponent.IProps) {
     super(props);
     this._datasetList = props.datasetList || [];
