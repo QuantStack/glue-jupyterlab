@@ -157,9 +157,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--jp-layout-color4);
+  background-color: var(--jp-layout-color2);
   min-height: 25px;
-  color: var(--jp-ui-inverse-font-color0);
+  color: var(--jp-ui-font-color1);
   font-weight: bold;
 }
 
