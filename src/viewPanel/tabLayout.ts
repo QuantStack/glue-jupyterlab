@@ -4,7 +4,12 @@ import { Signal, ISignal } from '@lumino/signaling';
 
 import { Message, MessageLoop } from '@lumino/messaging';
 
-import { GridStack, GridStackNode, GridItemHTMLElement, GridStackWidget } from 'gridstack';
+import {
+  GridStack,
+  GridStackNode,
+  GridItemHTMLElement,
+  GridStackWidget
+} from 'gridstack';
 
 import { GridStackItem } from './gridStackItem';
 
@@ -12,17 +17,17 @@ const COLUMNS = 12;
 const CELL_HEIGHT = 40;
 
 export type GridInfo = {
-  cellWidth: number,
-  cellHeight: number,
-  columns: number,
-  rows: number,
+  cellWidth: number;
+  cellHeight: number;
+  columns: number;
+  rows: number;
 };
 
 export type ItemInfo = {
-  width: number,
-  height: number,
-  column: number,
-  row: number,
+  width: number;
+  height: number;
+  column: number;
+  row: number;
 };
 
 /**
@@ -201,7 +206,7 @@ export class TabLayout extends Layout {
       cellWidth: this._grid.cellWidth(),
       cellHeight: CELL_HEIGHT,
       columns: COLUMNS,
-      rows: this._grid.getRow(),
+      rows: this._grid.getRow()
     };
 
     const itemInfo = {
@@ -211,10 +216,7 @@ export class TabLayout extends Layout {
       row: item.pos[1]
     };
 
-    const info = Private.calculatePositionSize(
-      gridInfo,
-      itemInfo
-    );
+    const info = Private.calculatePositionSize(gridInfo, itemInfo);
 
     const options: GridStackWidget = {
       id,
@@ -225,7 +227,7 @@ export class TabLayout extends Layout {
       w: info.width,
       h: info.height,
       x: info.column,
-      y: info.row, 
+      y: info.row
     };
 
     this._gridItems.push(item);
@@ -318,8 +320,10 @@ export class TabLayout extends Layout {
 }
 
 namespace Private {
-  export function calculatePositionSize(grid: GridInfo, item: ItemInfo): ItemInfo {
-
+  export function calculatePositionSize(
+    grid: GridInfo,
+    item: ItemInfo
+  ): ItemInfo {
     return {
       width: Math.ceil(item.width / grid.cellWidth),
       height: Math.ceil(item.height / grid.cellHeight),
