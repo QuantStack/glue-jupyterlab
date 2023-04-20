@@ -24,12 +24,9 @@ class YGlue(YBaseDoc):
         dataset = self._ydataset.to_json()
         links = self._ylinks.to_json()
         tabs = self._ytabs.to_json()
-        return json.dumps(dict(
-            contents=contents,
-            dataset=dataset,
-            links=links,
-            tabs=tabs
-            ))
+        return json.dumps(
+            dict(contents=contents, dataset=dataset, links=links, tabs=tabs)
+        )
 
     def set(self, value: str) -> None:
         """
