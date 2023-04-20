@@ -4,9 +4,26 @@ import { Signal, ISignal } from '@lumino/signaling';
 
 import { Message, MessageLoop } from '@lumino/messaging';
 
-import { GridStack, GridStackNode, GridItemHTMLElement } from 'gridstack';
+import { GridStack, GridStackNode, GridItemHTMLElement, GridStackWidget } from 'gridstack';
 
 import { GridStackItem } from './gridStackItem';
+
+const COLUMNS = 12;
+const CELL_HEIGHT = 40;
+
+export type GridInfo = {
+  cellWidth: number,
+  cellHeight: number,
+  columns: number,
+  rows: number,
+};
+
+export type ItemInfo = {
+  width: number,
+  height: number,
+  column: number,
+  row: number,
+};
 
 /**
  * A gridstack layout to host the visible Notebook's Cells.
@@ -27,9 +44,9 @@ export class TabLayout extends Layout {
     this._grid = GridStack.init(
       {
         float: true,
-        column: 12,
+        column: COLUMNS,
         margin: 3,
-        cellHeight: 40,
+        cellHeight: CELL_HEIGHT,
         styleInHead: true,
         disableOneColumnMode: true,
         draggable: { handle: '.glue-Session-tab-toolbar' },
@@ -180,14 +197,35 @@ export class TabLayout extends Layout {
   addGridItem(item: GridStackItem): void {
     const id = item.cellIdentity;
 
-    const options = {
+    const gridInfo: GridInfo = {
+      cellWidth: this._grid.cellWidth(),
+      cellHeight: CELL_HEIGHT,
+      columns: COLUMNS,
+      rows: this._grid.getRow(),
+    };
+
+    const itemInfo = {
+      width: item.size[0],
+      height: item.size[1],
+      column: item.pos[0],
+      row: item.pos[1]
+    };
+
+    const info = Private.calculatePositionSize(
+      gridInfo,
+      itemInfo
+    );
+
+    const options: GridStackWidget = {
       id,
-      autoPosition: true,
+      autoPosition: false,
       noMove: false,
       noResize: false,
       locked: false,
-      w: 6,
-      h: 12
+      w: info.width,
+      h: info.height,
+      x: info.column,
+      y: info.row, 
     };
 
     this._gridItems.push(item);
@@ -277,4 +315,16 @@ export class TabLayout extends Layout {
   private _gridItems: GridStackItem[] = [];
   private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
   private _resizeTimeout = 0;
+}
+
+namespace Private {
+  export function calculatePositionSize(grid: GridInfo, item: ItemInfo): ItemInfo {
+
+    return {
+      width: Math.ceil(item.width / grid.cellWidth),
+      height: Math.ceil(item.height / grid.cellHeight),
+      column: Math.ceil(item.column / grid.cellWidth),
+      row: Math.ceil(item.row / grid.cellHeight)
+    };
+  }
 }

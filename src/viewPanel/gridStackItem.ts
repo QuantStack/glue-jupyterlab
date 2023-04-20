@@ -8,9 +8,12 @@ export class GridStackItem extends Panel {
     this.removeClass('p-Widget');
     this.addClass('grid-stack-item');
 
-    const { cellIdentity, cell, itemTitle = '' } = options;
+    const { cellIdentity, cell, itemTitle = '', pos, size } = options;
     this._cellOutput = cell;
     this.cellIdentity = cellIdentity;
+    this._pos = pos;
+    this._size = size;
+    this._title = itemTitle;
 
     const content = new Panel();
     content.addClass('grid-stack-item-content');
@@ -28,6 +31,26 @@ export class GridStackItem extends Panel {
 
   get cellOutput(): Widget {
     return this._cellOutput;
+  }
+
+  get itemTitle(): string {
+    return this._title;
+  }
+
+  get pos(): number[] {
+    return this._pos;
+  }
+
+  set pos(value: number[]) {
+    this._pos = value;
+  }
+
+  get size(): number[] {
+    return this._size;
+  }
+
+  set size(value: number[]) {
+    this._size = value;
   }
 
   private _createToolbar(itemTitle: string): Toolbar {
@@ -50,6 +73,9 @@ export class GridStackItem extends Panel {
   }
 
   private _toolbar: Toolbar;
+  private _pos: number[];
+  private _size: number[];
+  private _title: string;
   private _cellOutput: Widget;
 }
 
@@ -58,5 +84,7 @@ export namespace GridStackItem {
     cellIdentity: string;
     cell: Widget;
     itemTitle?: string;
+    pos: number[];
+    size: number[];
   }
 }
