@@ -38,6 +38,8 @@ export interface IGlueSessionSharedModel
   links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
+  datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
+  linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
 }
 

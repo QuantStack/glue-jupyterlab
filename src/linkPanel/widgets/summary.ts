@@ -15,10 +15,6 @@ export class Summary extends LinkEditorWidget {
     );
   }
 
-  onSharedModelChanged(): void {
-    return;
-  }
-
   _identityLinksContent(): BoxPanel {
     const identityLinks = new BoxPanel();
     const links = new Widget();

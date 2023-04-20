@@ -68,10 +68,6 @@ export class Linking extends LinkEditorWidget {
     });
   }
 
-  onSharedModelChanged(): void {
-    return;
-  }
-
   onAttributeClicked(attribute: Widget, index: number): void {
     const isSelected = attribute.hasClass('selected');
 

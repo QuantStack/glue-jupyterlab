@@ -26,6 +26,8 @@ export class LinkedDataset extends LinkEditorWidget {
         { name: 'Inferred Links', widget: this._inferredLinksContent() }
       ])
     );
+
+    this._sharedModel.datasetChanged.connect(this.onDatasetChanged);
   }
 
   get selections(): [string, string] {
@@ -44,6 +46,10 @@ export class LinkedDataset extends LinkEditorWidget {
   }
 
   onSharedModelChanged(): void {
+    this.onDatasetChanged();
+  }
+
+  onDatasetChanged(): void {
     this._datasetSwitchers.forEach(switcher => {
       switcher.datasetList = Object.keys(this._sharedModel.dataset);
     });

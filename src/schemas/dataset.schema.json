@@ -39,9 +39,6 @@
     "meta": {
       "type": "object",
       "properties": {
-        "_type": {
-          "const": "collections.OrderedDict"
-        },
         "contents": {
           "type": "object"
         }
@@ -49,6 +46,7 @@
     },
     "style": {
       "type": "object",
+      "required": ["_type"],
       "properties": {
         "_type": {
           "const": "glue.core.visual.VisualAttributes"

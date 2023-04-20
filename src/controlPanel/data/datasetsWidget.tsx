@@ -61,10 +61,7 @@ export class DatasetsWidget extends ReactWidget {
 
     this._currentSharedModel = this._model.sharedModel;
     this._updateDataSets();
-    this._currentSharedModel.contentsChanged.connect(
-      this._updateDataSets,
-      this
-    );
+    this._currentSharedModel.datasetChanged.connect(this._updateDataSets, this);
   }
 
   private _updateDataSets() {

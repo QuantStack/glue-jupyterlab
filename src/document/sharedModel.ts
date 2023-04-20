@@ -27,6 +27,8 @@ export class GlueSessionSharedModel
     this._tabs = this.ydoc.getMap<IDict>('tabs');
     this.undoManager.addToScope(this._contents);
     this._contents.observe(this._contentsObserver);
+    this._dataset.observe(this._datasetObserver);
+    this._links.observe(this._linksObserver);
     this._tabs.observe(this._tabsObserver);
   }
 
@@ -52,6 +54,14 @@ export class GlueSessionSharedModel
 
   get contentsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._contentsChanged;
+  }
+
+  get datasetChanged(): ISignal<IGlueSessionSharedModel, IDict> {
+    return this._datasetChanged;
+  }
+
+  get linksChanged(): ISignal<IGlueSessionSharedModel, IDict> {
+    return this._linksChanged;
   }
 
   get tabsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
@@ -80,6 +90,14 @@ export class GlueSessionSharedModel
     this._contentsChanged.emit(contents);
   };
 
+  private _datasetObserver = (event: Y.YMapEvent<IDict>): void => {
+    this._datasetChanged.emit({});
+  };
+
+  private _linksObserver = (event: Y.YMapEvent<IDict>): void => {
+    this._linksChanged.emit({});
+  };
+
   private _tabsObserver = (event: Y.YMapEvent<IDict>): void => {
     this._tabsChanged.emit({});
   };
@@ -90,5 +108,7 @@ export class GlueSessionSharedModel
   private _tabs: Y.Map<IDict>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _datasetChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _linksChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
 }
