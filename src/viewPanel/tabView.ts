@@ -6,8 +6,6 @@ import { TabLayout } from './tabLayout';
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
     super();
-    this.removeClass('lm-Widget');
-    this.removeClass('p-Widget');
     this.addClass('grid-editor');
 
     this._model = options.model;
