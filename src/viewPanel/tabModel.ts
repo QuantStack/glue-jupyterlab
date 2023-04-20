@@ -117,7 +117,9 @@ export class TabModel implements IDisposable {
         item = new GridStackItem({
           cellIdentity: viewId,
           cell: out,
-          itemTitle: '2D Scatter'
+          itemTitle: '2D Scatter',
+          pos: viewData.pos,
+          size: viewData.size
         });
         const cellOutput = item.cellOutput as SimplifiedOutputArea;
         if (this._context) {
@@ -149,7 +151,9 @@ export class TabModel implements IDisposable {
         item = new GridStackItem({
           cellIdentity: viewId,
           cell: out,
-          itemTitle: 'Image'
+          itemTitle: 'Image',
+          pos: viewData.pos,
+          size: viewData.size
         });
         const cellOutput = item.cellOutput as SimplifiedOutputArea;
         if (this._context) {
@@ -175,7 +179,9 @@ export class TabModel implements IDisposable {
         item = new GridStackItem({
           cellIdentity: viewId,
           cell: out,
-          itemTitle: 'Histogram'
+          itemTitle: 'Histogram',
+          pos: viewData.pos,
+          size: viewData.size
         });
         const cellOutput = item.cellOutput as SimplifiedOutputArea;
         if (this._context) {
