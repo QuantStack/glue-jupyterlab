@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "description": "Dataset",
+  "title": "IDataset",
+  "required": ["_type", "components", "label", "primary_owner"],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "const": "glue.core.data.Data"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "coords": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "meta": {
+      "type": "object",
+      "$ref": "#/definitions/meta"
+    },
+    "primary_owner": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "style": {
+      "type": "object",
+      "$ref": "#/definitions/style"
+    }
+  },
+  "definitions": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "type": "object"
+        }
+      }
+    },
+    "style": {
+      "type": "object",
+      "required": ["_type"],
+      "properties": {
+        "_type": {
+          "const": "glue.core.visual.VisualAttributes"
+        }
+      }
+    }
+  }
+}

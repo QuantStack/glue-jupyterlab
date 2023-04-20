@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "description": "AdvancedLink",
+  "title": "IAdvancedLink",
+  "required": ["_type", "cids1", "cids2", "data1", "data2"],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "type": "string"
+    },
+    "cids1": {
+      "type": "string"
+    },
+    "cids2": {
+      "type": "string"
+    },
+    "data1": {
+      "type": "string"
+    },
+    "data2": {
+      "type": "string"
+    }
+  }
+}

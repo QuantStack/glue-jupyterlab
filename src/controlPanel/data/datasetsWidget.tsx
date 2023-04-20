@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { CommandRegistry } from '@lumino/commands';
-import { JSONObject } from '@lumino/coreutils';
 import { Menu } from '@lumino/widgets';
 
 import { ReactWidget } from '@jupyterlab/ui-components';
@@ -62,10 +61,7 @@ export class DatasetsWidget extends ReactWidget {
 
     this._currentSharedModel = this._model.sharedModel;
     this._updateDataSets();
-    this._currentSharedModel.contentsChanged.connect(
-      this._updateDataSets,
-      this
-    );
+    this._currentSharedModel.datasetChanged.connect(this._updateDataSets, this);
   }
 
   private _updateDataSets() {
@@ -73,19 +69,9 @@ export class DatasetsWidget extends ReactWidget {
       return;
     }
 
-    const mainModel = this._currentSharedModel.contents
-      .__main__ as JSONObject | null;
-
     this._currentSharedModel.changed.connect(this._updateDataSets, this);
 
-    if (!mainModel?.data) {
-      return;
-    }
-
-    const dataCollection =
-      this._currentSharedModel.contents[mainModel.data as string];
-
-    this._dataNames = (dataCollection as JSONObject | null)?.data as string[];
+    this._dataNames = Object.keys(this._currentSharedModel.dataset);
     this.update();
   }
 

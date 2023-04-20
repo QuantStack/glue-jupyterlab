@@ -7,11 +7,46 @@
     "contents": {
       "type": "object"
     },
+    "dataset": {
+      "$ref": "#/definitions/dataset"
+    },
+    "links": {
+      "$ref": "#/definitions/links"
+    },
     "tabs": {
       "$ref": "#/definitions/tabs"
     }
   },
   "definitions": {
+    "dataset": {
+      "title": "IGlueSessionDataset",
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./dataset.schema.json"
+        }
+      }
+    },
+    "links": {
+      "title": "IGlueSessionLinks",
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "./links/advancedLink.schema.json"
+              },
+              {
+                "$ref": "./links/componentLink.schema.json"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "tabs": {
       "title": "IGlueSessionTabs",
       "type": "object",
