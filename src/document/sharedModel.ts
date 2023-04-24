@@ -24,12 +24,18 @@ export class GlueSessionSharedModel
     this._contents = this.ydoc.getMap<IDict>('contents');
     this._dataset = this.ydoc.getMap<IDict>('dataset');
     this._links = this.ydoc.getMap<IDict>('links');
-    this._tabs = this.ydoc.getMap<IDict>('tabs');
+    this._tabs = this.ydoc.getMap<Y.Array<IDict>>('tabs');
+
     this.undoManager.addToScope(this._contents);
+
     this._contents.observe(this._contentsObserver);
     this._dataset.observe(this._datasetObserver);
     this._links.observe(this._linksObserver);
-    this._tabs.observe(this._tabsObserver);
+    this._tabs.observeDeep(this._tabsObserver);
+  }
+
+  static create(): IGlueSessionSharedModel {
+    return new GlueSessionSharedModel();
   }
 
   dispose(): void {
@@ -80,8 +86,8 @@ export class GlueSessionSharedModel
     this._contents.set(key, value);
   }
 
-  static create(): IGlueSessionSharedModel {
-    return new GlueSessionSharedModel();
+  moveItem(name: string, fromTab: string, toTab: string): void {
+    console.debug("Move item:", name, fromTab, toTab);
   }
 
   private _contentsObserver = (event: Y.YMapEvent<IDict>): void => {
@@ -98,14 +104,20 @@ export class GlueSessionSharedModel
     this._linksChanged.emit({});
   };
 
-  private _tabsObserver = (event: Y.YMapEvent<IDict>): void => {
+  private _tabsObserver = (events: Y.YEvent<any>[]): void => {
+    const tabsEvent = events.find(event => event.target === this._tabs) as Y.YMapEvent<any> | undefined;
+
+    if (!tabsEvent) {
+      return;
+    }
+
     this._tabsChanged.emit({});
   };
 
   private _contents: Y.Map<IDict>;
   private _dataset: Y.Map<IDict>;
   private _links: Y.Map<IDict>;
-  private _tabs: Y.Map<IDict>;
+  private _tabs: Y.Map<Y.Array<IDict>>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _datasetChanged = new Signal<IGlueSessionSharedModel, IDict>(this);

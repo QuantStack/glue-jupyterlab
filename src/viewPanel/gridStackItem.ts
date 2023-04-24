@@ -1,5 +1,6 @@
 import { Panel, Widget } from '@lumino/widgets';
 import { Toolbar, ToolbarButton, closeIcon } from '@jupyterlab/ui-components';
+import { ISignal, Signal } from '@lumino/signaling';
 
 export class GridStackItem extends Panel {
   constructor(options: GridStackItem.IOptions) {
@@ -7,6 +8,7 @@ export class GridStackItem extends Panel {
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
     this.addClass('grid-stack-item');
+    this.addClass('glue-item');
 
     const { cellIdentity, cell, itemTitle = '', pos, size } = options;
     this._cellOutput = cell;
@@ -18,13 +20,15 @@ export class GridStackItem extends Panel {
     const content = new Panel();
     content.addClass('grid-stack-item-content');
 
-    this._toolbar = this._createToolbar(itemTitle);
-    content.addWidget(this._toolbar);
+    const toolbar = this._createToolbar(itemTitle);
+    content.addWidget(toolbar);
 
     cell.addClass('grid-item-widget');
     content.addWidget(cell);
 
     this.addWidget(content);
+
+    this._changed = new Signal<GridStackItem, GridStackItem.IChange>(this);
   }
 
   readonly cellIdentity: string;
@@ -53,6 +57,10 @@ export class GridStackItem extends Panel {
     this._size = value;
   }
 
+  get changed(): ISignal<GridStackItem, GridStackItem.IChange> {
+    return this._changed;
+  }
+
   private _createToolbar(itemTitle: string): Toolbar {
     const toolbar = new Toolbar();
     toolbar.addClass('glue-Session-tab-toolbar');
@@ -61,7 +69,7 @@ export class GridStackItem extends Panel {
       new ToolbarButton({
         tooltip: 'Close',
         icon: closeIcon,
-        onClick: () => console.log('clicked')
+        onClick: () => this._changed.emit({ action: 'close' })
       })
     );
     const title = new Widget();
@@ -72,19 +80,25 @@ export class GridStackItem extends Panel {
     return toolbar;
   }
 
-  private _toolbar: Toolbar;
   private _pos: number[];
   private _size: number[];
   private _title: string;
   private _cellOutput: Widget;
+
+  private _changed: Signal<GridStackItem, GridStackItem.IChange>;
 }
 
 export namespace GridStackItem {
+
   export interface IOptions {
     cellIdentity: string;
     cell: Widget;
     itemTitle?: string;
     pos: number[];
     size: number[];
+  };
+
+  export interface IChange {
+    action: 'close' | 'lock';
   }
 }
