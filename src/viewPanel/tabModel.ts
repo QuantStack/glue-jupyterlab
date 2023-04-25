@@ -6,15 +6,18 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { IDict, IGlueSessionSharedModel, IGlueSessionViewerTypes } from '../types';
+import {
+  IDict,
+  IGlueSessionSharedModel,
+  IGlueSessionViewerTypes
+} from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { GridStackItem } from './gridStackItem';
 import { ISignal, Signal } from '@lumino/signaling';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
-    const { tabName, rendermime, model, context, dataLoaded } =
-      options;
+    const { tabName, rendermime, model, context, dataLoaded } = options;
     this._tabName = tabName;
     this._model = model;
     this._rendermime = rendermime;

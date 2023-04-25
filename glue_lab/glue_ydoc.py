@@ -46,7 +46,7 @@ class YGlue(YBaseDoc):
         for idx, tab in enumerate(tab_names):
             items: Dict[str, Y.YMap] = {}
             for viewer in viewers[idx]:
-                items[viewer] =contents.get(viewer, {})
+                items[viewer] = contents.get(viewer, {})
             tabs[tab] = Y.YMap(items)
 
         data_collection_name: str = contents.get("__main__", {}).get("data", "")
@@ -59,7 +59,7 @@ class YGlue(YBaseDoc):
         dataset: Dict[str, Dict] = {}
         for data_name in data_names:
             dataset[data_name] = contents.get(data_name, {})
-        
+
         links: Dict[str, Dict] = {}
         for link_name in link_names:
             links[link_name] = contents.get(link_name, {})

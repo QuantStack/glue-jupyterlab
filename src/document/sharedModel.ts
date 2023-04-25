@@ -115,7 +115,7 @@ export class GlueSessionSharedModel
         this.transact(() => {
           tab1.delete(name);
           tab2.set(name, content);
-        }, false)
+        }, false);
       }
     }
   }
@@ -141,11 +141,12 @@ export class GlueSessionSharedModel
           this._tabChanged.emit({ tab: name });
           return;
         }
-      })
-      
+      });
     });
 
-    const tabsEvent = events.find(event => event.target === this._tabs) as Y.YMapEvent<any> | undefined;
+    const tabsEvent = events.find(event => event.target === this._tabs) as
+      | Y.YMapEvent<any>
+      | undefined;
     if (!tabsEvent) {
       return;
     }

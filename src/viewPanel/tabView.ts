@@ -36,7 +36,6 @@ export class TabView extends Widget {
     this._model?.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
   }
 
-
   /**
    * Handle the DOM events for the widget.
    *
@@ -99,12 +98,18 @@ export class TabView extends Widget {
       execute: async () => {
         if (this._model && this._selectedItem) {
           const res = await InputDialog.getItem({
-            title: "Select the destination tab.",
-            items: this._model.sharedModel.getTabNames().filter(name => name !== this._model?.tabName),
+            title: 'Select the destination tab.',
+            items: this._model.sharedModel
+              .getTabNames()
+              .filter(name => name !== this._model?.tabName)
           });
 
           if (res.button.accept && res.value) {
-            this._model.sharedModel.moveTabItem(this._selectedItem.cellIdentity, this._model.tabName, res.value);
+            this._model.sharedModel.moveTabItem(
+              this._selectedItem.cellIdentity,
+              this._model.tabName,
+              res.value
+            );
           }
         }
       }
@@ -112,7 +117,7 @@ export class TabView extends Widget {
     this._contextMenu.addItem({
       command: 'moveItem',
       selector: '.glue-item',
-      rank: 0,
+      rank: 0
     });
   }
 
@@ -129,7 +134,7 @@ export class TabView extends Widget {
       let target = event.target as HTMLElement;
       const pos = this._findItem(target);
       this._selectedItem = (this.layout as TabLayout).gridWidgets[pos];
-      
+
       event.preventDefault();
       event.stopPropagation();
     }
@@ -159,7 +164,10 @@ export class TabView extends Widget {
     return -1;
   }
 
-  private _onTabChanged(sender: IGlueSessionSharedModel, args: IDict<any>): void {
+  private _onTabChanged(
+    sender: IGlueSessionSharedModel,
+    args: IDict<any>
+  ): void {
     if (args.tab && args.tab === this._model?.tabName) {
       (this.layout as TabLayout).cleanGrid();
       this._initGridItems();

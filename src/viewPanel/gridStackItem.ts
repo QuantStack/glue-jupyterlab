@@ -89,14 +89,13 @@ export class GridStackItem extends Panel {
 }
 
 export namespace GridStackItem {
-
   export interface IOptions {
     cellIdentity: string;
     cell: Widget;
     itemTitle?: string;
     pos: number[];
     size: number[];
-  };
+  }
 
   export interface IChange {
     action: 'close' | 'lock';
