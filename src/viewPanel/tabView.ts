@@ -1,3 +1,4 @@
+import { InputDialog } from '@jupyterlab/apputils';
 import { CommandRegistry } from '@lumino/commands';
 import { Message } from '@lumino/messaging';
 import { ContextMenu, Widget } from '@lumino/widgets';
@@ -6,6 +7,7 @@ import { ArrayExt } from '@lumino/algorithm';
 import { TabModel } from './tabModel';
 import { TabLayout } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
+import { IDict, IGlueSessionSharedModel } from '../types';
 
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
@@ -25,6 +27,13 @@ export class TabView extends Widget {
     this._model?.ready.connect(() => {
       this._initGridItems();
     });
+
+    this._model?.sharedModel.tabChanged.connect(this._onTabChanged, this);
+  }
+
+  dispose(): void {
+    super.dispose();
+    this._model?.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
   }
 
 
@@ -39,7 +48,6 @@ export class TabView extends Widget {
    * not be called directly by user code.
    */
   handleEvent(event: Event): void {
-
     switch (event.type) {
       case 'contextmenu':
         if (event.eventPhase === Event.CAPTURING_PHASE) {
@@ -88,9 +96,16 @@ export class TabView extends Widget {
     this._commands.addCommand('moveItem', {
       label: 'Move item.',
       isEnabled: () => true,
-      execute: () => {
-        if (this._selectedItem) {
-          console.debug("Move item", this._selectedItem);
+      execute: async () => {
+        if (this._model && this._selectedItem) {
+          const res = await InputDialog.getItem({
+            title: "Select the destination tab.",
+            items: this._model.sharedModel.getTabNames().filter(name => name !== this._model?.tabName),
+          });
+
+          if (res.button.accept && res.value) {
+            this._model.sharedModel.moveTabItem(this._selectedItem.cellIdentity, this._model.tabName, res.value);
+          }
         }
       }
     });
@@ -142,6 +157,13 @@ export class TabView extends Widget {
       el = el.parentElement;
     }
     return -1;
+  }
+
+  private _onTabChanged(sender: IGlueSessionSharedModel, args: IDict<any>): void {
+    if (args.tab && args.tab === this._model?.tabName) {
+      (this.layout as TabLayout).cleanGrid();
+      this._initGridItems();
+    }
   }
 
   private _selectedItem: GridStackItem | null = null;

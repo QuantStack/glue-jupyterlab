@@ -52,7 +52,7 @@
       "type": "object",
       "patternProperties": {
         ".*": {
-          "type": "array",
+          "type": "object",
           "items": {
             "anyOf": [
               {

@@ -40,12 +40,14 @@ class YGlue(YBaseDoc):
 
         tab_names: List[str] = contents.get("__main__", {}).get("tab_names", [])
         viewers = contents.get("__main__", {}).get("viewers", [])
-        tabs: Dict[str, Y.YArray] = {}
+        tabs: Dict[str, Y.YMap] = {}
+        print("Tabs:", tab_names)
+        print("Viewers:", viewers)
         for idx, tab in enumerate(tab_names):
-            items = []
+            items: Dict[str, Y.YMap] = {}
             for viewer in viewers[idx]:
-                items.append(contents.get(viewer, {}))
-            tabs[tab] = Y.YArray(items)
+                items[viewer] =contents.get(viewer, {})
+            tabs[tab] = Y.YMap(items)
 
         data_collection_name: str = contents.get("__main__", {}).get("data", "")
         data_names: List[str] = []

@@ -1,4 +1,4 @@
-import { JSONObject, PromiseDelegate, UUID } from '@lumino/coreutils';
+import { JSONObject, PromiseDelegate } from '@lumino/coreutils';
 import { IDisposable } from '@lumino/disposable';
 
 import { OutputAreaModel, SimplifiedOutputArea } from '@jupyterlab/outputarea';
@@ -6,16 +6,15 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { IGlueSessionSharedModel, IGlueSessionViewerTypes } from '../types';
+import { IDict, IGlueSessionSharedModel, IGlueSessionViewerTypes } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { GridStackItem } from './gridStackItem';
 import { ISignal, Signal } from '@lumino/signaling';
 
 export class TabModel implements IDisposable {
   constructor(options: TabModel.IOptions) {
-    const { tabName, tabData, rendermime, model, context, dataLoaded } =
+    const { tabName, rendermime, model, context, dataLoaded } =
       options;
-    this._tabData = tabData;
     this._tabName = tabName;
     this._model = model;
     this._rendermime = rendermime;
@@ -36,12 +35,16 @@ export class TabModel implements IDisposable {
     return this._ready;
   }
 
+  get sharedModel(): IGlueSessionSharedModel {
+    return this._model;
+  }
+
   get tabName(): string {
     return this._tabName;
   }
 
-  get tabData(): IGlueSessionViewerTypes[] {
-    return this._tabData;
+  get tabData(): IDict<IGlueSessionViewerTypes> {
+    return this._model.getTabData(this._tabName) ?? {};
   }
 
   get isDisposed(): boolean {
@@ -55,10 +58,8 @@ export class TabModel implements IDisposable {
   }
 
   async *createView(): AsyncGenerator<GridStackItem | undefined> {
-    const viewList = this.tabData;
-    for (const view of viewList) {
-      const viewId = UUID.uuid4();
-      yield await this._createView(viewId, view);
+    for (const [name, view] of Object.entries(this.tabData)) {
+      yield await this._createView(name, view);
     }
   }
 
@@ -209,7 +210,6 @@ export class TabModel implements IDisposable {
 
   private _isDisposed = false;
   private _ready: Signal<this, null>;
-  private _tabData: IGlueSessionViewerTypes[];
   private _tabName: string;
   private _model: IGlueSessionSharedModel;
   private _rendermime: IRenderMimeRegistry;
@@ -220,7 +220,6 @@ export class TabModel implements IDisposable {
 export namespace TabModel {
   export interface IOptions {
     tabName: string;
-    tabData: IGlueSessionViewerTypes[];
     model: IGlueSessionSharedModel;
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;

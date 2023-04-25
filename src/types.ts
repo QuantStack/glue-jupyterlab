@@ -40,7 +40,12 @@ export interface IGlueSessionSharedModel
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
+  tabChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
+
+  getTabNames(): string[];
+  getTabData(tabName: string): IDict<IGlueSessionViewerTypes> | undefined;
+  moveTabItem(name: string, fromTab: string, toTab: string): void;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {

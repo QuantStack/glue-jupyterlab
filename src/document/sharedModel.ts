@@ -1,12 +1,14 @@
 import { YDocument } from '@jupyter/ydoc';
 import { JSONExt, JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
+
 import * as Y from 'yjs';
 
 import {
   IDict,
   IGlueSessionSharedModel,
-  IGlueSessionSharedModelChange
+  IGlueSessionSharedModelChange,
+  IGlueSessionViewerTypes
 } from '../types';
 import {
   IGlueSessionDataset,
@@ -24,7 +26,7 @@ export class GlueSessionSharedModel
     this._contents = this.ydoc.getMap<IDict>('contents');
     this._dataset = this.ydoc.getMap<IDict>('dataset');
     this._links = this.ydoc.getMap<IDict>('links');
-    this._tabs = this.ydoc.getMap<Y.Array<IDict>>('tabs');
+    this._tabs = this.ydoc.getMap<Y.Map<IDict>>('tabs');
 
     this.undoManager.addToScope(this._contents);
 
@@ -70,6 +72,10 @@ export class GlueSessionSharedModel
     return this._linksChanged;
   }
 
+  get tabChanged(): ISignal<IGlueSessionSharedModel, IDict> {
+    return this._tabChanged;
+  }
+
   get tabsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._tabsChanged;
   }
@@ -86,8 +92,32 @@ export class GlueSessionSharedModel
     this._contents.set(key, value);
   }
 
-  moveItem(name: string, fromTab: string, toTab: string): void {
-    console.debug("Move item:", name, fromTab, toTab);
+  getTabNames(): string[] {
+    return [...this._tabs.keys()];
+  }
+
+  getTabData(tabName: string): IDict<IGlueSessionViewerTypes> | undefined {
+    const tab = this._tabs.get(tabName);
+    if (tab) {
+      return JSONExt.deepCopy(tab.toJSON());
+    }
+  }
+
+  moveTabItem(name: string, fromTab: string, toTab: string): void {
+    const tab1 = this._tabs.get(fromTab);
+    const tab2 = this._tabs.get(toTab);
+
+    if (tab1 && tab2) {
+      const view = tab1.get(name);
+
+      if (view) {
+        const content = JSONExt.deepCopy(view);
+        this.transact(() => {
+          tab1.delete(name);
+          tab2.set(name, content);
+        }, false)
+      }
+    }
   }
 
   private _contentsObserver = (event: Y.YMapEvent<IDict>): void => {
@@ -105,22 +135,31 @@ export class GlueSessionSharedModel
   };
 
   private _tabsObserver = (events: Y.YEvent<any>[]): void => {
-    const tabsEvent = events.find(event => event.target === this._tabs) as Y.YMapEvent<any> | undefined;
+    events.forEach(event => {
+      this._tabs.forEach((tab, name) => {
+        if (event.target === tab) {
+          this._tabChanged.emit({ tab: name });
+          return;
+        }
+      })
+      
+    });
 
+    const tabsEvent = events.find(event => event.target === this._tabs) as Y.YMapEvent<any> | undefined;
     if (!tabsEvent) {
       return;
     }
-
     this._tabsChanged.emit({});
   };
 
   private _contents: Y.Map<IDict>;
   private _dataset: Y.Map<IDict>;
   private _links: Y.Map<IDict>;
-  private _tabs: Y.Map<Y.Array<IDict>>;
+  private _tabs: Y.Map<Y.Map<IDict>>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _datasetChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _linksChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _tabChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
 }

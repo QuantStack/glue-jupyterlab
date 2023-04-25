@@ -148,11 +148,10 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _onTabsChanged(): void {
-    Object.entries(this._model.tabs).forEach(
-      async ([tabName, tabData], idx) => {
+    this._model.getTabNames().forEach(
+      async (tabName, idx) => {
         const model = new TabModel({
           tabName,
-          tabData,
           model: this._model,
           rendermime: this._rendermime,
           context: this._context,
