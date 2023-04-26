@@ -15,6 +15,15 @@ class YGlue(YBaseDoc):
         self._ydataset = self._ydoc.get_map("dataset")
         self._ylinks = self._ydoc.get_map("links")
         self._ytabs = self._ydoc.get_map("tabs")
+    
+    @property
+    def version(self) -> str:
+        """
+        Returns the version of the document.
+        :return: Document's version.
+        :rtype: str
+        """
+        return "1.0.0"
 
     def get(self) -> str:
         """

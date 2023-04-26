@@ -44,6 +44,11 @@ export class GlueSessionSharedModel
     super.dispose();
   }
 
+  /**
+   * Document version
+   */
+  readonly version: string = '1.0.0';
+
   get contents(): JSONObject {
     return JSONExt.deepCopy(this._contents.toJSON());
   }
