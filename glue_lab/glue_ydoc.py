@@ -4,6 +4,8 @@ from functools import partial
 
 from jupyter_ydoc.ybasedoc import YBaseDoc
 
+import y_py as Y
+
 
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
@@ -13,6 +15,15 @@ class YGlue(YBaseDoc):
         self._ydataset = self._ydoc.get_map("dataset")
         self._ylinks = self._ydoc.get_map("links")
         self._ytabs = self._ydoc.get_map("tabs")
+
+    @property
+    def version(self) -> str:
+        """
+        Returns the version of the document.
+        :return: Document's version.
+        :rtype: str
+        """
+        return "1.0.0"
 
     def get(self) -> str:
         """
@@ -38,11 +49,12 @@ class YGlue(YBaseDoc):
 
         tab_names: List[str] = contents.get("__main__", {}).get("tab_names", [])
         viewers = contents.get("__main__", {}).get("viewers", [])
-        tabs: Dict[str, List] = {}
+        tabs: Dict[str, Y.YMap] = {}
         for idx, tab in enumerate(tab_names):
-            tabs[tab] = []
+            items: Dict[str, Y.YMap] = {}
             for viewer in viewers[idx]:
-                tabs[tab].append(contents.get(viewer, {}))
+                items[viewer] = contents.get(viewer, {})
+            tabs[tab] = Y.YMap(items)
 
         data_collection_name: str = contents.get("__main__", {}).get("data", "")
         data_names: List[str] = []
@@ -54,6 +66,7 @@ class YGlue(YBaseDoc):
         dataset: Dict[str, Dict] = {}
         for data_name in data_names:
             dataset[data_name] = contents.get(data_name, {})
+
         links: Dict[str, Dict] = {}
         for link_name in link_names:
             links[link_name] = contents.get(link_name, {})

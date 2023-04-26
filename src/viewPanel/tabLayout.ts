@@ -270,6 +270,14 @@ export class TabLayout extends Layout {
   }
 
   /**
+   * Remove all items from gridstack.
+   */
+  cleanGrid(): void {
+    const items = this._grid?.getGridItems();
+    items?.forEach(item => this._grid.removeWidget(item, true, false));
+  }
+
+  /**
    * Handle change-event messages sent to from gridstack.
    */
   private _onChange(event: Event, items: GridStackNode[]): void {

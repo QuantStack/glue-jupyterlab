@@ -148,22 +148,19 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _onTabsChanged(): void {
-    Object.entries(this._model.tabs).forEach(
-      async ([tabName, tabData], idx) => {
-        const model = new TabModel({
-          tabName,
-          tabData,
-          model: this._model,
-          rendermime: this._rendermime,
-          context: this._context,
-          notebookTracker: this._notebookTracker,
-          dataLoaded: this._dataLoaded
-        });
-        const tabWidget = new TabView({ model });
+    this._model.getTabNames().forEach(async (tabName, idx) => {
+      const model = new TabModel({
+        tabName,
+        model: this._model,
+        rendermime: this._rendermime,
+        context: this._context,
+        notebookTracker: this._notebookTracker,
+        dataLoaded: this._dataLoaded
+      });
+      const tabWidget = new TabView({ model });
 
-        this._tabPanel.addTab(tabWidget, idx + 1);
-      }
-    );
+      this._tabPanel.addTab(tabWidget, idx + 1);
+    });
     this._tabPanel.activateTab(1);
   }
 
