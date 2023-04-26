@@ -7,6 +7,9 @@
     "contents": {
       "type": "object"
     },
+    "attributes": {
+      "$ref": "#/definitions/attributes"
+    },
     "dataset": {
       "$ref": "#/definitions/dataset"
     },
@@ -18,12 +21,21 @@
     }
   },
   "definitions": {
+    "attributes": {
+      "title": "IGlueSessionAttributes",
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "$ref": "./data/attributes.schema.json"
+        }
+      }
+    },
     "dataset": {
       "title": "IGlueSessionDataset",
       "type": "object",
       "patternProperties": {
         ".*": {
-          "$ref": "./dataset.schema.json"
+          "$ref": "./data/dataset.schema.json"
         }
       }
     },

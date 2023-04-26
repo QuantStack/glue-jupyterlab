@@ -12,6 +12,7 @@ class YGlue(YBaseDoc):
         super().__init__(*args, **kwargs)
         self._ysource = self._ydoc.get_text("source")
         self._ycontents = self._ydoc.get_map("contents")
+        self._yattributes = self._ydoc.get_map("attributes")
         self._ydataset = self._ydoc.get_map("dataset")
         self._ylinks = self._ydoc.get_map("links")
         self._ytabs = self._ydoc.get_map("tabs")
@@ -32,11 +33,18 @@ class YGlue(YBaseDoc):
         :rtype: Any
         """
         contents = self._ycontents.to_json()
+        attributes = self._yattributes.to_json()
         dataset = self._ydataset.to_json()
         links = self._ylinks.to_json()
         tabs = self._ytabs.to_json()
         return json.dumps(
-            dict(contents=contents, dataset=dataset, links=links, tabs=tabs)
+            dict(
+                contents=contents,
+                attributes=attributes,
+                dataset=dataset,
+                links=links,
+                tabs=tabs
+                )
         )
 
     def set(self, value: str) -> None:
@@ -64,8 +72,12 @@ class YGlue(YBaseDoc):
             link_names = contents.get(data_collection_name, {}).get("links", [])
 
         dataset: Dict[str, Dict] = {}
+        attributes: Dict[str, Dict] = {}
         for data_name in data_names:
             dataset[data_name] = contents.get(data_name, {})
+            for attribute in contents.get(data_name, {}).get("primary_owner", []):
+                attributes[attribute] = contents.get(attribute, {})
+
 
         links: Dict[str, Dict] = {}
         for link_name in link_names:
@@ -73,6 +85,7 @@ class YGlue(YBaseDoc):
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
+            self._yattributes.update(t, attributes.items())
             self._ydataset.update(t, dataset.items())
             self._ylinks.update(t, links.items())
             self._ytabs.update(t, tabs.items())
@@ -87,6 +100,9 @@ class YGlue(YBaseDoc):
         )
         self._subscriptions[self._ycontents] = self._ycontents.observe(
             partial(callback, "contents")
+        )
+        self._subscriptions[self._yattributes] = self._ycontents.observe(
+            partial(callback, "attributes")
         )
         self._subscriptions[self._ydataset] = self._ydataset.observe(
             partial(callback, "dataset")

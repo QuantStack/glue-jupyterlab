@@ -4,6 +4,7 @@ import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 import {
+  IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
   IGlueSessionTabs
@@ -34,6 +35,7 @@ export interface IGlueSessionSharedModelChange {
 export interface IGlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
+  attributes: IGlueSessionAttributes;
   dataset: IGlueSessionDataset;
   links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;

@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "description": "Attributes",
+  "title": "IAttributes",
+  "required": ["_type", "label"],
+  "additionalProperties": false,
+  "properties": {
+    "_type": {
+      "type": "string"
+    },
+    "axis": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    }
+  }
+}
