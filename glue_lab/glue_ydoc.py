@@ -50,8 +50,6 @@ class YGlue(YBaseDoc):
         tab_names: List[str] = contents.get("__main__", {}).get("tab_names", [])
         viewers = contents.get("__main__", {}).get("viewers", [])
         tabs: Dict[str, Y.YMap] = {}
-        print("Tabs:", tab_names)
-        print("Viewers:", viewers)
         for idx, tab in enumerate(tab_names):
             items: Dict[str, Y.YMap] = {}
             for viewer in viewers[idx]:
