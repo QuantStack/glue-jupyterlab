@@ -270,7 +270,7 @@ export class TabLayout extends Layout {
   }
 
   /**
-   * Remove a the items from gridstack.
+   * Remove all items from gridstack.
    */
   cleanGrid(): void {
     const items = this._grid?.getGridItems();
