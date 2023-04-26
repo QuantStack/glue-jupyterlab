@@ -63,6 +63,7 @@ export class LinkEditorModel implements ILinkEditorModel {
             this._relatedLinks.get(linkName)?.dest
           )
         ) {
+          this._relatedLinks.delete(linkName);
           console.error(`The ComponentLink ${linkName} is not valid`);
         }
       }

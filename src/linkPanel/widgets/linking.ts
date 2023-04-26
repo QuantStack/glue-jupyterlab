@@ -9,8 +9,9 @@ import { LinkedDataset } from './linkedDataset';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
-    super(options);
     const { linkedDataset } = options;
+    super(options);
+
     this.addClass('glue-LinkEditor-linking');
 
     this.titleValue = 'Linking';
@@ -25,14 +26,14 @@ export class Linking extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.updateDataset, this);
+    linkedDataset.selectionChanged.connect(this.updateAttributes, this);
 
     if (linkedDataset.selections) {
-      this.updateDataset(linkedDataset, linkedDataset.selections);
+      this.updateAttributes(linkedDataset, linkedDataset.selections);
     }
   }
 
-  updateDataset(_sender: LinkedDataset, dataset: [string, string]): void {
+  updateAttributes(_sender: LinkedDataset, dataset: [string, string]): void {
     dataset.forEach((dataName, index) => {
       // no-op if the dataset did not change.
       if (dataName === this._currentDataset[index]) {
