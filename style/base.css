@@ -185,6 +185,20 @@
   font-weight: bold;
 }
 
+.glue-LinkEditor-createdLinks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-weight: bold;
+  padding: 0.5em;
+  font-size: 1.1em;
+}
+
+.glue-LinkEditor-createdLinks:hover {
+  cursor: pointer;
+  background-color: var(--jp-layout-color2);
+}
+
 .glue-LinkEditor-linking .lm-StackedPanel .jp-Toolbar {
   justify-content: space-between;
 }

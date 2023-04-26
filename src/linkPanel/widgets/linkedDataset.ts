@@ -1,6 +1,6 @@
 import { ReactWidget, Toolbar } from '@jupyterlab/ui-components';
 import { ISignal, Signal } from '@lumino/signaling';
-import { BoxPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { DatasetSwitcherComponent } from './datasetSwitcher';
@@ -27,7 +27,11 @@ export class LinkedDataset extends LinkEditorWidget {
       ])
     );
 
-    this._sharedModel.datasetChanged.connect(this.onDatasetChanged);
+    this._sharedModel.datasetChanged.connect(this.onDatasetChanged, this);
+    this._linkEditorModel.relatedLinksChanged.connect(
+      this.onLinksChanged,
+      this
+    );
   }
 
   get selections(): [string, string] {
@@ -50,8 +54,39 @@ export class LinkedDataset extends LinkEditorWidget {
   }
 
   onDatasetChanged(): void {
+    // Updates the switchers
     this._datasetSwitchers.forEach(switcher => {
       switcher.datasetList = Object.keys(this._sharedModel.dataset);
+    });
+  }
+
+  onLinksChanged(): void {
+    // Remove all the existing widgets.
+    while (this._createdLinksView.widgets.length) {
+      this._createdLinksView.widgets[0].dispose();
+    }
+
+    // Get a set of the linked dataset.
+    const datasetLinks = new Set<string>();
+    Array.from(this._linkEditorModel.relatedLinks.values()).map(relatedLink => {
+      if (relatedLink.src && relatedLink.dest) {
+        datasetLinks.add(
+          JSON.stringify(
+            [relatedLink.src.dataset, relatedLink.dest.dataset].sort()
+          )
+        );
+      }
+    });
+
+    // Updates the view with one widget per linked dataset.
+    datasetLinks.forEach(datasetLink => {
+      const dataset = JSON.parse(datasetLink);
+      const widget = new Private.LinkedDataset(dataset);
+      widget.node.onclick = () => {
+        this._datasetSwitchers[0].value = dataset[0];
+        this._datasetSwitchers[1].value = dataset[1];
+      };
+      this._createdLinksView.addWidget(widget);
     });
   }
 
@@ -67,12 +102,13 @@ export class LinkedDataset extends LinkEditorWidget {
     });
     createdLinks.addWidget(datasetSelection);
 
-    const links = new Widget();
-    links.node.innerText = 'The created links';
-    createdLinks.addWidget(links);
+    const placeholder = new Widget();
+    placeholder.node.innerText = 'The current session has no link';
+    this._createdLinksView.addWidget(placeholder);
+    createdLinks.addWidget(this._createdLinksView);
 
     BoxPanel.setStretch(datasetSelection, 0);
-    BoxPanel.setStretch(links, 1);
+    BoxPanel.setStretch(this._createdLinksView, 1);
     createdLinks.hide();
     return createdLinks;
   }
@@ -86,5 +122,19 @@ export class LinkedDataset extends LinkEditorWidget {
 
   private _datasetSwitchers: DatasetSwitcherComponent[];
   private _selections: [string, string] = ['', ''];
+  private _createdLinksView = new Panel();
   private _selectionChanged = new Signal<this, [string, string]>(this);
+}
+
+namespace Private {
+  /**
+   * The widget displayed for each dataset linked together.
+   */
+  export class LinkedDataset extends Widget {
+    constructor(dataset: [string, string]) {
+      super();
+      this.addClass('glue-LinkEditor-createdLinks');
+      this.node.innerHTML = `<span>${dataset[0]}</span><span>${dataset[1]}</span>`;
+    }
+  }
 }
