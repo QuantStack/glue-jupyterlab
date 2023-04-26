@@ -32,17 +32,15 @@
       "type": "object",
       "patternProperties": {
         ".*": {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {
-                "$ref": "./links/advancedLink.schema.json"
-              },
-              {
-                "$ref": "./links/componentLink.schema.json"
-              }
-            ]
-          }
+          "type": "object",
+          "anyOf": [
+            {
+              "$ref": "./links/advancedLink.schema.json"
+            },
+            {
+              "$ref": "./links/componentLink.schema.json"
+            }
+          ]
         }
       },
       "additionalProperties": false
