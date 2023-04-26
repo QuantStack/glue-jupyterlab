@@ -131,7 +131,7 @@ export class TabView extends Widget {
 
     const opened = this._contextMenu.open(event);
     if (opened) {
-      let target = event.target as HTMLElement;
+      const target = event.target as HTMLElement;
       const pos = this._findItem(target);
       this._selectedItem = (this.layout as TabLayout).gridWidgets[pos];
 
