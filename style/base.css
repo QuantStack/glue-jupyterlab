@@ -241,7 +241,7 @@
 }
 
 .glue-LinkEditor-identity table {
-  width: 100%
+  width: 100%;
 }
 
 .glue-LinkEditor-identity table tr td:not(:last-child) {

@@ -43,8 +43,8 @@ class YGlue(YBaseDoc):
                 attributes=attributes,
                 dataset=dataset,
                 links=links,
-                tabs=tabs
-                )
+                tabs=tabs,
+            )
         )
 
     def set(self, value: str) -> None:
@@ -77,7 +77,6 @@ class YGlue(YBaseDoc):
             dataset[data_name] = contents.get(data_name, {})
             for attribute in contents.get(data_name, {}).get("primary_owner", []):
                 attributes[attribute] = contents.get(attribute, {})
-
 
         links: Dict[str, Dict] = {}
         for link_name in link_names:
