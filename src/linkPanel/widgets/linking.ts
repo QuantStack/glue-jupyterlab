@@ -9,8 +9,9 @@ import { LinkedDataset } from './linkedDataset';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
-    super(options);
     const { linkedDataset } = options;
+    super(options);
+
     this.addClass('glue-LinkEditor-linking');
 
     this.titleValue = 'Linking';
@@ -25,22 +26,22 @@ export class Linking extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.updateDataset, this);
+    linkedDataset.selectionChanged.connect(this.updateAttributes, this);
 
     if (linkedDataset.selections) {
-      this.updateDataset(linkedDataset, linkedDataset.selections);
+      this.updateAttributes(linkedDataset, linkedDataset.selections);
     }
   }
 
-  updateDataset(_sender: LinkedDataset, dataset: [string, string]): void {
-    dataset.forEach((dataName, index) => {
+  updateAttributes(_sender: LinkedDataset, selection: [string, string]): void {
+    selection.forEach((dataName, index) => {
       // no-op if the dataset did not change.
-      if (dataName === this._currentDataset[index]) {
+      if (dataName === this._currentSelection[index]) {
         return;
       }
 
       // Update identity toolbar item.
-      this._identityToolbar.get(index).widget.node.innerText = dataset[index];
+      this._identityToolbar.get(index).widget.node.innerText = selection[index];
 
       // Remove all the existing widgets.
       while (this._identityAttributes[index].widgets.length) {
@@ -53,6 +54,10 @@ export class Linking extends LinkEditorWidget {
 
       attributes = attributes.sort();
       attributes.forEach(value => {
+        // Get the actual name of the attribute.
+        if (this._sharedModel.attributes[value]) {
+          value = this._sharedModel.attributes[value].label;
+        }
         const attribute = new Widget();
         attribute.title.label = value;
         attribute.addClass('glue-LinkEditor-attribute');
@@ -64,7 +69,7 @@ export class Linking extends LinkEditorWidget {
       });
 
       // Updates the current dataset.
-      this._currentDataset[index] = dataName;
+      this._currentSelection[index] = dataName;
     });
   }
 
@@ -184,7 +189,7 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
-  private _currentDataset = ['', ''];
+  private _currentSelection = ['', ''];
   private _selectedAttributes = ['', ''];
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();

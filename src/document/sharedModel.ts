@@ -11,6 +11,7 @@ import {
   IGlueSessionViewerTypes
 } from '../types';
 import {
+  IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
   IGlueSessionTabs
@@ -24,6 +25,7 @@ export class GlueSessionSharedModel
     super();
 
     this._contents = this.ydoc.getMap<IDict>('contents');
+    this._attributes = this.ydoc.getMap<IDict>('attributes');
     this._dataset = this.ydoc.getMap<IDict>('dataset');
     this._links = this.ydoc.getMap<IDict>('links');
     this._tabs = this.ydoc.getMap<Y.Map<IDict>>('tabs');
@@ -31,6 +33,7 @@ export class GlueSessionSharedModel
     this.undoManager.addToScope(this._contents);
 
     this._contents.observe(this._contentsObserver);
+    this._attributes.observe(this._attributesObserver);
     this._dataset.observe(this._datasetObserver);
     this._links.observe(this._linksObserver);
     this._tabs.observeDeep(this._tabsObserver);
@@ -53,6 +56,10 @@ export class GlueSessionSharedModel
     return JSONExt.deepCopy(this._contents.toJSON());
   }
 
+  get attributes(): IGlueSessionAttributes {
+    return JSONExt.deepCopy(this._attributes.toJSON());
+  }
+
   get dataset(): IGlueSessionDataset {
     return JSONExt.deepCopy(this._dataset.toJSON());
   }
@@ -67,6 +74,10 @@ export class GlueSessionSharedModel
 
   get contentsChanged(): ISignal<IGlueSessionSharedModel, IDict> {
     return this._contentsChanged;
+  }
+
+  get attributesChanged(): ISignal<IGlueSessionSharedModel, IDict> {
+    return this._attributesChanged;
   }
 
   get datasetChanged(): ISignal<IGlueSessionSharedModel, IDict> {
@@ -130,6 +141,9 @@ export class GlueSessionSharedModel
     this._changed.emit(contents);
     this._contentsChanged.emit(contents);
   };
+  private _attributesObserver = (event: Y.YMapEvent<IDict>): void => {
+    this._attributesChanged.emit({});
+  };
 
   private _datasetObserver = (event: Y.YMapEvent<IDict>): void => {
     this._datasetChanged.emit({});
@@ -159,11 +173,13 @@ export class GlueSessionSharedModel
   };
 
   private _contents: Y.Map<IDict>;
+  private _attributes: Y.Map<IDict>;
   private _dataset: Y.Map<IDict>;
   private _links: Y.Map<IDict>;
   private _tabs: Y.Map<Y.Map<IDict>>;
 
   private _contentsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _attributesChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _datasetChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _linksChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabChanged = new Signal<IGlueSessionSharedModel, IDict>(this);

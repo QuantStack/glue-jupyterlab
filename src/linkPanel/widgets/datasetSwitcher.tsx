@@ -19,26 +19,29 @@ export class DatasetSwitcherComponent extends React.Component<DatasetSwitcherCom
   get value(): string {
     return this._value;
   }
+  set value(value: string) {
+    this._value = value;
+    this._onChange.emit(this._value);
+  }
 
   get onChange(): ISignal<this, string> {
     return this._onChange;
   }
 
+  get datasetList(): string[] {
+    return this._datasetList;
+  }
   set datasetList(values: string[]) {
     this._datasetList = values;
     if (this._datasetList.length) {
       this._value = this._datasetList[0];
-      this._onChange.emit(this._value);
     }
-    this._datasetChanged.emit();
-  }
-  get datasetList(): string[] {
-    return this._datasetList;
+    this._onChange.emit(this._value);
   }
 
   render(): JSX.Element {
     return (
-      <UseSignal signal={this._datasetChanged} initialSender={this}>
+      <UseSignal signal={this._onChange} initialSender={this}>
         {(): JSX.Element => (
           <HTMLSelect
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,7 +50,11 @@ export class DatasetSwitcherComponent extends React.Component<DatasetSwitcherCom
             }}
           >
             {this._datasetList.map(dataset => (
-              <option key={dataset} value={dataset}>
+              <option
+                key={dataset}
+                value={dataset}
+                selected={this._value === dataset}
+              >
                 {dataset}
               </option>
             ))}
@@ -60,7 +67,6 @@ export class DatasetSwitcherComponent extends React.Component<DatasetSwitcherCom
   private _name: string;
   private _value = '';
   private _datasetList: string[];
-  private _datasetChanged = new Signal<this, void>(this);
   private _onChange = new Signal<this, string>(this);
 }
 

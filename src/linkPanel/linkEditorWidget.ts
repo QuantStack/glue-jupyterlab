@@ -3,10 +3,12 @@ import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { Toolbar } from '@jupyterlab/ui-components';
 import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
+import { ILinkEditorModel } from './types';
 
 export class LinkEditorWidget extends BoxPanel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
+    this._linkEditorModel = options.linkEditorModel;
     this._sharedModel = options.sharedModel;
     this.addClass('glue-LinkEditor-widget');
     this._titleWidget.addClass('glue-LinkEditor-title');
@@ -74,6 +76,7 @@ export class LinkEditorWidget extends BoxPanel {
   }
 
   protected _sharedModel: IGlueSessionSharedModel;
+  protected _linkEditorModel: ILinkEditorModel;
   protected _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _titleWidget = new Widget();
@@ -82,6 +85,7 @@ export class LinkEditorWidget extends BoxPanel {
 
 export namespace LinkEditorWidget {
   export interface IOptions {
+    linkEditorModel: ILinkEditorModel;
     sharedModel: IGlueSessionSharedModel;
   }
 
