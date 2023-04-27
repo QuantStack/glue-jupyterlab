@@ -36,7 +36,7 @@ export class LinkEditorModel implements ILinkEditorModel {
           return;
         }
         link = link as IComponentLink;
-        this._relatedLinks.set(linkName, { origin: link });
+        this._relatedLinks.set(linkName, { origin: linkName });
         for (const dataName in dataset) {
           if (dataset[dataName].primary_owner.includes(link.frm[0])) {
             this._relatedLinks.set(linkName, {

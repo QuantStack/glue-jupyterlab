@@ -15,7 +15,7 @@ export function identityLinks(
   return (
     <table>
       {links.map(link => (
-        <tr>
+        <tr key={link[0].origin}>
           <td>{link[1] ? link[0].dest?.label : link[0].src?.label}</td>
           <td>{link[1] ? link[0].src?.label : link[0].dest?.label}</td>
           <td>

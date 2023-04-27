@@ -1,6 +1,5 @@
 import { ISignal } from '@lumino/signaling';
 import { IGlueSessionSharedModel } from '../types';
-import { IComponentLink } from '../_interface/glue.schema';
 
 export { IAdvancedLink, IComponentLink } from '../_interface/glue.schema';
 
@@ -15,7 +14,7 @@ export interface ILinkEditorModel {
 export interface IComponentLinkInfo {
   src?: ILinkInfo;
   dest?: ILinkInfo;
-  origin?: IComponentLink;
+  origin?: string;
 }
 
 export interface ILinkInfo {
