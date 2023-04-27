@@ -1,1 +1,1130 @@
-{"contents": "{\"ComponentLink_2\":{\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"_type\":\"glue.core.component_link.ComponentLink\",\"inverse\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"},\"frm\":[\"RAJ2000\"],\"to\":[\"PRIMARY\"]},\"__24_\":{\"label\":\"__24_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"DEJ2000_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"DEJ2000\"},\"LoadLog_1\":{\"force_coords\":false,\"_type\":\"glue.core.data_factories.helpers.LoadLog\",\"path\":\"w5/w6_psc.vot\",\"kwargs\":[[]],\"_protocol\":2,\"factory\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.data_factories.helpers.auto_data\"}},\"Component_22\":{\"log\":\"LoadLog_1\",\"_type\":\"glue.core.component.Component\",\"log_item\":10},\"RAJ2000_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"RAJ2000\"},\"ComponentLink_0\":{\"_type\":\"glue.core.component_link.ComponentLink\",\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"to\":[\"DEJ2000\"],\"frm\":[\"Pixel Axis 0 [y]\"],\"inverse\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"}},\"LoadLog_0\":{\"force_coords\":false,\"_type\":\"glue.core.data_factories.helpers.LoadLog\",\"path\":\"w5/w5_psc.vot\",\"kwargs\":[[]],\"factory\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.data_factories.helpers.auto_data\"},\"_protocol\":2},\"Component_13\":{\"log\":\"LoadLog_1\",\"_type\":\"glue.core.component.Component\",\"log_item\":1},\"Component_15\":{\"log_item\":3,\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_1\"},\"LoadLog\":{\"factory\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.data_factories.helpers.auto_data\"},\"path\":\"w5/w5.fits\",\"_type\":\"glue.core.data_factories.helpers.LoadLog\",\"_protocol\":2,\"force_coords\":true,\"kwargs\":[[]]},\"Component_11\":{\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_0\",\"log_item\":13},\"Component_1\":{\"_type\":\"glue.core.component.Component\",\"log_item\":2,\"log\":\"LoadLog_0\"},\"__5.8__0\":{\"label\":\"__5.8_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Hmag_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Hmag\"},\"ComponentLink_1\":{\"frm\":[\"Pixel Axis 0 [y]\"],\"to\":[\"RAJ2000\"],\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"_type\":\"glue.core.component_link.ComponentLink\",\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"Component_25\":{\"log\":\"LoadLog_1\",\"log_item\":14,\"_type\":\"glue.core.component.Component\"},\"ID_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"ID\"},\"Declination\":{\"label\":\"Declination\",\"_type\":\"glue.core.component_id.ComponentID\"},\"ID\":{\"label\":\"ID\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Component_3\":{\"log\":\"LoadLog_0\",\"log_item\":4,\"_type\":\"glue.core.component.Component\"},\"LinearSegmentedColormap\":{\"_type\":\"matplotlib.colors.LinearSegmentedColormap\",\"cmap\":\"gray\"},\"Component_0\":{\"log_item\":1,\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_0\"},\"ComponentLink_3\":{\"_type\":\"glue.core.component_link.ComponentLink\",\"to\":[\"PRIMARY\"],\"inverse\":null,\"frm\":[\"ID\",\"RAJ2000\",\"DEJ2000\"],\"using\":{\"function\":\"glue.core.link_helpers.lengths_to_volume\",\"_type\":\"types.FunctionType\"}},\"w5_psc\":{\"primary_owner\":[\"Pixel Axis 0 [x]\",\"ID\",\"RAJ2000\",\"DEJ2000\",\"Jmag\",\"Hmag\",\"Ksmag\",\"__3.6_\",\"__4.5_\",\"__5.8_\",\"__8.0_\",\"__24_\",\"Type\",\"__4.5__-__5.8_\",\"__5.8__-__8.0_\"],\"style\":{\"alpha\":0.8,\"marker\":\"o\",\"color\":\"#595959\",\"_type\":\"glue.core.visual.VisualAttributes\",\"linestyle\":\"solid\",\"markersize\":3,\"linewidth\":1},\"_type\":\"glue.core.data.Data\",\"subsets\":[],\"meta\":{\"_type\":\"collections.OrderedDict\",\"contents\":{\"st__ID\":\"st__J_ApJ_688_1142_table2\",\"st__description\":\"st__W5 source list\",\"st__name\":\"st__J/ApJ/688/1142/table2\"}},\"components\":[[\"Pixel Axis 0 [x]\",\"CoordinateComponent_3\"],[\"ID\",\"Component_0\"],[\"RAJ2000\",\"Component_1\"],[\"DEJ2000\",\"Component_2\"],[\"Jmag\",\"Component_3\"],[\"Hmag\",\"Component_4\"],[\"Ksmag\",\"Component_5\"],[\"__3.6_\",\"Component_6\"],[\"__4.5_\",\"Component_7\"],[\"__5.8_\",\"Component_8\"],[\"__8.0_\",\"Component_9\"],[\"__24_\",\"Component_10\"],[\"Type\",\"CategoricalComponent\"],[\"__4.5__-__5.8_\",\"Component_11\"],[\"__5.8__-__8.0_\",\"Component_12\"]],\"_key_joins\":[],\"label\":\"w5_psc\",\"_protocol\":5,\"uuid\":\"558542c4-f6c7-4196-bd86-c236d7b9e9a9\"},\"Component_14\":{\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_1\",\"log_item\":2},\"Component_16\":{\"log\":\"LoadLog_1\",\"log_item\":4,\"_type\":\"glue.core.component.Component\"},\"Hmag\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Hmag\"},\"Component_7\":{\"_type\":\"glue.core.component.Component\",\"log_item\":8,\"log\":\"LoadLog_0\"},\"list_1\":{\"_type\":\"builtins.list\",\"contents\":[\"ID\",\"RAJ2000\"]},\"Session\":{\"_type\":\"glue.core.session.Session\"},\"list\":{\"_type\":\"builtins.list\",\"contents\":[\"PRIMARY\",\"Pixel Axis 0 [y]\"]},\"CallbackList\":{\"values\":[\"ImageLayerState\"],\"_type\":\"echo.containers.CallbackList\"},\"DataCollection\":{\"subset_group_count\":0,\"links\":[\"ComponentLink\",\"ComponentLink_0\",\"FK4_to_FK5\",\"ComponentLink_1\",\"ComponentLink_2\",\"ComponentLink_3\",\"ICRS_to_Galactic\",\"ComponentLink_4\"],\"_protocol\":4,\"cids\":[\"Pixel Axis 0 [y]\",\"Pixel Axis 1 [x]\",\"Declination\",\"Right Ascension\",\"PRIMARY\",\"Pixel Axis 0 [x]\",\"ID\",\"RAJ2000\",\"DEJ2000\",\"Jmag\",\"Hmag\",\"Ksmag\",\"__3.6_\",\"__4.5_\",\"__5.8_\",\"__8.0_\",\"__24_\",\"Type\",\"__4.5__-__5.8_\",\"__5.8__-__8.0_\",\"Pixel Axis 0 [x]_0\",\"ID_0\",\"RAJ2000_0\",\"DEJ2000_0\",\"Jmag_0\",\"Hmag_0\",\"Ksmag_0\",\"__3.6__0\",\"__4.5__0\",\"__5.8__0\",\"__8.0__0\",\"__24__0\",\"Type_0\",\"__4.5__-__5.8__0\",\"__5.8__-__8.0__0\"],\"components\":[\"CoordinateComponent\",\"CoordinateComponent_0\",\"CoordinateComponent_1\",\"CoordinateComponent_2\",\"Component\",\"CoordinateComponent_3\",\"Component_0\",\"Component_1\",\"Component_2\",\"Component_3\",\"Component_4\",\"Component_5\",\"Component_6\",\"Component_7\",\"Component_8\",\"Component_9\",\"Component_10\",\"CategoricalComponent\",\"Component_11\",\"Component_12\",\"CoordinateComponent_4\",\"Component_13\",\"Component_14\",\"Component_15\",\"Component_16\",\"Component_17\",\"Component_18\",\"Component_19\",\"Component_20\",\"Component_21\",\"Component_22\",\"Component_23\",\"CategoricalComponent_0\",\"Component_24\",\"Component_25\"],\"data\":[\"w5\",\"w5_psc\",\"w6_psc\"],\"_type\":\"glue.core.data_collection.DataCollection\",\"groups\":[]},\"PRIMARY\":{\"label\":\"PRIMARY\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Component_21\":{\"log\":\"LoadLog_1\",\"log_item\":9,\"_type\":\"glue.core.component.Component\"},\"__24__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__24_\"},\"__8.0_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__8.0_\"},\"ComponentLink_4\":{\"_type\":\"glue.core.component_link.ComponentLink\",\"to\":[\"PRIMARY\"],\"frm\":[\"ID_0\"],\"inverse\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"},\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"__5.8__-__8.0__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8__-__8.0_\"},\"Component_12\":{\"log_item\":14,\"log\":\"LoadLog_0\",\"_type\":\"glue.core.component.Component\"},\"__4.5__0\":{\"label\":\"__4.5_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"ImageViewer\":{\"_protocol\":1,\"session\":\"Session\",\"layers\":[{\"_type\":\"glue.viewers.image.layer_artist.ImageLayerArtist\",\"state\":\"ImageLayerState\"}],\"size\":[1878,1312],\"pos\":[0,0],\"_type\":\"glue.viewers.image.qt.data_viewer.ImageViewer\",\"state\":{\"values\":{\"x_max\":1224.8757016352629,\"x_axislabel_weight\":\"st__normal\",\"y_ticklabel_size\":8,\"x_att\":\"Pixel Axis 1 [x]\",\"show_axes\":true,\"y_max\":962.015955168474,\"y_att\":\"Pixel Axis 0 [y]\",\"x_axislabel\":\"st__Right Ascension\",\"reference_data\":\"w5\",\"x_ticklabel_size\":8,\"x_axislabel_size\":10,\"x_min\":-225.87570163526289,\"y_axislabel_size\":10,\"x_att_world\":\"Right Ascension\",\"slices\":[0,0],\"y_log\":false,\"y_axislabel_weight\":\"st__normal\",\"y_att_world\":\"Declination\",\"x_log\":false,\"dpi\":72,\"color_mode\":\"st__Colormaps\",\"y_axislabel\":\"st__Declination\",\"aspect\":\"st__equal\",\"layers\":\"CallbackList\",\"y_min\":36.98404483152598},\"legend\":{\"fontsize\":10,\"visible\":false,\"frame_color\":\"#FFFFFF\",\"location\":\"draggable\",\"text_color\":\"#000000\",\"alpha\":0.5858585858585859,\"title\":\"\",\"show_edge\":true}}},\"list_0\":{\"contents\":[\"ID\",\"RAJ2000\"],\"_type\":\"builtins.list\"},\"Component_8\":{\"log\":\"LoadLog_0\",\"_type\":\"glue.core.component.Component\",\"log_item\":9},\"Pixel Axis 0 [x]\":{\"axis\":0,\"_type\":\"glue.core.component_id.PixelComponentID\",\"label\":\"Pixel Axis 0 [x]\"},\"Component_6\":{\"log_item\":7,\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_0\"},\"Pixel Axis 0 [y]\":{\"axis\":0,\"_type\":\"glue.core.component_id.PixelComponentID\",\"label\":\"Pixel Axis 0 [y]\"},\"Component_18\":{\"_type\":\"glue.core.component.Component\",\"log_item\":6,\"log\":\"LoadLog_1\"},\"Component_4\":{\"log_item\":5,\"log\":\"LoadLog_0\",\"_type\":\"glue.core.component.Component\"},\"CoordinateComponent_3\":{\"axis\":0,\"world\":false,\"_type\":\"glue.core.component.CoordinateComponent\"},\"Type_0\":{\"label\":\"Type\",\"_type\":\"glue.core.component_id.ComponentID\"},\"ImageLayerState\":{\"_type\":\"glue.viewers.image.state.ImageLayerState\",\"values\":{\"global_sync\":false,\"contrast\":1,\"cmap\":\"LinearSegmentedColormap\",\"zorder\":4,\"bias\":0.5,\"layer\":\"w5\",\"v_max\":2239.702392578125,\"stretch\":\"st__linear\",\"color\":\"st__#595959\",\"v_min\":438.8984375,\"percentile\":\"st__Custom\",\"alpha\":0.8,\"attribute\":\"PRIMARY\",\"visible\":true}},\"__3.6_\":{\"label\":\"__3.6_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Pixel Axis 1 [x]\":{\"axis\":1,\"_type\":\"glue.core.component_id.PixelComponentID\",\"label\":\"Pixel Axis 1 [x]\"},\"__5.8_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8_\"},\"attributes\":\"{\\\"Type_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Type\\\"},\\\"Declination\\\":{\\\"label\\\":\\\"Declination\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"ID_0\\\":{\\\"label\\\":\\\"ID\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"DEJ2000\\\":{\\\"label\\\":\\\"DEJ2000\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Ksmag\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Ksmag\\\"},\\\"RAJ2000\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"RAJ2000\\\"},\\\"Pixel Axis 0 [x]\\\":{\\\"label\\\":\\\"Pixel Axis 0 [x]\\\",\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\"},\\\"RAJ2000_0\\\":{\\\"label\\\":\\\"RAJ2000\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__24_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__24_\\\"},\\\"Hmag_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Hmag\\\"},\\\"__5.8__-__8.0_\\\":{\\\"label\\\":\\\"__5.8__-__8.0_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__5.8__-__8.0__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__5.8__-__8.0_\\\"},\\\"__4.5__-__5.8__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__4.5__-__5.8_\\\"},\\\"Ksmag_0\\\":{\\\"label\\\":\\\"Ksmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Pixel Axis 0 [y]\\\":{\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"label\\\":\\\"Pixel Axis 0 [y]\\\"},\\\"__4.5_\\\":{\\\"label\\\":\\\"__4.5_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Pixel Axis 1 [x]\\\":{\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"axis\\\":1,\\\"label\\\":\\\"Pixel Axis 1 [x]\\\"},\\\"__3.6_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__3.6_\\\"},\\\"DEJ2000_0\\\":{\\\"label\\\":\\\"DEJ2000\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"PRIMARY\\\":{\\\"label\\\":\\\"PRIMARY\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"ID\\\":{\\\"label\\\":\\\"ID\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__5.8_\\\":{\\\"label\\\":\\\"__5.8_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__8.0_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__8.0_\\\"},\\\"Jmag\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Jmag\\\"},\\\"__4.5__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__4.5_\\\"},\\\"Jmag_0\\\":{\\\"label\\\":\\\"Jmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Hmag\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Hmag\\\"},\\\"__8.0__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__8.0_\\\"},\\\"__4.5__-__5.8_\\\":{\\\"label\\\":\\\"__4.5__-__5.8_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__24__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__24_\\\"},\\\"Right Ascension\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Right Ascension\\\"},\\\"__5.8__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__5.8_\\\"},\\\"Pixel Axis 0 [x]_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"axis\\\":0,\\\"label\\\":\\\"Pixel Axis 0 [x]\\\"},\\\"Type\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Type\\\"},\\\"__3.6__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__3.6_\\\"}}\",\"Jmag\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Jmag\"},\"RAJ2000\":{\"label\":\"RAJ2000\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Component_5\":{\"_type\":\"glue.core.component.Component\",\"log_item\":6,\"log\":\"LoadLog_0\"},\"ICRS_to_Galactic\":{\"_type\":\"glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic\",\"data1\":\"w5_psc\",\"cids1\":\"list_1\",\"cids2\":\"list_2\",\"data2\":\"w5\"},\"CoordinateComponent_4\":{\"_type\":\"glue.core.component.CoordinateComponent\",\"world\":false,\"axis\":0},\"Pixel Axis 0 [x]_0\":{\"axis\":0,\"label\":\"Pixel Axis 0 [x]\",\"_type\":\"glue.core.component_id.PixelComponentID\"},\"CoordinateComponent_0\":{\"_type\":\"glue.core.component.CoordinateComponent\",\"axis\":1,\"world\":false},\"CoordinateComponent_2\":{\"world\":true,\"axis\":1,\"_type\":\"glue.core.component.CoordinateComponent\"},\"DEJ2000\":{\"label\":\"DEJ2000\",\"_type\":\"glue.core.component_id.ComponentID\"},\"links\":\"{\\\"ICRS_to_Galactic\\\":{\\\"data2\\\":\\\"w5\\\",\\\"cids2\\\":\\\"list_2\\\",\\\"_type\\\":\\\"glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic\\\",\\\"cids1\\\":\\\"list_1\\\",\\\"data1\\\":\\\"w5_psc\\\"},\\\"ComponentLink_1\\\":{\\\"to\\\":[\\\"RAJ2000\\\"],\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"inverse\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"frm\\\":[\\\"Pixel Axis 0 [y]\\\"]},\\\"FK4_to_FK5\\\":{\\\"cids2\\\":\\\"list_0\\\",\\\"cids1\\\":\\\"list\\\",\\\"_type\\\":\\\"glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5\\\",\\\"data1\\\":\\\"w5\\\",\\\"data2\\\":\\\"w5_psc\\\"},\\\"ComponentLink_4\\\":{\\\"inverse\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"frm\\\":[\\\"ID_0\\\"],\\\"to\\\":[\\\"PRIMARY\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\"},\\\"ComponentLink_2\\\":{\\\"inverse\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"to\\\":[\\\"PRIMARY\\\"],\\\"frm\\\":[\\\"RAJ2000\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"}},\\\"ComponentLink\\\":{\\\"inverse\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"to\\\":[\\\"RAJ2000\\\"],\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"frm\\\":[\\\"PRIMARY\\\"]},\\\"ComponentLink_0\\\":{\\\"inverse\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"using\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"frm\\\":[\\\"Pixel Axis 0 [y]\\\"],\\\"to\\\":[\\\"DEJ2000\\\"]},\\\"ComponentLink_3\\\":{\\\"inverse\\\":null,\\\"to\\\":[\\\"PRIMARY\\\"],\\\"frm\\\":[\\\"ID\\\",\\\"RAJ2000\\\",\\\"DEJ2000\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"using\\\":{\\\"function\\\":\\\"glue.core.link_helpers.lengths_to_volume\\\",\\\"_type\\\":\\\"types.FunctionType\\\"}}}\",\"Component_9\":{\"log\":\"LoadLog_0\",\"log_item\":10,\"_type\":\"glue.core.component.Component\"},\"Jmag_0\":{\"label\":\"Jmag\",\"_type\":\"glue.core.component_id.ComponentID\"},\"CategoricalComponent_0\":{\"_type\":\"glue.core.component.CategoricalComponent\",\"log_item\":12,\"log\":\"LoadLog_1\"},\"Component_24\":{\"log\":\"LoadLog_1\",\"log_item\":13,\"_type\":\"glue.core.component.Component\"},\"Ksmag_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Ksmag\"},\"contents\":\"{\\\"ImageLayerState\\\":{\\\"_type\\\":\\\"glue.viewers.image.state.ImageLayerState\\\",\\\"values\\\":{\\\"bias\\\":0.5,\\\"visible\\\":true,\\\"layer\\\":\\\"w5\\\",\\\"alpha\\\":0.8,\\\"contrast\\\":1,\\\"color\\\":\\\"st__#595959\\\",\\\"attribute\\\":\\\"PRIMARY\\\",\\\"global_sync\\\":false,\\\"stretch\\\":\\\"st__linear\\\",\\\"v_max\\\":2239.702392578125,\\\"v_min\\\":438.8984375,\\\"zorder\\\":4,\\\"percentile\\\":\\\"st__Custom\\\",\\\"cmap\\\":\\\"LinearSegmentedColormap\\\"}},\\\"ComponentLink_3\\\":{\\\"inverse\\\":null,\\\"to\\\":[\\\"PRIMARY\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"frm\\\":[\\\"ID\\\",\\\"RAJ2000\\\",\\\"DEJ2000\\\"],\\\"using\\\":{\\\"function\\\":\\\"glue.core.link_helpers.lengths_to_volume\\\",\\\"_type\\\":\\\"types.FunctionType\\\"}},\\\"Component_5\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":6,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"__3.6_\\\":{\\\"label\\\":\\\"__3.6_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"CategoricalComponent\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":12,\\\"_type\\\":\\\"glue.core.component.CategoricalComponent\\\"},\\\"Component_11\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":13},\\\"__5.8__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__5.8_\\\"},\\\"FK4_to_FK5\\\":{\\\"_type\\\":\\\"glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5\\\",\\\"cids1\\\":\\\"list\\\",\\\"cids2\\\":\\\"list_0\\\",\\\"data2\\\":\\\"w5_psc\\\",\\\"data1\\\":\\\"w5\\\"},\\\"Ksmag_0\\\":{\\\"label\\\":\\\"Ksmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_10\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":11,\\\"log\\\":\\\"LoadLog_0\\\"},\\\"ImageViewer\\\":{\\\"pos\\\":[0,0],\\\"session\\\":\\\"Session\\\",\\\"layers\\\":[{\\\"state\\\":\\\"ImageLayerState\\\",\\\"_type\\\":\\\"glue.viewers.image.layer_artist.ImageLayerArtist\\\"}],\\\"size\\\":[1878,1312],\\\"_type\\\":\\\"glue.viewers.image.qt.data_viewer.ImageViewer\\\",\\\"_protocol\\\":1,\\\"state\\\":{\\\"values\\\":{\\\"y_axislabel_size\\\":10,\\\"y_log\\\":false,\\\"color_mode\\\":\\\"st__Colormaps\\\",\\\"dpi\\\":72,\\\"x_axislabel\\\":\\\"st__Right Ascension\\\",\\\"slices\\\":[0,0],\\\"aspect\\\":\\\"st__equal\\\",\\\"x_att\\\":\\\"Pixel Axis 1 [x]\\\",\\\"layers\\\":\\\"CallbackList\\\",\\\"x_max\\\":1224.8757016352629,\\\"y_att_world\\\":\\\"Declination\\\",\\\"y_ticklabel_size\\\":8,\\\"x_att_world\\\":\\\"Right Ascension\\\",\\\"x_log\\\":false,\\\"x_axislabel_size\\\":10,\\\"show_axes\\\":true,\\\"y_max\\\":962.015955168474,\\\"reference_data\\\":\\\"w5\\\",\\\"y_min\\\":36.98404483152598,\\\"y_axislabel\\\":\\\"st__Declination\\\",\\\"y_att\\\":\\\"Pixel Axis 0 [y]\\\",\\\"x_ticklabel_size\\\":8,\\\"y_axislabel_weight\\\":\\\"st__normal\\\",\\\"x_axislabel_weight\\\":\\\"st__normal\\\",\\\"x_min\\\":-225.87570163526289},\\\"legend\\\":{\\\"fontsize\\\":10,\\\"frame_color\\\":\\\"#FFFFFF\\\",\\\"text_color\\\":\\\"#000000\\\",\\\"visible\\\":false,\\\"alpha\\\":0.5858585858585859,\\\"show_edge\\\":true,\\\"location\\\":\\\"draggable\\\",\\\"title\\\":\\\"\\\"}}},\\\"Jmag_0\\\":{\\\"label\\\":\\\"Jmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_0\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":1,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"DataCollection\\\":{\\\"_protocol\\\":4,\\\"subset_group_count\\\":0,\\\"cids\\\":[\\\"Pixel Axis 0 [y]\\\",\\\"Pixel Axis 1 [x]\\\",\\\"Declination\\\",\\\"Right Ascension\\\",\\\"PRIMARY\\\",\\\"Pixel Axis 0 [x]\\\",\\\"ID\\\",\\\"RAJ2000\\\",\\\"DEJ2000\\\",\\\"Jmag\\\",\\\"Hmag\\\",\\\"Ksmag\\\",\\\"__3.6_\\\",\\\"__4.5_\\\",\\\"__5.8_\\\",\\\"__8.0_\\\",\\\"__24_\\\",\\\"Type\\\",\\\"__4.5__-__5.8_\\\",\\\"__5.8__-__8.0_\\\",\\\"Pixel Axis 0 [x]_0\\\",\\\"ID_0\\\",\\\"RAJ2000_0\\\",\\\"DEJ2000_0\\\",\\\"Jmag_0\\\",\\\"Hmag_0\\\",\\\"Ksmag_0\\\",\\\"__3.6__0\\\",\\\"__4.5__0\\\",\\\"__5.8__0\\\",\\\"__8.0__0\\\",\\\"__24__0\\\",\\\"Type_0\\\",\\\"__4.5__-__5.8__0\\\",\\\"__5.8__-__8.0__0\\\"],\\\"components\\\":[\\\"CoordinateComponent\\\",\\\"CoordinateComponent_0\\\",\\\"CoordinateComponent_1\\\",\\\"CoordinateComponent_2\\\",\\\"Component\\\",\\\"CoordinateComponent_3\\\",\\\"Component_0\\\",\\\"Component_1\\\",\\\"Component_2\\\",\\\"Component_3\\\",\\\"Component_4\\\",\\\"Component_5\\\",\\\"Component_6\\\",\\\"Component_7\\\",\\\"Component_8\\\",\\\"Component_9\\\",\\\"Component_10\\\",\\\"CategoricalComponent\\\",\\\"Component_11\\\",\\\"Component_12\\\",\\\"CoordinateComponent_4\\\",\\\"Component_13\\\",\\\"Component_14\\\",\\\"Component_15\\\",\\\"Component_16\\\",\\\"Component_17\\\",\\\"Component_18\\\",\\\"Component_19\\\",\\\"Component_20\\\",\\\"Component_21\\\",\\\"Component_22\\\",\\\"Component_23\\\",\\\"CategoricalComponent_0\\\",\\\"Component_24\\\",\\\"Component_25\\\"],\\\"data\\\":[\\\"w5\\\",\\\"w5_psc\\\",\\\"w6_psc\\\"],\\\"links\\\":[\\\"ComponentLink\\\",\\\"ComponentLink_0\\\",\\\"FK4_to_FK5\\\",\\\"ComponentLink_1\\\",\\\"ComponentLink_2\\\",\\\"ComponentLink_3\\\",\\\"ICRS_to_Galactic\\\",\\\"ComponentLink_4\\\"],\\\"_type\\\":\\\"glue.core.data_collection.DataCollection\\\",\\\"groups\\\":[]},\\\"list_2\\\":{\\\"contents\\\":[\\\"PRIMARY\\\",\\\"Pixel Axis 0 [y]\\\"],\\\"_type\\\":\\\"builtins.list\\\"},\\\"__24_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__24_\\\"},\\\"Jmag\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Jmag\\\"},\\\"ID\\\":{\\\"label\\\":\\\"ID\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"ComponentLink\\\":{\\\"to\\\":[\\\"RAJ2000\\\"],\\\"inverse\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"frm\\\":[\\\"PRIMARY\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"}},\\\"__main__\\\":{\\\"plugins\\\":[\\\"glue.io.qt.directory_importer\\\",\\\"glue.plugins.wcs_autolinking\\\",\\\"casa_formats_io.glue_factory\\\",\\\"glue.plugins.coordinate_helpers\\\",\\\"glue.viewers.image.qt\\\",\\\"glue.viewers.table.qt\\\",\\\"glue.plugins.tools\\\",\\\"glue.viewers.profile.qt\\\",\\\"glue.plugins.export_d3po\\\",\\\"glue.io.formats.fits\\\",\\\"glue.core.data_exporters\\\",\\\"glue.plugins.tools.pv_slicer.qt\\\",\\\"glue.viewers.scatter.qt\\\",\\\"glue_vispy_viewers.scatter\\\",\\\"glue_vispy_viewers.volume\\\",\\\"glue.plugins.dendro_viewer.qt\\\",\\\"glue.viewers.histogram.qt\\\"],\\\"data\\\":\\\"DataCollection\\\",\\\"session\\\":\\\"Session\\\",\\\"viewers\\\":[[\\\"ImageViewer\\\"]],\\\"_type\\\":\\\"glue.app.qt.application.GlueApplication\\\",\\\"tab_names\\\":[\\\"Tab 1\\\"]},\\\"ComponentLink_1\\\":{\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"inverse\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"using\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"frm\\\":[\\\"Pixel Axis 0 [y]\\\"],\\\"to\\\":[\\\"RAJ2000\\\"]},\\\"Ksmag\\\":{\\\"label\\\":\\\"Ksmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"LinearSegmentedColormap\\\":{\\\"_type\\\":\\\"matplotlib.colors.LinearSegmentedColormap\\\",\\\"cmap\\\":\\\"gray\\\"},\\\"Session\\\":{\\\"_type\\\":\\\"glue.core.session.Session\\\"},\\\"__4.5_\\\":{\\\"label\\\":\\\"__4.5_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"CoordinateComponent_0\\\":{\\\"axis\\\":1,\\\"world\\\":false,\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\"},\\\"ICRS_to_Galactic\\\":{\\\"_type\\\":\\\"glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic\\\",\\\"cids1\\\":\\\"list_1\\\",\\\"cids2\\\":\\\"list_2\\\",\\\"data1\\\":\\\"w5_psc\\\",\\\"data2\\\":\\\"w5\\\"},\\\"Declination\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Declination\\\"},\\\"LoadLog_1\\\":{\\\"path\\\":\\\"w5/w6_psc.vot\\\",\\\"factory\\\":{\\\"function\\\":\\\"glue.core.data_factories.helpers.auto_data\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"_type\\\":\\\"glue.core.data_factories.helpers.LoadLog\\\",\\\"kwargs\\\":[[]],\\\"_protocol\\\":2,\\\"force_coords\\\":false},\\\"ComponentLink_0\\\":{\\\"using\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"to\\\":[\\\"DEJ2000\\\"],\\\"frm\\\":[\\\"Pixel Axis 0 [y]\\\"],\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"inverse\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"}},\\\"Component_9\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":10},\\\"Type_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Type\\\"},\\\"Component_12\\\":{\\\"log_item\\\":14,\\\"log\\\":\\\"LoadLog_0\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"w6_psc\\\":{\\\"_key_joins\\\":[],\\\"subsets\\\":[],\\\"components\\\":[[\\\"Pixel Axis 0 [x]_0\\\",\\\"CoordinateComponent_4\\\"],[\\\"ID_0\\\",\\\"Component_13\\\"],[\\\"RAJ2000_0\\\",\\\"Component_14\\\"],[\\\"DEJ2000_0\\\",\\\"Component_15\\\"],[\\\"Jmag_0\\\",\\\"Component_16\\\"],[\\\"Hmag_0\\\",\\\"Component_17\\\"],[\\\"Ksmag_0\\\",\\\"Component_18\\\"],[\\\"__3.6__0\\\",\\\"Component_19\\\"],[\\\"__4.5__0\\\",\\\"Component_20\\\"],[\\\"__5.8__0\\\",\\\"Component_21\\\"],[\\\"__8.0__0\\\",\\\"Component_22\\\"],[\\\"__24__0\\\",\\\"Component_23\\\"],[\\\"Type_0\\\",\\\"CategoricalComponent_0\\\"],[\\\"__4.5__-__5.8__0\\\",\\\"Component_24\\\"],[\\\"__5.8__-__8.0__0\\\",\\\"Component_25\\\"]],\\\"uuid\\\":\\\"872b488c-76e9-4aa5-aaf9-dff4539a7146\\\",\\\"_protocol\\\":5,\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"label\\\":\\\"w6_psc\\\",\\\"style\\\":{\\\"markersize\\\":3,\\\"color\\\":\\\"#595959\\\",\\\"alpha\\\":0.8,\\\"marker\\\":\\\"o\\\",\\\"linestyle\\\":\\\"solid\\\",\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\",\\\"linewidth\\\":1},\\\"primary_owner\\\":[\\\"Pixel Axis 0 [x]_0\\\",\\\"ID_0\\\",\\\"RAJ2000_0\\\",\\\"DEJ2000_0\\\",\\\"Jmag_0\\\",\\\"Hmag_0\\\",\\\"Ksmag_0\\\",\\\"__3.6__0\\\",\\\"__4.5__0\\\",\\\"__5.8__0\\\",\\\"__8.0__0\\\",\\\"__24__0\\\",\\\"Type_0\\\",\\\"__4.5__-__5.8__0\\\",\\\"__5.8__-__8.0__0\\\"],\\\"meta\\\":{\\\"contents\\\":{\\\"st__description\\\":\\\"st__W5 source list\\\",\\\"st__name\\\":\\\"st__J/ApJ/688/1142/table2\\\",\\\"st__ID\\\":\\\"st__J_ApJ_688_1142_table2\\\"},\\\"_type\\\":\\\"collections.OrderedDict\\\"}},\\\"list_0\\\":{\\\"contents\\\":[\\\"ID\\\",\\\"RAJ2000\\\"],\\\"_type\\\":\\\"builtins.list\\\"},\\\"Type\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Type\\\"},\\\"Right Ascension\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Right Ascension\\\"},\\\"ComponentLink_4\\\":{\\\"inverse\\\":{\\\"function\\\":\\\"glue.core.link_helpers.identity\\\",\\\"_type\\\":\\\"types.FunctionType\\\"},\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"to\\\":[\\\"PRIMARY\\\"],\\\"frm\\\":[\\\"ID_0\\\"],\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"}},\\\"RAJ2000_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"RAJ2000\\\"},\\\"CoordinateComponent_2\\\":{\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\",\\\"axis\\\":1,\\\"world\\\":true},\\\"RAJ2000\\\":{\\\"label\\\":\\\"RAJ2000\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_6\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":7,\\\"log\\\":\\\"LoadLog_0\\\"},\\\"ComponentLink_2\\\":{\\\"_type\\\":\\\"glue.core.component_link.ComponentLink\\\",\\\"using\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"inverse\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.link_helpers.identity\\\"},\\\"frm\\\":[\\\"RAJ2000\\\"],\\\"to\\\":[\\\"PRIMARY\\\"]},\\\"__8.0__0\\\":{\\\"label\\\":\\\"__8.0_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_2\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":3,\\\"log\\\":\\\"LoadLog_0\\\"},\\\"__4.5__-__5.8_\\\":{\\\"label\\\":\\\"__4.5__-__5.8_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"__24__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__24_\\\"},\\\"Component_3\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":4},\\\"Pixel Axis 0 [x]\\\":{\\\"label\\\":\\\"Pixel Axis 0 [x]\\\",\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"axis\\\":0},\\\"w5_psc\\\":{\\\"subsets\\\":[],\\\"meta\\\":{\\\"contents\\\":{\\\"st__ID\\\":\\\"st__J_ApJ_688_1142_table2\\\",\\\"st__description\\\":\\\"st__W5 source list\\\",\\\"st__name\\\":\\\"st__J/ApJ/688/1142/table2\\\"},\\\"_type\\\":\\\"collections.OrderedDict\\\"},\\\"label\\\":\\\"w5_psc\\\",\\\"uuid\\\":\\\"558542c4-f6c7-4196-bd86-c236d7b9e9a9\\\",\\\"primary_owner\\\":[\\\"Pixel Axis 0 [x]\\\",\\\"ID\\\",\\\"RAJ2000\\\",\\\"DEJ2000\\\",\\\"Jmag\\\",\\\"Hmag\\\",\\\"Ksmag\\\",\\\"__3.6_\\\",\\\"__4.5_\\\",\\\"__5.8_\\\",\\\"__8.0_\\\",\\\"__24_\\\",\\\"Type\\\",\\\"__4.5__-__5.8_\\\",\\\"__5.8__-__8.0_\\\"],\\\"_protocol\\\":5,\\\"components\\\":[[\\\"Pixel Axis 0 [x]\\\",\\\"CoordinateComponent_3\\\"],[\\\"ID\\\",\\\"Component_0\\\"],[\\\"RAJ2000\\\",\\\"Component_1\\\"],[\\\"DEJ2000\\\",\\\"Component_2\\\"],[\\\"Jmag\\\",\\\"Component_3\\\"],[\\\"Hmag\\\",\\\"Component_4\\\"],[\\\"Ksmag\\\",\\\"Component_5\\\"],[\\\"__3.6_\\\",\\\"Component_6\\\"],[\\\"__4.5_\\\",\\\"Component_7\\\"],[\\\"__5.8_\\\",\\\"Component_8\\\"],[\\\"__8.0_\\\",\\\"Component_9\\\"],[\\\"__24_\\\",\\\"Component_10\\\"],[\\\"Type\\\",\\\"CategoricalComponent\\\"],[\\\"__4.5__-__5.8_\\\",\\\"Component_11\\\"],[\\\"__5.8__-__8.0_\\\",\\\"Component_12\\\"]],\\\"style\\\":{\\\"alpha\\\":0.8,\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\",\\\"linestyle\\\":\\\"solid\\\",\\\"markersize\\\":3,\\\"linewidth\\\":1,\\\"marker\\\":\\\"o\\\",\\\"color\\\":\\\"#595959\\\"},\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"_key_joins\\\":[]},\\\"ID_0\\\":{\\\"label\\\":\\\"ID\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"CoordinateComponent\\\":{\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\",\\\"world\\\":false},\\\"__4.5__0\\\":{\\\"label\\\":\\\"__4.5_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_7\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":8,\\\"log\\\":\\\"LoadLog_0\\\"},\\\"w5\\\":{\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"coords\\\":\\\"WCS\\\",\\\"_key_joins\\\":[],\\\"label\\\":\\\"w5\\\",\\\"primary_owner\\\":[\\\"Pixel Axis 0 [y]\\\",\\\"Pixel Axis 1 [x]\\\",\\\"Declination\\\",\\\"Right Ascension\\\",\\\"PRIMARY\\\"],\\\"subsets\\\":[],\\\"meta\\\":{\\\"_type\\\":\\\"collections.OrderedDict\\\",\\\"contents\\\":{\\\"st__COMMENT\\\":[\\\"\\\",\\\" SkyView Survey metadata\\\",\\\"\\\",\\\"Provenance:  WISE Archive (IRSA/IPAC)\\\",\\\"Copyright:   WISE data is in the public domain but publications are re\\\",\\\"          quested to include the       statment:        This publicati\\\",\\\"          on makes use of data products from the Wide-field Infrared S\\\",\\\"          urvey Explorer,       which is a joint project of the Univer\\\",\\\"          sity of California, Los Angeles,       and the Jet Propulsio\\\",\\\"          n Laboratory/California Institute of Technology,       funde\\\",\\\"          d by the National Aeronautics and Space Administration.\\\",\\\"Regime:      Infrared\\\",\\\"NSurvey:     4\\\",\\\"Frequency:   25 THz (12 micrometers)\\\",\\\"Bandpass:    18-40 THz\\\",\\\"Coverage:    All sky\\\",\\\"PixelScale:  1.375\\\\\\\"\\\",\\\"PixelUnits:  DN\\\",\\\"Resolution:  6.5\\\\\\\"\\\",\\\"Coordinates: Equatorial\\\",\\\"Projection:  Sine\\\",\\\"Epoch:       January 7 to August 6, 2010\\\",\\\"Reference:    Wright et al (2010)\\\",\\\"\\\",\\\"Survey specific cards\\\",\\\"\\\"],\\\"st__CRPIX1\\\":500.5,\\\"st__EQUINOX\\\":2000,\\\"st__SIMPLE\\\":true,\\\"st__CRPIX2\\\":500.5,\\\"st__CDELT1\\\":-0.003,\\\"st__CTYPE1\\\":\\\"st__RA---TAN\\\",\\\"st__HISTORY\\\":[\\\"\\\",\\\" Settings used in processing:\\\",\\\"\\\",\\\"cache = /skyview8/cache/surveys/\\\",\\\"coordinates = J2000.0\\\",\\\"coordselect = J2000\\\",\\\"cs = standard\\\",\\\"deedger = skyview.process.Deedger\\\",\\\"descriptionxslt = cgifiles/description.xsl\\\",\\\"dummy\\\",\\\"equinox = 2000\\\",\\\"finalpostprocessor = skyview.ij.IJProcessor,skyview.data.BoxSmoother,sky\\\",\\\"float = on\\\",\\\"footertemplate = cgifiles/skyfooter.html\\\",\\\"galleryxslt = cgifiles/gallerymultipage.xsl\\\",\\\"headertemplate = cgifiles/skyheader.html\\\",\\\"htmlwriter = skyview.request.HTMLWriter\\\",\\\"imagefactory = skyview.survey.CachingImageFactory\\\",\\\"imagesize = 1.6\\\",\\\"imscale = 3\\\",\\\"localurl = http://skyview.gsfc.nasa.gov/surveys,/skyview/htdocs/surveys\\\",\\\"lut = colortables/b-w-linear.bin\\\",\\\"lutcbarpath = /images/colorbars/\\\",\\\"mosaicker = skyview.process.Mosaicker\\\",\\\"name = WISE 12 Micron All-Sky Survey\\\",\\\"noexit =\\\",\\\"nullimagedir = ../images/nodata\\\",\\\"nwindow = on\\\",\\\"output = ../tempspace/fits/skv7286600634832\\\",\\\"outputroot = ../tempspace/fits/\\\",\\\"pixels = 1000\\\",\\\"position = 43.46, 60.38\\\",\\\"postprocessor = skyview.ij.IJProcessor,skyview.request.HTMLWriter\\\",\\\"projection = Tan\\\",\\\"quicklook = jpeg\\\",\\\"reqxpos = 43.46\\\",\\\"reqypos = 60.38\\\",\\\"resolver = SIMBAD-NED\\\",\\\"rgbtemplate = cgifiles/skyrgb.html\\\",\\\"rgbwriter = skyview.request.RGBWriter\\\",\\\"sampler = Default\\\",\\\"savebysurvey\\\",\\\"scale = 0.0003819\\\",\\\"scaling = loglog\\\",\\\"settingsupdaters = BatchCompatibility,SettingsFixer,skyview.request.Toas\\\",\\\"shortname = Wise W3,Wise 12, WiseW3, Wise12\\\",\\\"siabase = http://skyview.gsfc.nasa.gov/cgi-bin/images?\\\",\\\"siaimagetimeout = 1200000\\\",\\\"siapfilterfield = VOX:BandPass_ID\\\",\\\"siapfiltervalue = W3\\\",\\\"siapurl = http://irsa.ipac.caltech.edu/ibe/sia/wise/allsky/4band_p3am_cd\\\",\\\"size = 3.0,3.0\\\",\\\"spcoordinates =\\\",\\\"survey = WISE 12\\\",\\\"surveyfinder = skyview.survey.XMLSurveyFinder\\\",\\\"surveymanifest = surveys/survey.manifest\\\",\\\"surveysheader = cgifiles/survey.header\\\",\\\"surveytemplate = cgifiles/skysurvey.html\\\",\\\"url.heasarcbase = http://heasarc.gsfc.nasa.gov/xamin/vo/cone?table=\\\",\\\"url.ned = http://nedwww.ipac.caltech.edu/cgi-bin/nph-NEDobjsearch?search\\\",\\\"url.simbad = http://simbad.u-strasbg.fr/simbad-conesearch.pl?\\\",\\\"url.vizierbase = http://vizier.u-strasbg.fr/viz-bin/votable/-dtd/-A?-out\\\",\\\"urlcoordinates = http://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/co\\\",\\\"urllocalhelp = http://skyview.gsfc.nasa.gov/help/help.html\\\",\\\"webrootpath = /skyview/htdocs/\\\",\\\"\\\",\\\" Map generated at: Mon Sep 24 16:13:12 EDT 2012\\\",\\\"\\\",\\\" Resampler used: NNSampler\\\",\\\"\\\",\\\"\\\",\\\"Image mosaicking using skyview.geometry.Mosaicker\\\",\\\"\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0460p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0432p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0403p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0450p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0420p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0390p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0480p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0442p620_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0410p620_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0473p620_ab41-w3-int-3.fits\\\",\\\"\\\",\\\"\\\",\\\"Edge adjustments applied (skyview.geometry.DeedgerList\\\",\\\"\\\",\\\"     Image 0403p590_ab41-w3-int-3.fits offset by -10.0955810546875\\\",\\\"     Image 0432p590_ab41-w3-int-3.fits offset by -14.76416015625\\\",\\\"     Image 0460p590_ab41-w3-int-3.fits offset by -18.1815185546875\\\",\\\"     Image 0390p605_ab41-w3-int-3.fits offset by 1.0014190673828125\\\",\\\"     Image 0410p620_ab41-w3-int-3.fits offset by -5.81903076171875\\\",\\\"     Image 0442p620_ab41-w3-int-3.fits offset by -1.201446533203125\\\",\\\"     Image 0450p605_ab41-w3-int-3.fits offset by -12.527557373046875\\\",\\\"     Image 0473p620_ab41-w3-int-3.fits offset by -8.7635498046875\\\",\\\"     Image 0480p605_ab41-w3-int-3.fits offset by -10.600997924804688\\\",\\\"\\\"],\\\"st__SURVEY\\\":\\\"st__WISE 12 micron allsky release\\\",\\\"st__BITPIX\\\":-32,\\\"st__CDELT2\\\":0.003,\\\"st__CRVAL1\\\":43.46,\\\"st__NAXIS1\\\":1000,\\\"st__NAXIS2\\\":1000,\\\"st__CRVAL2\\\":60.38,\\\"st__CTYPE2\\\":\\\"st__DEC--TAN\\\",\\\"st__NAXIS\\\":2,\\\"st__RADESYS\\\":\\\"st__FK5\\\"}},\\\"style\\\":{\\\"color\\\":\\\"#595959\\\",\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\",\\\"alpha\\\":0.8,\\\"linestyle\\\":\\\"solid\\\",\\\"linewidth\\\":1,\\\"marker\\\":\\\"o\\\",\\\"markersize\\\":3},\\\"components\\\":[[\\\"Pixel Axis 0 [y]\\\",\\\"CoordinateComponent\\\"],[\\\"Pixel Axis 1 [x]\\\",\\\"CoordinateComponent_0\\\"],[\\\"Declination\\\",\\\"CoordinateComponent_1\\\"],[\\\"Right Ascension\\\",\\\"CoordinateComponent_2\\\"],[\\\"PRIMARY\\\",\\\"Component\\\"]],\\\"uuid\\\":\\\"c7540d2a-39ba-4c44-9f0b-e6ec12d3df03\\\",\\\"_protocol\\\":5},\\\"Pixel Axis 0 [y]\\\":{\\\"label\\\":\\\"Pixel Axis 0 [y]\\\",\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\"},\\\"__5.8__-__8.0_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__5.8__-__8.0_\\\"},\\\"__5.8__-__8.0__0\\\":{\\\"label\\\":\\\"__5.8__-__8.0_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_14\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":2},\\\"Component_18\\\":{\\\"log_item\\\":6,\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_1\\\"},\\\"__8.0_\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__8.0_\\\"},\\\"CategoricalComponent_0\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":12,\\\"_type\\\":\\\"glue.core.component.CategoricalComponent\\\"},\\\"__5.8_\\\":{\\\"label\\\":\\\"__5.8_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"DEJ2000\\\":{\\\"label\\\":\\\"DEJ2000\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"WCS\\\":{\\\"header\\\":\\\"WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                500.5 / Pixel coordinate of reference point            CRPIX2  =                500.5 / Pixel coordinate of reference point            CDELT1  =               -0.003 / [deg] Coordinate increment at reference point  CDELT2  =                0.003 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               CRVAL1  =                43.46 / [deg] Coordinate value at reference point      CRVAL2  =                60.38 / [deg] Coordinate value at reference point      LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =                60.38 / [deg] Native latitude of celestial pole        MJDREF  =                  0.0 / [d] MJD of fiducial time                       RADESYS = 'FK5'                / Equatorial coordinate system                   EQUINOX =               2000.0 / [yr] Equinox of equatorial coordinates         END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \\\",\\\"_type\\\":\\\"astropy.wcs.wcs.WCS\\\"},\\\"list\\\":{\\\"contents\\\":[\\\"PRIMARY\\\",\\\"Pixel Axis 0 [y]\\\"],\\\"_type\\\":\\\"builtins.list\\\"},\\\"Component_23\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":11,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"Component\\\":{\\\"log\\\":\\\"LoadLog\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":4},\\\"Pixel Axis 0 [x]_0\\\":{\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"label\\\":\\\"Pixel Axis 0 [x]\\\"},\\\"Component_17\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":5,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"Hmag\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"Hmag\\\"},\\\"CoordinateComponent_1\\\":{\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\",\\\"world\\\":true},\\\"CoordinateComponent_3\\\":{\\\"axis\\\":0,\\\"world\\\":false,\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\"},\\\"Component_19\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":7},\\\"CoordinateComponent_4\\\":{\\\"axis\\\":0,\\\"_type\\\":\\\"glue.core.component.CoordinateComponent\\\",\\\"world\\\":false},\\\"Component_1\\\":{\\\"log_item\\\":2,\\\"log\\\":\\\"LoadLog_0\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"LoadLog\\\":{\\\"path\\\":\\\"w5/w5.fits\\\",\\\"_protocol\\\":2,\\\"factory\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.data_factories.helpers.auto_data\\\"},\\\"force_coords\\\":true,\\\"_type\\\":\\\"glue.core.data_factories.helpers.LoadLog\\\",\\\"kwargs\\\":[[]]},\\\"Component_15\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":3},\\\"Component_4\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"log_item\\\":5,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"Component_20\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":8,\\\"log\\\":\\\"LoadLog_1\\\"},\\\"Component_22\\\":{\\\"log_item\\\":10,\\\"log\\\":\\\"LoadLog_1\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"__4.5__-__5.8__0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"__4.5__-__5.8_\\\"},\\\"LoadLog_0\\\":{\\\"force_coords\\\":false,\\\"_protocol\\\":2,\\\"_type\\\":\\\"glue.core.data_factories.helpers.LoadLog\\\",\\\"factory\\\":{\\\"_type\\\":\\\"types.FunctionType\\\",\\\"function\\\":\\\"glue.core.data_factories.helpers.auto_data\\\"},\\\"path\\\":\\\"w5/w5_psc.vot\\\",\\\"kwargs\\\":[[]]},\\\"Component_24\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":13},\\\"Hmag_0\\\":{\\\"label\\\":\\\"Hmag\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Pixel Axis 1 [x]\\\":{\\\"axis\\\":1,\\\"_type\\\":\\\"glue.core.component_id.PixelComponentID\\\",\\\"label\\\":\\\"Pixel Axis 1 [x]\\\"},\\\"Component_8\\\":{\\\"log\\\":\\\"LoadLog_0\\\",\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log_item\\\":9},\\\"Component_25\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":14,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"__3.6__0\\\":{\\\"label\\\":\\\"__3.6_\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"Component_21\\\":{\\\"log_item\\\":9,\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_1\\\"},\\\"PRIMARY\\\":{\\\"label\\\":\\\"PRIMARY\\\",\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\"},\\\"CallbackList\\\":{\\\"values\\\":[\\\"ImageLayerState\\\"],\\\"_type\\\":\\\"echo.containers.CallbackList\\\"},\\\"list_1\\\":{\\\"contents\\\":[\\\"ID\\\",\\\"RAJ2000\\\"],\\\"_type\\\":\\\"builtins.list\\\"},\\\"DEJ2000_0\\\":{\\\"_type\\\":\\\"glue.core.component_id.ComponentID\\\",\\\"label\\\":\\\"DEJ2000\\\"},\\\"Component_16\\\":{\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":4,\\\"_type\\\":\\\"glue.core.component.Component\\\"},\\\"Component_13\\\":{\\\"_type\\\":\\\"glue.core.component.Component\\\",\\\"log\\\":\\\"LoadLog_1\\\",\\\"log_item\\\":1}}\",\"__5.8__-__8.0_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8__-__8.0_\"},\"Component_10\":{\"log_item\":11,\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_0\"},\"WCS\":{\"_type\":\"astropy.wcs.wcs.WCS\",\"header\":\"WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                500.5 / Pixel coordinate of reference point            CRPIX2  =                500.5 / Pixel coordinate of reference point            CDELT1  =               -0.003 / [deg] Coordinate increment at reference point  CDELT2  =                0.003 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               CRVAL1  =                43.46 / [deg] Coordinate value at reference point      CRVAL2  =                60.38 / [deg] Coordinate value at reference point      LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =                60.38 / [deg] Native latitude of celestial pole        MJDREF  =                  0.0 / [d] MJD of fiducial time                       RADESYS = 'FK5'                / Equatorial coordinate system                   EQUINOX =               2000.0 / [yr] Equinox of equatorial coordinates         END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \"},\"w5\":{\"primary_owner\":[\"Pixel Axis 0 [y]\",\"Pixel Axis 1 [x]\",\"Declination\",\"Right Ascension\",\"PRIMARY\"],\"_key_joins\":[],\"coords\":\"WCS\",\"uuid\":\"c7540d2a-39ba-4c44-9f0b-e6ec12d3df03\",\"subsets\":[],\"_type\":\"glue.core.data.Data\",\"meta\":{\"_type\":\"collections.OrderedDict\",\"contents\":{\"st__CRVAL2\":60.38,\"st__COMMENT\":[\"\",\" SkyView Survey metadata\",\"\",\"Provenance:  WISE Archive (IRSA/IPAC)\",\"Copyright:   WISE data is in the public domain but publications are re\",\"          quested to include the       statment:        This publicati\",\"          on makes use of data products from the Wide-field Infrared S\",\"          urvey Explorer,       which is a joint project of the Univer\",\"          sity of California, Los Angeles,       and the Jet Propulsio\",\"          n Laboratory/California Institute of Technology,       funde\",\"          d by the National Aeronautics and Space Administration.\",\"Regime:      Infrared\",\"NSurvey:     4\",\"Frequency:   25 THz (12 micrometers)\",\"Bandpass:    18-40 THz\",\"Coverage:    All sky\",\"PixelScale:  1.375\\\"\",\"PixelUnits:  DN\",\"Resolution:  6.5\\\"\",\"Coordinates: Equatorial\",\"Projection:  Sine\",\"Epoch:       January 7 to August 6, 2010\",\"Reference:    Wright et al (2010)\",\"\",\"Survey specific cards\",\"\"],\"st__CRPIX1\":500.5,\"st__CRPIX2\":500.5,\"st__CDELT2\":0.003,\"st__BITPIX\":-32,\"st__RADESYS\":\"st__FK5\",\"st__SIMPLE\":true,\"st__HISTORY\":[\"\",\" Settings used in processing:\",\"\",\"cache = /skyview8/cache/surveys/\",\"coordinates = J2000.0\",\"coordselect = J2000\",\"cs = standard\",\"deedger = skyview.process.Deedger\",\"descriptionxslt = cgifiles/description.xsl\",\"dummy\",\"equinox = 2000\",\"finalpostprocessor = skyview.ij.IJProcessor,skyview.data.BoxSmoother,sky\",\"float = on\",\"footertemplate = cgifiles/skyfooter.html\",\"galleryxslt = cgifiles/gallerymultipage.xsl\",\"headertemplate = cgifiles/skyheader.html\",\"htmlwriter = skyview.request.HTMLWriter\",\"imagefactory = skyview.survey.CachingImageFactory\",\"imagesize = 1.6\",\"imscale = 3\",\"localurl = http://skyview.gsfc.nasa.gov/surveys,/skyview/htdocs/surveys\",\"lut = colortables/b-w-linear.bin\",\"lutcbarpath = /images/colorbars/\",\"mosaicker = skyview.process.Mosaicker\",\"name = WISE 12 Micron All-Sky Survey\",\"noexit =\",\"nullimagedir = ../images/nodata\",\"nwindow = on\",\"output = ../tempspace/fits/skv7286600634832\",\"outputroot = ../tempspace/fits/\",\"pixels = 1000\",\"position = 43.46, 60.38\",\"postprocessor = skyview.ij.IJProcessor,skyview.request.HTMLWriter\",\"projection = Tan\",\"quicklook = jpeg\",\"reqxpos = 43.46\",\"reqypos = 60.38\",\"resolver = SIMBAD-NED\",\"rgbtemplate = cgifiles/skyrgb.html\",\"rgbwriter = skyview.request.RGBWriter\",\"sampler = Default\",\"savebysurvey\",\"scale = 0.0003819\",\"scaling = loglog\",\"settingsupdaters = BatchCompatibility,SettingsFixer,skyview.request.Toas\",\"shortname = Wise W3,Wise 12, WiseW3, Wise12\",\"siabase = http://skyview.gsfc.nasa.gov/cgi-bin/images?\",\"siaimagetimeout = 1200000\",\"siapfilterfield = VOX:BandPass_ID\",\"siapfiltervalue = W3\",\"siapurl = http://irsa.ipac.caltech.edu/ibe/sia/wise/allsky/4band_p3am_cd\",\"size = 3.0,3.0\",\"spcoordinates =\",\"survey = WISE 12\",\"surveyfinder = skyview.survey.XMLSurveyFinder\",\"surveymanifest = surveys/survey.manifest\",\"surveysheader = cgifiles/survey.header\",\"surveytemplate = cgifiles/skysurvey.html\",\"url.heasarcbase = http://heasarc.gsfc.nasa.gov/xamin/vo/cone?table=\",\"url.ned = http://nedwww.ipac.caltech.edu/cgi-bin/nph-NEDobjsearch?search\",\"url.simbad = http://simbad.u-strasbg.fr/simbad-conesearch.pl?\",\"url.vizierbase = http://vizier.u-strasbg.fr/viz-bin/votable/-dtd/-A?-out\",\"urlcoordinates = http://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/co\",\"urllocalhelp = http://skyview.gsfc.nasa.gov/help/help.html\",\"webrootpath = /skyview/htdocs/\",\"\",\" Map generated at: Mon Sep 24 16:13:12 EDT 2012\",\"\",\" Resampler used: NNSampler\",\"\",\"\",\"Image mosaicking using skyview.geometry.Mosaicker\",\"\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0460p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0432p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0403p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0450p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0420p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0390p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0480p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0442p620_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0410p620_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0473p620_ab41-w3-int-3.fits\",\"\",\"\",\"Edge adjustments applied (skyview.geometry.DeedgerList\",\"\",\"     Image 0403p590_ab41-w3-int-3.fits offset by -10.0955810546875\",\"     Image 0432p590_ab41-w3-int-3.fits offset by -14.76416015625\",\"     Image 0460p590_ab41-w3-int-3.fits offset by -18.1815185546875\",\"     Image 0390p605_ab41-w3-int-3.fits offset by 1.0014190673828125\",\"     Image 0410p620_ab41-w3-int-3.fits offset by -5.81903076171875\",\"     Image 0442p620_ab41-w3-int-3.fits offset by -1.201446533203125\",\"     Image 0450p605_ab41-w3-int-3.fits offset by -12.527557373046875\",\"     Image 0473p620_ab41-w3-int-3.fits offset by -8.7635498046875\",\"     Image 0480p605_ab41-w3-int-3.fits offset by -10.600997924804688\",\"\"],\"st__CTYPE2\":\"st__DEC--TAN\",\"st__NAXIS1\":1000,\"st__CTYPE1\":\"st__RA---TAN\",\"st__SURVEY\":\"st__WISE 12 micron allsky release\",\"st__NAXIS2\":1000,\"st__NAXIS\":2,\"st__CDELT1\":-0.003,\"st__CRVAL1\":43.46,\"st__EQUINOX\":2000}},\"label\":\"w5\",\"style\":{\"linestyle\":\"solid\",\"_type\":\"glue.core.visual.VisualAttributes\",\"color\":\"#595959\",\"alpha\":0.8,\"linewidth\":1,\"marker\":\"o\",\"markersize\":3},\"_protocol\":5,\"components\":[[\"Pixel Axis 0 [y]\",\"CoordinateComponent\"],[\"Pixel Axis 1 [x]\",\"CoordinateComponent_0\"],[\"Declination\",\"CoordinateComponent_1\"],[\"Right Ascension\",\"CoordinateComponent_2\"],[\"PRIMARY\",\"Component\"]]},\"__4.5_\":{\"label\":\"__4.5_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"ComponentLink\":{\"to\":[\"RAJ2000\"],\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"frm\":[\"PRIMARY\"],\"_type\":\"glue.core.component_link.ComponentLink\",\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"Component\":{\"_type\":\"glue.core.component.Component\",\"log_item\":4,\"log\":\"LoadLog\"},\"CoordinateComponent\":{\"axis\":0,\"_type\":\"glue.core.component.CoordinateComponent\",\"world\":false},\"Ksmag\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Ksmag\"},\"Component_23\":{\"log_item\":11,\"log\":\"LoadLog_1\",\"_type\":\"glue.core.component.Component\"},\"Type\":{\"label\":\"Type\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Right Ascension\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Right Ascension\"},\"__3.6__0\":{\"label\":\"__3.6_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__8.0__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__8.0_\"},\"Component_17\":{\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_1\",\"log_item\":5},\"Component_19\":{\"log_item\":7,\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_1\"},\"CoordinateComponent_1\":{\"_type\":\"glue.core.component.CoordinateComponent\",\"world\":true,\"axis\":0},\"__main__\":{\"data\":\"DataCollection\",\"session\":\"Session\",\"tab_names\":[\"Tab 1\"],\"viewers\":[[\"ImageViewer\"]],\"_type\":\"glue.app.qt.application.GlueApplication\",\"plugins\":[\"glue.io.qt.directory_importer\",\"glue.plugins.wcs_autolinking\",\"casa_formats_io.glue_factory\",\"glue.plugins.coordinate_helpers\",\"glue.viewers.image.qt\",\"glue.viewers.table.qt\",\"glue.plugins.tools\",\"glue.viewers.profile.qt\",\"glue.plugins.export_d3po\",\"glue.io.formats.fits\",\"glue.core.data_exporters\",\"glue.plugins.tools.pv_slicer.qt\",\"glue.viewers.scatter.qt\",\"glue_vispy_viewers.scatter\",\"glue_vispy_viewers.volume\",\"glue.plugins.dendro_viewer.qt\",\"glue.viewers.histogram.qt\"]},\"Component_2\":{\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_0\",\"log_item\":3},\"Component_20\":{\"_type\":\"glue.core.component.Component\",\"log\":\"LoadLog_1\",\"log_item\":8},\"__4.5__-__5.8__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__4.5__-__5.8_\"},\"__4.5__-__5.8_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__4.5__-__5.8_\"},\"FK4_to_FK5\":{\"data2\":\"w5_psc\",\"cids2\":\"list_0\",\"data1\":\"w5\",\"_type\":\"glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5\",\"cids1\":\"list\"},\"dataset\":\"{\\\"w5_psc\\\":{\\\"components\\\":[[\\\"Pixel Axis 0 [x]\\\",\\\"CoordinateComponent_3\\\"],[\\\"ID\\\",\\\"Component_0\\\"],[\\\"RAJ2000\\\",\\\"Component_1\\\"],[\\\"DEJ2000\\\",\\\"Component_2\\\"],[\\\"Jmag\\\",\\\"Component_3\\\"],[\\\"Hmag\\\",\\\"Component_4\\\"],[\\\"Ksmag\\\",\\\"Component_5\\\"],[\\\"__3.6_\\\",\\\"Component_6\\\"],[\\\"__4.5_\\\",\\\"Component_7\\\"],[\\\"__5.8_\\\",\\\"Component_8\\\"],[\\\"__8.0_\\\",\\\"Component_9\\\"],[\\\"__24_\\\",\\\"Component_10\\\"],[\\\"Type\\\",\\\"CategoricalComponent\\\"],[\\\"__4.5__-__5.8_\\\",\\\"Component_11\\\"],[\\\"__5.8__-__8.0_\\\",\\\"Component_12\\\"]],\\\"_protocol\\\":5,\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"label\\\":\\\"w5_psc\\\",\\\"style\\\":{\\\"linewidth\\\":1,\\\"marker\\\":\\\"o\\\",\\\"markersize\\\":3,\\\"linestyle\\\":\\\"solid\\\",\\\"color\\\":\\\"#595959\\\",\\\"alpha\\\":0.8,\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\"},\\\"subsets\\\":[],\\\"uuid\\\":\\\"558542c4-f6c7-4196-bd86-c236d7b9e9a9\\\",\\\"primary_owner\\\":[\\\"Pixel Axis 0 [x]\\\",\\\"ID\\\",\\\"RAJ2000\\\",\\\"DEJ2000\\\",\\\"Jmag\\\",\\\"Hmag\\\",\\\"Ksmag\\\",\\\"__3.6_\\\",\\\"__4.5_\\\",\\\"__5.8_\\\",\\\"__8.0_\\\",\\\"__24_\\\",\\\"Type\\\",\\\"__4.5__-__5.8_\\\",\\\"__5.8__-__8.0_\\\"],\\\"meta\\\":{\\\"_type\\\":\\\"collections.OrderedDict\\\",\\\"contents\\\":{\\\"st__name\\\":\\\"st__J/ApJ/688/1142/table2\\\",\\\"st__description\\\":\\\"st__W5 source list\\\",\\\"st__ID\\\":\\\"st__J_ApJ_688_1142_table2\\\"}},\\\"_key_joins\\\":[]},\\\"w5\\\":{\\\"uuid\\\":\\\"c7540d2a-39ba-4c44-9f0b-e6ec12d3df03\\\",\\\"meta\\\":{\\\"contents\\\":{\\\"st__CRVAL1\\\":43.46,\\\"st__HISTORY\\\":[\\\"\\\",\\\" Settings used in processing:\\\",\\\"\\\",\\\"cache = /skyview8/cache/surveys/\\\",\\\"coordinates = J2000.0\\\",\\\"coordselect = J2000\\\",\\\"cs = standard\\\",\\\"deedger = skyview.process.Deedger\\\",\\\"descriptionxslt = cgifiles/description.xsl\\\",\\\"dummy\\\",\\\"equinox = 2000\\\",\\\"finalpostprocessor = skyview.ij.IJProcessor,skyview.data.BoxSmoother,sky\\\",\\\"float = on\\\",\\\"footertemplate = cgifiles/skyfooter.html\\\",\\\"galleryxslt = cgifiles/gallerymultipage.xsl\\\",\\\"headertemplate = cgifiles/skyheader.html\\\",\\\"htmlwriter = skyview.request.HTMLWriter\\\",\\\"imagefactory = skyview.survey.CachingImageFactory\\\",\\\"imagesize = 1.6\\\",\\\"imscale = 3\\\",\\\"localurl = http://skyview.gsfc.nasa.gov/surveys,/skyview/htdocs/surveys\\\",\\\"lut = colortables/b-w-linear.bin\\\",\\\"lutcbarpath = /images/colorbars/\\\",\\\"mosaicker = skyview.process.Mosaicker\\\",\\\"name = WISE 12 Micron All-Sky Survey\\\",\\\"noexit =\\\",\\\"nullimagedir = ../images/nodata\\\",\\\"nwindow = on\\\",\\\"output = ../tempspace/fits/skv7286600634832\\\",\\\"outputroot = ../tempspace/fits/\\\",\\\"pixels = 1000\\\",\\\"position = 43.46, 60.38\\\",\\\"postprocessor = skyview.ij.IJProcessor,skyview.request.HTMLWriter\\\",\\\"projection = Tan\\\",\\\"quicklook = jpeg\\\",\\\"reqxpos = 43.46\\\",\\\"reqypos = 60.38\\\",\\\"resolver = SIMBAD-NED\\\",\\\"rgbtemplate = cgifiles/skyrgb.html\\\",\\\"rgbwriter = skyview.request.RGBWriter\\\",\\\"sampler = Default\\\",\\\"savebysurvey\\\",\\\"scale = 0.0003819\\\",\\\"scaling = loglog\\\",\\\"settingsupdaters = BatchCompatibility,SettingsFixer,skyview.request.Toas\\\",\\\"shortname = Wise W3,Wise 12, WiseW3, Wise12\\\",\\\"siabase = http://skyview.gsfc.nasa.gov/cgi-bin/images?\\\",\\\"siaimagetimeout = 1200000\\\",\\\"siapfilterfield = VOX:BandPass_ID\\\",\\\"siapfiltervalue = W3\\\",\\\"siapurl = http://irsa.ipac.caltech.edu/ibe/sia/wise/allsky/4band_p3am_cd\\\",\\\"size = 3.0,3.0\\\",\\\"spcoordinates =\\\",\\\"survey = WISE 12\\\",\\\"surveyfinder = skyview.survey.XMLSurveyFinder\\\",\\\"surveymanifest = surveys/survey.manifest\\\",\\\"surveysheader = cgifiles/survey.header\\\",\\\"surveytemplate = cgifiles/skysurvey.html\\\",\\\"url.heasarcbase = http://heasarc.gsfc.nasa.gov/xamin/vo/cone?table=\\\",\\\"url.ned = http://nedwww.ipac.caltech.edu/cgi-bin/nph-NEDobjsearch?search\\\",\\\"url.simbad = http://simbad.u-strasbg.fr/simbad-conesearch.pl?\\\",\\\"url.vizierbase = http://vizier.u-strasbg.fr/viz-bin/votable/-dtd/-A?-out\\\",\\\"urlcoordinates = http://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/co\\\",\\\"urllocalhelp = http://skyview.gsfc.nasa.gov/help/help.html\\\",\\\"webrootpath = /skyview/htdocs/\\\",\\\"\\\",\\\" Map generated at: Mon Sep 24 16:13:12 EDT 2012\\\",\\\"\\\",\\\" Resampler used: NNSampler\\\",\\\"\\\",\\\"\\\",\\\"Image mosaicking using skyview.geometry.Mosaicker\\\",\\\"\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0460p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0432p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0403p590_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0450p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0420p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0390p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0480p605_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0442p620_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0410p620_ab41-w3-int-3.fits\\\",\\\"  Used image:/skyview8/cache/surveys/Wise_W3/0473p620_ab41-w3-int-3.fits\\\",\\\"\\\",\\\"\\\",\\\"Edge adjustments applied (skyview.geometry.DeedgerList\\\",\\\"\\\",\\\"     Image 0403p590_ab41-w3-int-3.fits offset by -10.0955810546875\\\",\\\"     Image 0432p590_ab41-w3-int-3.fits offset by -14.76416015625\\\",\\\"     Image 0460p590_ab41-w3-int-3.fits offset by -18.1815185546875\\\",\\\"     Image 0390p605_ab41-w3-int-3.fits offset by 1.0014190673828125\\\",\\\"     Image 0410p620_ab41-w3-int-3.fits offset by -5.81903076171875\\\",\\\"     Image 0442p620_ab41-w3-int-3.fits offset by -1.201446533203125\\\",\\\"     Image 0450p605_ab41-w3-int-3.fits offset by -12.527557373046875\\\",\\\"     Image 0473p620_ab41-w3-int-3.fits offset by -8.7635498046875\\\",\\\"     Image 0480p605_ab41-w3-int-3.fits offset by -10.600997924804688\\\",\\\"\\\"],\\\"st__NAXIS2\\\":1000,\\\"st__NAXIS1\\\":1000,\\\"st__COMMENT\\\":[\\\"\\\",\\\" SkyView Survey metadata\\\",\\\"\\\",\\\"Provenance:  WISE Archive (IRSA/IPAC)\\\",\\\"Copyright:   WISE data is in the public domain but publications are re\\\",\\\"          quested to include the       statment:        This publicati\\\",\\\"          on makes use of data products from the Wide-field Infrared S\\\",\\\"          urvey Explorer,       which is a joint project of the Univer\\\",\\\"          sity of California, Los Angeles,       and the Jet Propulsio\\\",\\\"          n Laboratory/California Institute of Technology,       funde\\\",\\\"          d by the National Aeronautics and Space Administration.\\\",\\\"Regime:      Infrared\\\",\\\"NSurvey:     4\\\",\\\"Frequency:   25 THz (12 micrometers)\\\",\\\"Bandpass:    18-40 THz\\\",\\\"Coverage:    All sky\\\",\\\"PixelScale:  1.375\\\\\\\"\\\",\\\"PixelUnits:  DN\\\",\\\"Resolution:  6.5\\\\\\\"\\\",\\\"Coordinates: Equatorial\\\",\\\"Projection:  Sine\\\",\\\"Epoch:       January 7 to August 6, 2010\\\",\\\"Reference:    Wright et al (2010)\\\",\\\"\\\",\\\"Survey specific cards\\\",\\\"\\\"],\\\"st__BITPIX\\\":-32,\\\"st__CDELT1\\\":-0.003,\\\"st__CTYPE2\\\":\\\"st__DEC--TAN\\\",\\\"st__EQUINOX\\\":2000,\\\"st__CDELT2\\\":0.003,\\\"st__CRVAL2\\\":60.38,\\\"st__NAXIS\\\":2,\\\"st__CRPIX1\\\":500.5,\\\"st__SIMPLE\\\":true,\\\"st__CTYPE1\\\":\\\"st__RA---TAN\\\",\\\"st__RADESYS\\\":\\\"st__FK5\\\",\\\"st__SURVEY\\\":\\\"st__WISE 12 micron allsky release\\\",\\\"st__CRPIX2\\\":500.5},\\\"_type\\\":\\\"collections.OrderedDict\\\"},\\\"_key_joins\\\":[],\\\"components\\\":[[\\\"Pixel Axis 0 [y]\\\",\\\"CoordinateComponent\\\"],[\\\"Pixel Axis 1 [x]\\\",\\\"CoordinateComponent_0\\\"],[\\\"Declination\\\",\\\"CoordinateComponent_1\\\"],[\\\"Right Ascension\\\",\\\"CoordinateComponent_2\\\"],[\\\"PRIMARY\\\",\\\"Component\\\"]],\\\"_protocol\\\":5,\\\"coords\\\":\\\"WCS\\\",\\\"label\\\":\\\"w5\\\",\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"primary_owner\\\":[\\\"Pixel Axis 0 [y]\\\",\\\"Pixel Axis 1 [x]\\\",\\\"Declination\\\",\\\"Right Ascension\\\",\\\"PRIMARY\\\"],\\\"style\\\":{\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\",\\\"linewidth\\\":1,\\\"marker\\\":\\\"o\\\",\\\"linestyle\\\":\\\"solid\\\",\\\"markersize\\\":3,\\\"alpha\\\":0.8,\\\"color\\\":\\\"#595959\\\"},\\\"subsets\\\":[]},\\\"w6_psc\\\":{\\\"_type\\\":\\\"glue.core.data.Data\\\",\\\"label\\\":\\\"w6_psc\\\",\\\"components\\\":[[\\\"Pixel Axis 0 [x]_0\\\",\\\"CoordinateComponent_4\\\"],[\\\"ID_0\\\",\\\"Component_13\\\"],[\\\"RAJ2000_0\\\",\\\"Component_14\\\"],[\\\"DEJ2000_0\\\",\\\"Component_15\\\"],[\\\"Jmag_0\\\",\\\"Component_16\\\"],[\\\"Hmag_0\\\",\\\"Component_17\\\"],[\\\"Ksmag_0\\\",\\\"Component_18\\\"],[\\\"__3.6__0\\\",\\\"Component_19\\\"],[\\\"__4.5__0\\\",\\\"Component_20\\\"],[\\\"__5.8__0\\\",\\\"Component_21\\\"],[\\\"__8.0__0\\\",\\\"Component_22\\\"],[\\\"__24__0\\\",\\\"Component_23\\\"],[\\\"Type_0\\\",\\\"CategoricalComponent_0\\\"],[\\\"__4.5__-__5.8__0\\\",\\\"Component_24\\\"],[\\\"__5.8__-__8.0__0\\\",\\\"Component_25\\\"]],\\\"meta\\\":{\\\"contents\\\":{\\\"st__ID\\\":\\\"st__J_ApJ_688_1142_table2\\\",\\\"st__name\\\":\\\"st__J/ApJ/688/1142/table2\\\",\\\"st__description\\\":\\\"st__W5 source list\\\"},\\\"_type\\\":\\\"collections.OrderedDict\\\"},\\\"subsets\\\":[],\\\"uuid\\\":\\\"872b488c-76e9-4aa5-aaf9-dff4539a7146\\\",\\\"style\\\":{\\\"marker\\\":\\\"o\\\",\\\"color\\\":\\\"#595959\\\",\\\"markersize\\\":3,\\\"linewidth\\\":1,\\\"linestyle\\\":\\\"solid\\\",\\\"alpha\\\":0.8,\\\"_type\\\":\\\"glue.core.visual.VisualAttributes\\\"},\\\"_key_joins\\\":[],\\\"_protocol\\\":5,\\\"primary_owner\\\":[\\\"Pixel Axis 0 [x]_0\\\",\\\"ID_0\\\",\\\"RAJ2000_0\\\",\\\"DEJ2000_0\\\",\\\"Jmag_0\\\",\\\"Hmag_0\\\",\\\"Ksmag_0\\\",\\\"__3.6__0\\\",\\\"__4.5__0\\\",\\\"__5.8__0\\\",\\\"__8.0__0\\\",\\\"__24__0\\\",\\\"Type_0\\\",\\\"__4.5__-__5.8__0\\\",\\\"__5.8__-__8.0__0\\\"]}}\",\"CategoricalComponent\":{\"log\":\"LoadLog_0\",\"_type\":\"glue.core.component.CategoricalComponent\",\"log_item\":12},\"tabs\":\"{\\\"Tab 1\\\":[{\\\"session\\\":\\\"Session\\\",\\\"size\\\":[1878,1312],\\\"_type\\\":\\\"glue.viewers.image.qt.data_viewer.ImageViewer\\\",\\\"state\\\":{\\\"values\\\":{\\\"y_axislabel_weight\\\":\\\"st__normal\\\",\\\"x_max\\\":1224.8757016352629,\\\"y_axislabel_size\\\":10,\\\"reference_data\\\":\\\"w5\\\",\\\"color_mode\\\":\\\"st__Colormaps\\\",\\\"x_axislabel\\\":\\\"st__Right Ascension\\\",\\\"x_min\\\":-225.87570163526289,\\\"x_ticklabel_size\\\":8,\\\"y_att_world\\\":\\\"Declination\\\",\\\"y_min\\\":36.98404483152598,\\\"layers\\\":\\\"CallbackList\\\",\\\"x_axislabel_weight\\\":\\\"st__normal\\\",\\\"slices\\\":[0,0],\\\"y_att\\\":\\\"Pixel Axis 0 [y]\\\",\\\"y_axislabel\\\":\\\"st__Declination\\\",\\\"x_att\\\":\\\"Pixel Axis 1 [x]\\\",\\\"aspect\\\":\\\"st__equal\\\",\\\"x_att_world\\\":\\\"Right Ascension\\\",\\\"x_axislabel_size\\\":10,\\\"y_log\\\":false,\\\"dpi\\\":72,\\\"x_log\\\":false,\\\"y_max\\\":962.015955168474,\\\"show_axes\\\":true,\\\"y_ticklabel_size\\\":8},\\\"legend\\\":{\\\"show_edge\\\":true,\\\"title\\\":\\\"\\\",\\\"alpha\\\":0.5858585858585859,\\\"fontsize\\\":10,\\\"location\\\":\\\"draggable\\\",\\\"text_color\\\":\\\"#000000\\\",\\\"frame_color\\\":\\\"#FFFFFF\\\",\\\"visible\\\":false}},\\\"_protocol\\\":1,\\\"layers\\\":[{\\\"_type\\\":\\\"glue.viewers.image.layer_artist.ImageLayerArtist\\\",\\\"state\\\":\\\"ImageLayerState\\\"}],\\\"pos\\\":[0,0]}]}\",\"w6_psc\":{\"label\":\"w6_psc\",\"style\":{\"alpha\":0.8,\"linewidth\":1,\"marker\":\"o\",\"markersize\":3,\"color\":\"#595959\",\"_type\":\"glue.core.visual.VisualAttributes\",\"linestyle\":\"solid\"},\"_key_joins\":[],\"uuid\":\"872b488c-76e9-4aa5-aaf9-dff4539a7146\",\"_protocol\":5,\"primary_owner\":[\"Pixel Axis 0 [x]_0\",\"ID_0\",\"RAJ2000_0\",\"DEJ2000_0\",\"Jmag_0\",\"Hmag_0\",\"Ksmag_0\",\"__3.6__0\",\"__4.5__0\",\"__5.8__0\",\"__8.0__0\",\"__24__0\",\"Type_0\",\"__4.5__-__5.8__0\",\"__5.8__-__8.0__0\"],\"components\":[[\"Pixel Axis 0 [x]_0\",\"CoordinateComponent_4\"],[\"ID_0\",\"Component_13\"],[\"RAJ2000_0\",\"Component_14\"],[\"DEJ2000_0\",\"Component_15\"],[\"Jmag_0\",\"Component_16\"],[\"Hmag_0\",\"Component_17\"],[\"Ksmag_0\",\"Component_18\"],[\"__3.6__0\",\"Component_19\"],[\"__4.5__0\",\"Component_20\"],[\"__5.8__0\",\"Component_21\"],[\"__8.0__0\",\"Component_22\"],[\"__24__0\",\"Component_23\"],[\"Type_0\",\"CategoricalComponent_0\"],[\"__4.5__-__5.8__0\",\"Component_24\"],[\"__5.8__-__8.0__0\",\"Component_25\"]],\"meta\":{\"_type\":\"collections.OrderedDict\",\"contents\":{\"st__name\":\"st__J/ApJ/688/1142/table2\",\"st__ID\":\"st__J_ApJ_688_1142_table2\",\"st__description\":\"st__W5 source list\"}},\"subsets\":[],\"_type\":\"glue.core.data.Data\"},\"list_2\":{\"_type\":\"builtins.list\",\"contents\":[\"PRIMARY\",\"Pixel Axis 0 [y]\"]}}", "attributes": "{\"__4.5__-__5.8__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__4.5__-__5.8_\"},\"Jmag\":{\"label\":\"Jmag\",\"_type\":\"glue.core.component_id.ComponentID\"},\"DEJ2000\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"DEJ2000\"},\"Ksmag\":{\"label\":\"Ksmag\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__4.5__-__5.8_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__4.5__-__5.8_\"},\"Hmag\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Hmag\"},\"RAJ2000_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"RAJ2000\"},\"ID\":{\"label\":\"ID\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Pixel Axis 0 [y]\":{\"label\":\"Pixel Axis 0 [y]\",\"_type\":\"glue.core.component_id.PixelComponentID\",\"axis\":0},\"Type_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Type\"},\"Pixel Axis 0 [x]_0\":{\"axis\":0,\"_type\":\"glue.core.component_id.PixelComponentID\",\"label\":\"Pixel Axis 0 [x]\"},\"Jmag_0\":{\"label\":\"Jmag\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__3.6_\":{\"label\":\"__3.6_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"RAJ2000\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"RAJ2000\"},\"Pixel Axis 1 [x]\":{\"label\":\"Pixel Axis 1 [x]\",\"_type\":\"glue.core.component_id.PixelComponentID\",\"axis\":1},\"__5.8__-__8.0__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8__-__8.0_\"},\"__8.0__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__8.0_\"},\"Right Ascension\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Right Ascension\"},\"Hmag_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Hmag\"},\"__5.8__-__8.0_\":{\"label\":\"__5.8__-__8.0_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__8.0_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__8.0_\"},\"Declination\":{\"label\":\"Declination\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__24__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__24_\"},\"__3.6__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__3.6_\"},\"ID_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"ID\"},\"__5.8__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8_\"},\"Ksmag_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"Ksmag\"},\"DEJ2000_0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"DEJ2000\"},\"PRIMARY\":{\"label\":\"PRIMARY\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Pixel Axis 0 [x]\":{\"axis\":0,\"_type\":\"glue.core.component_id.PixelComponentID\",\"label\":\"Pixel Axis 0 [x]\"},\"__5.8_\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__5.8_\"},\"__4.5_\":{\"label\":\"__4.5_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"__4.5__0\":{\"_type\":\"glue.core.component_id.ComponentID\",\"label\":\"__4.5_\"},\"__24_\":{\"label\":\"__24_\",\"_type\":\"glue.core.component_id.ComponentID\"},\"Type\":{\"label\":\"Type\",\"_type\":\"glue.core.component_id.ComponentID\"}}", "dataset": "{\"w5\":{\"label\":\"w5\",\"_key_joins\":[],\"components\":[[\"Pixel Axis 0 [y]\",\"CoordinateComponent\"],[\"Pixel Axis 1 [x]\",\"CoordinateComponent_0\"],[\"Declination\",\"CoordinateComponent_1\"],[\"Right Ascension\",\"CoordinateComponent_2\"],[\"PRIMARY\",\"Component\"]],\"coords\":\"WCS\",\"meta\":{\"_type\":\"collections.OrderedDict\",\"contents\":{\"st__SURVEY\":\"st__WISE 12 micron allsky release\",\"st__CDELT2\":0.003,\"st__CRVAL2\":60.38,\"st__NAXIS2\":1000,\"st__HISTORY\":[\"\",\" Settings used in processing:\",\"\",\"cache = /skyview8/cache/surveys/\",\"coordinates = J2000.0\",\"coordselect = J2000\",\"cs = standard\",\"deedger = skyview.process.Deedger\",\"descriptionxslt = cgifiles/description.xsl\",\"dummy\",\"equinox = 2000\",\"finalpostprocessor = skyview.ij.IJProcessor,skyview.data.BoxSmoother,sky\",\"float = on\",\"footertemplate = cgifiles/skyfooter.html\",\"galleryxslt = cgifiles/gallerymultipage.xsl\",\"headertemplate = cgifiles/skyheader.html\",\"htmlwriter = skyview.request.HTMLWriter\",\"imagefactory = skyview.survey.CachingImageFactory\",\"imagesize = 1.6\",\"imscale = 3\",\"localurl = http://skyview.gsfc.nasa.gov/surveys,/skyview/htdocs/surveys\",\"lut = colortables/b-w-linear.bin\",\"lutcbarpath = /images/colorbars/\",\"mosaicker = skyview.process.Mosaicker\",\"name = WISE 12 Micron All-Sky Survey\",\"noexit =\",\"nullimagedir = ../images/nodata\",\"nwindow = on\",\"output = ../tempspace/fits/skv7286600634832\",\"outputroot = ../tempspace/fits/\",\"pixels = 1000\",\"position = 43.46, 60.38\",\"postprocessor = skyview.ij.IJProcessor,skyview.request.HTMLWriter\",\"projection = Tan\",\"quicklook = jpeg\",\"reqxpos = 43.46\",\"reqypos = 60.38\",\"resolver = SIMBAD-NED\",\"rgbtemplate = cgifiles/skyrgb.html\",\"rgbwriter = skyview.request.RGBWriter\",\"sampler = Default\",\"savebysurvey\",\"scale = 0.0003819\",\"scaling = loglog\",\"settingsupdaters = BatchCompatibility,SettingsFixer,skyview.request.Toas\",\"shortname = Wise W3,Wise 12, WiseW3, Wise12\",\"siabase = http://skyview.gsfc.nasa.gov/cgi-bin/images?\",\"siaimagetimeout = 1200000\",\"siapfilterfield = VOX:BandPass_ID\",\"siapfiltervalue = W3\",\"siapurl = http://irsa.ipac.caltech.edu/ibe/sia/wise/allsky/4band_p3am_cd\",\"size = 3.0,3.0\",\"spcoordinates =\",\"survey = WISE 12\",\"surveyfinder = skyview.survey.XMLSurveyFinder\",\"surveymanifest = surveys/survey.manifest\",\"surveysheader = cgifiles/survey.header\",\"surveytemplate = cgifiles/skysurvey.html\",\"url.heasarcbase = http://heasarc.gsfc.nasa.gov/xamin/vo/cone?table=\",\"url.ned = http://nedwww.ipac.caltech.edu/cgi-bin/nph-NEDobjsearch?search\",\"url.simbad = http://simbad.u-strasbg.fr/simbad-conesearch.pl?\",\"url.vizierbase = http://vizier.u-strasbg.fr/viz-bin/votable/-dtd/-A?-out\",\"urlcoordinates = http://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/co\",\"urllocalhelp = http://skyview.gsfc.nasa.gov/help/help.html\",\"webrootpath = /skyview/htdocs/\",\"\",\" Map generated at: Mon Sep 24 16:13:12 EDT 2012\",\"\",\" Resampler used: NNSampler\",\"\",\"\",\"Image mosaicking using skyview.geometry.Mosaicker\",\"\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0460p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0432p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0403p590_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0450p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0420p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0390p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0480p605_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0442p620_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0410p620_ab41-w3-int-3.fits\",\"  Used image:/skyview8/cache/surveys/Wise_W3/0473p620_ab41-w3-int-3.fits\",\"\",\"\",\"Edge adjustments applied (skyview.geometry.DeedgerList\",\"\",\"     Image 0403p590_ab41-w3-int-3.fits offset by -10.0955810546875\",\"     Image 0432p590_ab41-w3-int-3.fits offset by -14.76416015625\",\"     Image 0460p590_ab41-w3-int-3.fits offset by -18.1815185546875\",\"     Image 0390p605_ab41-w3-int-3.fits offset by 1.0014190673828125\",\"     Image 0410p620_ab41-w3-int-3.fits offset by -5.81903076171875\",\"     Image 0442p620_ab41-w3-int-3.fits offset by -1.201446533203125\",\"     Image 0450p605_ab41-w3-int-3.fits offset by -12.527557373046875\",\"     Image 0473p620_ab41-w3-int-3.fits offset by -8.7635498046875\",\"     Image 0480p605_ab41-w3-int-3.fits offset by -10.600997924804688\",\"\"],\"st__CTYPE1\":\"st__RA---TAN\",\"st__CDELT1\":-0.003,\"st__CRVAL1\":43.46,\"st__CTYPE2\":\"st__DEC--TAN\",\"st__NAXIS\":2,\"st__CRPIX2\":500.5,\"st__NAXIS1\":1000,\"st__EQUINOX\":2000,\"st__BITPIX\":-32,\"st__SIMPLE\":true,\"st__CRPIX1\":500.5,\"st__COMMENT\":[\"\",\" SkyView Survey metadata\",\"\",\"Provenance:  WISE Archive (IRSA/IPAC)\",\"Copyright:   WISE data is in the public domain but publications are re\",\"          quested to include the       statment:        This publicati\",\"          on makes use of data products from the Wide-field Infrared S\",\"          urvey Explorer,       which is a joint project of the Univer\",\"          sity of California, Los Angeles,       and the Jet Propulsio\",\"          n Laboratory/California Institute of Technology,       funde\",\"          d by the National Aeronautics and Space Administration.\",\"Regime:      Infrared\",\"NSurvey:     4\",\"Frequency:   25 THz (12 micrometers)\",\"Bandpass:    18-40 THz\",\"Coverage:    All sky\",\"PixelScale:  1.375\\\"\",\"PixelUnits:  DN\",\"Resolution:  6.5\\\"\",\"Coordinates: Equatorial\",\"Projection:  Sine\",\"Epoch:       January 7 to August 6, 2010\",\"Reference:    Wright et al (2010)\",\"\",\"Survey specific cards\",\"\"],\"st__RADESYS\":\"st__FK5\"}},\"_protocol\":5,\"_type\":\"glue.core.data.Data\",\"style\":{\"_type\":\"glue.core.visual.VisualAttributes\",\"linewidth\":1,\"markersize\":3,\"marker\":\"o\",\"linestyle\":\"solid\",\"alpha\":0.8,\"color\":\"#595959\"},\"primary_owner\":[\"Pixel Axis 0 [y]\",\"Pixel Axis 1 [x]\",\"Declination\",\"Right Ascension\",\"PRIMARY\"],\"uuid\":\"c7540d2a-39ba-4c44-9f0b-e6ec12d3df03\",\"subsets\":[]},\"w5_psc\":{\"subsets\":[],\"uuid\":\"558542c4-f6c7-4196-bd86-c236d7b9e9a9\",\"meta\":{\"_type\":\"collections.OrderedDict\",\"contents\":{\"st__ID\":\"st__J_ApJ_688_1142_table2\",\"st__description\":\"st__W5 source list\",\"st__name\":\"st__J/ApJ/688/1142/table2\"}},\"label\":\"w5_psc\",\"_type\":\"glue.core.data.Data\",\"_key_joins\":[],\"components\":[[\"Pixel Axis 0 [x]\",\"CoordinateComponent_3\"],[\"ID\",\"Component_0\"],[\"RAJ2000\",\"Component_1\"],[\"DEJ2000\",\"Component_2\"],[\"Jmag\",\"Component_3\"],[\"Hmag\",\"Component_4\"],[\"Ksmag\",\"Component_5\"],[\"__3.6_\",\"Component_6\"],[\"__4.5_\",\"Component_7\"],[\"__5.8_\",\"Component_8\"],[\"__8.0_\",\"Component_9\"],[\"__24_\",\"Component_10\"],[\"Type\",\"CategoricalComponent\"],[\"__4.5__-__5.8_\",\"Component_11\"],[\"__5.8__-__8.0_\",\"Component_12\"]],\"_protocol\":5,\"primary_owner\":[\"Pixel Axis 0 [x]\",\"ID\",\"RAJ2000\",\"DEJ2000\",\"Jmag\",\"Hmag\",\"Ksmag\",\"__3.6_\",\"__4.5_\",\"__5.8_\",\"__8.0_\",\"__24_\",\"Type\",\"__4.5__-__5.8_\",\"__5.8__-__8.0_\"],\"style\":{\"_type\":\"glue.core.visual.VisualAttributes\",\"markersize\":3,\"marker\":\"o\",\"linewidth\":1,\"linestyle\":\"solid\",\"color\":\"#595959\",\"alpha\":0.8}},\"w6_psc\":{\"_key_joins\":[],\"_type\":\"glue.core.data.Data\",\"components\":[[\"Pixel Axis 0 [x]_0\",\"CoordinateComponent_4\"],[\"ID_0\",\"Component_13\"],[\"RAJ2000_0\",\"Component_14\"],[\"DEJ2000_0\",\"Component_15\"],[\"Jmag_0\",\"Component_16\"],[\"Hmag_0\",\"Component_17\"],[\"Ksmag_0\",\"Component_18\"],[\"__3.6__0\",\"Component_19\"],[\"__4.5__0\",\"Component_20\"],[\"__5.8__0\",\"Component_21\"],[\"__8.0__0\",\"Component_22\"],[\"__24__0\",\"Component_23\"],[\"Type_0\",\"CategoricalComponent_0\"],[\"__4.5__-__5.8__0\",\"Component_24\"],[\"__5.8__-__8.0__0\",\"Component_25\"]],\"meta\":{\"contents\":{\"st__ID\":\"st__J_ApJ_688_1142_table2\",\"st__description\":\"st__W5 source list\",\"st__name\":\"st__J/ApJ/688/1142/table2\"},\"_type\":\"collections.OrderedDict\"},\"uuid\":\"872b488c-76e9-4aa5-aaf9-dff4539a7146\",\"style\":{\"_type\":\"glue.core.visual.VisualAttributes\",\"linewidth\":1,\"color\":\"#595959\",\"marker\":\"o\",\"markersize\":3,\"linestyle\":\"solid\",\"alpha\":0.8},\"subsets\":[],\"_protocol\":5,\"label\":\"w6_psc\",\"primary_owner\":[\"Pixel Axis 0 [x]_0\",\"ID_0\",\"RAJ2000_0\",\"DEJ2000_0\",\"Jmag_0\",\"Hmag_0\",\"Ksmag_0\",\"__3.6__0\",\"__4.5__0\",\"__5.8__0\",\"__8.0__0\",\"__24__0\",\"Type_0\",\"__4.5__-__5.8__0\",\"__5.8__-__8.0__0\"]}}", "links": "{\"ComponentLink_0\":{\"_type\":\"glue.core.component_link.ComponentLink\",\"to\":[\"DEJ2000\"],\"frm\":[\"Pixel Axis 0 [y]\"],\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"ComponentLink_2\":{\"to\":[\"PRIMARY\"],\"frm\":[\"RAJ2000\"],\"_type\":\"glue.core.component_link.ComponentLink\",\"using\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"},\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"ComponentLink_3\":{\"using\":{\"function\":\"glue.core.link_helpers.lengths_to_volume\",\"_type\":\"types.FunctionType\"},\"inverse\":null,\"to\":[\"PRIMARY\"],\"frm\":[\"ID\",\"RAJ2000\",\"DEJ2000\"],\"_type\":\"glue.core.component_link.ComponentLink\"},\"ComponentLink_4\":{\"_type\":\"glue.core.component_link.ComponentLink\",\"inverse\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"},\"frm\":[\"ID_0\"],\"using\":{\"_type\":\"types.FunctionType\",\"function\":\"glue.core.link_helpers.identity\"},\"to\":[\"PRIMARY\"]},\"FK4_to_FK5\":{\"data2\":\"w5_psc\",\"cids2\":\"list_0\",\"_type\":\"glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5\",\"cids1\":\"list\",\"data1\":\"w5\"},\"ComponentLink\":{\"frm\":[\"PRIMARY\"],\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"to\":[\"RAJ2000\"],\"_type\":\"glue.core.component_link.ComponentLink\",\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"}},\"ICRS_to_Galactic\":{\"cids2\":\"list_2\",\"_type\":\"glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic\",\"data2\":\"w5\",\"cids1\":\"list_1\",\"data1\":\"w5_psc\"},\"ComponentLink_1\":{\"frm\":[\"Pixel Axis 0 [y]\"],\"using\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"_type\":\"glue.core.component_link.ComponentLink\",\"inverse\":{\"function\":\"glue.core.link_helpers.identity\",\"_type\":\"types.FunctionType\"},\"to\":[\"RAJ2000\"]}}", "tabs": "{\"Tab 1\":[{\"_type\":\"glue.viewers.image.qt.data_viewer.ImageViewer\",\"state\":{\"values\":{\"dpi\":72,\"x_axislabel\":\"st__Right Ascension\",\"y_axislabel_weight\":\"st__normal\",\"aspect\":\"st__equal\",\"y_att_world\":\"Declination\",\"color_mode\":\"st__Colormaps\",\"slices\":[0,0],\"x_axislabel_weight\":\"st__normal\",\"y_axislabel\":\"st__Declination\",\"x_att\":\"Pixel Axis 1 [x]\",\"x_log\":false,\"y_max\":962.015955168474,\"layers\":\"CallbackList\",\"y_ticklabel_size\":8,\"x_ticklabel_size\":8,\"y_log\":false,\"y_att\":\"Pixel Axis 0 [y]\",\"x_max\":1224.8757016352629,\"show_axes\":true,\"x_att_world\":\"Right Ascension\",\"x_axislabel_size\":10,\"x_min\":-225.87570163526289,\"y_axislabel_size\":10,\"reference_data\":\"w5\",\"y_min\":36.98404483152598},\"legend\":{\"visible\":false,\"alpha\":0.5858585858585859,\"text_color\":\"#000000\",\"frame_color\":\"#FFFFFF\",\"fontsize\":10,\"show_edge\":true,\"title\":\"\",\"location\":\"draggable\"}},\"_protocol\":1,\"session\":\"Session\",\"layers\":[{\"_type\":\"glue.viewers.image.layer_artist.ImageLayerArtist\",\"state\":\"ImageLayerState\"}],\"pos\":[0,0],\"size\":[1878,1312]}]}"}
+{
+  "CallbackList": {
+    "_type": "echo.containers.CallbackList",
+    "values": [
+      "ImageLayerState"
+    ]
+  },
+  "CategoricalComponent": {
+    "_type": "glue.core.component.CategoricalComponent",
+    "log": "LoadLog_0",
+    "log_item": 12
+  },
+  "CategoricalComponent_0": {
+    "_type": "glue.core.component.CategoricalComponent",
+    "log": "LoadLog_1",
+    "log_item": 12
+  },
+  "Component": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog",
+    "log_item": 4
+  },
+  "ComponentLink": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "PRIMARY"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "RAJ2000"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "ComponentLink_0": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "Pixel Axis 0 [y]"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "DEJ2000"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "ComponentLink_1": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "Pixel Axis 0 [y]"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "RAJ2000"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "ComponentLink_2": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "RAJ2000"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "PRIMARY"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "ComponentLink_3": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "ID",
+      "RAJ2000",
+      "DEJ2000"
+    ],
+    "inverse": null,
+    "to": [
+      "PRIMARY"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.lengths_to_volume"
+    }
+  },
+  "ComponentLink_4": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "ID_0"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "PRIMARY"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "Component_0": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 1
+  },
+  "Component_1": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 2
+  },
+  "Component_10": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 11
+  },
+  "Component_11": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 13
+  },
+  "Component_12": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 14
+  },
+  "Component_13": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 1
+  },
+  "Component_14": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 2
+  },
+  "Component_15": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 3
+  },
+  "Component_16": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 4
+  },
+  "Component_17": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 5
+  },
+  "Component_18": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 6
+  },
+  "Component_19": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 7
+  },
+  "Component_2": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 3
+  },
+  "Component_20": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 8
+  },
+  "Component_21": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 9
+  },
+  "Component_22": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 10
+  },
+  "Component_23": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 11
+  },
+  "Component_24": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 13
+  },
+  "Component_25": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_1",
+    "log_item": 14
+  },
+  "Component_3": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 4
+  },
+  "Component_4": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 5
+  },
+  "Component_5": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 6
+  },
+  "Component_6": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 7
+  },
+  "Component_7": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 8
+  },
+  "Component_8": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 9
+  },
+  "Component_9": {
+    "_type": "glue.core.component.Component",
+    "log": "LoadLog_0",
+    "log_item": 10
+  },
+  "CoordinateComponent": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 0,
+    "world": false
+  },
+  "CoordinateComponent_0": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 1,
+    "world": false
+  },
+  "CoordinateComponent_1": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 0,
+    "world": true
+  },
+  "CoordinateComponent_2": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 1,
+    "world": true
+  },
+  "CoordinateComponent_3": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 0,
+    "world": false
+  },
+  "CoordinateComponent_4": {
+    "_type": "glue.core.component.CoordinateComponent",
+    "axis": 0,
+    "world": false
+  },
+  "DEJ2000": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "DEJ2000"
+  },
+  "DEJ2000_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "DEJ2000"
+  },
+  "DataCollection": {
+    "_protocol": 4,
+    "_type": "glue.core.data_collection.DataCollection",
+    "cids": [
+      "Pixel Axis 0 [y]",
+      "Pixel Axis 1 [x]",
+      "Declination",
+      "Right Ascension",
+      "PRIMARY",
+      "Pixel Axis 0 [x]",
+      "ID",
+      "RAJ2000",
+      "DEJ2000",
+      "Jmag",
+      "Hmag",
+      "Ksmag",
+      "__3.6_",
+      "__4.5_",
+      "__5.8_",
+      "__8.0_",
+      "__24_",
+      "Type",
+      "__4.5__-__5.8_",
+      "__5.8__-__8.0_",
+      "Pixel Axis 0 [x]_0",
+      "ID_0",
+      "RAJ2000_0",
+      "DEJ2000_0",
+      "Jmag_0",
+      "Hmag_0",
+      "Ksmag_0",
+      "__3.6__0",
+      "__4.5__0",
+      "__5.8__0",
+      "__8.0__0",
+      "__24__0",
+      "Type_0",
+      "__4.5__-__5.8__0",
+      "__5.8__-__8.0__0"
+    ],
+    "components": [
+      "CoordinateComponent",
+      "CoordinateComponent_0",
+      "CoordinateComponent_1",
+      "CoordinateComponent_2",
+      "Component",
+      "CoordinateComponent_3",
+      "Component_0",
+      "Component_1",
+      "Component_2",
+      "Component_3",
+      "Component_4",
+      "Component_5",
+      "Component_6",
+      "Component_7",
+      "Component_8",
+      "Component_9",
+      "Component_10",
+      "CategoricalComponent",
+      "Component_11",
+      "Component_12",
+      "CoordinateComponent_4",
+      "Component_13",
+      "Component_14",
+      "Component_15",
+      "Component_16",
+      "Component_17",
+      "Component_18",
+      "Component_19",
+      "Component_20",
+      "Component_21",
+      "Component_22",
+      "Component_23",
+      "CategoricalComponent_0",
+      "Component_24",
+      "Component_25"
+    ],
+    "data": [
+      "w5",
+      "w5_psc",
+      "w6_psc"
+    ],
+    "groups": [],
+    "links": [
+      "ComponentLink",
+      "ComponentLink_0",
+      "FK4_to_FK5",
+      "ComponentLink_1",
+      "ComponentLink_2",
+      "ComponentLink_3",
+      "ICRS_to_Galactic",
+      "ComponentLink_4"
+    ],
+    "subset_group_count": 0
+  },
+  "Declination": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Declination"
+  },
+  "FK4_to_FK5": {
+    "_type": "glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5",
+    "cids1": "list",
+    "cids2": "list_0",
+    "data1": "w5",
+    "data2": "w5_psc"
+  },
+  "Hmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Hmag"
+  },
+  "Hmag_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Hmag"
+  },
+  "ICRS_to_Galactic": {
+    "_type": "glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic",
+    "cids1": "list_1",
+    "cids2": "list_2",
+    "data1": "w5_psc",
+    "data2": "w5"
+  },
+  "ID": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "ID"
+  },
+  "ID_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "ID"
+  },
+  "ImageLayerState": {
+    "_type": "glue.viewers.image.state.ImageLayerState",
+    "values": {
+      "alpha": 0.8,
+      "attribute": "PRIMARY",
+      "bias": 0.5,
+      "cmap": "LinearSegmentedColormap",
+      "color": "st__#595959",
+      "contrast": 1.0,
+      "global_sync": false,
+      "layer": "w5",
+      "percentile": "st__Custom",
+      "stretch": "st__linear",
+      "v_max": 2239.702392578125,
+      "v_min": 438.8984375,
+      "visible": true,
+      "zorder": 4
+    }
+  },
+  "ImageViewer": {
+    "_protocol": 1,
+    "_type": "glue.viewers.image.qt.data_viewer.ImageViewer",
+    "layers": [
+      {
+        "_type": "glue.viewers.image.layer_artist.ImageLayerArtist",
+        "state": "ImageLayerState"
+      }
+    ],
+    "pos": [
+      0,
+      0
+    ],
+    "session": "Session",
+    "size": [
+      1878,
+      1312
+    ],
+    "state": {
+      "legend": {
+        "alpha": 0.5858585858585859,
+        "fontsize": 10,
+        "frame_color": "#FFFFFF",
+        "location": "draggable",
+        "show_edge": true,
+        "text_color": "#000000",
+        "title": "",
+        "visible": false
+      },
+      "values": {
+        "aspect": "st__equal",
+        "color_mode": "st__Colormaps",
+        "dpi": 72,
+        "layers": "CallbackList",
+        "reference_data": "w5",
+        "show_axes": true,
+        "slices": [
+          0,
+          0
+        ],
+        "x_att": "Pixel Axis 1 [x]",
+        "x_att_world": "Right Ascension",
+        "x_axislabel": "st__Right Ascension",
+        "x_axislabel_size": 10,
+        "x_axislabel_weight": "st__normal",
+        "x_log": false,
+        "x_max": 1224.8757016352629,
+        "x_min": -225.87570163526289,
+        "x_ticklabel_size": 8,
+        "y_att": "Pixel Axis 0 [y]",
+        "y_att_world": "Declination",
+        "y_axislabel": "st__Declination",
+        "y_axislabel_size": 10,
+        "y_axislabel_weight": "st__normal",
+        "y_log": false,
+        "y_max": 962.015955168474,
+        "y_min": 36.98404483152598,
+        "y_ticklabel_size": 8
+      }
+    }
+  },
+  "Jmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Jmag"
+  },
+  "Jmag_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Jmag"
+  },
+  "Ksmag": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Ksmag"
+  },
+  "Ksmag_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Ksmag"
+  },
+  "LinearSegmentedColormap": {
+    "_type": "matplotlib.colors.LinearSegmentedColormap",
+    "cmap": "gray"
+  },
+  "LoadLog": {
+    "_protocol": 2,
+    "_type": "glue.core.data_factories.helpers.LoadLog",
+    "factory": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.data_factories.helpers.auto_data"
+    },
+    "force_coords": true,
+    "kwargs": [
+      []
+    ],
+    "path": "w5/w5.fits"
+  },
+  "LoadLog_0": {
+    "_protocol": 2,
+    "_type": "glue.core.data_factories.helpers.LoadLog",
+    "factory": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.data_factories.helpers.auto_data"
+    },
+    "force_coords": false,
+    "kwargs": [
+      []
+    ],
+    "path": "w5/w5_psc.vot"
+  },
+  "LoadLog_1": {
+    "_protocol": 2,
+    "_type": "glue.core.data_factories.helpers.LoadLog",
+    "factory": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.data_factories.helpers.auto_data"
+    },
+    "force_coords": false,
+    "kwargs": [
+      []
+    ],
+    "path": "w5/w6_psc.vot"
+  },
+  "PRIMARY": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "PRIMARY"
+  },
+  "Pixel Axis 0 [x]": {
+    "_type": "glue.core.component_id.PixelComponentID",
+    "axis": 0,
+    "label": "Pixel Axis 0 [x]"
+  },
+  "Pixel Axis 0 [x]_0": {
+    "_type": "glue.core.component_id.PixelComponentID",
+    "axis": 0,
+    "label": "Pixel Axis 0 [x]"
+  },
+  "Pixel Axis 0 [y]": {
+    "_type": "glue.core.component_id.PixelComponentID",
+    "axis": 0,
+    "label": "Pixel Axis 0 [y]"
+  },
+  "Pixel Axis 1 [x]": {
+    "_type": "glue.core.component_id.PixelComponentID",
+    "axis": 1,
+    "label": "Pixel Axis 1 [x]"
+  },
+  "RAJ2000": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "RAJ2000"
+  },
+  "RAJ2000_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "RAJ2000"
+  },
+  "Right Ascension": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Right Ascension"
+  },
+  "Session": {
+    "_type": "glue.core.session.Session"
+  },
+  "Type": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Type"
+  },
+  "Type_0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "Type"
+  },
+  "WCS": {
+    "_type": "astropy.wcs.wcs.WCS",
+    "header": "WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                500.5 / Pixel coordinate of reference point            CRPIX2  =                500.5 / Pixel coordinate of reference point            CDELT1  =               -0.003 / [deg] Coordinate increment at reference point  CDELT2  =                0.003 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               CRVAL1  =                43.46 / [deg] Coordinate value at reference point      CRVAL2  =                60.38 / [deg] Coordinate value at reference point      LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =                60.38 / [deg] Native latitude of celestial pole        MJDREF  =                  0.0 / [d] MJD of fiducial time                       RADESYS = 'FK5'                / Equatorial coordinate system                   EQUINOX =               2000.0 / [yr] Equinox of equatorial coordinates         END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+  },
+  "__24_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__24_"
+  },
+  "__24__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__24_"
+  },
+  "__3.6_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__3.6_"
+  },
+  "__3.6__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__3.6_"
+  },
+  "__4.5_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__4.5_"
+  },
+  "__4.5__-__5.8_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__4.5__-__5.8_"
+  },
+  "__4.5__-__5.8__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__4.5__-__5.8_"
+  },
+  "__4.5__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__4.5_"
+  },
+  "__5.8_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__5.8_"
+  },
+  "__5.8__-__8.0_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__5.8__-__8.0_"
+  },
+  "__5.8__-__8.0__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__5.8__-__8.0_"
+  },
+  "__5.8__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__5.8_"
+  },
+  "__8.0_": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__8.0_"
+  },
+  "__8.0__0": {
+    "_type": "glue.core.component_id.ComponentID",
+    "label": "__8.0_"
+  },
+  "__main__": {
+    "_type": "glue.app.qt.application.GlueApplication",
+    "data": "DataCollection",
+    "plugins": [
+      "glue.io.qt.directory_importer",
+      "glue.plugins.wcs_autolinking",
+      "casa_formats_io.glue_factory",
+      "glue.plugins.coordinate_helpers",
+      "glue.viewers.image.qt",
+      "glue.viewers.table.qt",
+      "glue.plugins.tools",
+      "glue.viewers.profile.qt",
+      "glue.plugins.export_d3po",
+      "glue.io.formats.fits",
+      "glue.core.data_exporters",
+      "glue.plugins.tools.pv_slicer.qt",
+      "glue.viewers.scatter.qt",
+      "glue_vispy_viewers.scatter",
+      "glue_vispy_viewers.volume",
+      "glue.plugins.dendro_viewer.qt",
+      "glue.viewers.histogram.qt"
+    ],
+    "session": "Session",
+    "tab_names": [
+      "Tab 1"
+    ],
+    "viewers": [
+      [
+        "ImageViewer"
+      ]
+    ]
+  },
+  "list": {
+    "_type": "builtins.list",
+    "contents": [
+      "PRIMARY",
+      "Pixel Axis 0 [y]"
+    ]
+  },
+  "list_0": {
+    "_type": "builtins.list",
+    "contents": [
+      "ID",
+      "RAJ2000"
+    ]
+  },
+  "list_1": {
+    "_type": "builtins.list",
+    "contents": [
+      "ID",
+      "RAJ2000"
+    ]
+  },
+  "list_2": {
+    "_type": "builtins.list",
+    "contents": [
+      "PRIMARY",
+      "Pixel Axis 0 [y]"
+    ]
+  },
+  "w5": {
+    "_key_joins": [],
+    "_protocol": 5,
+    "_type": "glue.core.data.Data",
+    "components": [
+      [
+        "Pixel Axis 0 [y]",
+        "CoordinateComponent"
+      ],
+      [
+        "Pixel Axis 1 [x]",
+        "CoordinateComponent_0"
+      ],
+      [
+        "Declination",
+        "CoordinateComponent_1"
+      ],
+      [
+        "Right Ascension",
+        "CoordinateComponent_2"
+      ],
+      [
+        "PRIMARY",
+        "Component"
+      ]
+    ],
+    "coords": "WCS",
+    "label": "w5",
+    "meta": {
+      "_type": "collections.OrderedDict",
+      "contents": {
+        "st__BITPIX": -32,
+        "st__CDELT1": -0.003,
+        "st__CDELT2": 0.003,
+        "st__COMMENT": [
+          "",
+          " SkyView Survey metadata",
+          "",
+          "Provenance:  WISE Archive (IRSA/IPAC)",
+          "Copyright:   WISE data is in the public domain but publications are re",
+          "          quested to include the       statment:        This publicati",
+          "          on makes use of data products from the Wide-field Infrared S",
+          "          urvey Explorer,       which is a joint project of the Univer",
+          "          sity of California, Los Angeles,       and the Jet Propulsio",
+          "          n Laboratory/California Institute of Technology,       funde",
+          "          d by the National Aeronautics and Space Administration.",
+          "Regime:      Infrared",
+          "NSurvey:     4",
+          "Frequency:   25 THz (12 micrometers)",
+          "Bandpass:    18-40 THz",
+          "Coverage:    All sky",
+          "PixelScale:  1.375\"",
+          "PixelUnits:  DN",
+          "Resolution:  6.5\"",
+          "Coordinates: Equatorial",
+          "Projection:  Sine",
+          "Epoch:       January 7 to August 6, 2010",
+          "Reference:    Wright et al (2010)",
+          "",
+          "Survey specific cards",
+          ""
+        ],
+        "st__CRPIX1": 500.5,
+        "st__CRPIX2": 500.5,
+        "st__CRVAL1": 43.46,
+        "st__CRVAL2": 60.38,
+        "st__CTYPE1": "st__RA---TAN",
+        "st__CTYPE2": "st__DEC--TAN",
+        "st__EQUINOX": 2000.0,
+        "st__HISTORY": [
+          "",
+          " Settings used in processing:",
+          "",
+          "cache = /skyview8/cache/surveys/",
+          "coordinates = J2000.0",
+          "coordselect = J2000",
+          "cs = standard",
+          "deedger = skyview.process.Deedger",
+          "descriptionxslt = cgifiles/description.xsl",
+          "dummy",
+          "equinox = 2000",
+          "finalpostprocessor = skyview.ij.IJProcessor,skyview.data.BoxSmoother,sky",
+          "float = on",
+          "footertemplate = cgifiles/skyfooter.html",
+          "galleryxslt = cgifiles/gallerymultipage.xsl",
+          "headertemplate = cgifiles/skyheader.html",
+          "htmlwriter = skyview.request.HTMLWriter",
+          "imagefactory = skyview.survey.CachingImageFactory",
+          "imagesize = 1.6",
+          "imscale = 3",
+          "localurl = http://skyview.gsfc.nasa.gov/surveys,/skyview/htdocs/surveys",
+          "lut = colortables/b-w-linear.bin",
+          "lutcbarpath = /images/colorbars/",
+          "mosaicker = skyview.process.Mosaicker",
+          "name = WISE 12 Micron All-Sky Survey",
+          "noexit =",
+          "nullimagedir = ../images/nodata",
+          "nwindow = on",
+          "output = ../tempspace/fits/skv7286600634832",
+          "outputroot = ../tempspace/fits/",
+          "pixels = 1000",
+          "position = 43.46, 60.38",
+          "postprocessor = skyview.ij.IJProcessor,skyview.request.HTMLWriter",
+          "projection = Tan",
+          "quicklook = jpeg",
+          "reqxpos = 43.46",
+          "reqypos = 60.38",
+          "resolver = SIMBAD-NED",
+          "rgbtemplate = cgifiles/skyrgb.html",
+          "rgbwriter = skyview.request.RGBWriter",
+          "sampler = Default",
+          "savebysurvey",
+          "scale = 0.0003819",
+          "scaling = loglog",
+          "settingsupdaters = BatchCompatibility,SettingsFixer,skyview.request.Toas",
+          "shortname = Wise W3,Wise 12, WiseW3, Wise12",
+          "siabase = http://skyview.gsfc.nasa.gov/cgi-bin/images?",
+          "siaimagetimeout = 1200000",
+          "siapfilterfield = VOX:BandPass_ID",
+          "siapfiltervalue = W3",
+          "siapurl = http://irsa.ipac.caltech.edu/ibe/sia/wise/allsky/4band_p3am_cd",
+          "size = 3.0,3.0",
+          "spcoordinates =",
+          "survey = WISE 12",
+          "surveyfinder = skyview.survey.XMLSurveyFinder",
+          "surveymanifest = surveys/survey.manifest",
+          "surveysheader = cgifiles/survey.header",
+          "surveytemplate = cgifiles/skysurvey.html",
+          "url.heasarcbase = http://heasarc.gsfc.nasa.gov/xamin/vo/cone?table=",
+          "url.ned = http://nedwww.ipac.caltech.edu/cgi-bin/nph-NEDobjsearch?search",
+          "url.simbad = http://simbad.u-strasbg.fr/simbad-conesearch.pl?",
+          "url.vizierbase = http://vizier.u-strasbg.fr/viz-bin/votable/-dtd/-A?-out",
+          "urlcoordinates = http://heasarc.gsfc.nasa.gov/cgi-bin/Tools/convcoord/co",
+          "urllocalhelp = http://skyview.gsfc.nasa.gov/help/help.html",
+          "webrootpath = /skyview/htdocs/",
+          "",
+          " Map generated at: Mon Sep 24 16:13:12 EDT 2012",
+          "",
+          " Resampler used: NNSampler",
+          "",
+          "",
+          "Image mosaicking using skyview.geometry.Mosaicker",
+          "",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0460p590_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0432p590_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0403p590_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0450p605_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0420p605_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0390p605_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0480p605_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0442p620_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0410p620_ab41-w3-int-3.fits",
+          "  Used image:/skyview8/cache/surveys/Wise_W3/0473p620_ab41-w3-int-3.fits",
+          "",
+          "",
+          "Edge adjustments applied (skyview.geometry.DeedgerList",
+          "",
+          "     Image 0403p590_ab41-w3-int-3.fits offset by -10.0955810546875",
+          "     Image 0432p590_ab41-w3-int-3.fits offset by -14.76416015625",
+          "     Image 0460p590_ab41-w3-int-3.fits offset by -18.1815185546875",
+          "     Image 0390p605_ab41-w3-int-3.fits offset by 1.0014190673828125",
+          "     Image 0410p620_ab41-w3-int-3.fits offset by -5.81903076171875",
+          "     Image 0442p620_ab41-w3-int-3.fits offset by -1.201446533203125",
+          "     Image 0450p605_ab41-w3-int-3.fits offset by -12.527557373046875",
+          "     Image 0473p620_ab41-w3-int-3.fits offset by -8.7635498046875",
+          "     Image 0480p605_ab41-w3-int-3.fits offset by -10.600997924804688",
+          ""
+        ],
+        "st__NAXIS": 2,
+        "st__NAXIS1": 1000,
+        "st__NAXIS2": 1000,
+        "st__RADESYS": "st__FK5",
+        "st__SIMPLE": true,
+        "st__SURVEY": "st__WISE 12 micron allsky release"
+      }
+    },
+    "primary_owner": [
+      "Pixel Axis 0 [y]",
+      "Pixel Axis 1 [x]",
+      "Declination",
+      "Right Ascension",
+      "PRIMARY"
+    ],
+    "style": {
+      "_type": "glue.core.visual.VisualAttributes",
+      "alpha": 0.8,
+      "color": "#595959",
+      "linestyle": "solid",
+      "linewidth": 1,
+      "marker": "o",
+      "markersize": 3
+    },
+    "subsets": [],
+    "uuid": "c7540d2a-39ba-4c44-9f0b-e6ec12d3df03"
+  },
+  "w5_psc": {
+    "_key_joins": [],
+    "_protocol": 5,
+    "_type": "glue.core.data.Data",
+    "components": [
+      [
+        "Pixel Axis 0 [x]",
+        "CoordinateComponent_3"
+      ],
+      [
+        "ID",
+        "Component_0"
+      ],
+      [
+        "RAJ2000",
+        "Component_1"
+      ],
+      [
+        "DEJ2000",
+        "Component_2"
+      ],
+      [
+        "Jmag",
+        "Component_3"
+      ],
+      [
+        "Hmag",
+        "Component_4"
+      ],
+      [
+        "Ksmag",
+        "Component_5"
+      ],
+      [
+        "__3.6_",
+        "Component_6"
+      ],
+      [
+        "__4.5_",
+        "Component_7"
+      ],
+      [
+        "__5.8_",
+        "Component_8"
+      ],
+      [
+        "__8.0_",
+        "Component_9"
+      ],
+      [
+        "__24_",
+        "Component_10"
+      ],
+      [
+        "Type",
+        "CategoricalComponent"
+      ],
+      [
+        "__4.5__-__5.8_",
+        "Component_11"
+      ],
+      [
+        "__5.8__-__8.0_",
+        "Component_12"
+      ]
+    ],
+    "label": "w5_psc",
+    "meta": {
+      "_type": "collections.OrderedDict",
+      "contents": {
+        "st__ID": "st__J_ApJ_688_1142_table2",
+        "st__description": "st__W5 source list",
+        "st__name": "st__J/ApJ/688/1142/table2"
+      }
+    },
+    "primary_owner": [
+      "Pixel Axis 0 [x]",
+      "ID",
+      "RAJ2000",
+      "DEJ2000",
+      "Jmag",
+      "Hmag",
+      "Ksmag",
+      "__3.6_",
+      "__4.5_",
+      "__5.8_",
+      "__8.0_",
+      "__24_",
+      "Type",
+      "__4.5__-__5.8_",
+      "__5.8__-__8.0_"
+    ],
+    "style": {
+      "_type": "glue.core.visual.VisualAttributes",
+      "alpha": 0.8,
+      "color": "#595959",
+      "linestyle": "solid",
+      "linewidth": 1,
+      "marker": "o",
+      "markersize": 3
+    },
+    "subsets": [],
+    "uuid": "558542c4-f6c7-4196-bd86-c236d7b9e9a9"
+  },
+  "w6_psc": {
+    "_key_joins": [],
+    "_protocol": 5,
+    "_type": "glue.core.data.Data",
+    "components": [
+      [
+        "Pixel Axis 0 [x]_0",
+        "CoordinateComponent_4"
+      ],
+      [
+        "ID_0",
+        "Component_13"
+      ],
+      [
+        "RAJ2000_0",
+        "Component_14"
+      ],
+      [
+        "DEJ2000_0",
+        "Component_15"
+      ],
+      [
+        "Jmag_0",
+        "Component_16"
+      ],
+      [
+        "Hmag_0",
+        "Component_17"
+      ],
+      [
+        "Ksmag_0",
+        "Component_18"
+      ],
+      [
+        "__3.6__0",
+        "Component_19"
+      ],
+      [
+        "__4.5__0",
+        "Component_20"
+      ],
+      [
+        "__5.8__0",
+        "Component_21"
+      ],
+      [
+        "__8.0__0",
+        "Component_22"
+      ],
+      [
+        "__24__0",
+        "Component_23"
+      ],
+      [
+        "Type_0",
+        "CategoricalComponent_0"
+      ],
+      [
+        "__4.5__-__5.8__0",
+        "Component_24"
+      ],
+      [
+        "__5.8__-__8.0__0",
+        "Component_25"
+      ]
+    ],
+    "label": "w6_psc",
+    "meta": {
+      "_type": "collections.OrderedDict",
+      "contents": {
+        "st__ID": "st__J_ApJ_688_1142_table2",
+        "st__description": "st__W5 source list",
+        "st__name": "st__J/ApJ/688/1142/table2"
+      }
+    },
+    "primary_owner": [
+      "Pixel Axis 0 [x]_0",
+      "ID_0",
+      "RAJ2000_0",
+      "DEJ2000_0",
+      "Jmag_0",
+      "Hmag_0",
+      "Ksmag_0",
+      "__3.6__0",
+      "__4.5__0",
+      "__5.8__0",
+      "__8.0__0",
+      "__24__0",
+      "Type_0",
+      "__4.5__-__5.8__0",
+      "__5.8__-__8.0__0"
+    ],
+    "style": {
+      "_type": "glue.core.visual.VisualAttributes",
+      "alpha": 0.8,
+      "color": "#595959",
+      "linestyle": "solid",
+      "linewidth": 1,
+      "marker": "o",
+      "markersize": 3
+    },
+    "subsets": [],
+    "uuid": "872b488c-76e9-4aa5-aaf9-dff4539a7146"
+  }
+}
