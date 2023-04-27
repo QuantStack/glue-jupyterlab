@@ -4,7 +4,7 @@ import { Panel, Widget } from '@lumino/widgets';
 import { LinkEditorWidget } from '../linkEditorWidget';
 import { LinkedDataset } from './linkedDataset';
 import { identityLinks } from './identityLinks';
-import { IRelatedLink } from '../types';
+import { IComponentLinkInfo } from '../types';
 
 /**
  * The widget displaying the links for the selected dataset.
@@ -15,6 +15,11 @@ export class Summary extends LinkEditorWidget {
     super(options);
 
     this.addClass('glue-LinkEditor-summary');
+
+    this._identityLinks = new Panel();
+    this._identityLinks.addClass('glue-LinkEditor-identity');
+    this._advancedLinks = new Panel();
+    this._advancedLinks.addClass('glue-LinkEditor-advanced');
 
     this.titleValue = 'Summary';
 
@@ -44,7 +49,7 @@ export class Summary extends LinkEditorWidget {
    * Updates the list of links when the selected dataset changes.
    */
   updateIdentityLinks(_sender: LinkedDataset, dataset: [string, string]): void {
-    const links: IRelatedLink[] = [];
+    const links: [IComponentLinkInfo, boolean][] = [];
 
     // Remove all the existing widgets.
     while (this._identityLinks.widgets.length) {
@@ -60,7 +65,8 @@ export class Summary extends LinkEditorWidget {
         dataset.includes(link.src?.dataset) &&
         dataset.includes(link.dest?.dataset)
       ) {
-        links.push(link);
+        const revert = link.dest?.dataset === dataset[0];
+        links.push([link, revert]);
       }
     });
 
@@ -73,12 +79,12 @@ export class Summary extends LinkEditorWidget {
   /**
    * Called when clicking on the delete icon of the identity panel.
    */
-  onDeleteIdentity = (link: IRelatedLink): void => {
+  onDeleteIdentity = (link: IComponentLinkInfo): void => {
     console.log('Deleting', link);
   };
 
-  private _identityLinks = new Panel();
-  private _advancedLinks = new Panel();
+  private _identityLinks: Panel;
+  private _advancedLinks: Panel;
 }
 
 /**

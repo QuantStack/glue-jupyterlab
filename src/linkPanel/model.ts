@@ -5,7 +5,7 @@ import {
   ComponentLinkType,
   IComponentLink,
   ILinkEditorModel,
-  IRelatedLink
+  IComponentLinkInfo
 } from './types';
 
 export class LinkEditorModel implements ILinkEditorModel {
@@ -18,7 +18,7 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._sharedModel;
   }
 
-  get relatedLinks(): Map<string, IRelatedLink> {
+  get relatedLinks(): Map<string, IComponentLinkInfo> {
     return this._relatedLinks;
   }
 
@@ -36,13 +36,16 @@ export class LinkEditorModel implements ILinkEditorModel {
           return;
         }
         link = link as IComponentLink;
+        this._relatedLinks.set(linkName, { origin: link });
         for (const dataName in dataset) {
           if (dataset[dataName].primary_owner.includes(link.frm[0])) {
             this._relatedLinks.set(linkName, {
               ...this._relatedLinks.get(linkName),
               src: {
                 attribute: link.frm[0],
-                dataset: dataName
+                dataset: dataName,
+                label:
+                  this._sharedModel.attributes[link.frm[0]].label || link.frm[0]
               }
             });
           } else if (dataset[dataName].primary_owner.includes(link.to[0])) {
@@ -50,7 +53,9 @@ export class LinkEditorModel implements ILinkEditorModel {
               ...this._relatedLinks.get(linkName),
               dest: {
                 attribute: link.to[0],
-                dataset: dataName
+                dataset: dataName,
+                label:
+                  this._sharedModel.attributes[link.to[0]].label || link.to[0]
               }
             });
           }
@@ -72,7 +77,7 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   private _sharedModel: IGlueSessionSharedModel;
-  private _relatedLinks = new Map<string, IRelatedLink>();
+  private _relatedLinks = new Map<string, IComponentLinkInfo>();
   private _relatedLinksChanged = new Signal<this, void>(this);
 }
 
