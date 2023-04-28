@@ -11,7 +11,9 @@ import {
   GridStackWidget
 } from 'gridstack';
 
+import { globalMutex } from '../document/sharedModel';
 import { GridStackItem } from './gridStackItem';
+import { TabModel } from './tabModel';
 
 const COLUMNS = 12;
 const CELL_HEIGHT = 40;
@@ -39,8 +41,10 @@ export class TabLayout extends Layout {
    *
    * @param info - The `DashboardView` metadata.
    */
-  constructor() {
+  constructor(model: TabModel) {
     super();
+
+    this._model = model;
 
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
@@ -216,14 +220,14 @@ export class TabLayout extends Layout {
       row: item.pos[1]
     };
 
-    const info = Private.calculatePositionSize(gridInfo, itemInfo);
+    const info = Private.pixelToGridPositionSize(gridInfo, itemInfo);
 
     const options: GridStackWidget = {
       id,
       autoPosition: false,
       noMove: false,
       noResize: false,
-      locked: false,
+      locked: true,
       w: info.width,
       h: info.height,
       x: info.column,
@@ -282,6 +286,7 @@ export class TabLayout extends Layout {
    */
   private _onChange(event: Event, items: GridStackNode[]): void {
     this._gridItemChanged.emit(items ?? []);
+    items.forEach(item => this._updateItem(item));
   }
 
   /**
@@ -289,7 +294,13 @@ export class TabLayout extends Layout {
    */
   private _onRemoved(event: Event, items: GridStackNode[]): void {
     items.forEach(el => {
-      //this._model.hideCell(el.id as string);
+      globalMutex(() => {
+        // Use the "mutex" to prevent this client from rerendering the tab.
+        this._model.sharedModel.removeTabItem(
+          this._model.tabName,
+          el.id as string
+        );
+      });
     });
   }
 
@@ -300,9 +311,12 @@ export class TabLayout extends Layout {
     const widget = this._gridItems.find(
       value => value.cellIdentity === item.id
     );
-    if (widget) {
-      MessageLoop.sendMessage(widget, Widget.Msg.UpdateRequest);
+    if (!widget) {
+      return;
     }
+
+    MessageLoop.sendMessage(widget, Widget.Msg.UpdateRequest);
+    this._updateItem(item);
   }
 
   /**
@@ -320,15 +334,50 @@ export class TabLayout extends Layout {
     this._grid.onParentResize();
   }
 
+  private _updateItem(item: GridStackNode): void {
+    const tabName = this._model.tabName;
+    const itemID = item.id as string;
+    const tabItem = this._model.sharedModel.getTabItem(tabName, itemID);
+
+    if (!tabItem) {
+      return;
+    }
+
+    const gridInfo: GridInfo = {
+      cellWidth: this._grid.cellWidth(),
+      cellHeight: CELL_HEIGHT,
+      columns: COLUMNS,
+      rows: this._grid.getRow()
+    };
+
+    const itemInfo = {
+      width: item.w ?? 0,
+      height: item.h ?? 0,
+      column: item.x ?? 0,
+      row: item.y ?? 0
+    };
+
+    const info = Private.gridToPixelPositionSize(gridInfo, itemInfo);
+
+    tabItem.pos = [info.column, info.row];
+    tabItem.size = [info.width, info.height];
+
+    globalMutex(() => {
+      // Use the "mutex" to prevent this client from rerendering the tab.
+      this._model.sharedModel.updateTabItem(tabName, itemID, tabItem);
+    });
+  }
+
   private _gridHost: HTMLElement;
   private _grid: GridStack;
   private _gridItems: GridStackItem[] = [];
+  private _model: TabModel;
   private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
   private _resizeTimeout = 0;
 }
 
 namespace Private {
-  export function calculatePositionSize(
+  export function pixelToGridPositionSize(
     grid: GridInfo,
     item: ItemInfo
   ): ItemInfo {
@@ -337,6 +386,18 @@ namespace Private {
       height: Math.ceil(item.height / grid.cellHeight),
       column: Math.ceil(item.column / grid.cellWidth),
       row: Math.ceil(item.row / grid.cellHeight)
+    };
+  }
+
+  export function gridToPixelPositionSize(
+    grid: GridInfo,
+    item: ItemInfo
+  ): ItemInfo {
+    return {
+      width: Math.ceil(item.width * grid.cellWidth),
+      height: Math.ceil(item.height * grid.cellHeight),
+      column: Math.ceil(item.column * grid.cellWidth),
+      row: Math.ceil(item.row * grid.cellHeight)
     };
   }
 }

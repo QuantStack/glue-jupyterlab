@@ -1,4 +1,4 @@
-import { YDocument } from '@jupyter/ydoc';
+import { YDocument, createMutex } from '@jupyter/ydoc';
 import { JSONExt, JSONObject } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
@@ -16,6 +16,8 @@ import {
   IGlueSessionLinks,
   IGlueSessionTabs
 } from '../_interface/glue.schema';
+
+export const globalMutex = createMutex();
 
 export class GlueSessionSharedModel
   extends YDocument<IGlueSessionSharedModelChange>
@@ -119,18 +121,57 @@ export class GlueSessionSharedModel
     }
   }
 
-  moveTabItem(name: string, fromTab: string, toTab: string): void {
+  getTabItem(tabName: string, itemID: string): IGlueSessionViewerTypes {
+    const tab = this._tabs.get(tabName);
+    const view = tab?.get(itemID);
+    if (view) {
+      return JSONExt.deepCopy(view ?? {});
+    }
+  }
+
+  setTabItem(
+    tabName: string,
+    itemID: string,
+    data: IGlueSessionViewerTypes
+  ): void {
+    const tab = this._tabs.get(tabName);
+    tab?.set(itemID, JSONExt.deepCopy(data));
+  }
+
+  updateTabItem(
+    tabName: string,
+    itemID: string,
+    data: IGlueSessionViewerTypes
+  ): void {
+    const tab = this._tabs.get(tabName);
+
+    if (tab) {
+      const view = tab.get(itemID);
+
+      if (view) {
+        const content = { ...view, ...JSONExt.deepCopy(data) };
+        tab.set(itemID, content);
+      }
+    }
+  }
+
+  removeTabItem(tabName: string, itemID: string): void {
+    const tab = this._tabs.get(tabName);
+    tab?.delete(itemID);
+  }
+
+  moveTabItem(itemID: string, fromTab: string, toTab: string): void {
     const tab1 = this._tabs.get(fromTab);
     const tab2 = this._tabs.get(toTab);
 
     if (tab1 && tab2) {
-      const view = tab1.get(name);
+      const view = tab1.get(itemID);
 
       if (view) {
         const content = JSONExt.deepCopy(view);
         this.transact(() => {
-          tab1.delete(name);
-          tab2.set(name, content);
+          tab1.delete(itemID);
+          tab2.set(itemID, content);
         }, false);
       }
     }

@@ -8,6 +8,7 @@ import { TabModel } from './tabModel';
 import { TabLayout } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
 import { IDict, IGlueSessionSharedModel } from '../types';
+import { globalMutex } from '../document/sharedModel';
 
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
@@ -15,9 +16,9 @@ export class TabView extends Widget {
     this.addClass('grid-editor');
 
     this._model = options.model;
-    this.title.label = this._model?.tabName ?? '';
+    this.title.label = this._model.tabName ?? '';
 
-    this.layout = new TabLayout();
+    this.layout = new TabLayout(this._model);
 
     this._commands = new CommandRegistry();
     this._contextMenu = new ContextMenu({ commands: this._commands });
@@ -28,12 +29,12 @@ export class TabView extends Widget {
       this._initGridItems();
     });
 
-    this._model?.sharedModel.tabChanged.connect(this._onTabChanged, this);
+    this._model.sharedModel.tabChanged.connect(this._onTabChanged, this);
   }
 
   dispose(): void {
     super.dispose();
-    this._model?.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
+    this._model.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
   }
 
   /**
@@ -80,7 +81,7 @@ export class TabView extends Widget {
    * Initialize the `GridstackItemWidget` from Notebook's metadata.
    */
   private async _initGridItems(): Promise<void> {
-    const viewWidgets = this._model?.createView();
+    const viewWidgets = this._model.createView();
     if (!viewWidgets) {
       return;
     }
@@ -168,20 +169,23 @@ export class TabView extends Widget {
     sender: IGlueSessionSharedModel,
     args: IDict<any>
   ): void {
-    if (args.tab && args.tab === this._model?.tabName) {
-      (this.layout as TabLayout).cleanGrid();
-      this._initGridItems();
-    }
+    globalMutex(() => {
+      // Use the "mutex" to prevent this client from rerendering the tab.
+      if (args.tab && args.tab === this._model.tabName) {
+        (this.layout as TabLayout).cleanGrid();
+        this._initGridItems();
+      }
+    });
   }
 
   private _selectedItem: GridStackItem | null = null;
-  private _model?: TabModel;
+  private _model: TabModel;
   private _contextMenu: ContextMenu;
   private _commands: CommandRegistry;
 }
 
 export namespace TabView {
   export interface IOptions {
-    model?: TabModel;
+    model: TabModel;
   }
 }
