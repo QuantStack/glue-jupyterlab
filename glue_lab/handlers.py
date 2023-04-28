@@ -13,10 +13,12 @@ class RouteHandler(APIHandler):
     # Jupyter server
     @tornado.web.authenticated
     def get(self, path):
-        if path == 'available-advanced-links':
+        if path == "available-advanced-links":
             self.finish(json.dumps({"data": get_advanced_links()}))
         else:
-            self.finish(json.dumps({"data": f"There is no endpoint at /glue-lab/{path}!"}))
+            self.finish(
+                json.dumps({"data": f"There is no endpoint at /glue-lab/{path}!"})
+            )
 
 
 def setup_handlers(web_app):
