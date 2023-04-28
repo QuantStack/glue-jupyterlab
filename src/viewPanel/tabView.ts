@@ -5,7 +5,7 @@ import { ContextMenu, Widget } from '@lumino/widgets';
 import { ArrayExt } from '@lumino/algorithm';
 
 import { TabModel } from './tabModel';
-import { TabLayout } from './tabLayout';
+import { TabLayout, ViewInfo } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
 import { IDict, IGlueSessionSharedModel } from '../types';
 import { globalMutex } from '../document/sharedModel';
@@ -18,23 +18,33 @@ export class TabView extends Widget {
     this._model = options.model;
     this.title.label = this._model.tabName ?? '';
 
-    this.layout = new TabLayout(this._model);
+    const layout = (this.layout = new TabLayout());
 
     this._commands = new CommandRegistry();
     this._contextMenu = new ContextMenu({ commands: this._commands });
 
     this._addCommands();
 
-    this._model?.ready.connect(() => {
+    this._model.ready.connect(() => {
       this._initGridItems();
     });
 
+    layout.gridItemChanged.connect(this._onLayoutChanged, this);
     this._model.sharedModel.tabChanged.connect(this._onTabChanged, this);
   }
 
   dispose(): void {
-    super.dispose();
+    if (this.disposed) {
+      return;
+    }
+
+    (this.layout as TabLayout).gridItemChanged.disconnect(
+      this._onLayoutChanged,
+      this
+    );
     this._model.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
+
+    super.dispose();
   }
 
   /**
@@ -176,6 +186,39 @@ export class TabView extends Widget {
         this._initGridItems();
       }
     });
+  }
+
+  private _onLayoutChanged(sender: TabLayout, change: TabLayout.IChange): void {
+    const tabName = this._model.tabName;
+
+    switch (change.action) {
+      case 'move':
+      case 'resize':
+        globalMutex(() => {
+          // Use the "mutex" to prevent this client from rerendering the tab.
+          this._model.sharedModel.transact(() => {
+            (change.items as ViewInfo[]).forEach(item => {
+              const data = this._model.sharedModel.getTabItem(tabName, item.id);
+              this._model.sharedModel.updateTabItem(tabName, item.id, {
+                ...data,
+                pos: item.pos,
+                size: item.size
+              });
+            });
+          }, false);
+        });
+        break;
+      case 'remove':
+        globalMutex(() => {
+          // Use the "mutex" to prevent this client from rerendering the tab.
+          this._model.sharedModel.transact(() => {
+            (change.items as string[]).forEach(item =>
+              this._model.sharedModel.removeTabItem(tabName, item)
+            );
+          }, false);
+        });
+        break;
+    }
   }
 
   private _selectedItem: GridStackItem | null = null;

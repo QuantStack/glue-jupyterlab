@@ -11,21 +11,19 @@ import {
   GridStackWidget
 } from 'gridstack';
 
-import { globalMutex } from '../document/sharedModel';
 import { GridStackItem } from './gridStackItem';
-import { TabModel } from './tabModel';
 
 const COLUMNS = 12;
 const CELL_HEIGHT = 40;
 
-export type GridInfo = {
-  cellWidth: number;
-  cellHeight: number;
-  columns: number;
-  rows: number;
+export type ViewInfo = {
+  id: string;
+  pos: number[];
+  size: number[];
 };
 
 export type ItemInfo = {
+  id: string;
   width: number;
   height: number;
   column: number;
@@ -41,10 +39,8 @@ export class TabLayout extends Layout {
    *
    * @param info - The `DashboardView` metadata.
    */
-  constructor(model: TabModel) {
+  constructor() {
     super();
-
-    this._model = model;
 
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
@@ -107,7 +103,7 @@ export class TabLayout extends Layout {
     });
   }
 
-  get gridItemChanged(): ISignal<this, GridStackNode[]> {
+  get gridItemChanged(): ISignal<this, TabLayout.IChange> {
     return this._gridItemChanged;
   }
 
@@ -204,58 +200,37 @@ export class TabLayout extends Layout {
    * @param item - The cell widget.
    */
   addGridItem(item: GridStackItem): void {
-    const id = item.cellIdentity;
+    const options = Private.pixelToGrid(this._grid.cellWidth(), {
+      id: item.cellIdentity,
+      size: item.size,
+      pos: item.pos
+    });
 
-    const gridInfo: GridInfo = {
-      cellWidth: this._grid.cellWidth(),
-      cellHeight: CELL_HEIGHT,
-      columns: COLUMNS,
-      rows: this._grid.getRow()
-    };
-
-    const itemInfo = {
-      width: item.size[0],
-      height: item.size[1],
-      column: item.pos[0],
-      row: item.pos[1]
-    };
-
-    const info = Private.pixelToGridPositionSize(gridInfo, itemInfo);
-
-    const options: GridStackWidget = {
-      id,
-      autoPosition: false,
-      noMove: false,
-      noResize: false,
-      locked: true,
-      w: info.width,
-      h: info.height,
-      x: info.column,
-      y: info.row
-    };
-
+    item.changed.connect(this._onItemChanged, this);
     this._gridItems.push(item);
 
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
     MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
-    this.updateGridItem(id, options);
+    //this.updateGridItem(id, options);
   }
 
   /**
-   * Update a cell from gridstack.
+   * Update a view from gridstack.
    *
-   * @param id - The Cell id.
-   * @param info - The dashboard cell metadata parameters.
+   * @param id - The view id.
+   * @param info - The view cell parameters.
    */
-  updateGridItem(id: string, info: any): void {
+  updateGridItem(id: string, info: ViewInfo): void {
+    const options = Private.pixelToGrid(this._grid.cellWidth(), {
+      id: info.id,
+      size: info.size,
+      pos: info.pos
+    });
+
     const items = this._grid.getGridItems();
     const item = items?.find(value => value.gridstackNode?.id === id);
-    this._grid.update(item!, {
-      w: info.w,
-      h: info.h,
-      autoPosition: true
-    });
+    this._grid.update(item!, options);
   }
 
   /**
@@ -269,7 +244,7 @@ export class TabLayout extends Layout {
 
     if (item) {
       this._gridItems = this._gridItems.filter(obj => obj.cellIdentity !== id);
-      this._grid.removeWidget(item, true, false);
+      this._grid.removeWidget(item, true);
     }
   }
 
@@ -285,23 +260,18 @@ export class TabLayout extends Layout {
    * Handle change-event messages sent to from gridstack.
    */
   private _onChange(event: Event, items: GridStackNode[]): void {
-    this._gridItemChanged.emit(items ?? []);
-    items.forEach(item => this._updateItem(item));
+    const data: ViewInfo[] = items.map(item => {
+      return Private.gridToPixel(this._grid.cellWidth(), item);
+    });
+    this._gridItemChanged.emit({ action: 'move', items: data });
   }
 
   /**
    * Handle remove event messages sent from gridstack.
    */
   private _onRemoved(event: Event, items: GridStackNode[]): void {
-    items.forEach(el => {
-      globalMutex(() => {
-        // Use the "mutex" to prevent this client from rerendering the tab.
-        this._model.sharedModel.removeTabItem(
-          this._model.tabName,
-          el.id as string
-        );
-      });
-    });
+    const data: string[] = items.map(item => item.id as string);
+    this._gridItemChanged.emit({ action: 'remove', items: data });
   }
 
   /**
@@ -316,7 +286,13 @@ export class TabLayout extends Layout {
     }
 
     MessageLoop.sendMessage(widget, Widget.Msg.UpdateRequest);
-    this._updateItem(item);
+
+    const info = Private.gridToPixel(this._grid.cellWidth(), item);
+
+    this._gridItemChanged.emit({
+      action: 'move',
+      items: [info]
+    });
   }
 
   /**
@@ -328,76 +304,59 @@ export class TabLayout extends Layout {
     });
   };
 
+  private _onItemChanged(
+    sender: GridStackItem,
+    change: GridStackItem.IChange
+  ): void {
+    if (change.action === 'close') {
+      sender.changed.disconnect(this._onItemChanged, this);
+      this.removeGridItem(sender.cellIdentity);
+    }
+  }
+
   private _prepareGrid(): void {
     const rect = this.parent!.node.getBoundingClientRect();
     this._gridHost.style.minHeight = `${rect.height}px`;
     this._grid.onParentResize();
   }
 
-  private _updateItem(item: GridStackNode): void {
-    const tabName = this._model.tabName;
-    const itemID = item.id as string;
-    const tabItem = this._model.sharedModel.getTabItem(tabName, itemID);
-
-    if (!tabItem) {
-      return;
-    }
-
-    const gridInfo: GridInfo = {
-      cellWidth: this._grid.cellWidth(),
-      cellHeight: CELL_HEIGHT,
-      columns: COLUMNS,
-      rows: this._grid.getRow()
-    };
-
-    const itemInfo = {
-      width: item.w ?? 0,
-      height: item.h ?? 0,
-      column: item.x ?? 0,
-      row: item.y ?? 0
-    };
-
-    const info = Private.gridToPixelPositionSize(gridInfo, itemInfo);
-
-    tabItem.pos = [info.column, info.row];
-    tabItem.size = [info.width, info.height];
-
-    globalMutex(() => {
-      // Use the "mutex" to prevent this client from rerendering the tab.
-      this._model.sharedModel.updateTabItem(tabName, itemID, tabItem);
-    });
-  }
-
   private _gridHost: HTMLElement;
   private _grid: GridStack;
   private _gridItems: GridStackItem[] = [];
-  private _model: TabModel;
-  private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
+  private _gridItemChanged = new Signal<this, TabLayout.IChange>(this);
   private _resizeTimeout = 0;
 }
 
+export namespace TabLayout {
+  export interface IChange {
+    action: 'remove' | 'move' | 'resize';
+    items: ViewInfo[] | string[];
+  }
+}
+
 namespace Private {
-  export function pixelToGridPositionSize(
-    grid: GridInfo,
-    item: ItemInfo
-  ): ItemInfo {
+  export function pixelToGrid(
+    cellWidth: number,
+    item: ViewInfo
+  ): GridStackWidget {
     return {
-      width: Math.ceil(item.width / grid.cellWidth),
-      height: Math.ceil(item.height / grid.cellHeight),
-      column: Math.ceil(item.column / grid.cellWidth),
-      row: Math.ceil(item.row / grid.cellHeight)
+      id: item.id,
+      locked: true,
+      w: Math.ceil(item.size[0] / cellWidth),
+      h: Math.ceil(item.size[1] / CELL_HEIGHT),
+      x: Math.ceil(item.pos[0] / cellWidth),
+      y: Math.ceil(item.pos[1] / CELL_HEIGHT)
     };
   }
 
-  export function gridToPixelPositionSize(
-    grid: GridInfo,
-    item: ItemInfo
-  ): ItemInfo {
+  export function gridToPixel(
+    cellWidth: number,
+    item: GridStackWidget
+  ): ViewInfo {
     return {
-      width: Math.ceil(item.width * grid.cellWidth),
-      height: Math.ceil(item.height * grid.cellHeight),
-      column: Math.ceil(item.column * grid.cellWidth),
-      row: Math.ceil(item.row * grid.cellHeight)
+      id: item.id as string,
+      size: [Math.ceil(item.w! * cellWidth), Math.ceil(item.h! * CELL_HEIGHT)],
+      pos: [Math.ceil(item.x! * cellWidth), Math.ceil(item.y! * CELL_HEIGHT)]
     };
   }
 }
