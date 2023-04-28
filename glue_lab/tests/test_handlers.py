@@ -8,4 +8,14 @@ async def test_get_example(jp_fetch):
     # Then
     assert response.code == 200
     payload = json.loads(response.body)
-    assert payload == {"data": "This is /glue-lab/get_example endpoint!"}
+    assert payload == {"data": "There is no endpoint at /glue-lab/get_example!"}
+
+
+async def test_get_advanced_links_list(jp_fetch):
+    # When
+    response = await jp_fetch("glue-lab", "available-advanced-links")
+
+    # Then
+    assert response.code == 200
+    payload = json.loads(response.body)
+    assert list(payload["data"].keys()) == ["General", "Astronomy", "Join"]
