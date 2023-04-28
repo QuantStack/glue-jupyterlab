@@ -4,7 +4,7 @@ import { ReactWidget, Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { AdvancedLinking } from './advancedLinkingChoices';
+import { AdvancedLinkingChoices } from './advancedLinkingChoices';
 import { LinkedDataset } from './linkedDataset';
 
 export class Linking extends LinkEditorWidget {
@@ -102,7 +102,10 @@ export class Linking extends LinkEditorWidget {
     );
   };
 
-  advancedLinkChanged = (sender: AdvancedLinking, linkType: string): void => {
+  advancedLinkChanged = (
+    sender: AdvancedLinkingChoices,
+    linkType: string
+  ): void => {
     console.log(`Advanced link selected: '${linkType}'`);
   };
 
@@ -160,7 +163,10 @@ export class Linking extends LinkEditorWidget {
     const glueToolbar = new Toolbar();
     const attributes = new BoxPanel({ direction: 'left-to-right' });
 
-    const advancedSelect = new AdvancedLinking({});
+    const advancedSelect = new AdvancedLinkingChoices({
+      categories: this._linkEditorModel.availableAdvancedLinks
+    });
+
     this._advancedToolbar.push({
       name: 'Select advanced',
       widget: ReactWidget.create(advancedSelect.render())

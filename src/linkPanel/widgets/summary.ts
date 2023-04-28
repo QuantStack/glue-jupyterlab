@@ -2,9 +2,9 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
+import { IComponentLinkInfo } from '../types';
 import { LinkedDataset } from './linkedDataset';
 import { identityLinks } from './identityLinks';
-import { IComponentLinkInfo } from '../types';
 
 /**
  * The widget displaying the links for the selected dataset.

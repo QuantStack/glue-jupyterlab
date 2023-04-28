@@ -1,14 +1,24 @@
-import { HTMLSelect } from '@jupyterlab/ui-components';
+import { HTMLSelect, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal, Signal } from '@lumino/signaling';
 import React from 'react';
 
-export class AdvancedLinking extends React.Component<
+import { IAdvancedLinkCategories } from '../types';
+
+export class AdvancedLinkingChoices extends React.Component<
   AdvancedLinking.IProps,
   { dataset: string[] }
 > {
   constructor(props: AdvancedLinking.IProps) {
     super(props);
-    this._categories = props.categories || DefaultCategories;
+    props.categories
+      .then(categories => {
+        this._categories = categories;
+        this._advancedLinkLoaded.emit();
+      })
+      .catch(() => {
+        this._categories = {};
+        console.log('ERROR ON CATEGORIES');
+      });
   }
 
   get value(): string {
@@ -21,54 +31,40 @@ export class AdvancedLinking extends React.Component<
 
   render(): JSX.Element {
     return (
-      <HTMLSelect
-        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-          this._value = event.target.value;
-          this._onChange.emit(event.target.value);
-        }}
-      >
-        <option value="" disabled selected hidden>
-          Select an advanced link
-        </option>
-        {Object.keys(this._categories).map(group => (
-          <optgroup label={group}>
-            {this._categories[group].map(option => (
-              <option key={option} value={option}>
-                {option}
-              </option>
+      <UseSignal signal={this._advancedLinkLoaded} initialSender={this}>
+        {(): JSX.Element => (
+          <HTMLSelect
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              this._value = event.target.value;
+              this._onChange.emit(event.target.value);
+            }}
+          >
+            <option value="" disabled selected hidden>
+              Select an advanced link
+            </option>
+            {Object.keys(this._categories).map(group => (
+              <optgroup label={group}>
+                {this._categories[group].map(option => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </optgroup>
             ))}
-          </optgroup>
-        ))}
-      </HTMLSelect>
+          </HTMLSelect>
+        )}
+      </UseSignal>
     );
   }
 
   private _value = '';
-  private _categories: AdvancedLinking.ICategories;
+  private _categories: IAdvancedLinkCategories = {};
   private _onChange = new Signal<this, string>(this);
+  private _advancedLinkLoaded = new Signal<this, void>(this);
 }
 
 namespace AdvancedLinking {
   export interface IProps {
-    categories?: ICategories;
-  }
-
-  export interface ICategories {
-    [group: string]: string[];
+    categories: Promise<IAdvancedLinkCategories>;
   }
 }
-
-export const DefaultCategories: AdvancedLinking.ICategories = {
-  General: ['identity', 'length_to_volume'],
-  Astronomy: [
-    'Galactic <-> FK5 (J2000)',
-    'FK4 (B1950) <-> FK5 (J2000)',
-    'ICRS <-> FK5 (J2000)',
-    'Galactic <-> FK4 (B1950)',
-    'ICRS <-> FK4 (B1950)',
-    'ICRS <-> Galactic',
-    '3D Galactocentric <-> Galactic',
-    'WCS link'
-  ],
-  Join: ['Join on ID']
-};
