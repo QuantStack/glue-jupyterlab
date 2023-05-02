@@ -39,6 +39,7 @@ export interface IGlueSessionSharedModel
   dataset: IGlueSessionDataset;
   links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;
+
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
@@ -47,6 +48,22 @@ export interface IGlueSessionSharedModel
 
   getTabNames(): string[];
   getTabData(tabName: string): IDict<IGlueSessionViewerTypes> | undefined;
+
+  getTabItem(
+    tabName: string,
+    itemID: string
+  ): IGlueSessionViewerTypes | undefined;
+  setTabItem(
+    tabName: string,
+    itemID: string,
+    data: IGlueSessionViewerTypes
+  ): void;
+  updateTabItem(
+    tabName: string,
+    itemID: string,
+    data: IGlueSessionViewerTypes
+  ): void;
+  removeTabItem(tabName: string, itemID: string): void;
   moveTabItem(name: string, fromTab: string, toTab: string): void;
 }
 

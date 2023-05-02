@@ -5,9 +5,10 @@ import { ContextMenu, Widget } from '@lumino/widgets';
 import { ArrayExt } from '@lumino/algorithm';
 
 import { TabModel } from './tabModel';
-import { TabLayout } from './tabLayout';
+import { TabLayout, ViewInfo } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
 import { IDict, IGlueSessionSharedModel } from '../types';
+import { globalMutex } from '../document/sharedModel';
 
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
@@ -15,25 +16,35 @@ export class TabView extends Widget {
     this.addClass('grid-editor');
 
     this._model = options.model;
-    this.title.label = this._model?.tabName ?? '';
+    this.title.label = this._model.tabName ?? '';
 
-    this.layout = new TabLayout();
+    const layout = (this.layout = new TabLayout());
 
     this._commands = new CommandRegistry();
     this._contextMenu = new ContextMenu({ commands: this._commands });
 
     this._addCommands();
 
-    this._model?.ready.connect(() => {
+    this._model.ready.connect(() => {
       this._initGridItems();
     });
 
-    this._model?.sharedModel.tabChanged.connect(this._onTabChanged, this);
+    layout.gridItemChanged.connect(this._onLayoutChanged, this);
+    this._model.sharedModel.tabChanged.connect(this._onTabChanged, this);
   }
 
   dispose(): void {
+    if (this.disposed) {
+      return;
+    }
+
+    (this.layout as TabLayout).gridItemChanged.disconnect(
+      this._onLayoutChanged,
+      this
+    );
+    this._model.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
+
     super.dispose();
-    this._model?.sharedModel.tabChanged.disconnect(this._onTabChanged, this);
   }
 
   /**
@@ -80,7 +91,7 @@ export class TabView extends Widget {
    * Initialize the `GridstackItemWidget` from Notebook's metadata.
    */
   private async _initGridItems(): Promise<void> {
-    const viewWidgets = this._model?.createView();
+    const viewWidgets = this._model.createView();
     if (!viewWidgets) {
       return;
     }
@@ -168,20 +179,56 @@ export class TabView extends Widget {
     sender: IGlueSessionSharedModel,
     args: IDict<any>
   ): void {
-    if (args.tab && args.tab === this._model?.tabName) {
-      (this.layout as TabLayout).cleanGrid();
-      this._initGridItems();
+    globalMutex(() => {
+      // Use the "mutex" to prevent this client from rerendering the tab.
+      if (args.tab && args.tab === this._model.tabName) {
+        (this.layout as TabLayout).cleanGrid();
+        this._initGridItems();
+      }
+    });
+  }
+
+  private _onLayoutChanged(sender: TabLayout, change: TabLayout.IChange): void {
+    const tabName = this._model.tabName;
+
+    switch (change.action) {
+      case 'move':
+      case 'resize':
+        globalMutex(() => {
+          // Use the "mutex" to prevent this client from rerendering the tab.
+          this._model.sharedModel.transact(() => {
+            (change.items as ViewInfo[]).forEach(item => {
+              const data = this._model.sharedModel.getTabItem(tabName, item.id);
+              this._model.sharedModel.updateTabItem(tabName, item.id, {
+                ...data,
+                pos: item.pos,
+                size: item.size
+              });
+            });
+          }, false);
+        });
+        break;
+      case 'remove':
+        globalMutex(() => {
+          // Use the "mutex" to prevent this client from rerendering the tab.
+          this._model.sharedModel.transact(() => {
+            (change.items as string[]).forEach(item =>
+              this._model.sharedModel.removeTabItem(tabName, item)
+            );
+          }, false);
+        });
+        break;
     }
   }
 
   private _selectedItem: GridStackItem | null = null;
-  private _model?: TabModel;
+  private _model: TabModel;
   private _contextMenu: ContextMenu;
   private _commands: CommandRegistry;
 }
 
 export namespace TabView {
   export interface IOptions {
-    model?: TabModel;
+    model: TabModel;
   }
 }
