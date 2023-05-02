@@ -124,9 +124,8 @@ export class GlueSessionSharedModel
   getTabItem(tabName: string, itemID: string): IGlueSessionViewerTypes {
     const tab = this._tabs.get(tabName);
     const view = tab?.get(itemID);
-    if (view) {
-      return JSONExt.deepCopy(view ?? {});
-    }
+     return JSONExt.deepCopy(view ?? {});
+    
   }
 
   setTabItem(
