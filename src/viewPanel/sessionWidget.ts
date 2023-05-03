@@ -21,6 +21,7 @@ import { PathExt } from '@jupyterlab/coreutils';
 import { Message } from '@lumino/messaging';
 import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -32,7 +33,8 @@ export class SessionWidget extends BoxPanel {
     this._notebookTracker = options.notebookTracker;
     this._context = options.context;
     this._commands = options.commands;
-
+    this._wm = options.wm;
+    
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
       tabBarPosition: 'bottom',
@@ -123,9 +125,61 @@ export class SessionWidget extends BoxPanel {
       });
       return;
     }
+    this._wm.registerKernel(kernel);
 
+    let code = `
+    import os
+    import y_py as Y
+    from ypywidgets import Widget, reactive
+
+    n = os.linesep
+
+    class GlueSession(Widget):
+        def __init__(self, path: str):
+            with open("debug.txt", "at") as f: f.write(f"GlueSession{n}")
+            ydoc = Y.YDoc()
+            self._contents = ydoc.get_map("contents")
+            self._dataset = ydoc.get_map("dataset")
+            self._links = ydoc.get_map("links")
+            self._tabs = ydoc.get_map("tabs")
+
+            self._contents.observe(self._set_contents)
+            self._dataset.observe(self._set_dataset)
+            self._links.observe(self._set_links)
+            self._tabs.observe(self._set_tabs)
+
+            super().__init__(
+                ydoc=ydoc,
+                comm_metadata=dict(
+                    ymodel_name="GlueSession",
+                    create_ydoc=False,
+                    path=path,
+                ),
+            )
+
+        def _set_contents(self, event):
+            with open("debug.txt", "at") as f: f.write(f"contents{n}{event}{n}")
+
+        def _set_dataset(self, event):
+            with open("debug.txt", "at") as f: f.write(f"dataset{n}{event}{n}")
+
+        def _set_links(self, event):
+            with open("debug.txt", "at") as f: f.write(f"links{n}{event}{n}")
+
+        def _set_tabs(self, event):
+            with open("debug.txt", "at") as f: f.write(f"tabs{n}{event}{n}")
+
+
+    glue_session = GlueSession("${this._context.localPath}")
+    `;
+
+    let future = kernel.requestExecute({ code }, false);
+    future.onReply = msg => {
+      console.log(msg);
+    };
+    await future.done;
     // TODO Handle loading errors and report in the UI?
-    const code = `
+    code = `
     # Ignoring warnings so they don't show up in viewers
     # TODO don't suppress warnings but redirect them?
     import warnings
@@ -137,7 +191,7 @@ export class SessionWidget extends BoxPanel {
     app = gj.jglue()
     `;
 
-    const future = kernel.requestExecute({ code }, false);
+    future = kernel.requestExecute({ code }, false);
     future.onReply = msg => {
       console.log(msg);
     };
@@ -250,6 +304,7 @@ export class SessionWidget extends BoxPanel {
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
   private _notebookTracker: INotebookTracker;
   private _commands: CommandRegistry;
+  private _wm: IJupyterYWidgetManager;
 }
 
 export namespace SessionWidget {
@@ -259,5 +314,6 @@ export namespace SessionWidget {
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
     commands: CommandRegistry;
+    wm: IJupyterYWidgetManager;
   }
 }
