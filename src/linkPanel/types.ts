@@ -9,6 +9,7 @@ export interface ILinkEditorModel {
   relatedLinks: Map<string, IComponentLinkInfo>;
   relatedLinksChanged: ISignal<this, void>;
   sharedModel: IGlueSessionSharedModel | undefined;
+  readonly availableAdvancedLinks: Promise<IAdvancedLinkCategories>;
 }
 
 export interface IComponentLinkInfo {
@@ -21,4 +22,8 @@ export interface ILinkInfo {
   attribute: string;
   dataset: string;
   label?: string;
+}
+
+export interface IAdvancedLinkCategories {
+  [group: string]: string[];
 }
