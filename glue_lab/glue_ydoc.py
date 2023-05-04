@@ -8,6 +8,7 @@ import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 
+
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,9 +89,8 @@ class YGlue(YBaseDoc):
             links[link_name] = contents.get(link_name, {})
             if links[link_name]["_type"] != COMPONENT_LINK_TYPE:
                 for i in range(1, 3):
-                    listName =links[link_name][f"cids{i}"]
+                    listName = links[link_name][f"cids{i}"]
                     lists[listName] = contents.get(listName, {})
-
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
