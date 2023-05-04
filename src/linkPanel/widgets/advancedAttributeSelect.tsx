@@ -26,7 +26,7 @@ export function advancedAttributes(
         {info.description}
       </div>
       {currentDatasets.map((dataset, index) => (
-        <div key={attrType[index]}>
+        <div key={attrType[index]} id={`advanced-link-${attrType[index]}`}>
           <div style={{ padding: '0.5em 0px' }}>
             <span style={{ fontWeight: 'bold' }}>{dataset}</span>
             <span>{` attributes (${attrType[index]}):`}</span>

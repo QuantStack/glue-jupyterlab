@@ -151,7 +151,23 @@ export class Linking extends LinkEditorWidget {
   }
 
   glueAdvanced = (): void => {
-    console.log('Glue advanced clicked');
+    const input: string[] = [];
+    const output: string[] = [];
+
+    this._advancedPanel.node
+      .querySelectorAll('#advanced-link-input select')
+      .forEach(value => {
+        input.push((value as HTMLSelectElement).value);
+      });
+
+    this._advancedPanel.node
+      .querySelectorAll('#advanced-link-output select')
+      .forEach(value => {
+        output.push((value as HTMLSelectElement).value);
+      });
+    console.log(`Glue advanced link: ${this._selectedAdvLink.linkName}`);
+    console.log('INPUT: ', input);
+    console.log('OUTPUT: ', output);
   };
 
   _identityLinking(selections: [string, string]): BoxPanel {
