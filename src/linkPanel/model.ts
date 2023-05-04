@@ -9,16 +9,17 @@ import {
   IComponentLink,
   ILinkEditorModel,
   IComponentLinkInfo,
-  IAdvancedLinkCategories
+  IAdvLinkCategories,
+  IAdvLinkDescription
 } from './types';
 
-const AVAILABLE_ADVANCED_LINKS_URL = '/glue-lab/available-advanced-links';
+const AVAILABLE_ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 
 export class LinkEditorModel implements ILinkEditorModel {
   constructor(options: LinkEditorModel.IOptions) {
     this._sharedModel = options.sharedModel;
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
-    this._getAvailableAdvancedLinks();
+    this._getAdvancedLinks();
   }
 
   get sharedModel(): IGlueSessionSharedModel {
@@ -33,11 +34,15 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._relatedLinksChanged;
   }
 
-  get availableAdvancedLinks(): Promise<IAdvancedLinkCategories> {
-    return this._availableAdvancedLinks.promise;
+  get advLinkCategories(): IAdvLinkCategories {
+    return this._advLinkCategories;
   }
 
-  private async _getAvailableAdvancedLinks(): Promise<void> {
+  get advLinksPromise(): Promise<IAdvLinkCategories> {
+    return this._advLinksPromise.promise;
+  }
+
+  private async _getAdvancedLinks(): Promise<void> {
     // Make request to Jupyter API
     const settings = ServerConnection.makeSettings();
     const requestUrl = URLExt.join(
@@ -55,16 +60,15 @@ export class LinkEditorModel implements ILinkEditorModel {
     const data = await response.json();
 
     if (!response.ok) {
-      this._availableAdvancedLinks.reject(data.message);
+      this._advLinksPromise.reject(data.message);
       throw new ServerConnection.ResponseError(response, data.message);
     }
 
-    const advancedLinksList: IAdvancedLinkCategories = {};
-    Object.entries(data.data).forEach(([category, advancedLinks], idx) => {
-      advancedLinksList[category] = advancedLinks as string[];
+    Object.entries(data.data).forEach(([category, link], idx) => {
+      this._advLinkCategories[category] = link as IAdvLinkDescription[];
     });
 
-    this._availableAdvancedLinks.resolve(advancedLinksList);
+    this._advLinksPromise.resolve(this._advLinkCategories);
   }
 
   onSharedModelChanged(): void {
@@ -118,8 +122,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   private _sharedModel: IGlueSessionSharedModel;
-  private _availableAdvancedLinks =
-    new PromiseDelegate<IAdvancedLinkCategories>();
+  private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
+  private _advLinkCategories: IAdvLinkCategories = {};
   private _relatedLinks = new Map<string, IComponentLinkInfo>();
   private _relatedLinksChanged = new Signal<this, void>(this);
 }

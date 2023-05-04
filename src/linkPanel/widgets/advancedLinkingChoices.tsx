@@ -2,7 +2,7 @@ import { HTMLSelect, UseSignal } from '@jupyterlab/ui-components';
 import { ISignal, Signal } from '@lumino/signaling';
 import React from 'react';
 
-import { IAdvancedLinkCategories } from '../types';
+import { IAdvLinkCategories } from '../types';
 
 export class AdvancedLinkingChoices extends React.Component<
   AdvancedLinking.IProps,
@@ -25,7 +25,7 @@ export class AdvancedLinkingChoices extends React.Component<
     return this._value;
   }
 
-  get onChange(): ISignal<this, string> {
+  get onChange(): ISignal<this, AdvancedLinking.ISelected> {
     return this._onChange;
   }
 
@@ -36,7 +36,15 @@ export class AdvancedLinkingChoices extends React.Component<
           <HTMLSelect
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               this._value = event.target.value;
-              this._onChange.emit(event.target.value);
+              const optgroup: HTMLOptGroupElement | null | undefined =
+                event.target
+                  .querySelector(`option[value='${this._value}']`)
+                  ?.closest('optgroup');
+              const selected = {
+                category: optgroup?.label || '',
+                linkName: this._value
+              };
+              this._onChange.emit(selected);
             }}
           >
             <option value="" disabled selected hidden>
@@ -44,9 +52,9 @@ export class AdvancedLinkingChoices extends React.Component<
             </option>
             {Object.keys(this._categories).map(group => (
               <optgroup label={group}>
-                {this._categories[group].map(option => (
-                  <option key={option} value={option}>
-                    {option}
+                {this._categories[group].map(link => (
+                  <option key={link.display} value={link.display}>
+                    {link.display}
                   </option>
                 ))}
               </optgroup>
@@ -58,13 +66,17 @@ export class AdvancedLinkingChoices extends React.Component<
   }
 
   private _value = '';
-  private _categories: IAdvancedLinkCategories = {};
-  private _onChange = new Signal<this, string>(this);
+  private _categories: IAdvLinkCategories = {};
+  private _onChange = new Signal<this, AdvancedLinking.ISelected>(this);
   private _advancedLinkLoaded = new Signal<this, void>(this);
 }
 
-namespace AdvancedLinking {
+export namespace AdvancedLinking {
   export interface IProps {
-    categories: Promise<IAdvancedLinkCategories>;
+    categories: Promise<IAdvLinkCategories>;
+  }
+  export interface ISelected {
+    category: string;
+    linkName: string;
   }
 }

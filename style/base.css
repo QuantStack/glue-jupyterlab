@@ -224,6 +224,19 @@
   cursor: pointer;
 }
 
+.glue-LinkEditor-linking .advanced-link-description {
+  font-style: italic;
+}
+
+.glue-LinkEditor-linking table.advanced-link-attributes {
+  width: 100%;
+}
+
+.glue-LinkEditor-linking table.advanced-link-attributes tr td:first-child {
+  width: 20%;
+  padding-left: 1em;
+}
+
 .glue-LinkEditor-attribute {
   padding: 0.5em;
 }

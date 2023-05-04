@@ -13,7 +13,7 @@ class RouteHandler(APIHandler):
     # Jupyter server
     @tornado.web.authenticated
     def get(self, path):
-        if path == "available-advanced-links":
+        if path == "advanced-links":
             self.finish(json.dumps({"data": get_advanced_links()}))
         else:
             self.finish(

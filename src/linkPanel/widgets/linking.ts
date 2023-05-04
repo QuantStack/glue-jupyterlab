@@ -4,8 +4,12 @@ import { ReactWidget, Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { AdvancedLinkingChoices } from './advancedLinkingChoices';
+import {
+  AdvancedLinkingChoices,
+  AdvancedLinking
+} from './advancedLinkingChoices';
 import { LinkedDataset } from './linkedDataset';
+import { advancedAttributes } from './advancedAttributeSelect';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
@@ -104,9 +108,29 @@ export class Linking extends LinkEditorWidget {
 
   advancedLinkChanged = (
     sender: AdvancedLinkingChoices,
-    linkType: string
+    selectedLink: AdvancedLinking.ISelected
   ): void => {
-    console.log(`Advanced link selected: '${linkType}'`);
+    // Remove all the existing widgets in advanced panel.
+    while (this._advancedPanel.widgets.length) {
+      this._advancedPanel.widgets[0].dispose();
+    }
+    const { category, linkName } = selectedLink;
+
+    // Get advanced link info.
+    const info = this._linkEditorModel.advLinkCategories[category].find(
+      detail => detail.display === linkName
+    );
+
+    if (!info) {
+      return;
+    }
+
+    // Display the link widget.
+    this._advancedPanel.addWidget(
+      ReactWidget.create(
+        advancedAttributes(info, this._currentSelection, this._sharedModel)
+      )
+    );
   };
 
   glueAdvanced = (): void => {
@@ -161,48 +185,40 @@ export class Linking extends LinkEditorWidget {
     panel.title.label = 'Advanced linking';
 
     const glueToolbar = new Toolbar();
-    const attributes = new BoxPanel({ direction: 'left-to-right' });
 
     const advancedSelect = new AdvancedLinkingChoices({
-      categories: this._linkEditorModel.availableAdvancedLinks
+      categories: this._linkEditorModel.advLinksPromise
     });
-
-    this._advancedToolbar.push({
-      name: 'Select advanced',
-      widget: ReactWidget.create(advancedSelect.render())
-    });
+    advancedSelect.onChange.connect(this.advancedLinkChanged, this);
+    glueToolbar.addItem(
+      'Select advanced',
+      ReactWidget.create(advancedSelect.render())
+    );
 
     const glueButton = new ToolbarButton({
       label: 'GLUE',
       tooltip: 'Glue selection',
       onClick: this.glueAdvanced
     });
-    this._advancedToolbar.push({ name: 'Glue', widget: glueButton });
+    glueToolbar.addItem('Glue', glueButton);
 
-    Array.from(this._advancedToolbar).forEach(item =>
-      glueToolbar.addItem(item.name, item.widget)
-    );
-
-    advancedSelect.onChange.connect(this.advancedLinkChanged, this);
     panel.addWidget(glueToolbar);
-    panel.addWidget(attributes);
+    panel.addWidget(this._advancedPanel);
 
     BoxPanel.setStretch(glueToolbar, 0);
-    BoxPanel.setStretch(attributes, 1);
+    BoxPanel.setStretch(this._advancedPanel, 1);
 
     panel.hide();
 
     return panel;
   }
 
-  private _currentSelection = ['', ''];
+  private _currentSelection: [string, string] = ['', ''];
   private _selectedAttributes = ['', ''];
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityAttributes = [new Panel(), new Panel()];
-  private _advancedToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
-  // private _advancedAttributes = [new Panel(), new Panel()];
+  private _advancedPanel = new BoxPanel();
 }
 
 namespace Linking {
