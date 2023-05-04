@@ -104,7 +104,7 @@ export class TabView extends Widget {
 
   private _addCommands(): void {
     this._commands.addCommand('moveItem', {
-      label: 'Move item.',
+      label: 'Move Item',
       isEnabled: () => true,
       execute: async () => {
         if (this._model && this._selectedItem) {
