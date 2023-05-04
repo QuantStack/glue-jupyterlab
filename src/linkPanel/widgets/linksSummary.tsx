@@ -44,33 +44,34 @@ export function identityLinks(
  * @param clickCallback - Function to call when clicking on the delete icon.
  */
 export function advancedLinks(
-  links: [IAdvancedLinkInfo, boolean][],
+  links: IAdvancedLinkInfo[],
   clickCallback: (link: IAdvancedLinkInfo) => void
 ): JSX.Element {
   return (
     <div>
       {links.map(link => (
-        <div
-          key={link[0].origin}
-          className={'glue-LinkEditor-advancedLinkItem'}
-        >
+        <div key={link.origin} className={'glue-LinkEditor-advancedLinkItem'}>
           <div style={{ fontWeight: 'bold' }}>
-            {link[0].name.split('.')[link[0].name.split('.').length - 1]}
+            {link.name.split('.')[link.name.split('.').length - 1]}
           </div>
           <table>
-            <tr key={link[0].origin}>
+            <tr key={link.origin}>
               <td>
-                <span style={{ fontWeight: 'bold' }}>{link[0].data1}</span>
-                <span> ({link[0].cids1.join(', ')})</span>
+                <div>{link.data1}</div>
+                <div style={{ fontStyle: 'italic' }}>
+                  {link.cids1.join(', ')}
+                </div>
               </td>
               <td>
-                <span style={{ fontWeight: 'bold' }}>{link[0].data2}</span>
-                <span> ({link[0].cids2.join(', ')})</span>
+                <div>{link.data2}</div>
+                <div style={{ fontStyle: 'italic' }}>
+                  {link.cids2.join(', ')}
+                </div>
               </td>
               <td>
                 <Button
                   className="glue-LinkEditor-button"
-                  onClick={() => clickCallback(link[0])}
+                  onClick={() => clickCallback(link)}
                   minimal
                 >
                   <LabIcon.resolveReact

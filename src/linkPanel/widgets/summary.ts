@@ -86,7 +86,7 @@ export class Summary extends LinkEditorWidget {
    *
    */
   updateAdvancedLinks(dataset: [string, string]): void {
-    const links: [IAdvancedLinkInfo, boolean][] = [];
+    const links: IAdvancedLinkInfo[] = [];
 
     // Remove all the existing widgets.
     while (this._advancedLinks.widgets.length) {
@@ -94,8 +94,7 @@ export class Summary extends LinkEditorWidget {
     }
     this._linkEditorModel.advancedLinks.forEach(link => {
       if (dataset.includes(link.data1) && dataset.includes(link.data2)) {
-        const revert = link.data2 === dataset[0];
-        links.push([link, revert]);
+        links.push(link);
       }
     });
     // Build the widget.
