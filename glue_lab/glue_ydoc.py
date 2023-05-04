@@ -6,6 +6,7 @@ from jupyter_ydoc.ybasedoc import YBaseDoc
 
 import y_py as Y
 
+COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
@@ -15,6 +16,7 @@ class YGlue(YBaseDoc):
         self._yattributes = self._ydoc.get_map("attributes")
         self._ydataset = self._ydoc.get_map("dataset")
         self._ylinks = self._ydoc.get_map("links")
+        self._ylists = self._ydoc.get_map("lists")
         self._ytabs = self._ydoc.get_map("tabs")
 
     @property
@@ -36,6 +38,7 @@ class YGlue(YBaseDoc):
         attributes = self._yattributes.to_json()
         dataset = self._ydataset.to_json()
         links = self._ylinks.to_json()
+        lists = self._ylists.to_json()
         tabs = self._ytabs.to_json()
         return json.dumps(
             dict(
@@ -43,6 +46,7 @@ class YGlue(YBaseDoc):
                 attributes=attributes,
                 dataset=dataset,
                 links=links,
+                lists=lists,
                 tabs=tabs,
             )
         )
@@ -79,14 +83,21 @@ class YGlue(YBaseDoc):
                 attributes[attribute] = contents.get(attribute, {})
 
         links: Dict[str, Dict] = {}
+        lists: Dict[str, Dict] = {}
         for link_name in link_names:
             links[link_name] = contents.get(link_name, {})
+            if links[link_name]["_type"] != COMPONENT_LINK_TYPE:
+                for i in range(1, 3):
+                    listName =links[link_name][f"cids{i}"]
+                    lists[listName] = contents.get(listName, {})
+
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
             self._yattributes.update(t, attributes.items())
             self._ydataset.update(t, dataset.items())
             self._ylinks.update(t, links.items())
+            self._ylists.update(t, lists.items())
             self._ytabs.update(t, tabs.items())
 
     def observe(self, callback: Callable[[str, Any], None]):
@@ -108,6 +119,9 @@ class YGlue(YBaseDoc):
         )
         self._subscriptions[self._ylinks] = self._ylinks.observe(
             partial(callback, "links")
+        )
+        self._subscriptions[self._ylists] = self._ylists.observe(
+            partial(callback, "lists")
         )
         self._subscriptions[self._ytabs] = self._ytabs.observe(
             partial(callback, "tabs")
