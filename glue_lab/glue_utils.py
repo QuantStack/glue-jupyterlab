@@ -3,20 +3,17 @@ from inspect import getfullargspec
 from typing import List, Dict
 from glue.main import load_plugins
 from glue.config import link_function, link_helper
-from glue.core.component_link import ComponentLink
-from glue.core.link_helpers import LinkCollection, JoinLink
 
 load_plugins()
 
 
 def get_function_info(function_or_helper):
-
     item_info: Dict[str, Dict] = {}
     attributes = ["description", "labels1", "labels2", "display"]
 
     item = function_or_helper[0]
 
-    if hasattr(function_or_helper, 'function'):
+    if hasattr(function_or_helper, "function"):
         item_info["description"] = function_or_helper.info
         item_info["labels1"] = getfullargspec(item)[0]
         item_info["labels2"] = function_or_helper.output_labels
@@ -50,10 +47,12 @@ def get_advanced_links():
             json.dumps(advanced_info)
             advanced_links[helper.category].append(advanced_info)
         except TypeError:
-            advanced_links[helper.category].append({
-                "display": str(advanced_info["display"]),
-                "description": "This link is not available"
-            })
+            advanced_links[helper.category].append(
+                {
+                    "display": str(advanced_info["display"]),
+                    "description": "This link is not available",
+                }
+            )
 
     # Reordering the dict
     categories = ["General"] + sorted(set(advanced_links.keys()) - set(["General"]))
