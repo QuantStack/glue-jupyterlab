@@ -13,7 +13,7 @@ async def test_get_example(jp_fetch):
 
 async def test_get_advanced_links_list(jp_fetch):
     # When
-    response = await jp_fetch("glue-lab", "available-advanced-links")
+    response = await jp_fetch("glue-lab", "advanced-links")
 
     # Then
     assert response.code == 200
