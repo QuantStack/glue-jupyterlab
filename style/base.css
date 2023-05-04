@@ -259,14 +259,26 @@
   color: var(--jp-content-link-color);
 }
 
-.glue-LinkEditor-identity table {
+.glue-LinkEditor-summary table {
   width: 100%;
 }
 
-.glue-LinkEditor-identity table tr td:not(:last-child) {
+.glue-LinkEditor-summary table tr td:not(:last-child) {
   width: 40%;
 }
 
 .glue-LinkEditor-identity table tr td:not(:first-child) {
+  text-align: right;
+}
+
+.glue-LinkEditor-advancedLinkItem {
+  padding-top: 0.4em;
+}
+
+.glue-LinkEditor-advancedLinkItem:not(:first-child) {
+  border-top: solid 1px;
+}
+
+.glue-LinkEditor-advanced table tr td:last-child {
   text-align: right;
 }

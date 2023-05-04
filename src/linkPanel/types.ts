@@ -11,6 +11,8 @@ export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
 export interface ILinkEditorModel {
   relatedLinks: Map<string, IComponentLinkInfo>;
   relatedLinksChanged: ISignal<this, void>;
+  advancedLinks: Map<string, IAdvancedLinkInfo>;
+  advancedLinksChanged: ISignal<this, void>;
   sharedModel: IGlueSessionSharedModel | undefined;
   readonly advLinkCategories: IAdvLinkCategories;
   readonly advLinksPromise: Promise<IAdvLinkCategories>;
@@ -20,9 +22,9 @@ export interface ILinkEditorModel {
  * The existing identity link.
  */
 export interface IComponentLinkInfo {
-  src?: ILinkInfo;
-  dest?: ILinkInfo;
-  origin?: string;
+  src: ILinkInfo;
+  dest: ILinkInfo;
+  origin: string;
 }
 
 /**
@@ -50,4 +52,13 @@ export interface IAdvLinkDescription {
  */
 export interface IAdvLinkCategories {
   [category: string]: IAdvLinkDescription[];
+}
+
+export interface IAdvancedLinkInfo {
+  name: string;
+  cids1: string[];
+  cids2: string[];
+  data1: string;
+  data2: string;
+  origin: string;
 }

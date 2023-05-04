@@ -10,7 +10,10 @@ import {
   ILinkEditorModel,
   IComponentLinkInfo,
   IAdvLinkCategories,
-  IAdvLinkDescription
+  IAdvLinkDescription,
+  IAdvancedLinkInfo,
+  ILinkInfo,
+  IAdvancedLink
 } from './types';
 
 const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
@@ -36,6 +39,14 @@ export class LinkEditorModel implements ILinkEditorModel {
 
   get advLinkCategories(): IAdvLinkCategories {
     return this._advLinkCategories;
+  }
+
+  get advancedLinks(): Map<string, IAdvancedLinkInfo> {
+    return this._advancedLinks;
+  }
+
+  get advancedLinksChanged(): ISignal<this, void> {
+    return this._advancedLinksChanged;
   }
 
   get advLinksPromise(): Promise<IAdvLinkCategories> {
@@ -69,53 +80,85 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   onSharedModelChanged(): void {
-    const dataset = this._sharedModel.dataset;
+    // const dataset = this._sharedModel.dataset;
 
     // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
       ([linkName, link], idx) => {
-        if (link._type !== ComponentLinkType) {
-          return;
-        }
-        link = link as IComponentLink;
-        this._relatedLinks.set(linkName, { origin: linkName });
-        for (const dataName in dataset) {
-          if (dataset[dataName].primary_owner.includes(link.frm[0])) {
-            this._relatedLinks.set(linkName, {
-              ...this._relatedLinks.get(linkName),
-              src: {
-                attribute: link.frm[0],
-                dataset: dataName,
-                label:
-                  this._sharedModel.attributes[link.frm[0]].label || link.frm[0]
-              }
-            });
-          } else if (dataset[dataName].primary_owner.includes(link.to[0])) {
-            this._relatedLinks.set(linkName, {
-              ...this._relatedLinks.get(linkName),
-              dest: {
-                attribute: link.to[0],
-                dataset: dataName,
-                label:
-                  this._sharedModel.attributes[link.to[0]].label || link.to[0]
-              }
-            });
+        if (link._type === ComponentLinkType) {
+          const identityLink = this._getIdentityLink(
+            linkName,
+            link as IComponentLink
+          );
+          if (identityLink) {
+            this._relatedLinks.set(linkName, identityLink);
           }
-        }
-
-        // Error if the related link is not valid.
-        if (
-          !(
-            this._relatedLinks.get(linkName)?.src &&
-            this._relatedLinks.get(linkName)?.dest
-          )
-        ) {
-          this._relatedLinks.delete(linkName);
-          console.error(`The ComponentLink ${linkName} is not valid`);
+        } else {
+          const advancedLink = this._getAdvancedLink(
+            linkName,
+            link as IAdvancedLink
+          );
+          if (advancedLink) {
+            this._advancedLinks.set(linkName, advancedLink);
+          }
         }
       }
     );
     this._relatedLinksChanged.emit();
+  }
+
+  _getIdentityLink(
+    linkName: string,
+    link: IComponentLink
+  ): IComponentLinkInfo | undefined {
+    const dataset = this._sharedModel.dataset;
+    let src: ILinkInfo | undefined;
+    let dest: ILinkInfo | undefined;
+    for (const dataName in dataset) {
+      if (dataset[dataName].primary_owner.includes(link.frm[0])) {
+        src = {
+          attribute: link.frm[0],
+          dataset: dataName,
+          label: this._sharedModel.attributes[link.frm[0]].label || link.frm[0]
+        };
+      } else if (dataset[dataName].primary_owner.includes(link.to[0])) {
+        dest = {
+          attribute: link.to[0],
+          dataset: dataName,
+          label: this._sharedModel.attributes[link.to[0]].label || link.to[0]
+        };
+      }
+    }
+
+    if (!(src && dest)) {
+      return undefined;
+    } else {
+      return {
+        origin: linkName,
+        src: src,
+        dest: dest
+      };
+    }
+  }
+
+  _getAdvancedLink(
+    linkName: string,
+    link: IAdvancedLink
+  ): IAdvancedLinkInfo | undefined {
+    const cids1 = this._sharedModel.lists[link.cids1];
+    const cids2 = this._sharedModel.lists[link.cids2];
+    if (!(cids1 && cids2)) {
+      return undefined;
+    } else {
+      return {
+        origin: linkName,
+        name: link._type,
+        cids1: cids1.contents,
+        cids2: cids2.contents,
+        data1: link.data1,
+        data2: link.data2
+      };
+    }
   }
 
   private _sharedModel: IGlueSessionSharedModel;
@@ -123,6 +166,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   private _advLinkCategories: IAdvLinkCategories = {};
   private _relatedLinks = new Map<string, IComponentLinkInfo>();
   private _relatedLinksChanged = new Signal<this, void>(this);
+  private _advancedLinks = new Map<string, IAdvancedLinkInfo>();
+  private _advancedLinksChanged = new Signal<this, void>(this);
 }
 
 namespace LinkEditorModel {
