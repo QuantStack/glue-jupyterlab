@@ -20,6 +20,8 @@ export class Linking extends LinkEditorWidget {
 
     this.titleValue = 'Linking';
 
+    this._selectedAdvLink = { category: '', linkName: '' };
+
     this.content.addWidget(
       this.mainContent([
         {
@@ -30,22 +32,40 @@ export class Linking extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.updateAttributes, this);
+    linkedDataset.selectionChanged.connect(this.onDatasetChange, this);
 
     if (linkedDataset.selections) {
-      this.updateAttributes(linkedDataset, linkedDataset.selections);
+      this.onDatasetChange(linkedDataset, linkedDataset.selections);
     }
   }
 
-  updateAttributes(_sender: LinkedDataset, selection: [string, string]): void {
-    selection.forEach((dataName, index) => {
+  onDatasetChange = (
+    _sender: LinkedDataset,
+    selection: [string, string]
+  ): void => {
+    this._currentSelection = selection;
+    this.updateIdentityAttributes();
+    this.updateAdvancedLink();
+  };
+
+  onAdvancedLinkChanged = (
+    sender: AdvancedLinkingChoices,
+    selectedLink: AdvancedLinking.ISelected
+  ): void => {
+    this._selectedAdvLink = selectedLink;
+    this.updateAdvancedLink();
+  };
+
+  updateIdentityAttributes(): void {
+    this._currentSelection.forEach((dataName, index) => {
       // no-op if the dataset did not change.
-      if (dataName === this._currentSelection[index]) {
+      const current = this._identityToolbar.get(index).widget.node.innerText;
+      if (this._currentSelection[index] === current) {
         return;
       }
 
       // Update identity toolbar item.
-      this._identityToolbar.get(index).widget.node.innerText = selection[index];
+      this._identityToolbar.get(index).widget.node.innerText = dataName;
 
       // Remove all the existing widgets.
       while (this._identityAttributes[index].widgets.length) {
@@ -71,9 +91,6 @@ export class Linking extends LinkEditorWidget {
         };
         this._identityAttributes[index].addWidget(attribute);
       });
-
-      // Updates the current dataset.
-      this._currentSelection[index] = dataName;
     });
   }
 
@@ -106,20 +123,20 @@ export class Linking extends LinkEditorWidget {
     );
   };
 
-  advancedLinkChanged = (
-    sender: AdvancedLinkingChoices,
-    selectedLink: AdvancedLinking.ISelected
-  ): void => {
+  updateAdvancedLink(): void {
     // Remove all the existing widgets in advanced panel.
     while (this._advancedPanel.widgets.length) {
       this._advancedPanel.widgets[0].dispose();
     }
-    const { category, linkName } = selectedLink;
+
+    if (!(this._selectedAdvLink.category && this._selectedAdvLink.linkName)) {
+      return;
+    }
 
     // Get advanced link info.
-    const info = this._linkEditorModel.advLinkCategories[category].find(
-      detail => detail.display === linkName
-    );
+    const info = this._linkEditorModel.advLinkCategories[
+      this._selectedAdvLink.category
+    ].find(detail => detail.display === this._selectedAdvLink.linkName);
 
     if (!info) {
       return;
@@ -131,7 +148,7 @@ export class Linking extends LinkEditorWidget {
         advancedAttributes(info, this._currentSelection, this._sharedModel)
       )
     );
-  };
+  }
 
   glueAdvanced = (): void => {
     console.log('Glue advanced clicked');
@@ -189,7 +206,7 @@ export class Linking extends LinkEditorWidget {
     const advancedSelect = new AdvancedLinkingChoices({
       categories: this._linkEditorModel.advLinksPromise
     });
-    advancedSelect.onChange.connect(this.advancedLinkChanged, this);
+    advancedSelect.onChange.connect(this.onAdvancedLinkChanged, this);
     glueToolbar.addItem(
       'Select advanced',
       ReactWidget.create(advancedSelect.render())
@@ -215,6 +232,7 @@ export class Linking extends LinkEditorWidget {
 
   private _currentSelection: [string, string] = ['', ''];
   private _selectedAttributes = ['', ''];
+  private _selectedAdvLink: AdvancedLinking.ISelected;
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityAttributes = [new Panel(), new Panel()];
