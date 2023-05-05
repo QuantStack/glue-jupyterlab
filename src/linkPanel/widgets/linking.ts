@@ -165,9 +165,6 @@ export class Linking extends LinkEditorWidget {
       .forEach(value => {
         output.push((value as HTMLSelectElement).value);
       });
-    console.log(`Glue advanced link: ${this._selectedAdvLink.linkName}`);
-    console.log('INPUT: ', input);
-    console.log('OUTPUT: ', output);
   };
 
   _identityLinking(selections: [string, string]): BoxPanel {
