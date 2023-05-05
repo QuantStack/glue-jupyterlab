@@ -7,6 +7,8 @@ import tornado
 from .glue_utils import get_advanced_links
 
 """The handler to get the advanced links."""
+
+
 class AdvancedLinkHandler(APIHandler):
     @tornado.web.authenticated
     def get(self):

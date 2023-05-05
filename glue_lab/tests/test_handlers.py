@@ -1,5 +1,6 @@
 import json
 
+
 async def test_get_advanced_links_list(jp_fetch):
     # When
     response = await jp_fetch("glue-lab", "advanced-links")
