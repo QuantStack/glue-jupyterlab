@@ -6,25 +6,19 @@ import tornado
 
 from .glue_utils import get_advanced_links
 
+"""The handler to get the advanced links."""
 
-class RouteHandler(APIHandler):
-    # The following decorator should be present on all verb methods (head, get, post,
-    # patch, put, delete, options) to ensure only authorized user can request the
-    # Jupyter server
+
+class AdvancedLinkHandler(APIHandler):
     @tornado.web.authenticated
-    def get(self, path):
-        if path == "available-advanced-links":
-            self.finish(json.dumps({"data": get_advanced_links()}))
-        else:
-            self.finish(
-                json.dumps({"data": f"There is no endpoint at /glue-lab/{path}!"})
-            )
+    def get(self):
+        self.finish(json.dumps({"data": get_advanced_links()}))
 
 
 def setup_handlers(web_app):
     host_pattern = ".*$"
 
     base_url = web_app.settings["base_url"]
-    route_pattern = url_path_join(base_url, r"glue-lab/([^/]+)")
-    handlers = [(route_pattern, RouteHandler)]
+    route_pattern = url_path_join(base_url, "glue-lab", "advanced-links")
+    handlers = [(route_pattern, AdvancedLinkHandler)]
     web_app.add_handlers(host_pattern, handlers)

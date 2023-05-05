@@ -5,25 +5,49 @@ export { IAdvancedLink, IComponentLink } from '../_interface/glue.schema';
 
 export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
 
+/**
+ * The link editor model.
+ */
 export interface ILinkEditorModel {
   relatedLinks: Map<string, IComponentLinkInfo>;
   relatedLinksChanged: ISignal<this, void>;
   sharedModel: IGlueSessionSharedModel | undefined;
-  readonly availableAdvancedLinks: Promise<IAdvancedLinkCategories>;
+  readonly advLinkCategories: IAdvLinkCategories;
+  readonly advLinksPromise: Promise<IAdvLinkCategories>;
 }
 
+/**
+ * The existing identity link.
+ */
 export interface IComponentLinkInfo {
   src?: ILinkInfo;
   dest?: ILinkInfo;
   origin?: string;
 }
 
+/**
+ * The attribute info of identity link.
+ */
 export interface ILinkInfo {
   attribute: string;
   dataset: string;
   label?: string;
 }
 
-export interface IAdvancedLinkCategories {
-  [group: string]: string[];
+/**
+ * The necessary information to create an advanced link.
+ */
+export interface IAdvLinkDescription {
+  function: string;
+  display: string;
+  description: string;
+  labels1: string[];
+  labels2: string[];
+}
+
+/**
+ * The available advanced links by category.
+ */
+export interface IAdvLinkCategories {
+  [category: string]: IAdvLinkDescription[];
 }

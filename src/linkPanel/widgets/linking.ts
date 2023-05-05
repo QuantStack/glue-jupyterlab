@@ -1,11 +1,12 @@
 import { ToolbarRegistry } from '@jupyterlab/apputils';
 import { IObservableList, ObservableList } from '@jupyterlab/observables';
-import { ReactWidget, Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
+import { Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { AdvancedLinkingChoices } from './advancedLinkingChoices';
 import { LinkedDataset } from './linkedDataset';
+import { IAdvLinkCategories, IAdvLinkDescription } from '../types';
+import { IGlueSessionSharedModel } from '../../types';
 
 export class Linking extends LinkEditorWidget {
   constructor(options: Linking.IOptions) {
@@ -15,6 +16,8 @@ export class Linking extends LinkEditorWidget {
     this.addClass('glue-LinkEditor-linking');
 
     this.titleValue = 'Linking';
+
+    this._selectedAdvLink = { category: '', linkName: '' };
 
     this.content.addWidget(
       this.mainContent([
@@ -26,22 +29,39 @@ export class Linking extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.updateAttributes, this);
+    linkedDataset.selectionChanged.connect(this.onDatasetChange, this);
 
     if (linkedDataset.selections) {
-      this.updateAttributes(linkedDataset, linkedDataset.selections);
+      this.onDatasetChange(linkedDataset, linkedDataset.selections);
     }
   }
 
-  updateAttributes(_sender: LinkedDataset, selection: [string, string]): void {
-    selection.forEach((dataName, index) => {
+  onDatasetChange = (
+    _sender: LinkedDataset,
+    selection: [string, string]
+  ): void => {
+    this._currentSelection = selection;
+    this.updateIdentityAttributes();
+    this.updateAdvancedLink();
+  };
+
+  onAdvancedLinkChanged = (
+    selectedLink: Private.IAdvancedLinkSelected
+  ): void => {
+    this._selectedAdvLink = selectedLink;
+    this.updateAdvancedLink();
+  };
+
+  updateIdentityAttributes(): void {
+    this._currentSelection.forEach((dataName, index) => {
       // no-op if the dataset did not change.
-      if (dataName === this._currentSelection[index]) {
+      const current = this._identityToolbar.get(index).widget.node.innerText;
+      if (this._currentSelection[index] === current) {
         return;
       }
 
       // Update identity toolbar item.
-      this._identityToolbar.get(index).widget.node.innerText = selection[index];
+      this._identityToolbar.get(index).widget.node.innerText = dataName;
 
       // Remove all the existing widgets.
       while (this._identityAttributes[index].widgets.length) {
@@ -67,9 +87,6 @@ export class Linking extends LinkEditorWidget {
         };
         this._identityAttributes[index].addWidget(attribute);
       });
-
-      // Updates the current dataset.
-      this._currentSelection[index] = dataName;
     });
   }
 
@@ -102,15 +119,52 @@ export class Linking extends LinkEditorWidget {
     );
   };
 
-  advancedLinkChanged = (
-    sender: AdvancedLinkingChoices,
-    linkType: string
-  ): void => {
-    console.log(`Advanced link selected: '${linkType}'`);
-  };
+  updateAdvancedLink(): void {
+    // Remove all the existing widgets in advanced panel.
+    while (this._advancedPanel.widgets.length) {
+      this._advancedPanel.widgets[0].dispose();
+    }
+
+    if (!(this._selectedAdvLink.category && this._selectedAdvLink.linkName)) {
+      return;
+    }
+
+    // Get advanced link info.
+    const info = this._linkEditorModel.advLinkCategories[
+      this._selectedAdvLink.category
+    ].find(detail => detail.display === this._selectedAdvLink.linkName);
+
+    if (!info) {
+      return;
+    }
+
+    // Display the link widget.
+    this._advancedPanel.addWidget(
+      new Widget({
+        node: Private.advancedLinkAttributes(
+          info,
+          this._currentSelection,
+          this._sharedModel
+        )
+      })
+    );
+  }
 
   glueAdvanced = (): void => {
-    console.log('Glue advanced clicked');
+    const input: string[] = [];
+    const output: string[] = [];
+
+    this._advancedPanel.node
+      .querySelectorAll('#advanced-link-input select')
+      .forEach(value => {
+        input.push((value as HTMLSelectElement).value);
+      });
+
+    this._advancedPanel.node
+      .querySelectorAll('#advanced-link-output select')
+      .forEach(value => {
+        output.push((value as HTMLSelectElement).value);
+      });
   };
 
   _identityLinking(selections: [string, string]): BoxPanel {
@@ -161,52 +215,161 @@ export class Linking extends LinkEditorWidget {
     panel.title.label = 'Advanced linking';
 
     const glueToolbar = new Toolbar();
-    const attributes = new BoxPanel({ direction: 'left-to-right' });
 
-    const advancedSelect = new AdvancedLinkingChoices({
-      categories: this._linkEditorModel.availableAdvancedLinks
+    const advancedSelect = new Widget({
+      node: Private.advancedLinkSelect(
+        this._linkEditorModel.advLinksPromise,
+        this.onAdvancedLinkChanged
+      )
     });
-
-    this._advancedToolbar.push({
-      name: 'Select advanced',
-      widget: ReactWidget.create(advancedSelect.render())
-    });
+    glueToolbar.addItem(
+      'Select advanced',
+      // ReactWidget.create(advancedSelect.render())
+      advancedSelect
+    );
 
     const glueButton = new ToolbarButton({
       label: 'GLUE',
       tooltip: 'Glue selection',
       onClick: this.glueAdvanced
     });
-    this._advancedToolbar.push({ name: 'Glue', widget: glueButton });
+    glueToolbar.addItem('Glue', glueButton);
 
-    Array.from(this._advancedToolbar).forEach(item =>
-      glueToolbar.addItem(item.name, item.widget)
-    );
-
-    advancedSelect.onChange.connect(this.advancedLinkChanged, this);
     panel.addWidget(glueToolbar);
-    panel.addWidget(attributes);
+    panel.addWidget(this._advancedPanel);
 
     BoxPanel.setStretch(glueToolbar, 0);
-    BoxPanel.setStretch(attributes, 1);
+    BoxPanel.setStretch(this._advancedPanel, 1);
 
     panel.hide();
 
     return panel;
   }
 
-  private _currentSelection = ['', ''];
+  private _currentSelection: [string, string] = ['', ''];
   private _selectedAttributes = ['', ''];
+  private _selectedAdvLink: Private.IAdvancedLinkSelected;
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityAttributes = [new Panel(), new Panel()];
-  private _advancedToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
-  // private _advancedAttributes = [new Panel(), new Panel()];
+  private _advancedPanel = new BoxPanel();
 }
 
 namespace Linking {
   export interface IOptions extends LinkEditorWidget.IOptions {
     linkedDataset: LinkedDataset;
+  }
+}
+
+namespace Private {
+  /**
+   * The selected link interface.
+   */
+  export interface IAdvancedLinkSelected {
+    category: string;
+    linkName: string;
+  }
+
+  /**
+   * The advanced link select node.
+   * @param promiseCategories - The advanced link categories fetched from the server.
+   */
+  export function advancedLinkSelect(
+    promiseCategories: Promise<IAdvLinkCategories>,
+    onLinkChange: (selectedLink: Private.IAdvancedLinkSelected) => void
+  ): HTMLSelectElement {
+    const select = document.createElement('select');
+
+    select.onchange = ev => {
+      const target = ev.target as HTMLSelectElement;
+      const value = target.value;
+      const optgroup: HTMLOptGroupElement | null | undefined = target
+        .querySelector(`option[value='${value}']`)
+        ?.closest('optgroup');
+      onLinkChange({
+        category: optgroup?.label || '',
+        linkName: value
+      });
+    };
+
+    const disabledOption = document.createElement('option');
+    disabledOption.value = '';
+    disabledOption.selected = true;
+    disabledOption.hidden = true;
+    disabledOption.innerText = 'Select an advanced link';
+    select.append(disabledOption);
+
+    promiseCategories
+      .then(categories => {
+        Object.entries(categories).forEach(([category, links], _) => {
+          const group = document.createElement('optgroup');
+          group.label = category;
+
+          links.forEach(link => {
+            const option = document.createElement('option');
+            option.value = link.display;
+            option.innerText = link.display;
+            group.append(option);
+          });
+          select.append(group);
+        });
+      })
+      .catch(error => {
+        console.error('Error while getting the advanced links', error);
+      });
+
+    return select;
+  }
+
+  /**
+   * The advanced link select node.
+   * @param promiseCategories - The advanced link categories fetched from the server.
+   */
+  export function advancedLinkAttributes(
+    info: IAdvLinkDescription,
+    currentDatasets: [string, string],
+    sharedModel: IGlueSessionSharedModel
+  ): HTMLElement {
+    const attrType = ['INPUT', 'OUTPUT'];
+    const labels: ('labels1' | 'labels2')[] = ['labels1', 'labels2'];
+
+    const div = document.createElement('div');
+
+    const description = document.createElement('div');
+    description.classList.add('advanced-link-description');
+    description.innerText = info.description;
+    div.append(description);
+
+    currentDatasets.forEach((dataset, index) => {
+      const datasetName = document.createElement('div');
+      datasetName.style.padding = '1em 0.5em';
+      datasetName.innerText = `${attrType[index]} (${dataset})`;
+      div.append(datasetName);
+
+      const table = document.createElement('table');
+      table.classList.add('advanced-link-attributes');
+      info[labels[index]].forEach(label => {
+        const row = document.createElement('tr');
+
+        const labelCol = document.createElement('td');
+        labelCol.innerText = label;
+        row.append(labelCol);
+
+        const selectCol = document.createElement('td');
+        const select = document.createElement('select');
+        sharedModel.dataset[dataset].primary_owner.forEach(attribute => {
+          const option = document.createElement('option');
+          option.value = attribute;
+          option.innerText = sharedModel.attributes[attribute].label;
+          select.append(option);
+        });
+        selectCol.append(select);
+        row.append(selectCol);
+
+        table.append(row);
+      });
+      div.append(table);
+    });
+    return div;
   }
 }
