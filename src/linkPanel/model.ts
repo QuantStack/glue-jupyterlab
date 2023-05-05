@@ -13,7 +13,7 @@ import {
   IAdvLinkDescription
 } from './types';
 
-const AVAILABLE_ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
+const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 
 export class LinkEditorModel implements ILinkEditorModel {
   constructor(options: LinkEditorModel.IOptions) {
@@ -45,10 +45,7 @@ export class LinkEditorModel implements ILinkEditorModel {
   private async _getAdvancedLinks(): Promise<void> {
     // Make request to Jupyter API
     const settings = ServerConnection.makeSettings();
-    const requestUrl = URLExt.join(
-      settings.baseUrl,
-      AVAILABLE_ADVANCED_LINKS_URL
-    );
+    const requestUrl = URLExt.join(settings.baseUrl, ADVANCED_LINKS_URL);
 
     let response: Response;
     try {

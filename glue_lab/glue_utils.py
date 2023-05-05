@@ -14,10 +14,13 @@ def get_function_info(function_or_helper):
     item = function_or_helper[0]
 
     if hasattr(function_or_helper, "function"):
-        item_info["description"] = function_or_helper.info
-        item_info["labels1"] = getfullargspec(item)[0]
-        item_info["labels2"] = function_or_helper.output_labels
-        item_info["display"] = function_or_helper.function.__name__
+        try:
+            item_info["description"] = function_or_helper.info
+            item_info["labels1"] = getfullargspec(item)[0]
+            item_info["labels2"] = function_or_helper.output_labels
+            item_info["display"] = function_or_helper.function.__name__
+        except Exception as e:
+            print(f"The link function {function_or_helper} is not loaded\n{e.args}")
     else:
         for attr in attributes:
             item_info[attr] = getattr(item, attr, "")
