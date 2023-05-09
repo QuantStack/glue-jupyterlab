@@ -86,7 +86,9 @@ class YGlue(YBaseDoc):
             if links[link_name]["_type"] != COMPONENT_LINK_TYPE:
                 for i in range(1, 3):
                     listName = links[link_name][f"cids{i}"]
-                    links[link_name][f"cids{i}"] = contents.get(listName, {}).get("contents")
+                    links[link_name][f"cids{i}"] = contents.get(listName, {}).get(
+                        "contents"
+                    )
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
