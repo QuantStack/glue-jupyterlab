@@ -145,20 +145,14 @@ export class LinkEditorModel implements ILinkEditorModel {
     linkName: string,
     link: IAdvancedLink
   ): IAdvancedLinkInfo | undefined {
-    const cids1 = this._sharedModel.lists[link.cids1];
-    const cids2 = this._sharedModel.lists[link.cids2];
-    if (!(cids1 && cids2)) {
-      return undefined;
-    } else {
-      return {
-        origin: linkName,
-        name: link._type,
-        cids1: cids1.contents,
-        cids2: cids2.contents,
-        data1: link.data1,
-        data2: link.data2
-      };
-    }
+    return {
+      origin: linkName,
+      name: link._type,
+      cids1: link.cids1,
+      cids2: link.cids2,
+      data1: link.data1,
+      data2: link.data2
+    };
   }
 
   private _sharedModel: IGlueSessionSharedModel;

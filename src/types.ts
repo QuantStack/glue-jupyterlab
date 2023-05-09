@@ -7,7 +7,6 @@ import {
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
-  IGlueSessionLists,
   IGlueSessionTabs
 } from './_interface/glue.schema';
 
@@ -39,13 +38,11 @@ export interface IGlueSessionSharedModel
   attributes: IGlueSessionAttributes;
   dataset: IGlueSessionDataset;
   links: IGlueSessionLinks;
-  lists: IGlueSessionLists;
   tabs: IGlueSessionTabs;
 
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
-  listsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
 

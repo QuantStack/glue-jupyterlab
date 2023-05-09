@@ -9,10 +9,16 @@
       "type": "string"
     },
     "cids1": {
-      "type": "string"
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "cids2": {
-      "type": "string"
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "data1": {
       "type": "string"

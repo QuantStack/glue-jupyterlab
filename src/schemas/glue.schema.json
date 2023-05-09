@@ -16,9 +16,6 @@
     "links": {
       "$ref": "#/definitions/links"
     },
-    "lists": {
-      "$ref": "#/definitions/lists"
-    },
     "tabs": {
       "$ref": "#/definitions/tabs"
     }
@@ -56,16 +53,6 @@
               "$ref": "./links/componentLink.schema.json"
             }
           ]
-        }
-      },
-      "additionalProperties": false
-    },
-    "lists": {
-      "title": "IGlueSessionLists",
-      "type": "object",
-      "patternProperties": {
-        ".*": {
-          "$ref": "./links/attributesList.schema.json"
         }
       },
       "additionalProperties": false
