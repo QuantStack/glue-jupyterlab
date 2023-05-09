@@ -279,6 +279,10 @@
   border-top: solid 1px;
 }
 
+.glue-LinkEditor-advancedLinkItem table td:not(:last-child) {
+  vertical-align: top;
+}
+
 .glue-LinkEditor-advanced table tr td:last-child {
   text-align: right;
 }
