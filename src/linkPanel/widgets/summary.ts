@@ -2,9 +2,9 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { IComponentLinkInfo } from '../types';
+import { IAdvancedLinkInfo, IComponentLinkInfo } from '../types';
 import { LinkedDataset } from './linkedDataset';
-import { identityLinks } from './identityLinks';
+import { advancedLinks, identityLinks } from './linksSummary';
 
 /**
  * The widget displaying the links for the selected dataset.
@@ -38,17 +38,26 @@ export class Summary extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.updateIdentityLinks, this);
+    linkedDataset.selectionChanged.connect(this.onDatasetsChange, this);
 
     if (linkedDataset.selections) {
-      this.updateIdentityLinks(linkedDataset, linkedDataset.selections);
+      this.updateIdentityLinks(linkedDataset.selections);
+      this.updateAdvancedLinks(linkedDataset.selections);
     }
+  }
+
+  /**
+   * Callback when the selected datasets change.
+   */
+  onDatasetsChange(_sender: LinkedDataset, datasets: [string, string]): void {
+    this.updateIdentityLinks(datasets);
+    this.updateAdvancedLinks(datasets);
   }
 
   /**
    * Updates the list of links when the selected dataset changes.
    */
-  updateIdentityLinks(_sender: LinkedDataset, dataset: [string, string]): void {
+  updateIdentityLinks(dataset: [string, string]): void {
     const links: [IComponentLinkInfo, boolean][] = [];
 
     // Remove all the existing widgets.
@@ -58,14 +67,11 @@ export class Summary extends LinkEditorWidget {
 
     // Keep only the links components for this dataset.
     this._linkEditorModel.relatedLinks.forEach(link => {
-      if (!link.src || !link.dest) {
-        return;
-      }
       if (
-        dataset.includes(link.src?.dataset) &&
-        dataset.includes(link.dest?.dataset)
+        dataset.includes(link.src.dataset) &&
+        dataset.includes(link.dest.dataset)
       ) {
-        const revert = link.dest?.dataset === dataset[0];
+        const revert = link.dest.dataset === dataset[0];
         links.push([link, revert]);
       }
     });
@@ -77,9 +83,37 @@ export class Summary extends LinkEditorWidget {
   }
 
   /**
+   *
+   */
+  updateAdvancedLinks(dataset: [string, string]): void {
+    const links: IAdvancedLinkInfo[] = [];
+
+    // Remove all the existing widgets.
+    while (this._advancedLinks.widgets.length) {
+      this._advancedLinks.widgets[0].dispose();
+    }
+    this._linkEditorModel.advancedLinks.forEach(link => {
+      if (dataset.includes(link.data1) && dataset.includes(link.data2)) {
+        links.push(link);
+      }
+    });
+    // Build the widget.
+    this._advancedLinks.addWidget(
+      ReactWidget.create(advancedLinks(links, this.onDeleteAdvanced))
+    );
+  }
+
+  /**
    * Called when clicking on the delete icon of the identity panel.
    */
   onDeleteIdentity = (link: IComponentLinkInfo): void => {
+    console.log('Deleting', link);
+  };
+
+  /**
+   * Called when clicking on the delete icon of the identity panel.
+   */
+  onDeleteAdvanced = (link: IAdvancedLinkInfo): void => {
     console.log('Deleting', link);
   };
 
