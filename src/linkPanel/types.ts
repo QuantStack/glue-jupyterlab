@@ -13,9 +13,8 @@ export interface ILinkEditorModel {
   setCurrentDataset(index: 0 | 1, value: string): void;
   readonly currentDatasetsChanged: ISignal<this, [string, string]>;
   readonly relatedLinks: Map<string, IComponentLinkInfo>;
-  readonly relatedLinksChanged: ISignal<this, void>;
   readonly advancedLinks: Map<string, IAdvancedLinkInfo>;
-  readonly advancedLinksChanged: ISignal<this, void>;
+  readonly linksChanged: ISignal<this, void>;
   readonly sharedModel: IGlueSessionSharedModel | undefined;
   readonly advLinkCategories: IAdvLinkCategories;
   readonly advLinksPromise: Promise<IAdvLinkCategories>;
@@ -44,6 +43,7 @@ export interface ILinkInfo {
  */
 export interface IAdvLinkDescription {
   function: string;
+  _type: string;
   display: string;
   description: string;
   labels1: string[];

@@ -45,12 +45,17 @@ export class Summary extends LinkEditorWidget {
       this
     );
 
+    this._linkEditorModel.linksChanged.connect(this.linksChanged, this);
     if (this._linkEditorModel.currentDatasets) {
       this.updateIdentityLinks(this._linkEditorModel.currentDatasets);
       this.updateAdvancedLinks(this._linkEditorModel.currentDatasets);
     }
   }
 
+  linksChanged(): void {
+    this.updateIdentityLinks(this._linkEditorModel.currentDatasets);
+    this.updateAdvancedLinks(this._linkEditorModel.currentDatasets);
+  }
   /**
    * Callback when the selected datasets change.
    */

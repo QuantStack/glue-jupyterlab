@@ -4,6 +4,8 @@ import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 import {
+  IAdvancedLink,
+  IComponentLink,
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
@@ -69,6 +71,8 @@ export interface IGlueSessionSharedModel
 
   setSelectedTab(tab: number, emitter?: string): void;
   getSelectedTab(): number | null;
+
+  setLink(linkName: string, link: IComponentLink | IAdvancedLink): void;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {

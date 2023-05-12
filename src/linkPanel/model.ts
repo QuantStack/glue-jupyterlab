@@ -24,7 +24,8 @@ const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 export class LinkEditorModel implements ILinkEditorModel {
   constructor(options: LinkEditorModel.IOptions) {
     this._sharedModel = options.sharedModel;
-    this._sharedModel.changed.connect(this.onSharedModelChanged, this);
+    this._sharedModel.linksChanged.connect(this.onLinksChanged, this);
+    this._sharedModel.datasetChanged.connect(this.onDatasetsChanged, this);
     this._getAdvancedLinks();
   }
 
@@ -62,10 +63,6 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._relatedLinks;
   }
 
-  get relatedLinksChanged(): ISignal<this, void> {
-    return this._relatedLinksChanged;
-  }
-
   get advLinkCategories(): IAdvLinkCategories {
     return this._advLinkCategories;
   }
@@ -74,8 +71,8 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._advancedLinks;
   }
 
-  get advancedLinksChanged(): ISignal<this, void> {
-    return this._advancedLinksChanged;
+  get linksChanged(): ISignal<this, void> {
+    return this._linksChanged;
   }
 
   get advLinksPromise(): Promise<IAdvLinkCategories> {
@@ -101,20 +98,22 @@ export class LinkEditorModel implements ILinkEditorModel {
       throw new ServerConnection.ResponseError(response, data.message);
     }
 
-    Object.entries(data.data).forEach(([category, link], idx) => {
-      this._advLinkCategories[category] = link as IAdvLinkDescription[];
+    Object.entries(data.data).forEach(([category, links], idx) => {
+      this._advLinkCategories[category] = links as IAdvLinkDescription[];
     });
 
     this._advLinksPromise.resolve(this._advLinkCategories);
   }
 
-  onSharedModelChanged(): void {
+  onDatasetsChanged(): void {
     // Reset the current dataset.
     if (this._sharedModel.dataset) {
       const datasetsList = Object.keys(this._sharedModel.dataset);
       this._currentDatasets = [datasetsList[0], datasetsList[0]];
     }
+  }
 
+  onLinksChanged(): void {
     // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
       ([linkName, link], idx) => {
@@ -137,7 +136,7 @@ export class LinkEditorModel implements ILinkEditorModel {
         }
       }
     );
-    this._relatedLinksChanged.emit();
+    this._linksChanged.emit();
   }
 
   _getIdentityLink(
@@ -194,9 +193,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
   private _advLinkCategories: IAdvLinkCategories = {};
   private _relatedLinks = new Map<string, IComponentLinkInfo>();
-  private _relatedLinksChanged = new Signal<this, void>(this);
   private _advancedLinks = new Map<string, IAdvancedLinkInfo>();
-  private _advancedLinksChanged = new Signal<this, void>(this);
+  private _linksChanged = new Signal<this, void>(this);
 }
 
 namespace LinkEditorModel {

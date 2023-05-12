@@ -17,10 +17,7 @@ export class LinkedDataset extends LinkEditorWidget {
       ])
     );
 
-    this._linkEditorModel.relatedLinksChanged.connect(
-      this.onLinksChanged,
-      this
-    );
+    this._linkEditorModel.linksChanged.connect(this.onLinksChanged, this);
   }
 
   onLinksChanged(): void {

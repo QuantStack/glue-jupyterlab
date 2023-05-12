@@ -26,6 +26,7 @@ def get_function_info(function_or_helper):
             item_info[attr] = getattr(item, attr, "")
 
     item_info["function"] = item.__name__
+    item_info["_type"] = "%s.%s" % (item.__module__, item.__name__)
     if not item_info["display"]:
         item_info["display"] = item.__name__
 

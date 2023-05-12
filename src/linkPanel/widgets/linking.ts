@@ -6,9 +6,12 @@ import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../../types';
 import { LinkEditorWidget } from '../linkEditorWidget';
 import {
+  ComponentLinkType,
   IAdvLinkCategories,
   IAdvLinkDescription,
-  ILinkEditorModel
+  ILinkEditorModel,
+  IComponentLink,
+  IAdvancedLink
 } from '../types';
 
 export class Linking extends LinkEditorWidget {
@@ -48,7 +51,6 @@ export class Linking extends LinkEditorWidget {
     _sender: ILinkEditorModel,
     selection: [string, string]
   ): void => {
-    // this._currentSelection = selection;
     this.updateIdentityAttributes();
     this.updateAdvancedLink();
   };
@@ -83,13 +85,14 @@ export class Linking extends LinkEditorWidget {
       attributes = attributes.sort();
       attributes.forEach(value => {
         // Get the actual name of the attribute.
+        let actualName = undefined;
         if (this._sharedModel.attributes[value]) {
-          value = this._sharedModel.attributes[value].label;
+          actualName = this._sharedModel.attributes[value].label;
         }
         const attribute = new Widget();
         attribute.title.label = value;
         attribute.addClass('glue-LinkEditor-attribute');
-        attribute.node.innerText = value;
+        attribute.node.innerText = actualName || value;
         attribute.node.onclick = () => {
           this.onAttributeClicked(attribute, index);
         };
@@ -122,9 +125,13 @@ export class Linking extends LinkEditorWidget {
   }
 
   glueIdentity = (): void => {
-    console.log(
-      `Glue identity: ${this._selectedAttributes[0]} <-> ${this._selectedAttributes[1]}`
-    );
+    const link: IComponentLink = {
+      _type: ComponentLinkType,
+      frm: [this._selectedAttributes[0]],
+      to: [this._selectedAttributes[1]]
+    };
+    const linkName = Private.newLinkName('ComponentLink', this._sharedModel);
+    this._sharedModel.setLink(linkName, link);
   };
 
   updateAdvancedLink(): void {
@@ -163,16 +170,36 @@ export class Linking extends LinkEditorWidget {
     const output: string[] = [];
 
     this._advancedPanel.node
-      .querySelectorAll('#advanced-link-input select')
+      .querySelectorAll('#advanced-link-INPUT select')
       .forEach(value => {
         input.push((value as HTMLSelectElement).value);
       });
 
     this._advancedPanel.node
-      .querySelectorAll('#advanced-link-output select')
+      .querySelectorAll('#advanced-link-OUTPUT select')
       .forEach(value => {
         output.push((value as HTMLSelectElement).value);
       });
+
+    const info = this._linkEditorModel.advLinkCategories[
+      this._selectedAdvLink.category
+    ].find(detail => detail.display === this._selectedAdvLink.linkName);
+
+    if (!info) {
+      return;
+    }
+
+    const link: IAdvancedLink = {
+      _type: info?._type || '',
+      cids1: input,
+      cids2: output,
+      data1: this._linkEditorModel.currentDatasets[0],
+      data2: this._linkEditorModel.currentDatasets[1]
+    };
+
+    const linkName = Private.newLinkName(info.function, this._sharedModel);
+
+    this._sharedModel.setLink(linkName, link);
   };
 
   _identityLinking(selections: [string, string]): BoxPanel {
@@ -267,6 +294,26 @@ namespace Private {
     linkName: string;
   }
 
+  export function newLinkName(
+    basename: string,
+    sharedModel: IGlueSessionSharedModel
+  ): string {
+    let maxNum: number | undefined = undefined;
+    const re = RegExp(`^${basename}(?:_([0-9]+))?$`);
+    Object.keys(sharedModel.links).forEach(linkName => {
+      const match = re.exec(linkName);
+      if (match) {
+        if (!match[1] && !maxNum) {
+          maxNum = -1;
+        } else {
+          maxNum = Math.max(maxNum || -1, parseInt(match[1]));
+        }
+      }
+    });
+    const suffix = maxNum ? `_${maxNum + 1}` : '';
+    return `${basename}${suffix}`;
+  }
+
   /**
    * The advanced link select node.
    * @param promiseCategories - The advanced link categories fetched from the server.
@@ -339,11 +386,13 @@ namespace Private {
 
     currentDatasets.forEach((dataset, index) => {
       const datasetName = document.createElement('div');
+
       datasetName.style.padding = '1em 0.5em';
       datasetName.innerText = `${attrType[index]} (${dataset})`;
       div.append(datasetName);
 
       const table = document.createElement('table');
+      table.id = `advanced-link-${attrType[index]}`;
       table.classList.add('advanced-link-attributes');
       info[labels[index]].forEach(label => {
         const row = document.createElement('tr');

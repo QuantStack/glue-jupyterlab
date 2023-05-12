@@ -11,6 +11,8 @@ import {
   IGlueSessionViewerTypes
 } from '../types';
 import {
+  IAdvancedLink,
+  IComponentLink,
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
@@ -190,6 +192,10 @@ export class GlueSessionSharedModel
     }
 
     return state['selectedTab'].value;
+  }
+
+  setLink(linkName: string, link: IComponentLink | IAdvancedLink): void {
+    this._links.set(linkName, link as IDict);
   }
 
   private _contentsObserver = (event: Y.YMapEvent<IDict>): void => {
