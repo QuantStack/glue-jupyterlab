@@ -9,11 +9,14 @@ export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
  * The link editor model.
  */
 export interface ILinkEditorModel {
-  relatedLinks: Map<string, IComponentLinkInfo>;
-  relatedLinksChanged: ISignal<this, void>;
-  advancedLinks: Map<string, IAdvancedLinkInfo>;
-  advancedLinksChanged: ISignal<this, void>;
-  sharedModel: IGlueSessionSharedModel | undefined;
+  currentDatasets: [string, string];
+  setCurrentDataset(index: 0 | 1, value: string): void;
+  readonly currentDatasetsChanged: ISignal<this, [string, string]>;
+  readonly relatedLinks: Map<string, IComponentLinkInfo>;
+  readonly relatedLinksChanged: ISignal<this, void>;
+  readonly advancedLinks: Map<string, IAdvancedLinkInfo>;
+  readonly advancedLinksChanged: ISignal<this, void>;
+  readonly sharedModel: IGlueSessionSharedModel | undefined;
   readonly advLinkCategories: IAdvLinkCategories;
   readonly advLinksPromise: Promise<IAdvLinkCategories>;
 }

@@ -2,16 +2,18 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { IAdvancedLinkInfo, IComponentLinkInfo } from '../types';
-import { LinkedDataset } from './linkedDataset';
+import {
+  IAdvancedLinkInfo,
+  IComponentLinkInfo,
+  ILinkEditorModel
+} from '../types';
 import { advancedLinks, identityLinks } from './linksSummary';
 
 /**
  * The widget displaying the links for the selected dataset.
  */
 export class Summary extends LinkEditorWidget {
-  constructor(options: Summary.IOptions) {
-    const { linkedDataset } = options;
+  constructor(options: LinkEditorWidget.IOptions) {
     super(options);
 
     this.addClass('glue-LinkEditor-summary');
@@ -38,18 +40,24 @@ export class Summary extends LinkEditorWidget {
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.onDatasetsChange, this);
+    this._linkEditorModel.currentDatasetsChanged.connect(
+      this.onDatasetsChange,
+      this
+    );
 
-    if (linkedDataset.selections) {
-      this.updateIdentityLinks(linkedDataset.selections);
-      this.updateAdvancedLinks(linkedDataset.selections);
+    if (this._linkEditorModel.currentDatasets) {
+      this.updateIdentityLinks(this._linkEditorModel.currentDatasets);
+      this.updateAdvancedLinks(this._linkEditorModel.currentDatasets);
     }
   }
 
   /**
    * Callback when the selected datasets change.
    */
-  onDatasetsChange(_sender: LinkedDataset, datasets: [string, string]): void {
+  onDatasetsChange(
+    _sender: ILinkEditorModel,
+    datasets: [string, string]
+  ): void {
     this.updateIdentityLinks(datasets);
     this.updateAdvancedLinks(datasets);
   }
@@ -119,16 +127,4 @@ export class Summary extends LinkEditorWidget {
 
   private _identityLinks: Panel;
   private _advancedLinks: Panel;
-}
-
-/**
- * The namespace of the Summary.
- */
-namespace Summary {
-  /**
-   * The constructor options of the Summary.
-   */
-  export interface IOptions extends LinkEditorWidget.IOptions {
-    linkedDataset: LinkedDataset;
-  }
 }

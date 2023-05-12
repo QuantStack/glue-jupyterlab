@@ -18,6 +18,9 @@ import {
 
 const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 
+/**
+ * The link editor model.
+ */
 export class LinkEditorModel implements ILinkEditorModel {
   constructor(options: LinkEditorModel.IOptions) {
     this._sharedModel = options.sharedModel;
@@ -27,6 +30,32 @@ export class LinkEditorModel implements ILinkEditorModel {
 
   get sharedModel(): IGlueSessionSharedModel {
     return this._sharedModel;
+  }
+
+  /**
+   * Getter and setter for datasets.
+   */
+  get currentDatasets(): [string, string] {
+    return this._currentDatasets;
+  }
+  set currentDatasets(datasets: [string, string]) {
+    this._currentDatasets = datasets;
+    this._datasetsChanged.emit(this._currentDatasets);
+  }
+
+  /**
+   * Replace one current dataset.
+   */
+  setCurrentDataset(index: 0 | 1, value: string): void {
+    this._currentDatasets[index] = value;
+    this._datasetsChanged.emit(this._currentDatasets);
+  }
+
+  /**
+   * A signal emits when current datasets changes
+   */
+  get currentDatasetsChanged(): ISignal<this, [string, string]> {
+    return this._datasetsChanged;
   }
 
   get relatedLinks(): Map<string, IComponentLinkInfo> {
@@ -80,7 +109,11 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   onSharedModelChanged(): void {
-    // const dataset = this._sharedModel.dataset;
+    // Reset the current dataset.
+    if (this._sharedModel.dataset) {
+      const datasetsList = Object.keys(this._sharedModel.dataset);
+      this._currentDatasets = [datasetsList[0], datasetsList[0]];
+    }
 
     // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
@@ -156,6 +189,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   private _sharedModel: IGlueSessionSharedModel;
+  private _currentDatasets: [string, string] = ['', ''];
+  private _datasetsChanged = new Signal<this, [string, string]>(this);
   private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
   private _advLinkCategories: IAdvLinkCategories = {};
   private _relatedLinks = new Map<string, IComponentLinkInfo>();

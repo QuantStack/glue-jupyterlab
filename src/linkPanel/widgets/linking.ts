@@ -3,14 +3,16 @@ import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
-import { LinkEditorWidget } from '../linkEditorWidget';
-import { LinkedDataset } from './linkedDataset';
-import { IAdvLinkCategories, IAdvLinkDescription } from '../types';
 import { IGlueSessionSharedModel } from '../../types';
+import { LinkEditorWidget } from '../linkEditorWidget';
+import {
+  IAdvLinkCategories,
+  IAdvLinkDescription,
+  ILinkEditorModel
+} from '../types';
 
 export class Linking extends LinkEditorWidget {
-  constructor(options: Linking.IOptions) {
-    const { linkedDataset } = options;
+  constructor(options: LinkEditorWidget.IOptions) {
     super(options);
 
     this.addClass('glue-LinkEditor-linking');
@@ -23,24 +25,30 @@ export class Linking extends LinkEditorWidget {
       this.mainContent([
         {
           name: 'Identity Linking',
-          widget: this._identityLinking(linkedDataset.selections)
+          widget: this._identityLinking(this._linkEditorModel.currentDatasets)
         },
         { name: 'Advanced Linking', widget: this._advancedLinking() }
       ])
     );
 
-    linkedDataset.selectionChanged.connect(this.onDatasetChange, this);
+    this._linkEditorModel.currentDatasetsChanged.connect(
+      this.onDatasetChange,
+      this
+    );
 
-    if (linkedDataset.selections) {
-      this.onDatasetChange(linkedDataset, linkedDataset.selections);
+    if (this._linkEditorModel.currentDatasets) {
+      this.onDatasetChange(
+        this._linkEditorModel,
+        this._linkEditorModel.currentDatasets
+      );
     }
   }
 
   onDatasetChange = (
-    _sender: LinkedDataset,
+    _sender: ILinkEditorModel,
     selection: [string, string]
   ): void => {
-    this._currentSelection = selection;
+    // this._currentSelection = selection;
     this.updateIdentityAttributes();
     this.updateAdvancedLink();
   };
@@ -53,10 +61,10 @@ export class Linking extends LinkEditorWidget {
   };
 
   updateIdentityAttributes(): void {
-    this._currentSelection.forEach((dataName, index) => {
+    this._linkEditorModel.currentDatasets.forEach((dataName, index) => {
       // no-op if the dataset did not change.
       const current = this._identityToolbar.get(index).widget.node.innerText;
-      if (this._currentSelection[index] === current) {
+      if (dataName === current) {
         return;
       }
 
@@ -143,7 +151,7 @@ export class Linking extends LinkEditorWidget {
       new Widget({
         node: Private.advancedLinkAttributes(
           info,
-          this._currentSelection,
+          this._linkEditorModel.currentDatasets,
           this._sharedModel
         )
       })
@@ -222,11 +230,7 @@ export class Linking extends LinkEditorWidget {
         this.onAdvancedLinkChanged
       )
     });
-    glueToolbar.addItem(
-      'Select advanced',
-      // ReactWidget.create(advancedSelect.render())
-      advancedSelect
-    );
+    glueToolbar.addItem('Select advanced', advancedSelect);
 
     const glueButton = new ToolbarButton({
       label: 'GLUE',
@@ -246,19 +250,12 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
-  private _currentSelection: [string, string] = ['', ''];
   private _selectedAttributes = ['', ''];
   private _selectedAdvLink: Private.IAdvancedLinkSelected;
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityAttributes = [new Panel(), new Panel()];
   private _advancedPanel = new BoxPanel();
-}
-
-namespace Linking {
-  export interface IOptions extends LinkEditorWidget.IOptions {
-    linkedDataset: LinkedDataset;
-  }
 }
 
 namespace Private {
