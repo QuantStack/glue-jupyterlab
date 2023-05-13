@@ -91,7 +91,7 @@ export class Summary extends LinkEditorWidget {
 
     // Build the widget.
     this._identityLinks.addWidget(
-      ReactWidget.create(identityLinks(links, this.onDeleteIdentity))
+      ReactWidget.create(identityLinks(links, this.onDeleteLink))
     );
   }
 
@@ -112,22 +112,15 @@ export class Summary extends LinkEditorWidget {
     });
     // Build the widget.
     this._advancedLinks.addWidget(
-      ReactWidget.create(advancedLinks(links, this.onDeleteAdvanced))
+      ReactWidget.create(advancedLinks(links, this.onDeleteLink))
     );
   }
 
   /**
-   * Called when clicking on the delete icon of the identity panel.
+   * Called when clicking on the delete icon panel.
    */
-  onDeleteIdentity = (link: IComponentLinkInfo): void => {
-    console.log('Deleting', link);
-  };
-
-  /**
-   * Called when clicking on the delete icon of the identity panel.
-   */
-  onDeleteAdvanced = (link: IAdvancedLinkInfo): void => {
-    console.log('Deleting', link);
+  onDeleteLink = (link: IComponentLinkInfo | IAdvancedLinkInfo): void => {
+    this._sharedModel.removeLink(link.origin);
   };
 
   private _identityLinks: Panel;

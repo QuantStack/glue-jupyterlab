@@ -26,7 +26,7 @@ export class LinkEditorModel implements ILinkEditorModel {
     this._sharedModel = options.sharedModel;
     this._sharedModel.linksChanged.connect(this.onLinksChanged, this);
     this._sharedModel.datasetChanged.connect(this.onDatasetsChanged, this);
-    this._getAdvancedLinks();
+    this._getAdvancedLinksCategories();
   }
 
   get sharedModel(): IGlueSessionSharedModel {
@@ -79,8 +79,8 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._advLinksPromise.promise;
   }
 
-  private async _getAdvancedLinks(): Promise<void> {
-    // Make request to Jupyter API
+  private async _getAdvancedLinksCategories(): Promise<void> {
+    // Make request to Jupyter API.
     const settings = ServerConnection.makeSettings();
     const requestUrl = URLExt.join(settings.baseUrl, ADVANCED_LINKS_URL);
 
@@ -110,10 +110,14 @@ export class LinkEditorModel implements ILinkEditorModel {
     if (this._sharedModel.dataset) {
       const datasetsList = Object.keys(this._sharedModel.dataset);
       this._currentDatasets = [datasetsList[0], datasetsList[0]];
+      this._datasetsChanged.emit(this._currentDatasets);
     }
   }
 
   onLinksChanged(): void {
+    this._relatedLinks = new Map<string, IComponentLinkInfo>();
+    this._advancedLinks = new Map<string, IAdvancedLinkInfo>();
+
     // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
       ([linkName, link], idx) => {

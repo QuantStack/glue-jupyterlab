@@ -73,6 +73,7 @@ export interface IGlueSessionSharedModel
   getSelectedTab(): number | null;
 
   setLink(linkName: string, link: IComponentLink | IAdvancedLink): void;
+  removeLink(linkName: string): void;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {
