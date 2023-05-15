@@ -26,17 +26,26 @@ export class LinkedDataset extends LinkEditorWidget {
       this._createdLinksView.widgets[0].dispose();
     }
 
-    // Get a set of the linked dataset.
+    // Get a set of the identity linked dataset.
     const datasetLinks = new Set<string>();
-    Array.from(this._linkEditorModel.relatedLinks.values()).map(relatedLink => {
-      if (relatedLink.src && relatedLink.dest) {
+    Array.from(this._linkEditorModel.relatedLinks.values()).forEach(
+      relatedLink => {
+        if (relatedLink.src && relatedLink.dest) {
+          datasetLinks.add(
+            JSON.stringify(
+              [relatedLink.src.dataset, relatedLink.dest.dataset].sort()
+            )
+          );
+        }
+      }
+    );
+    Array.from(this._linkEditorModel.advancedLinks.values()).forEach(
+      advancedLink => {
         datasetLinks.add(
-          JSON.stringify(
-            [relatedLink.src.dataset, relatedLink.dest.dataset].sort()
-          )
+          JSON.stringify([advancedLink.data1, advancedLink.data2].sort())
         );
       }
-    });
+    );
 
     // Updates the view with one widget per linked dataset.
     datasetLinks.forEach(datasetLink => {
