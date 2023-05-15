@@ -105,6 +105,9 @@ export class LinkEditorModel implements ILinkEditorModel {
     this._advLinksPromise.resolve(this._advLinkCategories);
   }
 
+  /**
+   * Called when the datasets have changed in the glue session model.
+   */
   onDatasetsChanged(): void {
     // Reset the current dataset.
     if (this._sharedModel.dataset) {
@@ -114,6 +117,9 @@ export class LinkEditorModel implements ILinkEditorModel {
     }
   }
 
+  /**
+   * Called when the links have changed in the glue session model.
+   */
   onLinksChanged(): void {
     this._relatedLinks = new Map<string, IComponentLinkInfo>();
     this._advancedLinks = new Map<string, IAdvancedLinkInfo>();

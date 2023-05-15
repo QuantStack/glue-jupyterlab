@@ -23,7 +23,6 @@ export class Linking extends LinkEditorWidget {
     this.titleValue = 'Linking';
 
     this._selectedAdvLink = { category: '', linkName: '' };
-
     this.content.addWidget(
       this.mainContent([
         {
@@ -117,11 +116,14 @@ export class Linking extends LinkEditorWidget {
       this._selectedAttributes[index] = '';
     }
 
-    // Enable/disable the Glue button.
+    // Enable/disable the Glue button if datasets are different and attributes selected.
     (
       this._identityToolbar.get(this._identityToolbar.length - 1)
         .widget as ToolbarButton
-    ).enabled = this._selectedAttributes.every(value => value !== '');
+    ).enabled =
+      this._selectedAttributes.every(value => value !== '') &&
+      this._linkEditorModel.currentDatasets[0] !==
+        this._linkEditorModel.currentDatasets[1];
   }
 
   glueIdentity = (): void => {
