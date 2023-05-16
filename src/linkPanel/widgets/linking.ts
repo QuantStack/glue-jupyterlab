@@ -1,5 +1,5 @@
 import { ToolbarRegistry } from '@jupyterlab/apputils';
-import { IObservableList, ObservableList } from '@jupyterlab/observables';
+import { ObservableList } from '@jupyterlab/observables';
 import { Toolbar, ToolbarButton } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
@@ -47,7 +47,7 @@ export class Linking extends LinkEditorWidget {
       );
     }
 
-    this._selectedAttributes = {
+    this._identityAttributes = {
       first: '',
       second: ''
     };
@@ -65,6 +65,9 @@ export class Linking extends LinkEditorWidget {
     this.updateAdvancedLink();
   };
 
+  /**
+   * Updates the identity link panel.
+   */
   updateIdentityAttributes(): void {
     IDatasetsKeys.forEach((position, index) => {
       const dataset = this._linkEditorModel.currentDatasets[position];
@@ -79,8 +82,8 @@ export class Linking extends LinkEditorWidget {
       this._identityToolbar.get(index).widget.node.innerText = dataset;
 
       // Remove all the existing widgets.
-      while (this._identityAttributes[index].widgets.length) {
-        this._identityAttributes[index].widgets[0].dispose();
+      while (this._identityPanel[index].widgets.length) {
+        this._identityPanel[index].widgets[0].dispose();
       }
 
       // Add a new widget for each attribute.
@@ -101,7 +104,7 @@ export class Linking extends LinkEditorWidget {
         attribute.node.onclick = () => {
           this.onIdentityAttributeClicked(attribute, index);
         };
-        this._identityAttributes[index].addWidget(attribute);
+        this._identityPanel[index].addWidget(attribute);
       });
     });
   }
@@ -117,31 +120,34 @@ export class Linking extends LinkEditorWidget {
     // Select the attribute.
     if (!isSelected) {
       attribute.addClass('selected');
-      this._selectedAttributes[IDatasetsKeys[index]] = attribute.title.label;
+      this._identityAttributes[IDatasetsKeys[index]] = attribute.title.label;
     } else {
-      this._selectedAttributes[IDatasetsKeys[index]] = '';
+      this._identityAttributes[IDatasetsKeys[index]] = '';
     }
 
+    const currentDatasets = this._linkEditorModel.currentDatasets;
     // Enable/disable the Glue button if datasets are different and attributes selected.
-    (
-      this._identityToolbar.get(this._identityToolbar.length - 1)
-        .widget as ToolbarButton
-    ).enabled =
-      Object.values(this._selectedAttributes).every(value => value !== '') &&
-      this._linkEditorModel.currentDatasets.first !==
-        this._linkEditorModel.currentDatasets.second;
+    this.identityGlueButton.enabled =
+      Object.values(this._identityAttributes).every(value => value !== '') &&
+      currentDatasets.first !== currentDatasets.second;
   }
 
+  /**
+   * Creates identity link.
+   */
   glueIdentity = (): void => {
     const link: IComponentLink = {
       _type: ComponentLinkType,
-      frm: [this._selectedAttributes.first],
-      to: [this._selectedAttributes.second]
+      frm: [this._identityAttributes.first],
+      to: [this._identityAttributes.second]
     };
     const linkName = Private.newLinkName('ComponentLink', this._sharedModel);
     this._sharedModel.setLink(linkName, link);
   };
 
+  /**
+   * Updates the advanced link panel.
+   */
   updateAdvancedLink(): void {
     // Remove all the existing widgets in advanced panel.
     while (this._advancedPanel.widgets.length) {
@@ -149,6 +155,7 @@ export class Linking extends LinkEditorWidget {
     }
 
     if (!(this._selectedAdvLink.category && this._selectedAdvLink.linkName)) {
+      this.advancedGlueButton.enabled = false;
       return;
     }
 
@@ -166,9 +173,31 @@ export class Linking extends LinkEditorWidget {
       new Private.AdvancedAttributes(
         info,
         this._linkEditorModel.currentDatasets,
-        this._sharedModel
+        this._sharedModel,
+        this
       )
     );
+    this.advancedGlueButtonStatus();
+  }
+
+  /**
+   * Checks if the advanced glue button should be enabled or not.
+   */
+  advancedGlueButtonStatus(): void {
+    const currentDatasets = this._linkEditorModel.currentDatasets;
+    const inputs = (
+      this._advancedPanel.widgets[0] as Private.AdvancedAttributes
+    ).inputs;
+
+    const outputs = (
+      this._advancedPanel.widgets[0] as Private.AdvancedAttributes
+    ).outputs;
+
+    // Enable the Glue button if datasets and attributes are different.
+    this.advancedGlueButton.enabled =
+      currentDatasets.first !== currentDatasets.second &&
+      new Set(inputs).size === inputs.length &&
+      new Set(outputs).size === outputs.length;
   }
 
   glueAdvanced = (): void => {
@@ -218,7 +247,7 @@ export class Linking extends LinkEditorWidget {
         widget: datasetName
       });
 
-      attributes.addWidget(this._identityAttributes[index]);
+      attributes.addWidget(this._identityPanel[index]);
     });
 
     const glueButton = new ToolbarButton({
@@ -257,14 +286,21 @@ export class Linking extends LinkEditorWidget {
         this.onAdvancedLinkChanged
       )
     });
-    glueToolbar.addItem('Select advanced', advancedSelect);
+    this._advancedToolbar.push({
+      name: 'Select advanced',
+      widget: advancedSelect
+    });
 
     const glueButton = new ToolbarButton({
       label: 'GLUE',
       tooltip: 'Glue selection',
       onClick: this.glueAdvanced
     });
-    glueToolbar.addItem('Glue', glueButton);
+    this._advancedToolbar.push({ name: 'Glue', widget: glueButton });
+
+    Array.from(this._advancedToolbar).forEach(item =>
+      glueToolbar.addItem(item.name, item.widget)
+    );
 
     panel.addWidget(glueToolbar);
     panel.addWidget(this._advancedPanel);
@@ -277,11 +313,21 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
-  private _selectedAttributes: IDatasets;
+  private get identityGlueButton(): ToolbarButton {
+    return this._identityToolbar.get(this._identityToolbar.length - 1)
+      .widget as ToolbarButton;
+  }
+
+  private get advancedGlueButton(): ToolbarButton {
+    return this._advancedToolbar.get(this._advancedToolbar.length - 1)
+      .widget as ToolbarButton;
+  }
+
+  private _identityAttributes: Private.IIdentityAttributes;
   private _selectedAdvLink: Private.IAdvancedLinkSelected;
-  private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
-  private _identityAttributes = [new Panel(), new Panel()];
+  private _identityToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
+  private _identityPanel = [new Panel(), new Panel()];
+  private _advancedToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _advancedPanel = new BoxPanel();
 }
 
@@ -295,6 +341,11 @@ namespace Private {
   }
 
   /**
+   * The identity attribute.
+   */
+  export type IIdentityAttributes = IDatasets;
+
+  /**
    * The IO types names.
    */
   export type IIOTypes = 'inputs' | 'outputs';
@@ -306,9 +357,12 @@ namespace Private {
     constructor(
       info: IAdvLinkDescription,
       currentDatasets: IDatasets,
-      sharedModel: IGlueSessionSharedModel
+      sharedModel: IGlueSessionSharedModel,
+      parentPanel: Linking
     ) {
       super();
+      this._parentPanel = parentPanel;
+
       this.node.append(this._description(info));
       this.node.append(
         this._attributes('inputs', currentDatasets.first, info, sharedModel)
@@ -334,6 +388,7 @@ namespace Private {
      */
     onSelectIO(ioType: IIOTypes, index: number, value: string): void {
       this._io[ioType][index] = value;
+      this._parentPanel.advancedGlueButtonStatus();
     }
 
     /**
@@ -412,6 +467,7 @@ namespace Private {
       return div;
     }
 
+    private _parentPanel: Linking;
     private _io = {
       inputs: [] as string[],
       outputs: [] as string[]
