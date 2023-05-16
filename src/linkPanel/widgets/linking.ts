@@ -99,14 +99,14 @@ export class Linking extends LinkEditorWidget {
         attribute.addClass('glue-LinkEditor-attribute');
         attribute.node.innerText = actualName || value;
         attribute.node.onclick = () => {
-          this.onAttributeClicked(attribute, index);
+          this.onIdentityAttributeClicked(attribute, index);
         };
         this._identityAttributes[index].addWidget(attribute);
       });
     });
   }
 
-  onAttributeClicked(attribute: Widget, index: number): void {
+  onIdentityAttributeClicked(attribute: Widget, index: number): void {
     const isSelected = attribute.hasClass('selected');
 
     // Remove sibling attribute selected class.
@@ -163,44 +163,35 @@ export class Linking extends LinkEditorWidget {
 
     // Display the link widget.
     this._advancedPanel.addWidget(
-      new Widget({
-        node: Private.advancedLinkAttributes(
-          info,
-          this._linkEditorModel.currentDatasets,
-          this._sharedModel
-        )
-      })
+      new Private.AdvancedAttributes(
+        info,
+        this._linkEditorModel.currentDatasets,
+        this._sharedModel
+      )
     );
   }
 
   glueAdvanced = (): void => {
-    const input: string[] = [];
-    const output: string[] = [];
+    const inputs = (
+      this._advancedPanel.widgets[0] as Private.AdvancedAttributes
+    ).inputs;
 
-    this._advancedPanel.node
-      .querySelectorAll('#advanced-link-INPUT select')
-      .forEach(value => {
-        input.push((value as HTMLSelectElement).value);
-      });
-
-    this._advancedPanel.node
-      .querySelectorAll('#advanced-link-OUTPUT select')
-      .forEach(value => {
-        output.push((value as HTMLSelectElement).value);
-      });
+    const outputs = (
+      this._advancedPanel.widgets[0] as Private.AdvancedAttributes
+    ).outputs;
 
     const info = this._linkEditorModel.advLinkCategories[
       this._selectedAdvLink.category
     ].find(detail => detail.display === this._selectedAdvLink.linkName);
 
-    if (!info) {
+    if (!inputs || !outputs || !info) {
       return;
     }
 
     const link: IAdvancedLink = {
       _type: info?._type || '',
-      cids1: input,
-      cids2: output,
+      cids1: inputs,
+      cids2: outputs,
       data1: this._linkEditorModel.currentDatasets.first,
       data2: this._linkEditorModel.currentDatasets.second
     };
@@ -303,6 +294,137 @@ namespace Private {
     linkName: string;
   }
 
+  /**
+   * The IO types names.
+   */
+  export type IIOTypes = 'inputs' | 'outputs';
+
+  /**
+   * The widget to select the advanced link attributes.
+   */
+  export class AdvancedAttributes extends Widget {
+    constructor(
+      info: IAdvLinkDescription,
+      currentDatasets: IDatasets,
+      sharedModel: IGlueSessionSharedModel
+    ) {
+      super();
+      this.node.append(this._description(info));
+      this.node.append(
+        this._attributes('inputs', currentDatasets.first, info, sharedModel)
+      );
+      this.node.append(
+        this._attributes('outputs', currentDatasets.second, info, sharedModel)
+      );
+    }
+
+    get inputs(): string[] {
+      return this._io.inputs;
+    }
+
+    get outputs(): string[] {
+      return this._io.outputs;
+    }
+
+    /**
+     * Triggered when an attribute change.
+     * @param ioType - The type of I/O.
+     * @param index - The index of the attribute in I/O list.
+     * @param value - The value of the attribute.
+     */
+    onSelectIO(ioType: IIOTypes, index: number, value: string): void {
+      this._io[ioType][index] = value;
+    }
+
+    /**
+     * Creates the description DOM element.
+     * @param info - The description of the advanced link.
+     * @returns - The DOM element.
+     */
+    _description(info: IAdvLinkDescription): HTMLDivElement {
+      const description = document.createElement('div');
+      description.classList.add('advanced-link-description');
+      description.innerText = info.description;
+      return description;
+    }
+
+    /**
+     * Creates the inputs or outputs DOM element.
+     * @param ioType - The type of I/O.
+     * @param dataset - The dataset of the I/O.
+     * @param info - The definition of the advanced link.
+     * @param sharedModel - The glue session model.
+     * @returns - The DOM element.
+     */
+    _attributes(
+      ioType: IIOTypes,
+      dataset: string,
+      info: IAdvLinkDescription,
+      sharedModel: IGlueSessionSharedModel
+    ): HTMLDivElement {
+      const labelName = ioType === 'inputs' ? 'labels1' : 'labels2';
+      const attributes = sharedModel.dataset[dataset].primary_owner;
+
+      const div = document.createElement('div');
+
+      // The title of the inputs / outputs.
+      const datasetName = document.createElement('div');
+      datasetName.style.padding = '1em 0.5em';
+      datasetName.innerText = `${ioType.toUpperCase()} (${dataset})`;
+      div.append(datasetName);
+
+      // The select elements.
+      const table = document.createElement('table');
+      table.classList.add('advanced-link-attributes');
+      table.classList.add(`advanced-link-${ioType}`);
+
+      info[labelName].forEach((label, index) => {
+        const row = document.createElement('tr');
+
+        const labelCol = document.createElement('td');
+        labelCol.innerText = label;
+        row.append(labelCol);
+
+        const selectCol = document.createElement('td');
+        const select = document.createElement('select');
+        attributes.forEach(attribute => {
+          const option = document.createElement('option');
+          option.value = attribute;
+          option.innerText = sharedModel.attributes[attribute].label;
+          select.append(option);
+        });
+
+        select.value = attributes[index] || attributes[0];
+        this._io[ioType].push(attributes[index] || attributes[0]);
+
+        select.onchange = () => {
+          this.onSelectIO(ioType, index, select.value);
+        };
+
+        selectCol.append(select);
+        row.append(selectCol);
+
+        table.append(row);
+      });
+
+      div.append(table);
+
+      return div;
+    }
+
+    private _io = {
+      inputs: [] as string[],
+      outputs: [] as string[]
+    };
+  }
+
+  /**
+   * Creates a unique name for the link.
+   *
+   * @param basename - base name of the link.
+   * @param sharedModel - Glue session model.
+   * @returns
+   */
   export function newLinkName(
     basename: string,
     sharedModel: IGlueSessionSharedModel
@@ -372,60 +494,5 @@ namespace Private {
       });
 
     return select;
-  }
-
-  /**
-   * The advanced link select node.
-   * @param promiseCategories - The advanced link categories fetched from the server.
-   */
-  export function advancedLinkAttributes(
-    info: IAdvLinkDescription,
-    currentDatasets: IDatasets,
-    sharedModel: IGlueSessionSharedModel
-  ): HTMLElement {
-    const attrType = ['INPUT', 'OUTPUT'];
-    const labels: ('labels1' | 'labels2')[] = ['labels1', 'labels2'];
-
-    const div = document.createElement('div');
-
-    const description = document.createElement('div');
-    description.classList.add('advanced-link-description');
-    description.innerText = info.description;
-    div.append(description);
-
-    IDatasetsKeys.forEach((position, index) => {
-      const dataset = currentDatasets[position];
-      const datasetName = document.createElement('div');
-
-      datasetName.style.padding = '1em 0.5em';
-      datasetName.innerText = `${attrType[index]} (${dataset})`;
-      div.append(datasetName);
-
-      const table = document.createElement('table');
-      table.id = `advanced-link-${attrType[index]}`;
-      table.classList.add('advanced-link-attributes');
-      info[labels[index]].forEach(label => {
-        const row = document.createElement('tr');
-
-        const labelCol = document.createElement('td');
-        labelCol.innerText = label;
-        row.append(labelCol);
-
-        const selectCol = document.createElement('td');
-        const select = document.createElement('select');
-        sharedModel.dataset[dataset].primary_owner.forEach(attribute => {
-          const option = document.createElement('option');
-          option.value = attribute;
-          option.innerText = sharedModel.attributes[attribute].label;
-          select.append(option);
-        });
-        selectCol.append(select);
-        row.append(selectCol);
-
-        table.append(row);
-      });
-      div.append(table);
-    });
-    return div;
   }
 }
