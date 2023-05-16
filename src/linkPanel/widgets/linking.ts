@@ -174,7 +174,7 @@ export class Linking extends LinkEditorWidget {
         info,
         this._linkEditorModel.currentDatasets,
         this._sharedModel,
-        this
+        this.advancedGlueButtonStatus
       )
     );
     this.advancedGlueButtonStatus();
@@ -183,7 +183,7 @@ export class Linking extends LinkEditorWidget {
   /**
    * Checks if the advanced glue button should be enabled or not.
    */
-  advancedGlueButtonStatus(): void {
+  advancedGlueButtonStatus = (): void => {
     const currentDatasets = this._linkEditorModel.currentDatasets;
     const inputs = (
       this._advancedPanel.widgets[0] as Private.AdvancedAttributes
@@ -198,7 +198,7 @@ export class Linking extends LinkEditorWidget {
       currentDatasets.first !== currentDatasets.second &&
       new Set(inputs).size === inputs.length &&
       new Set(outputs).size === outputs.length;
-  }
+  };
 
   glueAdvanced = (): void => {
     const inputs = (
@@ -358,11 +358,10 @@ namespace Private {
       info: IAdvLinkDescription,
       currentDatasets: IDatasets,
       sharedModel: IGlueSessionSharedModel,
-      parentPanel: Linking
+      onAttributeChanged: () => void
     ) {
       super();
-      this._parentPanel = parentPanel;
-
+      this._onAttributeChanged = onAttributeChanged;
       this.node.append(this._description(info));
       this.node.append(
         this._attributes('inputs', currentDatasets.first, info, sharedModel)
@@ -388,7 +387,8 @@ namespace Private {
      */
     onSelectIO(ioType: IIOTypes, index: number, value: string): void {
       this._io[ioType][index] = value;
-      this._parentPanel.advancedGlueButtonStatus();
+      // this._parentPanel.advancedGlueButtonStatus();
+      this._onAttributeChanged();
     }
 
     /**
@@ -467,7 +467,8 @@ namespace Private {
       return div;
     }
 
-    private _parentPanel: Linking;
+    // private _parentPanel: Linking;
+    private _onAttributeChanged: () => void;
     private _io = {
       inputs: [] as string[],
       outputs: [] as string[]
