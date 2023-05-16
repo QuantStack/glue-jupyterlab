@@ -2,7 +2,7 @@ import { Toolbar } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { ILinkEditorModel } from '../types';
+import { IDatasetsKeys, IDatasets, ILinkEditorModel } from '../types';
 import { IGlueSessionSharedModel } from '../../types';
 
 export class LinkedDataset extends LinkEditorWidget {
@@ -28,31 +28,38 @@ export class LinkedDataset extends LinkEditorWidget {
 
     // Get a set of the identity linked dataset.
     const datasetLinks = new Set<string>();
-    Array.from(this._linkEditorModel.relatedLinks.values()).forEach(
-      relatedLink => {
-        if (relatedLink.src && relatedLink.dest) {
-          datasetLinks.add(
-            JSON.stringify(
-              [relatedLink.src.dataset, relatedLink.dest.dataset].sort()
-            )
-          );
-        }
-      }
-    );
-    Array.from(this._linkEditorModel.advancedLinks.values()).forEach(
-      advancedLink => {
+    this._linkEditorModel.relatedLinks.forEach(relatedLink => {
+      if (relatedLink.src && relatedLink.dest) {
+        const sortedDatasets = [
+          relatedLink.src.dataset,
+          relatedLink.dest.dataset
+        ].sort();
+
         datasetLinks.add(
-          JSON.stringify([advancedLink.data1, advancedLink.data2].sort())
+          JSON.stringify({
+            first: sortedDatasets[0],
+            second: sortedDatasets[1]
+          })
         );
       }
-    );
+    });
+    this._linkEditorModel.advancedLinks.forEach(advancedLink => {
+      const sortedDatasets = [advancedLink.data1, advancedLink.data2].sort();
+      datasetLinks.add(
+        JSON.stringify({
+          first: sortedDatasets[0],
+          second: sortedDatasets[1]
+        })
+      );
+    });
 
     // Updates the view with one widget per linked dataset.
     datasetLinks.forEach(datasetLink => {
-      const dataset = JSON.parse(datasetLink) as [string, string];
-      const widget = new Private.LinkedDataset(dataset);
+      const datasets = JSON.parse(datasetLink) as IDatasets;
+
+      const widget = new Private.LinkedDataset(datasets);
       widget.node.onclick = () => {
-        this._linkEditorModel.currentDatasets = [...dataset];
+        this._linkEditorModel.currentDatasets = { ...datasets };
       };
 
       this._createdLinksView.addWidget(widget);
@@ -69,15 +76,15 @@ export class LinkedDataset extends LinkEditorWidget {
     const datasetSelection = new Toolbar();
     datasetSelection.addClass('glue-LinkedDataset-select');
 
-    ([0, 1] as (0 | 1)[]).forEach(index => {
+    IDatasetsKeys.forEach(position => {
       const widget = new Widget({
         node: Private.datasetSelect(
-          index,
+          position,
           this._linkEditorModel,
           this._sharedModel
         )
       });
-      datasetSelection.addItem(`Dataset ${index}`, widget);
+      datasetSelection.addItem(`Dataset ${position}`, widget);
     });
 
     createdLinks.addWidget(datasetSelection);
@@ -113,10 +120,10 @@ namespace Private {
    * The widget displayed for each dataset linked together.
    */
   export class LinkedDataset extends Widget {
-    constructor(datasets: [string, string]) {
+    constructor(datasets: IDatasets) {
       super();
       this.addClass('glue-LinkEditor-createdLinks');
-      this.node.innerHTML = `<span>${datasets[0]}</span><span>${datasets[1]}</span>`;
+      this.node.innerHTML = `<span>${datasets.first}</span><span>${datasets.second}</span>`;
     }
   }
 
@@ -124,7 +131,7 @@ namespace Private {
    * The dataset select widget.
    */
   export function datasetSelect(
-    index: 0 | 1,
+    position: keyof IDatasets,
     model: ILinkEditorModel,
     sharedModel: IGlueSessionSharedModel
   ): HTMLSelectElement {
@@ -134,15 +141,15 @@ namespace Private {
 
     select.onchange = ev => {
       const value = (ev.target as HTMLSelectElement).value;
-      model.setCurrentDataset(index, value);
+      model.setCurrentDataset(position, value);
     };
 
     const addDatasets = (datasetsList: string[]): void => {
       // Removes previous datasets;
       select.innerHTML = '';
 
-      const value = model.currentDatasets[index]
-        ? model.currentDatasets[index]
+      const value = model.currentDatasets[position]
+        ? model.currentDatasets[position]
         : datasetsList[0] || '';
 
       // Adds new datasets.
@@ -157,8 +164,8 @@ namespace Private {
     };
 
     // Listen to the current dataset selection to change the value.
-    model.currentDatasetsChanged.connect((_, datasets: [string, string]) => {
-      select.value = datasets[index];
+    model.currentDatasetsChanged.connect((_, datasets: IDatasets) => {
+      select.value = datasets[position];
     });
 
     // Listen to the datasets list to change the options.

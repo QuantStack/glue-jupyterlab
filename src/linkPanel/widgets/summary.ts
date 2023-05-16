@@ -5,6 +5,7 @@ import { LinkEditorWidget } from '../linkEditorWidget';
 import {
   IAdvancedLinkInfo,
   IComponentLinkInfo,
+  IDatasets,
   ILinkEditorModel
 } from '../types';
 import { advancedLinks, identityLinks } from './linksSummary';
@@ -59,10 +60,7 @@ export class Summary extends LinkEditorWidget {
   /**
    * Callback when the selected datasets change.
    */
-  onDatasetsChange(
-    _sender: ILinkEditorModel,
-    datasets: [string, string]
-  ): void {
+  onDatasetsChange(_sender: ILinkEditorModel, datasets: IDatasets): void {
     this.updateIdentityLinks(datasets);
     this.updateAdvancedLinks(datasets);
   }
@@ -70,7 +68,7 @@ export class Summary extends LinkEditorWidget {
   /**
    * Updates the list of links when the selected dataset changes.
    */
-  updateIdentityLinks(dataset: [string, string]): void {
+  updateIdentityLinks(dataset: IDatasets): void {
     const links: [IComponentLinkInfo, boolean][] = [];
 
     // Remove all the existing widgets.
@@ -81,10 +79,10 @@ export class Summary extends LinkEditorWidget {
     // Keep only the links components for this dataset.
     this._linkEditorModel.relatedLinks.forEach(link => {
       if (
-        dataset.includes(link.src.dataset) &&
-        dataset.includes(link.dest.dataset)
+        Object.values(dataset).includes(link.src.dataset) &&
+        Object.values(dataset).includes(link.dest.dataset)
       ) {
-        const revert = link.dest.dataset === dataset[0];
+        const revert = link.dest.dataset === dataset.first;
         links.push([link, revert]);
       }
     });
@@ -98,7 +96,7 @@ export class Summary extends LinkEditorWidget {
   /**
    *
    */
-  updateAdvancedLinks(dataset: [string, string]): void {
+  updateAdvancedLinks(dataset: IDatasets): void {
     const links: IAdvancedLinkInfo[] = [];
 
     // Remove all the existing widgets.
@@ -106,7 +104,10 @@ export class Summary extends LinkEditorWidget {
       this._advancedLinks.widgets[0].dispose();
     }
     this._linkEditorModel.advancedLinks.forEach(link => {
-      if (dataset.includes(link.data1) && dataset.includes(link.data2)) {
+      if (
+        Object.values(dataset).includes(link.data1) &&
+        Object.values(dataset).includes(link.data2)
+      ) {
         links.push(link);
       }
     });

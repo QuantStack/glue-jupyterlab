@@ -11,7 +11,9 @@ import {
   IAdvLinkDescription,
   ILinkEditorModel,
   IComponentLink,
-  IAdvancedLink
+  IAdvancedLink,
+  IDatasets,
+  IDatasetsKeys
 } from '../types';
 
 export class Linking extends LinkEditorWidget {
@@ -44,12 +46,14 @@ export class Linking extends LinkEditorWidget {
         this._linkEditorModel.currentDatasets
       );
     }
+
+    this._selectedAttributes = {
+      first: '',
+      second: ''
+    };
   }
 
-  onDatasetChange = (
-    _sender: ILinkEditorModel,
-    selection: [string, string]
-  ): void => {
+  onDatasetChange = (_sender: ILinkEditorModel, selection: IDatasets): void => {
     this.updateIdentityAttributes();
     this.updateAdvancedLink();
   };
@@ -62,15 +66,17 @@ export class Linking extends LinkEditorWidget {
   };
 
   updateIdentityAttributes(): void {
-    this._linkEditorModel.currentDatasets.forEach((dataName, index) => {
+    IDatasetsKeys.forEach((position, index) => {
+      const dataset = this._linkEditorModel.currentDatasets[position];
+
       // no-op if the dataset did not change.
       const current = this._identityToolbar.get(index).widget.node.innerText;
-      if (dataName === current) {
+      if (dataset === current) {
         return;
       }
 
       // Update identity toolbar item.
-      this._identityToolbar.get(index).widget.node.innerText = dataName;
+      this._identityToolbar.get(index).widget.node.innerText = dataset;
 
       // Remove all the existing widgets.
       while (this._identityAttributes[index].widgets.length) {
@@ -79,7 +85,7 @@ export class Linking extends LinkEditorWidget {
 
       // Add a new widget for each attribute.
       let attributes: string[] =
-        this._sharedModel.dataset[dataName].primary_owner;
+        this._sharedModel.dataset[dataset].primary_owner;
 
       attributes = attributes.sort();
       attributes.forEach(value => {
@@ -111,9 +117,9 @@ export class Linking extends LinkEditorWidget {
     // Select the attribute.
     if (!isSelected) {
       attribute.addClass('selected');
-      this._selectedAttributes[index] = attribute.title.label;
+      this._selectedAttributes[IDatasetsKeys[index]] = attribute.title.label;
     } else {
-      this._selectedAttributes[index] = '';
+      this._selectedAttributes[IDatasetsKeys[index]] = '';
     }
 
     // Enable/disable the Glue button if datasets are different and attributes selected.
@@ -121,16 +127,16 @@ export class Linking extends LinkEditorWidget {
       this._identityToolbar.get(this._identityToolbar.length - 1)
         .widget as ToolbarButton
     ).enabled =
-      this._selectedAttributes.every(value => value !== '') &&
-      this._linkEditorModel.currentDatasets[0] !==
-        this._linkEditorModel.currentDatasets[1];
+      Object.values(this._selectedAttributes).every(value => value !== '') &&
+      this._linkEditorModel.currentDatasets.first !==
+        this._linkEditorModel.currentDatasets.second;
   }
 
   glueIdentity = (): void => {
     const link: IComponentLink = {
       _type: ComponentLinkType,
-      frm: [this._selectedAttributes[0]],
-      to: [this._selectedAttributes[1]]
+      frm: [this._selectedAttributes.first],
+      to: [this._selectedAttributes.second]
     };
     const linkName = Private.newLinkName('ComponentLink', this._sharedModel);
     this._sharedModel.setLink(linkName, link);
@@ -195,8 +201,8 @@ export class Linking extends LinkEditorWidget {
       _type: info?._type || '',
       cids1: input,
       cids2: output,
-      data1: this._linkEditorModel.currentDatasets[0],
-      data2: this._linkEditorModel.currentDatasets[1]
+      data1: this._linkEditorModel.currentDatasets.first,
+      data2: this._linkEditorModel.currentDatasets.second
     };
 
     const linkName = Private.newLinkName(info.function, this._sharedModel);
@@ -204,14 +210,15 @@ export class Linking extends LinkEditorWidget {
     this._sharedModel.setLink(linkName, link);
   };
 
-  _identityLinking(selections: [string, string]): BoxPanel {
+  _identityLinking(selections: IDatasets): BoxPanel {
     const panel = new BoxPanel();
     panel.title.label = 'Identity linking';
 
     const glueToolbar = new Toolbar();
     const attributes = new BoxPanel({ direction: 'left-to-right' });
 
-    selections.forEach((selection, index) => {
+    IDatasetsKeys.forEach((position, index) => {
+      const selection = selections[position];
       const datasetName = new Widget();
       datasetName.addClass('glue-LinkEditor-linkingDatasetName');
       datasetName.node.innerText = selection;
@@ -279,7 +286,7 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
-  private _selectedAttributes = ['', ''];
+  private _selectedAttributes: IDatasets;
   private _selectedAdvLink: Private.IAdvancedLinkSelected;
   private _identityToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
@@ -373,7 +380,7 @@ namespace Private {
    */
   export function advancedLinkAttributes(
     info: IAdvLinkDescription,
-    currentDatasets: [string, string],
+    currentDatasets: IDatasets,
     sharedModel: IGlueSessionSharedModel
   ): HTMLElement {
     const attrType = ['INPUT', 'OUTPUT'];
@@ -386,7 +393,8 @@ namespace Private {
     description.innerText = info.description;
     div.append(description);
 
-    currentDatasets.forEach((dataset, index) => {
+    IDatasetsKeys.forEach((position, index) => {
+      const dataset = currentDatasets[position];
       const datasetName = document.createElement('div');
 
       datasetName.style.padding = '1em 0.5em';

@@ -5,13 +5,14 @@ export { IAdvancedLink, IComponentLink } from '../_interface/glue.schema';
 
 export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
 
+export const IDatasetsKeys = ['first', 'second'] as (keyof IDatasets)[];
 /**
  * The link editor model.
  */
 export interface ILinkEditorModel {
-  currentDatasets: [string, string];
-  setCurrentDataset(index: 0 | 1, value: string): void;
-  readonly currentDatasetsChanged: ISignal<this, [string, string]>;
+  currentDatasets: IDatasets;
+  setCurrentDataset(position: keyof IDatasets, value: string): void;
+  readonly currentDatasetsChanged: ISignal<this, IDatasets>;
   readonly relatedLinks: Map<string, IComponentLinkInfo>;
   readonly advancedLinks: Map<string, IAdvancedLinkInfo>;
   readonly linksChanged: ISignal<this, void>;
@@ -64,4 +65,12 @@ export interface IAdvancedLinkInfo {
   data1: string;
   data2: string;
   origin: string;
+}
+
+/**
+ * Definition of the selected datasets.
+ */
+export interface IDatasets {
+  first: string;
+  second: string;
 }
