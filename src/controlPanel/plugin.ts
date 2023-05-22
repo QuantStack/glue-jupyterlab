@@ -52,7 +52,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
           pos: [0, 0],
           session: 'Session',
@@ -77,7 +77,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
           pos: [0, 0],
           session: 'Session',
@@ -102,7 +102,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
           pos: [0, 0],
           session: 'Session',
