@@ -64,6 +64,9 @@ export interface IGlueSessionSharedModel
   ): void;
   removeTabItem(tabName: string, itemID: string): void;
   moveTabItem(name: string, fromTab: string, toTab: string): void;
+
+  setSelectedTab(tab: number, emitter?: string): void;
+  getSelectedTab(): number | null;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {

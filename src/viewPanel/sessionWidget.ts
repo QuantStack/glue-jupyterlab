@@ -1,5 +1,5 @@
 import { PromiseDelegate } from '@lumino/coreutils';
-import { BoxPanel } from '@lumino/widgets';
+import { TabBar, BoxPanel, Widget } from '@lumino/widgets';
 
 import { Dialog, showDialog } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
@@ -41,6 +41,8 @@ export class SessionWidget extends BoxPanel {
     BoxPanel.setStretch(this._tabPanel, 1);
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
+
+    this._tabPanel.topBar.currentChanged.connect(this._onFocusedTabChanged, this);
 
     this._startKernel();
   }
@@ -176,6 +178,13 @@ export class SessionWidget extends BoxPanel {
     // }
 
     this._tabPanel.activateTab(1);
+  }
+
+  private _onFocusedTabChanged(
+    sender: TabBar<Widget>,
+    args: TabBar.ICurrentChangedArgs<Widget>
+    ) {
+    this._model.setSelectedTab(args.currentIndex);
   }
 
   private _tabViews: { [k: string]: TabView } = {};

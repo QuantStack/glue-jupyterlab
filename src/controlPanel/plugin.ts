@@ -8,6 +8,7 @@ import {
 } from '@jupyterlab/application';
 import { IGlueSessionTracker } from '../token';
 import { CommandIDs } from './commands';
+import { UUID } from '@lumino/coreutils';
 
 const NAME_SPACE = 'gluelab';
 
@@ -48,10 +49,10 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
           return;
         }
 
-        // TODO Add to the currently focused tab instead of always the first one!
         const tabs = Object.keys(controlModel.sharedModel.tabs);
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
           _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
           pos: [0, 0],
           session: 'Session',
@@ -73,10 +74,10 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
           return;
         }
 
-        // TODO Add to the currently focused tab instead of always the first one!
         const tabs = Object.keys(controlModel.sharedModel.tabs);
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
           _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
           pos: [0, 0],
           session: 'Session',
@@ -98,10 +99,10 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
           return;
         }
 
-        // TODO Add to the currently focused tab instead of always the first one!
         const tabs = Object.keys(controlModel.sharedModel.tabs);
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
 
-        controlModel.sharedModel.setTabItem(tabs[0], 'test', {
+        controlModel.sharedModel.setTabItem(tabs[focusedTab], UUID.uuid4(), {
           _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
           pos: [0, 0],
           session: 'Session',
