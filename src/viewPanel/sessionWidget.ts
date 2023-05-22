@@ -42,7 +42,10 @@ export class SessionWidget extends BoxPanel {
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
 
-    this._tabPanel.topBar.currentChanged.connect(this._onFocusedTabChanged, this);
+    this._tabPanel.topBar.currentChanged.connect(
+      this._onFocusedTabChanged,
+      this
+    );
 
     this._startKernel();
   }
@@ -183,7 +186,7 @@ export class SessionWidget extends BoxPanel {
   private _onFocusedTabChanged(
     sender: TabBar<Widget>,
     args: TabBar.ICurrentChangedArgs<Widget>
-    ) {
+  ) {
     this._model.setSelectedTab(args.currentIndex);
   }
 
