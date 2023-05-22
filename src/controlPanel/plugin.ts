@@ -160,6 +160,5 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         );
       }
     });
-
   }
 };

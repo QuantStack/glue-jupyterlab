@@ -89,7 +89,7 @@ export class SessionWidget extends BoxPanel {
       Histogram: CommandIDs.new1DHistogram,
       '2D Scatter': CommandIDs.new2DScatter,
       '2D Image': CommandIDs.new2DImage,
-      'Table': CommandIDs.newTable
+      Table: CommandIDs.newTable
     };
 
     const res = await InputDialog.getItem({
