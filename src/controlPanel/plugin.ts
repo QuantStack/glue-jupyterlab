@@ -130,5 +130,36 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         );
       }
     });
+
+    commands.addCommand(CommandIDs.newTable, {
+      label: 'Table',
+      iconClass: 'fa fa-table',
+      execute: (args?: INewViewerArgs) => {
+        if (!controlModel.sharedModel) {
+          return;
+        }
+
+        const tabs = Object.keys(controlModel.sharedModel.tabs);
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const layer = args?.dataset || controlModel.selectedDataset;
+
+        controlModel.sharedModel.setTabItem(
+          tabs[focusedTab - 1],
+          UUID.uuid4(),
+          {
+            _type: 'glue.viewers.table.qt.data_viewer.TableViewer',
+            pos: args?.position || [0, 0],
+            session: 'Session',
+            size: args?.size || [600, 400],
+            state: {
+              values: {
+                layer
+              }
+            }
+          }
+        );
+      }
+    });
+
   }
 };

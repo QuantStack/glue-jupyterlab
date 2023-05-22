@@ -7,6 +7,8 @@ export namespace CommandIDs {
   export const new2DImage = 'glue-control:new-2d-image-viewer';
 
   export const new2DScatter = 'glue-control:new-2d-scatter-viewer';
+
+  export const newTable = 'glue-control:new-table-viewer';
 }
 
 export interface INewViewerArgs {

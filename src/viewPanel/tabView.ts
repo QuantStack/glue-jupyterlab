@@ -294,6 +294,40 @@ export class TabView extends Widget {
         }
         break;
       }
+      case 'glue.viewers.table.qt.data_viewer.TableViewer': {
+        const outputAreaModel = new OutputAreaModel({ trusted: true });
+        const out = new SimplifiedOutputArea({
+          model: outputAreaModel,
+          rendermime: this._rendermime
+        });
+
+        item = new GridStackItem({
+          cellIdentity: viewerId,
+          cell: out,
+          itemTitle: 'Table',
+          pos: viewerData.pos,
+          size: viewerData.size
+        });
+        const cellOutput = item.cellOutput as SimplifiedOutputArea;
+        if (this._context) {
+          SimplifiedOutputArea.execute(
+            `
+            state = json.loads('${JSON.stringify(state)}')
+
+            hist = app.table(data=data[state["layer"]])
+
+            for key, value in state.items():
+                try:
+                    setattr(hist.state, key, value)
+                except:
+                    pass
+            `,
+            cellOutput,
+            this._context.sessionContext
+          );
+        }
+        break;
+      }
     }
     return item;
   }

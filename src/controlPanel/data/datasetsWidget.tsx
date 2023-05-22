@@ -33,6 +33,7 @@ export class DatasetsWidget extends ReactWidget {
     viewerSubmenu.addItem({ command: CommandIDs.new1DHistogram });
     viewerSubmenu.addItem({ command: CommandIDs.new2DScatter });
     viewerSubmenu.addItem({ command: CommandIDs.new2DImage });
+    viewerSubmenu.addItem({ command: CommandIDs.newTable });
     this._menu.addItem({ type: 'submenu', submenu: viewerSubmenu });
 
     this._model.selectedDatasetChanged.connect(this.update, this);
