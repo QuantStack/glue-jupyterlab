@@ -7,7 +7,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { IGlueSessionTracker } from '../token';
-import { CommandIDs } from './commands';
+import { CommandIDs, INewViewerArgs } from '../commands';
 import { UUID } from '@lumino/coreutils';
 
 const NAME_SPACE = 'gluelab';
@@ -44,22 +44,23 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
     commands.addCommand(CommandIDs.new1DHistogram, {
       label: '1D Histogram',
       iconClass: 'fa fa-chart-bar',
-      execute: () => {
+      execute: (args?: INewViewerArgs) => {
         if (!controlModel.sharedModel) {
           return;
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const layer = args?.dataset || controlModel.selectedDataset;
 
         controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
-          pos: [0, 0],
+          pos: args?.position || [0, 0],
           session: 'Session',
-          size: [600, 400],
+          size: args?.size || [600, 400],
           state: {
             values: {
-              layer: controlModel.selectedDataset
+              layer
             }
           }
         });
@@ -69,22 +70,23 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
     commands.addCommand(CommandIDs.new2DScatter, {
       label: '2D Scatter',
       iconClass: 'fa fa-circle',
-      execute: () => {
+      execute: (args?: INewViewerArgs) => {
         if (!controlModel.sharedModel) {
           return;
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const layer = args?.dataset || controlModel.selectedDataset;
 
         controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
-          pos: [0, 0],
+          pos: args?.position || [0, 0],
           session: 'Session',
-          size: [600, 400],
+          size: args?.size || [600, 400],
           state: {
             values: {
-              layer: controlModel.selectedDataset
+              layer
             }
           }
         });
@@ -94,22 +96,23 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
     commands.addCommand(CommandIDs.new2DImage, {
       label: '2D Image',
       iconClass: 'fa fa-image',
-      execute: () => {
+      execute: (args?: INewViewerArgs) => {
         if (!controlModel.sharedModel) {
           return;
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const layer = args?.dataset || controlModel.selectedDataset;
 
         controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
           _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
-          pos: [0, 0],
+          pos: args?.position || [0, 0],
           session: 'Session',
-          size: [600, 400],
+          size: args?.size || [600, 400],
           state: {
             values: {
-              layer: controlModel.selectedDataset
+              layer
             }
           }
         });

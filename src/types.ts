@@ -10,6 +10,8 @@ import {
   IGlueSessionTabs
 } from './_interface/glue.schema';
 
+export const DATASET_MIME = 'application/x-gluejupyter-dataset';
+
 export interface IDict<T = any> {
   [key: string]: T;
 }

@@ -5,8 +5,8 @@ import { Menu } from '@lumino/widgets';
 
 import { ReactWidget } from '@jupyterlab/ui-components';
 
-import { IControlPanelModel, IGlueSessionSharedModel } from '../../types';
-import { CommandIDs } from '../commands';
+import { DATASET_MIME, IControlPanelModel, IGlueSessionSharedModel } from '../../types';
+import { CommandIDs } from '../../commands';
 
 export class DatasetsWidget extends ReactWidget {
   constructor(options: {
@@ -89,10 +89,18 @@ export class DatasetsWidget extends ReactWidget {
         : ''
     }`;
     return (
-      <li id={id} className={className} onClick={this._onClick.bind(this)}>
+      <li id={id} className={className} onClick={this._onClick.bind(this)} draggable="true" onDragStart={this._onDragStart(id)}>
         {id}
       </li>
     );
+  }
+
+  private _onDragStart(id: string): (event: React.DragEvent) => void {
+    return (event: React.DragEvent) => {
+      console.log('drag start', id, event);
+
+      event.dataTransfer.setData(DATASET_MIME, id);
+    };
   }
 
   render(): JSX.Element {
