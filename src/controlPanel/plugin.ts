@@ -53,17 +53,21 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
-          _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
-          pos: args?.position || [0, 0],
-          session: 'Session',
-          size: args?.size || [600, 400],
-          state: {
-            values: {
-              layer
+        controlModel.sharedModel.setTabItem(
+          tabs[focusedTab - 1],
+          UUID.uuid4(),
+          {
+            _type: 'glue.viewers.histogram.qt.data_viewer.HistogramViewer',
+            pos: args?.position || [0, 0],
+            session: 'Session',
+            size: args?.size || [600, 400],
+            state: {
+              values: {
+                layer
+              }
             }
           }
-        });
+        );
       }
     });
 
@@ -79,17 +83,21 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
-          _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
-          pos: args?.position || [0, 0],
-          session: 'Session',
-          size: args?.size || [600, 400],
-          state: {
-            values: {
-              layer
+        controlModel.sharedModel.setTabItem(
+          tabs[focusedTab - 1],
+          UUID.uuid4(),
+          {
+            _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
+            pos: args?.position || [0, 0],
+            session: 'Session',
+            size: args?.size || [600, 400],
+            state: {
+              values: {
+                layer
+              }
             }
           }
-        });
+        );
       }
     });
 
@@ -105,17 +113,21 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
-          _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
-          pos: args?.position || [0, 0],
-          session: 'Session',
-          size: args?.size || [600, 400],
-          state: {
-            values: {
-              layer
+        controlModel.sharedModel.setTabItem(
+          tabs[focusedTab - 1],
+          UUID.uuid4(),
+          {
+            _type: 'glue.viewers.image.qt.data_viewer.ImageViewer',
+            pos: args?.position || [0, 0],
+            session: 'Session',
+            size: args?.size || [600, 400],
+            state: {
+              values: {
+                layer
+              }
             }
           }
-        });
+        );
       }
     });
   }

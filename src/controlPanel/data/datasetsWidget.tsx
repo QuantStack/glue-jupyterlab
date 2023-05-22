@@ -5,7 +5,11 @@ import { Menu } from '@lumino/widgets';
 
 import { ReactWidget } from '@jupyterlab/ui-components';
 
-import { DATASET_MIME, IControlPanelModel, IGlueSessionSharedModel } from '../../types';
+import {
+  DATASET_MIME,
+  IControlPanelModel,
+  IGlueSessionSharedModel
+} from '../../types';
 import { CommandIDs } from '../../commands';
 
 export class DatasetsWidget extends ReactWidget {
@@ -89,7 +93,13 @@ export class DatasetsWidget extends ReactWidget {
         : ''
     }`;
     return (
-      <li id={id} className={className} onClick={this._onClick.bind(this)} draggable="true" onDragStart={this._onDragStart(id)}>
+      <li
+        id={id}
+        className={className}
+        onClick={this._onClick.bind(this)}
+        draggable="true"
+        onDragStart={this._onDragStart(id)}
+      >
         {id}
       </li>
     );

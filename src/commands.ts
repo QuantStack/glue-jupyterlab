@@ -9,7 +9,6 @@ export namespace CommandIDs {
   export const new2DScatter = 'glue-control:new-2d-scatter-viewer';
 }
 
-
 export interface INewViewerArgs {
   dataset?: string;
   position?: [number, number];

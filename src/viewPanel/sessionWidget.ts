@@ -7,7 +7,12 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { HTabPanel } from '../common/tabPanel';
-import { DATASET_MIME, IDict, IGlueSessionSharedModel, ILoadLog } from '../types';
+import {
+  DATASET_MIME,
+  IDict,
+  IGlueSessionSharedModel,
+  ILoadLog
+} from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
@@ -81,7 +86,7 @@ export class SessionWidget extends BoxPanel {
     const datasetId = event.dataTransfer?.getData(DATASET_MIME);
 
     const items: IDict<string> = {
-      'Histogram': CommandIDs.new1DHistogram,
+      Histogram: CommandIDs.new1DHistogram,
       '2D Scatter': CommandIDs.new2DScatter,
       '2D Image': CommandIDs.new2DImage
     };
