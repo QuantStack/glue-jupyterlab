@@ -13,7 +13,6 @@ import {
   IGlueSessionViewerTypes
 } from '../types';
 import { globalMutex } from '../document/sharedModel';
-import { Signal } from '@lumino/signaling';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { GlueSessionModel } from '../document/docModel';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
