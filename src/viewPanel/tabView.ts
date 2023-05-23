@@ -38,13 +38,8 @@ export class TabView extends Widget {
 
     this._addCommands();
 
-    this._ready = new Signal<this, null>(this);
-    this._ready.connect(() => {
-      this._updateViewers();
-    });
-
     this._context.sessionContext.ready.then(() => {
-      this._ready.emit(null);
+      this._updateViewers();
     });
 
     layout.gridItemChanged.connect(this._onLayoutChanged, this);
@@ -451,7 +446,6 @@ export class TabView extends Widget {
   }
 
   private _viewers: { [viewerId: string]: GridStackItem | undefined } = {};
-  private _ready: Signal<this, null>;
   private _dataLoaded: PromiseDelegate<void>;
   private _selectedItem: GridStackItem | null = null;
   private _model: IGlueSessionSharedModel;
