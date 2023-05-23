@@ -53,7 +53,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        if (focusedTab == 0) {
+        if (focusedTab === 0) {
           return;
         }
 
@@ -87,7 +87,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        if (focusedTab == 0) {
+        if (focusedTab === 0) {
           return;
         }
 
@@ -121,7 +121,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        if (focusedTab == 0) {
+        if (focusedTab === 0) {
           return;
         }
 
@@ -155,7 +155,7 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
 
-        if (focusedTab == 0) {
+        if (focusedTab === 0) {
           return;
         }
 
