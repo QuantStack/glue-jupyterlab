@@ -108,7 +108,6 @@ export class DatasetsWidget extends ReactWidget {
 
   private _onDragStart(id: string): (event: React.DragEvent) => void {
     return (event: React.DragEvent) => {
-      console.log('drag start', id, event);
 
       event.dataTransfer.setData(DATASET_MIME, id);
     };
