@@ -50,8 +50,12 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
-        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
+
+        if (focusedTab == 0) {
+          return;
+        }
 
         controlModel.sharedModel.setTabItem(
           tabs[focusedTab - 1],
@@ -80,8 +84,12 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
-        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
+
+        if (focusedTab == 0) {
+          return;
+        }
 
         controlModel.sharedModel.setTabItem(
           tabs[focusedTab - 1],
@@ -110,8 +118,12 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
-        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
+
+        if (focusedTab == 0) {
+          return;
+        }
 
         controlModel.sharedModel.setTabItem(
           tabs[focusedTab - 1],
@@ -140,8 +152,12 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
         }
 
         const tabs = Object.keys(controlModel.sharedModel.tabs);
-        const focusedTab = controlModel.sharedModel.getSelectedTab() || 0;
+        const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
         const layer = args?.dataset || controlModel.selectedDataset;
+
+        if (focusedTab == 0) {
+          return;
+        }
 
         controlModel.sharedModel.setTabItem(
           tabs[focusedTab - 1],
