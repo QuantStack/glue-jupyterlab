@@ -1,19 +1,26 @@
 import { PromiseDelegate } from '@lumino/coreutils';
-import { BoxPanel } from '@lumino/widgets';
+import { TabBar, BoxPanel, Widget } from '@lumino/widgets';
 
-import { Dialog, showDialog } from '@jupyterlab/apputils';
+import { Dialog, InputDialog, showDialog } from '@jupyterlab/apputils';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { HTabPanel } from '../common/tabPanel';
-import { IGlueSessionSharedModel, ILoadLog } from '../types';
+import {
+  DATASET_MIME,
+  IDict,
+  IGlueSessionSharedModel,
+  ILoadLog
+} from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
-import { TabModel } from './tabModel';
 import { LinkEditor } from '../linkPanel/linkEditor';
 import { PathExt } from '@jupyterlab/coreutils';
+import { Message } from '@lumino/messaging';
+import { CommandRegistry } from '@lumino/commands';
+import { CommandIDs } from '../commands';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -24,6 +31,8 @@ export class SessionWidget extends BoxPanel {
     this._rendermime = options.rendermime;
     this._notebookTracker = options.notebookTracker;
     this._context = options.context;
+    this._commands = options.commands;
+
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
       tabBarPosition: 'bottom',
@@ -43,11 +52,57 @@ export class SessionWidget extends BoxPanel {
 
     this._model.tabsChanged.connect(this._onTabsChanged, this);
 
+    this._tabPanel.topBar.currentChanged.connect(
+      this._onFocusedTabChanged,
+      this
+    );
+
     this._startKernel();
   }
 
   get rendermime(): IRenderMimeRegistry {
     return this._rendermime;
+  }
+
+  protected onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+
+    this.node.addEventListener('dragover', this._ondragover.bind(this));
+    this.node.addEventListener('drop', this._ondrop.bind(this));
+  }
+
+  protected onBeforeDetach(msg: Message): void {
+    this.node.removeEventListener('dragover', this._ondragover.bind(this));
+    this.node.removeEventListener('drop', this._ondrop.bind(this));
+
+    super.onBeforeDetach(msg);
+  }
+
+  private _ondragover(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  private async _ondrop(event: DragEvent) {
+    const datasetId = event.dataTransfer?.getData(DATASET_MIME);
+
+    const items: IDict<string> = {
+      Histogram: CommandIDs.new1DHistogram,
+      '2D Scatter': CommandIDs.new2DScatter,
+      '2D Image': CommandIDs.new2DImage,
+      Table: CommandIDs.newTable
+    };
+
+    const res = await InputDialog.getItem({
+      title: 'Viewer Type',
+      items: Object.keys(items)
+    });
+
+    if (res.button.accept && res.value) {
+      this._commands.execute(items[res.value], {
+        position: [event.offsetX, event.offsetY],
+        dataset: datasetId
+      });
+    }
   }
 
   private async _startKernel() {
@@ -148,22 +203,45 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _onTabsChanged(): void {
-    this._model.getTabNames().forEach(async (tabName, idx) => {
-      const model = new TabModel({
+    const tabNames = this._model.getTabNames();
+
+    tabNames.forEach((tabName, idx) => {
+      // Tab already exists, we don't do anything
+      if (tabName in this._tabViews) {
+        return;
+      }
+
+      // Tab does not exist, we create it
+      const tabWidget = (this._tabViews[tabName] = new TabView({
         tabName,
         model: this._model,
         rendermime: this._rendermime,
         context: this._context,
         notebookTracker: this._notebookTracker,
         dataLoaded: this._dataLoaded
-      });
-      const tabWidget = new TabView({ model });
+      }));
 
       this._tabPanel.addTab(tabWidget, idx + 1);
     });
+
+    // TODO Remove leftover tabs
+    // for (const tabName in Object.keys(this._tabViews)) {
+    //   if (!(tabName in tabNames)) {
+    //     todo
+    //   }
+    // }
+
     this._tabPanel.activateTab(1);
   }
 
+  private _onFocusedTabChanged(
+    sender: TabBar<Widget>,
+    args: TabBar.ICurrentChangedArgs<Widget>
+  ) {
+    this._model.setSelectedTab(args.currentIndex);
+  }
+
+  private _tabViews: { [k: string]: TabView } = {};
   private _dataLoaded: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkEditor | undefined = undefined;
@@ -171,6 +249,7 @@ export class SessionWidget extends BoxPanel {
   private _rendermime: IRenderMimeRegistry;
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
   private _notebookTracker: INotebookTracker;
+  private _commands: CommandRegistry;
 }
 
 export namespace SessionWidget {
@@ -179,5 +258,6 @@ export namespace SessionWidget {
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
+    commands: CommandRegistry;
   }
 }

@@ -131,6 +131,21 @@
   min-height: calc(100% - 8px);
 }
 
+.glue-Session-gridhost::before {
+  content: 'Drag Data To Plot';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 30px;
+  font-weight: bold;
+}
+
 .grid-stack-item-content {
   color: var(--jp-content-font-color1);
   background-color: var(--jp-layout-color1);

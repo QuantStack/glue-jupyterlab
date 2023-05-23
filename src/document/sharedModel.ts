@@ -175,6 +175,23 @@ export class GlueSessionSharedModel
     }
   }
 
+  setSelectedTab(tab: number, emitter?: string): void {
+    this.awareness.setLocalStateField('selectedTab', {
+      value: tab,
+      emitter: emitter
+    });
+  }
+
+  getSelectedTab(): number | null {
+    const state = this.awareness.getLocalState();
+
+    if (!state || !state['selectedTab']) {
+      return null;
+    }
+
+    return state['selectedTab'].value;
+  }
+
   private _contentsObserver = (event: Y.YMapEvent<IDict>): void => {
     const contents = this.contents;
     this._changed.emit(contents);

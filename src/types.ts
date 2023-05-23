@@ -10,6 +10,8 @@ import {
   IGlueSessionTabs
 } from './_interface/glue.schema';
 
+export const DATASET_MIME = 'application/x-gluejupyter-dataset';
+
 export interface IDict<T = any> {
   [key: string]: T;
 }
@@ -39,7 +41,6 @@ export interface IGlueSessionSharedModel
   dataset: IGlueSessionDataset;
   links: IGlueSessionLinks;
   tabs: IGlueSessionTabs;
-
   contentsChanged: ISignal<IGlueSessionSharedModel, IDict>;
   datasetChanged: ISignal<IGlueSessionSharedModel, IDict>;
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
@@ -65,6 +66,9 @@ export interface IGlueSessionSharedModel
   ): void;
   removeTabItem(tabName: string, itemID: string): void;
   moveTabItem(name: string, fromTab: string, toTab: string): void;
+
+  setSelectedTab(tab: number, emitter?: string): void;
+  getSelectedTab(): number | null;
 }
 
 export interface IGlueSessionModel extends DocumentRegistry.IModel {

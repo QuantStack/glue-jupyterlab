@@ -59,7 +59,8 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       rendermime,
       notebookTracker,
       preferKernel: true,
-      canStartKernel: true
+      canStartKernel: true,
+      commands: app.commands
     });
     widgetFactory.widgetCreated.connect((_, widget) => {
       widget.context.pathChanged.connect(() => {
