@@ -19,6 +19,8 @@ class YGlue(YBaseDoc):
         self._ylinks = self._ydoc.get_map("links")
         self._ytabs = self._ydoc.get_map("tabs")
 
+        self._data_collection_name = ""
+
     @property
     def version(self) -> str:
         """
@@ -34,20 +36,45 @@ class YGlue(YBaseDoc):
         :return: Document's content.
         :rtype: Any
         """
-        contents = self._ycontents.to_json()
-        attributes = self._yattributes.to_json()
-        dataset = self._ydataset.to_json()
-        links = self._ylinks.to_json()
-        tabs = self._ytabs.to_json()
-        return json.dumps(
-            dict(
-                contents=contents,
-                attributes=attributes,
-                dataset=dataset,
-                links=links,
-                tabs=tabs,
-            )
-        )
+        contents = json.loads(self._ycontents.to_json())
+        json.loads(self._yattributes.to_json())
+        dataset = json.loads(self._ydataset.to_json())
+        links = json.loads(self._ylinks.to_json())
+        tabs = json.loads(self._ytabs.to_json())
+
+        contents.setdefault("__main__", {})
+
+        tab_names = sorted(list(tabs.keys()))
+        contents["__main__"]["tab_names"] = tab_names
+
+        contents["__main__"].setdefault("viewers", [])
+
+        while len(contents["__main__"]["viewers"]) != len(tab_names):
+            contents["__main__"]["viewers"].append([])
+
+        viewer_names = []
+        for idx, tab in enumerate(tab_names):
+            viewers = tabs[tab]
+            viewer_names = sorted(list(viewers.keys()))
+
+            contents["__main__"]["viewers"][idx] = viewer_names
+            for viewer in viewer_names:
+                contents[viewer] = viewers[viewer]
+
+        if self._data_collection_name:
+            data_names = sorted(list(dataset.keys()))
+            link_names = sorted(list(links.keys()))
+
+            contents[self._data_collection_name]["data"] = data_names
+            contents[self._data_collection_name]["links"] = link_names
+
+            for data_name in data_names:
+                contents[data_name] = dataset[data_name]
+
+            for link_name in link_names:
+                contents[link_name] = links[link_name]
+
+        return json.dumps(contents, sort_keys=True)
 
     def set(self, value: str) -> None:
         """
@@ -66,12 +93,12 @@ class YGlue(YBaseDoc):
                 items[viewer] = contents.get(viewer, {})
             tabs[tab] = Y.YMap(items)
 
-        data_collection_name: str = contents.get("__main__", {}).get("data", "")
+        self._data_collection_name: str = contents.get("__main__", {}).get("data", "")
         data_names: List[str] = []
         link_names: List[str] = []
-        if data_collection_name:
-            data_names = contents.get(data_collection_name, {}).get("data", [])
-            link_names = contents.get(data_collection_name, {}).get("links", [])
+        if self._data_collection_name:
+            data_names = contents.get(self._data_collection_name, {}).get("data", [])
+            link_names = contents.get(self._data_collection_name, {}).get("links", [])
 
         dataset: Dict[str, Dict] = {}
         attributes: Dict[str, Dict] = {}
