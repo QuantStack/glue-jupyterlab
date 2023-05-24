@@ -333,7 +333,7 @@ export class TabView extends Widget {
       execute: async () => {
         if (this._model && this._selectedItem) {
           const res = await InputDialog.getItem({
-            title: 'Select the destination tab.',
+            title: 'Move To Tab',
             items: this._model
               .getTabNames()
               .filter(name => name !== this._tabName)
