@@ -52,7 +52,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
     canvasTracker: WidgetTracker,
     drive: ICollaborativeDrive,
     notebookTracker: INotebookTracker,
-    wm: IJupyterYWidgetManager
+    yWidgetManager: IJupyterYWidgetManager
   ) => {
     const widgetFactory = new GlueCanvasWidgetFactory({
       name: 'Glue Lab',
@@ -61,7 +61,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       defaultFor: ['glu'],
       rendermime,
       notebookTracker,
-      wm,
+      yWidgetManager: yWidgetManager,
       preferKernel: true,
       canStartKernel: true,
       commands: app.commands

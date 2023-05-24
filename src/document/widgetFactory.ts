@@ -14,12 +14,13 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueSessionModel
 > {
   constructor(options: GlueCanvasWidgetFactory.IOptions) {
-    const { rendermime, notebookTracker, commands, wm, ...rest } = options;
+    const { rendermime, notebookTracker, commands, yWidgetManager, ...rest } =
+      options;
     super(rest);
     this._rendermime = rendermime;
     this._notebookTracker = notebookTracker;
     this._commands = commands;
-    this._wm = wm;
+    this._yWidgetManager = yWidgetManager;
   }
 
   /**
@@ -37,7 +38,7 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
       notebookTracker: this._notebookTracker,
       context,
       commands: this._commands,
-      wm: this._wm
+      yWidgetManager: this._yWidgetManager
     });
     return new GlueDocumentWidget({ context, content });
   }
@@ -45,7 +46,7 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   private _rendermime: IRenderMimeRegistry;
   private _notebookTracker: INotebookTracker;
   private _commands: CommandRegistry;
-  private _wm: IJupyterYWidgetManager;
+  private _yWidgetManager: IJupyterYWidgetManager;
 }
 
 export namespace GlueCanvasWidgetFactory {
@@ -53,6 +54,6 @@ export namespace GlueCanvasWidgetFactory {
     rendermime: IRenderMimeRegistry;
     notebookTracker: INotebookTracker;
     commands: CommandRegistry;
-    wm: IJupyterYWidgetManager;
+    yWidgetManager: IJupyterYWidgetManager;
   }
 }

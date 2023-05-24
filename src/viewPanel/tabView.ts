@@ -27,7 +27,7 @@ export class TabView extends Widget {
     this._model = options.model;
     this._tabName = this.title.label = options.tabName;
     this._context = options.context;
-    this._dataLoaded = options.dataLoaded;
+    // this._dataLoaded = options.dataLoaded;
     this._rendermime = options.rendermime;
 
     const layout = (this.layout = new TabLayout());
@@ -126,6 +126,7 @@ export class TabView extends Widget {
 
       // Create new viewers
       const viewer = (this._viewers[viewerId] = await this._createViewer(
+        this.tabName,
         viewerId,
         viewerData
       ));
@@ -148,12 +149,12 @@ export class TabView extends Widget {
   }
 
   private async _createViewer(
+    tabName: string,
     viewerId: string,
     viewerData: IGlueSessionViewerTypes
   ): Promise<GridStackItem | undefined> {
-    let item: GridStackItem | undefined = undefined;
-
-    await this._dataLoaded.promise;
+    console.log('viewerData', tabName, viewerId, viewerData);
+    // await this._dataLoaded.promise;
 
     // Extract plot state
     const state: { [k: string]: any } = {};
@@ -190,140 +191,54 @@ export class TabView extends Widget {
         state[prop] = value;
       }
     }
-
+    let itemTitle: string | undefined = undefined;
     switch (viewerData._type) {
       case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
-        const outputAreaModel = new OutputAreaModel({ trusted: true });
-        const out = new SimplifiedOutputArea({
-          model: outputAreaModel,
-          rendermime: this._rendermime
-        });
-
-        item = new GridStackItem({
-          cellIdentity: viewerId,
-          cell: out,
-          itemTitle: '2D Scatter',
-          pos: viewerData.pos,
-          size: viewerData.size
-        });
-        const cellOutput = item.cellOutput as SimplifiedOutputArea;
-        if (this._context) {
-          SimplifiedOutputArea.execute(
-            `
-            state = json.loads('${JSON.stringify(state)}')
-
-            scatter = app.scatter2d(data=data[state["layer"]])
-
-            for key, value in state.items():
-                try:
-                    setattr(scatter.state, key, value)
-                except:
-                    pass
-            `,
-            cellOutput,
-            this._context.sessionContext
-          );
-        }
+        itemTitle = '2D Scatter';
         break;
       }
       case 'glue.viewers.image.qt.data_viewer.ImageViewer': {
-        const outputAreaModel = new OutputAreaModel({ trusted: true });
-        const out = new SimplifiedOutputArea({
-          model: outputAreaModel,
-          rendermime: this._rendermime
-        });
-
-        item = new GridStackItem({
-          cellIdentity: viewerId,
-          cell: out,
-          itemTitle: 'Image',
-          pos: viewerData.pos,
-          size: viewerData.size
-        });
-        const cellOutput = item.cellOutput as SimplifiedOutputArea;
-        if (this._context) {
-          SimplifiedOutputArea.execute(
-            `
-            state = json.loads('${JSON.stringify(state)}')
-
-            image = app.imshow(data=data[state["layer"]])
-            `,
-            cellOutput,
-            this._context.sessionContext
-          );
-        }
+        itemTitle = 'Image';
         break;
       }
       case 'glue.viewers.histogram.qt.data_viewer.HistogramViewer': {
-        const outputAreaModel = new OutputAreaModel({ trusted: true });
-        const out = new SimplifiedOutputArea({
-          model: outputAreaModel,
-          rendermime: this._rendermime
-        });
-
-        item = new GridStackItem({
-          cellIdentity: viewerId,
-          cell: out,
-          itemTitle: 'Histogram',
-          pos: viewerData.pos,
-          size: viewerData.size
-        });
-        const cellOutput = item.cellOutput as SimplifiedOutputArea;
-        if (this._context) {
-          SimplifiedOutputArea.execute(
-            `
-            state = json.loads('${JSON.stringify(state)}')
-
-            hist = app.histogram1d(data=data[state["layer"]])
-
-            for key, value in state.items():
-                try:
-                    setattr(hist.state, key, value)
-                except:
-                    pass
-            `,
-            cellOutput,
-            this._context.sessionContext
-          );
-        }
+        itemTitle = 'Histogram';
         break;
       }
       case 'glue.viewers.table.qt.data_viewer.TableViewer': {
-        const outputAreaModel = new OutputAreaModel({ trusted: true });
-        const out = new SimplifiedOutputArea({
-          model: outputAreaModel,
-          rendermime: this._rendermime
-        });
-
-        item = new GridStackItem({
-          cellIdentity: viewerId,
-          cell: out,
-          itemTitle: 'Table',
-          pos: viewerData.pos,
-          size: viewerData.size
-        });
-        const cellOutput = item.cellOutput as SimplifiedOutputArea;
-        if (this._context) {
-          SimplifiedOutputArea.execute(
-            `
-            state = json.loads('${JSON.stringify(state)}')
-
-            hist = app.table(data=data[state["layer"]])
-
-            for key, value in state.items():
-                try:
-                    setattr(hist.state, key, value)
-                except:
-                    pass
-            `,
-            cellOutput,
-            this._context.sessionContext
-          );
-        }
+        itemTitle = 'Table';
         break;
       }
     }
-    return item;
+    if (itemTitle) {
+      const outputAreaModel = new OutputAreaModel({ trusted: true });
+      const out = new SimplifiedOutputArea({
+        model: outputAreaModel,
+        rendermime: this._rendermime
+      });
+
+      const item = new GridStackItem({
+        cellIdentity: viewerId,
+        cell: out,
+        itemTitle: '2D Scatter',
+        pos: viewerData.pos,
+        size: viewerData.size
+      });
+      const cellOutput = item.cellOutput as SimplifiedOutputArea;
+      if (this._context) {
+        SimplifiedOutputArea.execute(
+          `
+          import json
+          GLUE_SESSION.create_viewer("${tabName}", "${viewerId}","${
+            viewerData._type
+          }", json.loads('${JSON.stringify(state)}'))
+          `,
+          cellOutput,
+          this._context.sessionContext
+        );
+      }
+      return item;
+    }
   }
 
   private _addCommands(): void {
@@ -445,7 +360,6 @@ export class TabView extends Widget {
   }
 
   private _viewers: { [viewerId: string]: GridStackItem | undefined } = {};
-  private _dataLoaded: PromiseDelegate<void>;
   private _selectedItem: GridStackItem | null = null;
   private _model: IGlueSessionSharedModel;
   private _context: DocumentRegistry.IContext<GlueSessionModel>;

@@ -7,17 +7,12 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { HTabPanel } from '../common/tabPanel';
-import {
-  DATASET_MIME,
-  IDict,
-  IGlueSessionSharedModel,
-  ILoadLog
-} from '../types';
+import { DATASET_MIME, IDict, IGlueSessionSharedModel } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
 import { LinkEditor } from '../linkPanel/linkEditor';
-import { PathExt } from '@jupyterlab/coreutils';
+
 import { Message } from '@lumino/messaging';
 import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
@@ -33,8 +28,8 @@ export class SessionWidget extends BoxPanel {
     this._notebookTracker = options.notebookTracker;
     this._context = options.context;
     this._commands = options.commands;
-    this._wm = options.wm;
-    
+    this._yWidgetManager = options.yWidgetManager;
+
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
       tabBarPosition: 'bottom',
@@ -120,141 +115,87 @@ export class SessionWidget extends BoxPanel {
     if (!kernel) {
       void showDialog({
         title: 'Error',
-        body: 'Failed to start the kernel for the GLue session',
+        body: 'Failed to start the kernel for the Glue session',
         buttons: [Dialog.cancelButton()]
       });
       return;
     }
-    this._wm.registerKernel(kernel);
-
-    let code = `
-    import os
-    import y_py as Y
-    from ypywidgets import Widget, reactive
-
-    n = os.linesep
-
-    class GlueSession(Widget):
-        def __init__(self, path: str):
-            with open("debug.txt", "at") as f: f.write(f"GlueSession{n}")
-            ydoc = Y.YDoc()
-            self._contents = ydoc.get_map("contents")
-            self._dataset = ydoc.get_map("dataset")
-            self._links = ydoc.get_map("links")
-            self._tabs = ydoc.get_map("tabs")
-
-            self._contents.observe(self._set_contents)
-            self._dataset.observe(self._set_dataset)
-            self._links.observe(self._set_links)
-            self._tabs.observe(self._set_tabs)
-
-            super().__init__(
-                ydoc=ydoc,
-                comm_metadata=dict(
-                    ymodel_name="GlueSession",
-                    create_ydoc=False,
-                    path=path,
-                ),
-            )
-
-        def _set_contents(self, event):
-            with open("debug.txt", "at") as f: f.write(f"contents{n}{event}{n}")
-
-        def _set_dataset(self, event):
-            with open("debug.txt", "at") as f: f.write(f"dataset{n}{event}{n}")
-
-        def _set_links(self, event):
-            with open("debug.txt", "at") as f: f.write(f"links{n}{event}{n}")
-
-        def _set_tabs(self, event):
-            with open("debug.txt", "at") as f: f.write(f"tabs{n}{event}{n}")
-
-
-    glue_session = GlueSession("${this._context.localPath}")
-    `;
-
-    let future = kernel.requestExecute({ code }, false);
-    future.onReply = msg => {
-      console.log(msg);
-    };
-    await future.done;
-    // TODO Handle loading errors and report in the UI?
-    code = `
-    # Ignoring warnings so they don't show up in viewers
-    # TODO don't suppress warnings but redirect them?
-    import warnings
-    warnings.filterwarnings("ignore")
-
-    import json
-    import glue_jupyter as gj
-
-    app = gj.jglue()
-    `;
-
-    future = kernel.requestExecute({ code }, false);
-    future.onReply = msg => {
-      console.log(msg);
-    };
-    await future.done;
-
-    await this._loadData();
-    this._model.contentsChanged.connect(this._loadData, this);
-  }
-
-  private async _loadData() {
-    const kernel = this._context?.sessionContext.session?.kernel;
-
-    if (!kernel) {
-      console.error('No kernel running');
-      return;
-    }
-
-    // Extract session path
-    let sessionPath: string;
-    if (this._context.path.includes(':')) {
-      sessionPath = this._context.path.split(':')[1];
-    } else {
-      sessionPath = this._context.path;
-    }
-
-    // Extract paths to datasets
-    const dataPaths: { [k: string]: string } = {};
-    if ('LoadLog' in this._model.contents) {
-      const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
-        .path;
-      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        PathExt.join(PathExt.dirname(sessionPath), path);
-    }
-    let i = 0;
-    while (`LoadLog_${i}` in this._model.contents) {
-      const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
-        .path;
-      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        PathExt.join(PathExt.dirname(sessionPath), path);
-      i++;
-    }
-
-    if (!dataPaths) {
-      return;
-    }
+    this._yWidgetManager.registerKernel(kernel);
 
     // TODO Handle loading errors and report in the UI?
     const code = `
-    data_paths = json.loads('${JSON.stringify(dataPaths)}')
+    # Ignoring warnings so they don't show up in viewers
+    # TODO don't suppress warnings but redirect them?
 
-    data = {}
-    for name, path in data_paths.items():
-        data[name] = app.load_data(path)
+    from glue_lab.glue_session import SharedGlueSession
+
+    GLUE_SESSION = SharedGlueSession("${this._context.localPath}")
     `;
 
     const future = kernel.requestExecute({ code }, false);
     future.onReply = msg => {
-      console.log(msg);
+      console.log('MSG', msg);
     };
     await future.done;
 
-    this._dataLoaded.resolve();
+    // await this._loadData();
+    // this._model.contentsChanged.connect(this._loadData, this);
   }
+
+  // private async _loadData() {
+  //   const kernel = this._context?.sessionContext.session?.kernel;
+
+  //   if (!kernel) {
+  //     console.error('No kernel running');
+  //     return;
+  //   }
+
+  //   // Extract session path
+  //   let sessionPath: string;
+  //   if (this._context.path.includes(':')) {
+  //     sessionPath = this._context.path.split(':')[1];
+  //   } else {
+  //     sessionPath = this._context.path;
+  //   }
+
+  //   // Extract paths to datasets
+  //   const dataPaths: { [k: string]: string } = {};
+  //   if ('LoadLog' in this._model.contents) {
+  //     const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
+  //       .path;
+  //     dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
+  //       PathExt.join(PathExt.dirname(sessionPath), path);
+  //   }
+  //   let i = 0;
+  //   while (`LoadLog_${i}` in this._model.contents) {
+  //     const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
+  //       .path;
+  //     dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
+  //       PathExt.join(PathExt.dirname(sessionPath), path);
+  //     i++;
+  //   }
+
+  //   if (!dataPaths) {
+  //     return;
+  //   }
+
+  //   // TODO Handle loading errors and report in the UI?
+  //   const code = `
+  //   data_paths = json.loads('${JSON.stringify(dataPaths)}')
+
+  //   data = {}
+  //   for name, path in data_paths.items():
+  //       data[name] = app.load_data(path)
+  //   `;
+
+  //   const future = kernel.requestExecute({ code }, false);
+  //   future.onReply = msg => {
+  //     console.log(msg);
+  //   };
+  //   await future.done;
+
+  //   this._dataLoaded.resolve();
+  // }
 
   private _onTabsChanged(): void {
     const tabNames = this._model.getTabNames();
@@ -304,7 +245,7 @@ export class SessionWidget extends BoxPanel {
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
   private _notebookTracker: INotebookTracker;
   private _commands: CommandRegistry;
-  private _wm: IJupyterYWidgetManager;
+  private _yWidgetManager: IJupyterYWidgetManager;
 }
 
 export namespace SessionWidget {
@@ -314,6 +255,6 @@ export namespace SessionWidget {
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
     commands: CommandRegistry;
-    wm: IJupyterYWidgetManager;
+    yWidgetManager: IJupyterYWidgetManager;
   }
 }

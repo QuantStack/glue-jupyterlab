@@ -1,9 +1,7 @@
 import json
 from typing import Dict, List, Any, Callable
 from functools import partial
-
 from jupyter_ydoc.ybasedoc import YBaseDoc
-
 import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
@@ -12,6 +10,7 @@ COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._yprivate_messages = self._ydoc.get_map("private_messages")
         self._ysource = self._ydoc.get_text("source")
         self._ycontents = self._ydoc.get_map("contents")
         self._yattributes = self._ydoc.get_map("attributes")
@@ -147,3 +146,6 @@ class YGlue(YBaseDoc):
         self._subscriptions[self._ytabs] = self._ytabs.observe_deep(
             partial(callback, "tabs")
         )
+        self._subscriptions[
+            self._yprivate_messages
+        ] = self._yprivate_messages.observe_deep(partial(callback, "private_messages"))
