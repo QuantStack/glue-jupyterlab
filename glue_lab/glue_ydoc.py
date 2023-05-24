@@ -8,6 +8,7 @@ import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 
+
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
