@@ -8,7 +8,6 @@ import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 
-
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -74,7 +73,7 @@ class YGlue(YBaseDoc):
             for link_name in link_names:
                 contents[link_name] = links[link_name]
 
-        return json.dumps(contents, sort_keys=True)
+        return json.dumps(contents, indent=2, sort_keys=True)
 
     def set(self, value: str) -> None:
         """
@@ -144,6 +143,6 @@ class YGlue(YBaseDoc):
         self._subscriptions[self._ylinks] = self._ylinks.observe(
             partial(callback, "links")
         )
-        self._subscriptions[self._ytabs] = self._ytabs.observe(
+        self._subscriptions[self._ytabs] = self._ytabs.observe_deep(
             partial(callback, "tabs")
         )
