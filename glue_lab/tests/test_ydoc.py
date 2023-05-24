@@ -5,7 +5,6 @@ import json
 from jupyter_ydoc import ydocs
 
 
-
 def test_set():
     with open(Path(__file__).parent / "assets" / "session.glu", "r") as fobj:
         data = fobj.read()
