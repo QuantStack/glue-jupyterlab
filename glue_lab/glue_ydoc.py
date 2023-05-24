@@ -37,7 +37,7 @@ class YGlue(YBaseDoc):
         :rtype: Any
         """
         contents = json.loads(self._ycontents.to_json())
-        attributes = json.loads(self._yattributes.to_json())
+        json.loads(self._yattributes.to_json())
         dataset = json.loads(self._ydataset.to_json())
         links = json.loads(self._ylinks.to_json())
         tabs = json.loads(self._ytabs.to_json())

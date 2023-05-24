@@ -4,32 +4,31 @@ import json
 # Loading glue_lab.glue_ydoc.YGlue class through jupyter_ydoc
 from jupyter_ydoc import ydocs
 
-import y_py as Y
 
 
 def test_set():
-    with open(Path(__file__).parent / 'assets' / 'session.glu', 'r') as fobj:
+    with open(Path(__file__).parent / "assets" / "session.glu", "r") as fobj:
         data = fobj.read()
 
-    glue = ydocs['glu']()
+    glue = ydocs["glu"]()
 
     glue.set(data)
 
-    assert 'Tab 1' in glue._ytabs
-    assert 'Tab 2' in glue._ytabs
+    assert "Tab 1" in glue._ytabs
+    assert "Tab 2" in glue._ytabs
 
-    assert 'HistogramViewer' in glue._ycontents
+    assert "HistogramViewer" in glue._ycontents
 
-    assert 'DEJ2000' in glue._yattributes
+    assert "DEJ2000" in glue._yattributes
 
-    assert 'w5_psc' in glue._ydataset
+    assert "w5_psc" in glue._ydataset
 
 
 def test_get():
-    with open(Path(__file__).parent / 'assets' / 'session.glu', 'r') as fobj:
+    with open(Path(__file__).parent / "assets" / "session.glu", "r") as fobj:
         data = fobj.read()
 
-    glue = ydocs['glu']()
+    glue = ydocs["glu"]()
 
     glue.set(data)
 
@@ -48,11 +47,7 @@ def test_get():
                 "pos": [0, 0],
                 "session": "Session",
                 "size": [600, 400],
-                "state": {
-                    "values": {
-                        "layer": "w5"
-                    }
-                }
+                "state": {"values": {"layer": "w5"}},
             }
         }
 
