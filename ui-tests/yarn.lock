@@ -1275,7 +1275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.32.2":
+"@playwright/test@npm:^1.32.2, @playwright/test@npm:^1.34.2":
   version: 1.34.2
   resolution: "@playwright/test@npm:1.34.2"
   dependencies:
@@ -2508,6 +2508,7 @@ __metadata:
   resolution: "glue-lab-ui-tests@workspace:."
   dependencies:
     "@jupyterlab/galata": ^5.0.0
+    "@playwright/test": ^1.34.2
   languageName: unknown
   linkType: soft
 
