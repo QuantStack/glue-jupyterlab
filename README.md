@@ -8,7 +8,7 @@ Glue is an open-source data exploration tool that allows users to visualize and 
 
 ## Requirements
 
-- JupyterLab >= 4.0.0a29
+- JupyterLab >= 4.0.0,<5
 
 ## Install
 
