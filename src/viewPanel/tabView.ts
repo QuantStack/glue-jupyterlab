@@ -3,7 +3,6 @@ import { InputDialog } from '@jupyterlab/apputils';
 import { CommandRegistry } from '@lumino/commands';
 import { Message } from '@lumino/messaging';
 import { ContextMenu, Widget } from '@lumino/widgets';
-import { ArrayExt } from '@lumino/algorithm';
 
 import { TabLayout, ViewInfo } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
@@ -36,9 +35,7 @@ export class TabView extends Widget {
 
     this._addCommands();
 
-    this._context.sessionContext.ready.then(() => {
-      this._updateViewers();
-    });
+    this._context.sessionContext.ready.then(() => this._initGrid());
 
     layout.gridItemChanged.connect(this._onLayoutChanged, this);
     this._model.tabChanged.connect(this._onTabChanged, this);
@@ -115,35 +112,20 @@ export class TabView extends Widget {
   /**
    * Update the viewers.
    */
-  private async _updateViewers(): Promise<void> {
+  private async _initGrid(): Promise<void> {
     for (const [viewerId, viewerData] of Object.entries(this.tabData)) {
-      // TODO Update already existing viewers
-      if (viewerId in this._viewers) {
-        // TODO
-        continue;
-      }
-
       // Create new viewers
-      const viewer = (this._viewers[viewerId] = await this._createViewer(
-        this.tabName,
-        viewerId,
-        viewerData
-      ));
+      const viewer = await this._createViewer(this.tabName, viewerId, viewerData);
 
       if (!viewer) {
         console.error(`Unable to create viewer for ${viewerId}`);
         continue;
       }
 
-      (this.layout as TabLayout).addGridItem(viewer);
-    }
-
-    // Remove old viewers
-    for (const viewerId in this._viewers) {
-      if (!(viewerId in this.tabData)) {
-        (this.layout as TabLayout).removeGridItem(viewerId);
-        delete this._viewers[viewerId];
-      }
+      // Use the "mutex" to prevent this client triggering a change in the shared model.
+      globalMutex(() => {
+        (this.layout as TabLayout).addGridItem(viewer);
+      });
     }
   }
 
@@ -222,8 +204,7 @@ export class TabView extends Widget {
     const opened = this._contextMenu.open(event);
     if (opened) {
       const target = event.target as HTMLElement;
-      const pos = this._findItem(target);
-      this._selectedItem = (this.layout as TabLayout).gridWidgets[pos];
+      this._selectedItem = this._findItem(target);
 
       event.preventDefault();
       event.stopPropagation();
@@ -236,34 +217,66 @@ export class TabView extends Widget {
    * #### Notes
    * Returns -1 if the cell is not found.
    */
-  private _findItem(elem: HTMLElement): number {
+  private _findItem(elem: HTMLElement): GridStackItem | null {
     let el: HTMLElement | null = elem;
     while (el && el !== this.node) {
       if (el.classList.contains('glue-item')) {
-        const i = ArrayExt.findFirstIndex(
-          (this.layout as TabLayout).gridWidgets,
-          widget => widget.node === el
-        );
-        if (i !== -1) {
-          return i;
+        for (const item of this.layout as TabLayout) {
+          if (item.node === el) {
+            return item as GridStackItem;
+          }
         }
         break;
       }
       el = el.parentElement;
     }
-    return -1;
+    return null;
   }
 
   private _onTabChanged(
     sender: IGlueSessionSharedModel,
     args: IDict<any>
   ): void {
-    globalMutex(() => {
-      // Use the "mutex" to prevent this client from rerendering the tab.
-      if (args.tab && args.tab === this.tabName) {
-        this._updateViewers();
-      }
-    });
+    if (args.tab && args.tab === this.tabName) {
+      // Use the "mutex" to prevent this client triggering a change in the shared model.
+      globalMutex(async () => {
+        // Update existing viewers or create new
+        for (const [viewerId, viewerData] of Object.entries(this.tabData)) {
+          const item = (this.layout as TabLayout).gridItems.get(viewerId);
+          if (item) {
+            const { size, pos } = viewerData;
+            if (item.size !== size || item.pos !== pos) {
+              (this.layout as TabLayout).updateGridItem(viewerId, {
+                id: viewerId,
+                size: size,
+                pos: pos
+              });
+            }
+          } else {
+            // Create new viewers
+            const viewer = await this._createViewer(this._tabName, viewerId, viewerData);
+
+            if (!viewer) {
+              console.error(`Unable to create viewer for ${viewerId}`);
+              continue;
+            }
+
+            (this.layout as TabLayout).addGridItem(viewer);
+          }
+        }
+
+        // Remove viewers
+        const toDelete: GridStackItem[] = [];
+        (this.layout as TabLayout).gridItems.forEach(item => {
+          if (this.tabData[item.cellIdentity] === undefined) {
+            toDelete.push(item);
+          }
+        });
+        toDelete.forEach(item =>
+          (this.layout as TabLayout).removeGridItem(item.cellIdentity)
+        );
+      });
+    }
   }
 
   private _onLayoutChanged(sender: TabLayout, change: TabLayout.IChange): void {
@@ -299,7 +312,6 @@ export class TabView extends Widget {
     }
   }
 
-  private _viewers: { [viewerId: string]: GridStackItem | undefined } = {};
   private _selectedItem: GridStackItem | null = null;
   private _model: IGlueSessionSharedModel;
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
