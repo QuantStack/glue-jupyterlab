@@ -11,6 +11,8 @@ import {
   IGlueSessionViewerTypes
 } from '../types';
 import {
+  IAdvancedLink,
+  IComponentLink,
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
@@ -190,6 +192,25 @@ export class GlueSessionSharedModel
     }
 
     return state['selectedTab'].value;
+  }
+
+  /**
+   * Adds a link to the glue shared model.
+   *
+   * @param linkName - The link name.
+   * @param link - The component or advanced link.
+   */
+  setLink(linkName: string, link: IComponentLink | IAdvancedLink): void {
+    this._links.set(linkName, link as IDict);
+  }
+
+  /**
+   * remove a link from the glue session model.
+   *
+   * @param linkName - the link name.
+   */
+  removeLink(linkName: string): void {
+    this._links.delete(linkName);
   }
 
   private _contentsObserver = (event: Y.YMapEvent<IDict>): void => {

@@ -26,15 +26,13 @@ export class LinkEditor extends BoxPanel {
     this.addWidget(
       new Linking({
         linkEditorModel: model,
-        sharedModel: this._sharedModel,
-        linkedDataset: linkedDataset
+        sharedModel: this._sharedModel
       })
     );
     this.addWidget(
       new Summary({
         linkEditorModel: model,
-        sharedModel: this._sharedModel,
-        linkedDataset: linkedDataset
+        sharedModel: this._sharedModel
       })
     );
   }

@@ -13,28 +13,60 @@ import {
   IAdvLinkDescription,
   IAdvancedLinkInfo,
   ILinkInfo,
-  IAdvancedLink
+  IAdvancedLink,
+  IDatasets
 } from './types';
 
 const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 
+/**
+ * The link editor model.
+ */
 export class LinkEditorModel implements ILinkEditorModel {
   constructor(options: LinkEditorModel.IOptions) {
     this._sharedModel = options.sharedModel;
-    this._sharedModel.changed.connect(this.onSharedModelChanged, this);
-    this._getAdvancedLinks();
+    this._sharedModel.linksChanged.connect(this.onLinksChanged, this);
+    this._sharedModel.datasetChanged.connect(this.onDatasetsChanged, this);
+    this._getAdvancedLinksCategories();
+
+    this._currentDatasets = {
+      first: '',
+      second: ''
+    };
   }
 
   get sharedModel(): IGlueSessionSharedModel {
     return this._sharedModel;
   }
 
-  get relatedLinks(): Map<string, IComponentLinkInfo> {
-    return this._relatedLinks;
+  /**
+   * Getter and setter for datasets.
+   */
+  get currentDatasets(): IDatasets {
+    return this._currentDatasets;
+  }
+  set currentDatasets(datasets: IDatasets) {
+    this._currentDatasets = datasets;
+    this._datasetsChanged.emit(this._currentDatasets);
   }
 
-  get relatedLinksChanged(): ISignal<this, void> {
-    return this._relatedLinksChanged;
+  /**
+   * Replace one current dataset.
+   */
+  setCurrentDataset(position: keyof IDatasets, value: string): void {
+    this._currentDatasets[position] = value;
+    this._datasetsChanged.emit(this._currentDatasets);
+  }
+
+  /**
+   * A signal emits when current datasets changes
+   */
+  get currentDatasetsChanged(): ISignal<this, IDatasets> {
+    return this._datasetsChanged;
+  }
+
+  get relatedLinks(): Map<string, IComponentLinkInfo> {
+    return this._relatedLinks;
   }
 
   get advLinkCategories(): IAdvLinkCategories {
@@ -45,16 +77,16 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._advancedLinks;
   }
 
-  get advancedLinksChanged(): ISignal<this, void> {
-    return this._advancedLinksChanged;
+  get linksChanged(): ISignal<this, void> {
+    return this._linksChanged;
   }
 
   get advLinksPromise(): Promise<IAdvLinkCategories> {
     return this._advLinksPromise.promise;
   }
 
-  private async _getAdvancedLinks(): Promise<void> {
-    // Make request to Jupyter API
+  private async _getAdvancedLinksCategories(): Promise<void> {
+    // Make request to Jupyter API.
     const settings = ServerConnection.makeSettings();
     const requestUrl = URLExt.join(settings.baseUrl, ADVANCED_LINKS_URL);
 
@@ -72,15 +104,34 @@ export class LinkEditorModel implements ILinkEditorModel {
       throw new ServerConnection.ResponseError(response, data.message);
     }
 
-    Object.entries(data.data).forEach(([category, link], idx) => {
-      this._advLinkCategories[category] = link as IAdvLinkDescription[];
+    Object.entries(data.data).forEach(([category, links]) => {
+      this._advLinkCategories[category] = links as IAdvLinkDescription[];
     });
 
     this._advLinksPromise.resolve(this._advLinkCategories);
   }
 
-  onSharedModelChanged(): void {
-    // const dataset = this._sharedModel.dataset;
+  /**
+   * Called when the datasets have changed in the glue session model.
+   */
+  onDatasetsChanged(): void {
+    // Reset the current dataset, with empty values if there is less than 2 datasets.
+    if (this._sharedModel.dataset) {
+      const datasetsList = Object.keys(this._sharedModel.dataset);
+      this._currentDatasets = {
+        first: datasetsList.length > 1 ? datasetsList[0] : '',
+        second: datasetsList.length > 1 ? datasetsList[1] : ''
+      };
+      this._datasetsChanged.emit(this._currentDatasets);
+    }
+  }
+
+  /**
+   * Called when the links have changed in the glue session model.
+   */
+  onLinksChanged(): void {
+    this._relatedLinks = new Map<string, IComponentLinkInfo>();
+    this._advancedLinks = new Map<string, IAdvancedLinkInfo>();
 
     // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
@@ -104,7 +155,7 @@ export class LinkEditorModel implements ILinkEditorModel {
         }
       }
     );
-    this._relatedLinksChanged.emit();
+    this._linksChanged.emit();
   }
 
   _getIdentityLink(
@@ -156,15 +207,22 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   private _sharedModel: IGlueSessionSharedModel;
+  private _currentDatasets: IDatasets;
+  private _datasetsChanged = new Signal<this, IDatasets>(this);
   private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
   private _advLinkCategories: IAdvLinkCategories = {};
   private _relatedLinks = new Map<string, IComponentLinkInfo>();
-  private _relatedLinksChanged = new Signal<this, void>(this);
   private _advancedLinks = new Map<string, IAdvancedLinkInfo>();
-  private _advancedLinksChanged = new Signal<this, void>(this);
+  private _linksChanged = new Signal<this, void>(this);
 }
 
-namespace LinkEditorModel {
+/**
+ * A namespace for the link editor model.
+ */
+export namespace LinkEditorModel {
+  /**
+   * Options to build a link editor object.
+   */
   export interface IOptions {
     sharedModel: IGlueSessionSharedModel;
   }
