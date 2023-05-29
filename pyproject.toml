@@ -27,7 +27,7 @@ dependencies = [
     "jupyter_collaboration>=1.0.0a8",
     "glue-core",
     "glue-jupyter",
-    "yjs-widgets>=0.3.0,<0.4.0",
+    "yjs-widgets>=0.3.3,<0.4.0",
     "ypywidgets>=0.4.0,<0.5.0",
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]

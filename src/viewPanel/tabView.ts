@@ -27,7 +27,6 @@ export class TabView extends Widget {
     this._model = options.model;
     this._tabName = this.title.label = options.tabName;
     this._context = options.context;
-    // this._dataLoaded = options.dataLoaded;
     this._rendermime = options.rendermime;
 
     const layout = (this.layout = new TabLayout());
@@ -172,7 +171,6 @@ export class TabView extends Widget {
       if (this._context) {
         SimplifiedOutputArea.execute(
           `
-          import json
           GLUE_SESSION.create_viewer("${tabName}", "${viewerId}")
           `,
           cellOutput,
