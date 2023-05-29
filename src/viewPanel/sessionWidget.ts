@@ -129,9 +129,6 @@ export class SessionWidget extends BoxPanel {
     `;
 
     const future = kernel.requestExecute({ code }, false);
-    future.onReply = msg => {
-      console.log(msg);
-    };
     await future.done;
   }
 

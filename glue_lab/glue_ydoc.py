@@ -177,3 +177,9 @@ class YGlue(YBaseDoc):
         tab = self._ytabs.get(tab_name)
         if tab is not None:
             return json.loads(tab.to_json())
+
+    def remove_tab_viewer(self, tab_name: str, viewer_id: str) -> None:
+        tab = self._ytabs.get(tab_name)
+        if tab is not None:
+            with self._ydoc.begin_transaction() as t:
+                tab.pop(t, viewer_id)

@@ -16,8 +16,6 @@ export class GlueDocumentWidget
    */
   dispose(): void {
     //TODO Shutdown kernel does not work??
-    console.log('shutdown kernel');
-
     this.context.sessionContext.shutdown();
     this.content.dispose();
     super.dispose();

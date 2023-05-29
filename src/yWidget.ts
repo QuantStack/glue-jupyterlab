@@ -39,21 +39,16 @@ export const yGlueSessionWidgetPlugin: JupyterFrontEndPlugin<void> = {
     class YGlueSessionModel extends JupyterYModel {
       ydocFactory(commMetadata: ICommMetadata): Y.Doc {
         const path = commMetadata.path;
-        console.log('commMetadata', commMetadata);
-
         const sessionWidget = tracker.find(obj => {
           const filePath = obj.context.path.split(':')[1];
-          console.log('found path', path);
           return filePath === path;
         });
 
         let requestedYDoc: Y.Doc;
         if (sessionWidget) {
           requestedYDoc = sessionWidget.context.model.sharedModel.ydoc;
-          console.log('found ydoc');
         } else {
           requestedYDoc = new Y.Doc();
-          console.log('im in this  case');
         }
         return requestedYDoc;
       }
