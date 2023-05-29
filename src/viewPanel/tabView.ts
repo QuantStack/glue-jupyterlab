@@ -17,7 +17,7 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { GlueSessionModel } from '../document/docModel';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { JSONObject, PromiseDelegate } from '@lumino/coreutils';
+import { PromiseDelegate } from '@lumino/coreutils';
 
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
@@ -153,63 +153,7 @@ export class TabView extends Widget {
     viewerId: string,
     viewerData: IGlueSessionViewerTypes
   ): Promise<GridStackItem | undefined> {
-    console.log('viewerData', tabName, viewerId, viewerData);
-    // await this._dataLoaded.promise;
-
-    // Extract plot state
-    const state: { [k: string]: any } = {};
-    if (viewerData.state.values) {
-      for (const prop in viewerData.state.values) {
-        const value = viewerData.state.values[prop];
-        // TODO Why do we need to do this??
-        if (typeof value === 'string' && value.startsWith('st__')) {
-          state[prop] = value.slice(4);
-          continue;
-        }
-
-        state[prop] = value;
-      }
-    }
-    // Merging the state with what's specified in "layers"
-    // Only taking the state of the first layer
-    // TODO Support multiple layers??
-    if (
-      viewerData.layers &&
-      viewerData.layers[0]['state'] in this._model.contents
-    ) {
-      const extraState = (
-        this._model.contents[viewerData.layers[0]['state']] as JSONObject
-      ).values as JSONObject;
-      for (const prop in extraState) {
-        const value = extraState[prop];
-        // TODO Why do we need to do this??
-        if (typeof value === 'string' && value.startsWith('st__')) {
-          state[prop] = value.slice(4);
-          continue;
-        }
-
-        state[prop] = value;
-      }
-    }
-    let itemTitle: string | undefined = undefined;
-    switch (viewerData._type) {
-      case 'glue.viewers.scatter.qt.data_viewer.ScatterViewer': {
-        itemTitle = '2D Scatter';
-        break;
-      }
-      case 'glue.viewers.image.qt.data_viewer.ImageViewer': {
-        itemTitle = 'Image';
-        break;
-      }
-      case 'glue.viewers.histogram.qt.data_viewer.HistogramViewer': {
-        itemTitle = 'Histogram';
-        break;
-      }
-      case 'glue.viewers.table.qt.data_viewer.TableViewer': {
-        itemTitle = 'Table';
-        break;
-      }
-    }
+    const itemTitle = (viewerData._type as string)?.split('.').pop();
     if (itemTitle) {
       const outputAreaModel = new OutputAreaModel({ trusted: true });
       const out = new SimplifiedOutputArea({
@@ -220,7 +164,7 @@ export class TabView extends Widget {
       const item = new GridStackItem({
         cellIdentity: viewerId,
         cell: out,
-        itemTitle: '2D Scatter',
+        itemTitle: itemTitle.match(/($[a-z])|[A-Z][^A-Z]+/g)?.join(' '),
         pos: viewerData.pos,
         size: viewerData.size
       });
@@ -229,9 +173,7 @@ export class TabView extends Widget {
         SimplifiedOutputArea.execute(
           `
           import json
-          GLUE_SESSION.create_viewer("${tabName}", "${viewerId}","${
-            viewerData._type
-          }", json.loads('${JSON.stringify(state)}'))
+          GLUE_SESSION.create_viewer("${tabName}", "${viewerId}")
           `,
           cellOutput,
           this._context.sessionContext

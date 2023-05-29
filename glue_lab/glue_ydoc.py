@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Any, Callable
+from typing import Dict, List, Any, Callable, Optional
 from functools import partial
 from jupyter_ydoc.ybasedoc import YBaseDoc
 import y_py as Y
@@ -28,6 +28,26 @@ class YGlue(YBaseDoc):
         :rtype: str
         """
         return "1.0.0"
+
+    @property
+    def contents(self) -> Dict:
+        return json.loads(self._ycontents.to_json())
+
+    @property
+    def attributes(self) -> Dict:
+        return json.loads(self._yattributes.to_json())
+
+    @property
+    def dataset(self) -> Dict:
+        return json.loads(self._ydataset.to_json())
+
+    @property
+    def links(self) -> Dict:
+        return json.loads(self._ylinks.to_json())
+
+    @property
+    def tabs(self) -> Dict:
+        return json.loads(self._ytabs.to_json())
 
     def get(self) -> str:
         """
@@ -149,3 +169,11 @@ class YGlue(YBaseDoc):
         self._subscriptions[
             self._yprivate_messages
         ] = self._yprivate_messages.observe_deep(partial(callback, "private_messages"))
+
+    def get_tab_names(self) -> List[str]:
+        return list(self._ytabs.keys())
+
+    def get_tab_data(self, tab_name: str) -> Optional[Dict]:
+        tab = self._ytabs.get(tab_name)
+        if tab is not None:
+            return json.loads(tab.to_json())

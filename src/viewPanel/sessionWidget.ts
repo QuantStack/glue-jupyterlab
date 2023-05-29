@@ -124,78 +124,16 @@ export class SessionWidget extends BoxPanel {
 
     // TODO Handle loading errors and report in the UI?
     const code = `
-    # Ignoring warnings so they don't show up in viewers
-    # TODO don't suppress warnings but redirect them?
-
     from glue_lab.glue_session import SharedGlueSession
-
     GLUE_SESSION = SharedGlueSession("${this._context.localPath}")
     `;
 
     const future = kernel.requestExecute({ code }, false);
     future.onReply = msg => {
-      console.log('MSG', msg);
+      console.log(msg);
     };
     await future.done;
-
-    // await this._loadData();
-    // this._model.contentsChanged.connect(this._loadData, this);
   }
-
-  // private async _loadData() {
-  //   const kernel = this._context?.sessionContext.session?.kernel;
-
-  //   if (!kernel) {
-  //     console.error('No kernel running');
-  //     return;
-  //   }
-
-  //   // Extract session path
-  //   let sessionPath: string;
-  //   if (this._context.path.includes(':')) {
-  //     sessionPath = this._context.path.split(':')[1];
-  //   } else {
-  //     sessionPath = this._context.path;
-  //   }
-
-  //   // Extract paths to datasets
-  //   const dataPaths: { [k: string]: string } = {};
-  //   if ('LoadLog' in this._model.contents) {
-  //     const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
-  //       .path;
-  //     dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-  //       PathExt.join(PathExt.dirname(sessionPath), path);
-  //   }
-  //   let i = 0;
-  //   while (`LoadLog_${i}` in this._model.contents) {
-  //     const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
-  //       .path;
-  //     dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-  //       PathExt.join(PathExt.dirname(sessionPath), path);
-  //     i++;
-  //   }
-
-  //   if (!dataPaths) {
-  //     return;
-  //   }
-
-  //   // TODO Handle loading errors and report in the UI?
-  //   const code = `
-  //   data_paths = json.loads('${JSON.stringify(dataPaths)}')
-
-  //   data = {}
-  //   for name, path in data_paths.items():
-  //       data[name] = app.load_data(path)
-  //   `;
-
-  //   const future = kernel.requestExecute({ code }, false);
-  //   future.onReply = msg => {
-  //     console.log(msg);
-  //   };
-  //   await future.done;
-
-  //   this._dataLoaded.resolve();
-  // }
 
   private _onTabsChanged(): void {
     const tabNames = this._model.getTabNames();

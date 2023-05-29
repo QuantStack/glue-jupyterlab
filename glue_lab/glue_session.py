@@ -1,18 +1,26 @@
-from typing import Dict
-import json
-from ypywidgets import Widget
-from jupyter_ydoc import ydocs
-import y_py as Y
-import glue_jupyter as gj
-from ipywidgets import Output
-from pathlib import Path
 import warnings
+from pathlib import Path
+from typing import Dict, Optional, Tuple
+
+import glue_jupyter as gj
+import y_py as Y
 from IPython.display import display
+from ipywidgets import Output
+from jupyter_ydoc import ydocs
+from ypywidgets import Widget
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .glue_ydoc import YGlue
 
 warnings.filterwarnings("ignore")
 
 
 class SharedGlueSession:
+    """The glue session which lives in the kernel of the
+    glue document.
+    """
+
     def __init__(self, path: str):
         self.app = gj.jglue()
         self._path = path
@@ -20,28 +28,22 @@ class SharedGlueSession:
         self._data = {}
         self.init_ydoc()
 
-    def create_viewer(
-        self, tab_name: str, viewer_id: str, view_type: str, state, render_view=True
-    ):
+    def create_viewer(self, tab_name: str, viewer_id: str, display_view=True):
         if tab_name in self._viewers:
             if viewer_id not in self._viewers[tab_name]:
                 self._viewers[tab_name][viewer_id] = dict(
-                    output=Output(), view_type=view_type, state=state, rendered=False
+                    output=Output(), rendered=False
                 )
         else:
-            self._viewers[tab_name] = {
-                viewer_id: dict(
-                    output=Output(), view_type=view_type, state=state, rendered=False
-                )
-            }
+            self._viewers[tab_name] = {viewer_id: dict(output=Output(), rendered=False)}
 
-        if render_view:
+        if display_view:
             display(self._viewers[tab_name][viewer_id]["output"])
 
     def init_ydoc(self):
         self._sessionYDoc = Y.YDoc()
-
-        self._document = ydocs.get("glu")(self._sessionYDoc)
+        # Import `glue_lab.glue_ydoc.YGlue`` class through `jupyter_ydoc``
+        self._document: YGlue = ydocs.get("glu")(self._sessionYDoc)
         self._document.observe(self._on_document_change)
         self._ywidget = Widget(
             comm_metadata=dict(
@@ -52,7 +54,7 @@ class SharedGlueSession:
 
     def load_data(self):
         data_paths = {}
-        contents = json.loads(self._document._ycontents.to_json())
+        contents = self._document.contents
         session_path = Path(self._path).parent
         if "LoadLog" in contents:
             path = Path(contents["LoadLog"]["path"])
@@ -68,17 +70,17 @@ class SharedGlueSession:
                 self._data[data_name] = self.app.load_data(data_path)
 
     def render_viewer(self):
-        all_tab_data = json.loads(self._document._ytabs.to_json())
         for tab_name in self._viewers:
-            tab_data: Dict = all_tab_data.get(tab_name, {})
+            tab_data = self._document.get_tab_data(tab_name)
+            if tab_data is None:
+                return
             for viewer_id in tab_data:
                 saved_viewer = self._viewers.get(tab_name, {}).get(viewer_id)
                 if saved_viewer is not None:
                     if saved_viewer["rendered"]:
                         continue
                     output = saved_viewer["output"]
-                    view_type = saved_viewer["view_type"]
-                    state = saved_viewer["state"]
+                    view_type, state = self.read_view_state(tab_name, viewer_id)
                     data = self._data[state["layer"]]
                     if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
                         output.clear_output()
@@ -115,6 +117,38 @@ class SharedGlueSession:
                                 except Exception:
                                     pass
                     saved_viewer["rendered"] = True
+
+    def read_view_state(
+        self, tab_name: str, viewer_id: str
+    ) -> Tuple[Optional[str], Dict]:
+        state = {}
+        tab_data = self._document.get_tab_data(tab_name)
+        contents = self._document.contents
+        if tab_data is None:
+            return state
+
+        viewer_data = tab_data.get(viewer_id, {})
+        view_type: str = viewer_data.get("_type")
+        state_values = viewer_data.get("state", {}).get("values", {})
+        # Extract plot state
+        for prop, value in state_values.items():
+            if isinstance(value, str) and value.startswith("st__"):
+                state[prop] = value[4:]
+            else:
+                state[prop] = value
+
+        # Merging the state with what's specified in "layers"
+        # Only taking the state of the first layer
+        # TODO Support multiple layers??
+        layers = viewer_data.get("layers", [])
+        if len(layers) > 0 and layers[0].get("state") in contents:
+            extra_state = contents.get(layers[0].get("state"), {}).get("values", {})
+            for prop, value in extra_state.items():
+                if isinstance(value, str) and value.startswith("st__"):
+                    state[prop] = value[4:]
+                else:
+                    state[prop] = value
+        return view_type, state
 
     def _on_document_change(self, target, event):
         if target == "contents":
