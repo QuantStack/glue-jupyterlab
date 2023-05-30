@@ -37,12 +37,12 @@ class SharedGlueSession:
         """
         if tab_name not in self._viewers:
             return
-        else:
-            tab_viewers = self._viewers.pop(tab_name, {})
-            for viewer in tab_viewers.values():
-                out: Output = viewer.get("output")
-                if out is not None:
-                    out.clear_output()
+
+        tab_viewers = self._viewers.pop(tab_name, {})
+        for viewer in tab_viewers.values():
+            out: Output = viewer.get("output")
+            if out is not None:
+                out.clear_output()
 
     def create_viewer(self, tab_name: str, viewer_id: str, display_view=True) -> None:
         """Create a new viewer placeholder. This method will create a
@@ -204,8 +204,11 @@ class SharedGlueSession:
             path = Path(contents["LoadLog"]["path"])
             data_paths[path.stem] = str(session_path / path)
         idx = 0
-        while f"LoadLog_{idx}" in contents:
-            path = Path(contents[f"LoadLog_{idx}"]["path"])
+        while True:
+            load_log = f"LoadLog_{idx}"
+            if load_log not in contents:
+                break
+            path = Path(contents[load_log]["path"])
             data_paths[path.stem] = str(session_path / path)
             idx += 1
 
@@ -217,6 +220,6 @@ class SharedGlueSession:
         """Callback on ydoc changed event."""
         if target == "contents":
             self._load_data()
-        if target == "tabs":
+        elif target == "tabs":
             self._load_data()
             self.render_viewer()
