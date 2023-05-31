@@ -1005,10 +1005,10 @@
     ],
     "viewers": [
       [
-        "ScatterViewer",
         "HistogramViewer",
-        "ScatterViewer_0",
-        "ImageViewer"
+        "ImageViewer",
+        "ScatterViewer",
+        "ScatterViewer_0"
       ],
       [
         "ScatterViewer_1"

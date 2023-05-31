@@ -16,6 +16,7 @@ import { GlueSessionTracker } from './tracker';
 import { GlueCanvasWidgetFactory } from './widgetFactory';
 import { GlueSessionSharedModel } from './sharedModel';
 import { INotebookTracker } from '@jupyterlab/notebook';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
 
 const NAME_SPACE = 'gluelab';
 
@@ -42,14 +43,16 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
     IRenderMimeRegistry,
     IGlueSessionTracker,
     ICollaborativeDrive,
-    INotebookTracker
+    INotebookTracker,
+    IJupyterYWidgetManager
   ],
   activate: (
     app: JupyterFrontEnd,
     rendermime: IRenderMimeRegistry,
     canvasTracker: WidgetTracker,
     drive: ICollaborativeDrive,
-    notebookTracker: INotebookTracker
+    notebookTracker: INotebookTracker,
+    yWidgetManager: IJupyterYWidgetManager
   ) => {
     const widgetFactory = new GlueCanvasWidgetFactory({
       name: 'Glue Lab',
@@ -58,6 +61,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       defaultFor: ['glu'],
       rendermime,
       notebookTracker,
+      yWidgetManager: yWidgetManager,
       preferKernel: true,
       canStartKernel: true,
       commands: app.commands

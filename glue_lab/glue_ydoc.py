@@ -1,9 +1,7 @@
 import json
-from typing import Dict, List, Any, Callable
+from typing import Dict, List, Any, Callable, Optional
 from functools import partial
-
 from jupyter_ydoc.ybasedoc import YBaseDoc
-
 import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
@@ -12,6 +10,7 @@ COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 class YGlue(YBaseDoc):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._yprivate_messages = self._ydoc.get_map("private_messages")
         self._ysource = self._ydoc.get_text("source")
         self._ycontents = self._ydoc.get_map("contents")
         self._yattributes = self._ydoc.get_map("attributes")
@@ -29,6 +28,26 @@ class YGlue(YBaseDoc):
         :rtype: str
         """
         return "1.0.0"
+
+    @property
+    def contents(self) -> Dict:
+        return json.loads(self._ycontents.to_json())
+
+    @property
+    def attributes(self) -> Dict:
+        return json.loads(self._yattributes.to_json())
+
+    @property
+    def dataset(self) -> Dict:
+        return json.loads(self._ydataset.to_json())
+
+    @property
+    def links(self) -> Dict:
+        return json.loads(self._ylinks.to_json())
+
+    @property
+    def tabs(self) -> Dict:
+        return json.loads(self._ytabs.to_json())
 
     def get(self) -> str:
         """
@@ -147,3 +166,20 @@ class YGlue(YBaseDoc):
         self._subscriptions[self._ytabs] = self._ytabs.observe_deep(
             partial(callback, "tabs")
         )
+        self._subscriptions[
+            self._yprivate_messages
+        ] = self._yprivate_messages.observe_deep(partial(callback, "private_messages"))
+
+    def get_tab_names(self) -> List[str]:
+        return list(self._ytabs.keys())
+
+    def get_tab_data(self, tab_name: str) -> Optional[Dict]:
+        tab = self._ytabs.get(tab_name)
+        if tab is not None:
+            return json.loads(tab.to_json())
+
+    def remove_tab_viewer(self, tab_name: str, viewer_id: str) -> None:
+        tab = self._ytabs.get(tab_name)
+        if tab is not None:
+            with self._ydoc.begin_transaction() as t:
+                tab.pop(t, viewer_id)

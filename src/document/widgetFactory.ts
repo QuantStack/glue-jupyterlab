@@ -7,17 +7,20 @@ import { GlueSessionModel } from './docModel';
 import { GlueDocumentWidget } from '../viewPanel/glueDocumentWidget';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { CommandRegistry } from '@lumino/commands';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
 
 export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   GlueDocumentWidget,
   GlueSessionModel
 > {
   constructor(options: GlueCanvasWidgetFactory.IOptions) {
-    const { rendermime, notebookTracker, commands, ...rest } = options;
+    const { rendermime, notebookTracker, commands, yWidgetManager, ...rest } =
+      options;
     super(rest);
     this._rendermime = rendermime;
     this._notebookTracker = notebookTracker;
     this._commands = commands;
+    this._yWidgetManager = yWidgetManager;
   }
 
   /**
@@ -34,7 +37,8 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
       rendermime: this._rendermime,
       notebookTracker: this._notebookTracker,
       context,
-      commands: this._commands
+      commands: this._commands,
+      yWidgetManager: this._yWidgetManager
     });
     return new GlueDocumentWidget({ context, content });
   }
@@ -42,6 +46,7 @@ export class GlueCanvasWidgetFactory extends ABCWidgetFactory<
   private _rendermime: IRenderMimeRegistry;
   private _notebookTracker: INotebookTracker;
   private _commands: CommandRegistry;
+  private _yWidgetManager: IJupyterYWidgetManager;
 }
 
 export namespace GlueCanvasWidgetFactory {
@@ -49,5 +54,6 @@ export namespace GlueCanvasWidgetFactory {
     rendermime: IRenderMimeRegistry;
     notebookTracker: INotebookTracker;
     commands: CommandRegistry;
+    yWidgetManager: IJupyterYWidgetManager;
   }
 }

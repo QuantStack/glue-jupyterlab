@@ -26,7 +26,9 @@ dependencies = [
     "jupyter_server>=1.21,<3",
     "jupyter_collaboration>=1.0.0a8",
     "glue-core",
-    "glue-jupyter"
+    "glue-jupyter",
+    "yjs-widgets>=0.3.3,<0.4.0",
+    "ypywidgets>=0.4.0,<0.5.0",
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
@@ -36,7 +38,7 @@ test = [
     "pytest",
     "pytest-asyncio",
     "pytest-cov",
-    "pytest-jupyter[server]>=0.6.0"
+    "pytest-jupyter[server]>=0.6.0",
 ]
 
 [tool.hatch.version]
@@ -84,7 +86,7 @@ version_cmd = "hatch version"
 before-build-npm = [
     "python -m pip install 'jupyterlab>=4.0.0,<5'",
     "jlpm",
-    "jlpm build:prod"
+    "jlpm build:prod",
 ]
 before-build-python = ["jlpm clean:all"]
 

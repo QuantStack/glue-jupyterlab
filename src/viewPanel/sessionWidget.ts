@@ -7,20 +7,16 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { HTabPanel } from '../common/tabPanel';
-import {
-  DATASET_MIME,
-  IDict,
-  IGlueSessionSharedModel,
-  ILoadLog
-} from '../types';
+import { DATASET_MIME, IDict, IGlueSessionSharedModel } from '../types';
 import { GlueSessionModel } from '../document/docModel';
 import { mockNotebook } from '../tools';
 import { TabView } from './tabView';
 import { LinkEditor } from '../linkPanel/linkEditor';
-import { PathExt } from '@jupyterlab/coreutils';
+
 import { Message } from '@lumino/messaging';
 import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -32,6 +28,7 @@ export class SessionWidget extends BoxPanel {
     this._notebookTracker = options.notebookTracker;
     this._context = options.context;
     this._commands = options.commands;
+    this._yWidgetManager = options.yWidgetManager;
 
     const tabBarClassList = ['glue-Session-tabBar'];
     this._tabPanel = new HTabPanel({
@@ -118,88 +115,21 @@ export class SessionWidget extends BoxPanel {
     if (!kernel) {
       void showDialog({
         title: 'Error',
-        body: 'Failed to start the kernel for the GLue session',
+        body: 'Failed to start the kernel for the Glue session',
         buttons: [Dialog.cancelButton()]
       });
       return;
     }
+    this._yWidgetManager.registerKernel(kernel);
 
     // TODO Handle loading errors and report in the UI?
     const code = `
-    # Ignoring warnings so they don't show up in viewers
-    # TODO don't suppress warnings but redirect them?
-    import warnings
-    warnings.filterwarnings("ignore")
-
-    import json
-    import glue_jupyter as gj
-
-    app = gj.jglue()
+    from glue_lab.glue_session import SharedGlueSession
+    GLUE_SESSION = SharedGlueSession("${this._context.localPath}")
     `;
 
     const future = kernel.requestExecute({ code }, false);
-    future.onReply = msg => {
-      console.log(msg);
-    };
     await future.done;
-
-    await this._loadData();
-    this._model.contentsChanged.connect(this._loadData, this);
-  }
-
-  private async _loadData() {
-    const kernel = this._context?.sessionContext.session?.kernel;
-
-    if (!kernel) {
-      console.error('No kernel running');
-      return;
-    }
-
-    // Extract session path
-    let sessionPath: string;
-    if (this._context.path.includes(':')) {
-      sessionPath = this._context.path.split(':')[1];
-    } else {
-      sessionPath = this._context.path;
-    }
-
-    // Extract paths to datasets
-    const dataPaths: { [k: string]: string } = {};
-    if ('LoadLog' in this._model.contents) {
-      const path = (this._model.contents['LoadLog'] as unknown as ILoadLog)
-        .path;
-      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        PathExt.join(PathExt.dirname(sessionPath), path);
-    }
-    let i = 0;
-    while (`LoadLog_${i}` in this._model.contents) {
-      const path = (this._model.contents[`LoadLog_${i}`] as unknown as ILoadLog)
-        .path;
-      dataPaths[PathExt.basename(path).replace(PathExt.extname(path), '')] =
-        PathExt.join(PathExt.dirname(sessionPath), path);
-      i++;
-    }
-
-    if (!dataPaths) {
-      return;
-    }
-
-    // TODO Handle loading errors and report in the UI?
-    const code = `
-    data_paths = json.loads('${JSON.stringify(dataPaths)}')
-
-    data = {}
-    for name, path in data_paths.items():
-        data[name] = app.load_data(path)
-    `;
-
-    const future = kernel.requestExecute({ code }, false);
-    future.onReply = msg => {
-      console.log(msg);
-    };
-    await future.done;
-
-    this._dataLoaded.resolve();
   }
 
   private _onTabsChanged(): void {
@@ -250,6 +180,7 @@ export class SessionWidget extends BoxPanel {
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
   private _notebookTracker: INotebookTracker;
   private _commands: CommandRegistry;
+  private _yWidgetManager: IJupyterYWidgetManager;
 }
 
 export namespace SessionWidget {
@@ -259,5 +190,6 @@ export namespace SessionWidget {
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
     commands: CommandRegistry;
+    yWidgetManager: IJupyterYWidgetManager;
   }
 }
