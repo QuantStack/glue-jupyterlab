@@ -42,6 +42,7 @@ export class TabLayout extends Layout {
   constructor() {
     super();
 
+    this._gridItems = new Map();
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
     this._gridHost.classList.add('glue-Session-gridhost');
@@ -161,7 +162,7 @@ export class TabLayout extends Layout {
    * @returns A new iterator over the widgets in the layout.
    */
   *[Symbol.iterator](): IterableIterator<Widget> {
-    yield* this._gridItems;
+    yield* this._gridItems.values();
   }
 
   /**
@@ -183,14 +184,14 @@ export class TabLayout extends Layout {
   /**
    * Get the list of `GridStackItem` (Lumino widgets).
    */
-  get gridWidgets(): Array<GridStackItem> {
+  get gridItems(): Map<string, GridStackItem> {
     return this._gridItems;
   }
 
   /**
    * Get the list of `GridItemHTMLElement`.
    */
-  get gridItems(): GridItemHTMLElement[] {
+  get gridElements(): GridItemHTMLElement[] {
     return this._grid.getGridItems() ?? [];
   }
 
@@ -206,9 +207,11 @@ export class TabLayout extends Layout {
       pos: item.pos
     });
 
+    // Save item
     item.changed.connect(this._onItemChanged, this);
-    this._gridItems.push(item);
+    this._gridItems.set(item.cellIdentity, item);
 
+    // Add item to grid
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
     MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
@@ -228,9 +231,18 @@ export class TabLayout extends Layout {
       pos: info.pos
     });
 
-    const items = this._grid.getGridItems();
-    const item = items?.find(value => value.gridstackNode?.id === id);
-    this._grid.update(item!, options);
+    // Update Item
+    const item = this._gridItems.get(id);
+    if (!item) {
+      return;
+    }
+    item.size = info.size;
+    item.pos = info.pos;
+
+    // Update grid
+    const elems = this._grid.getGridItems();
+    const el = elems?.find(value => value.gridstackNode?.id === id);
+    this._grid.update(el!, options);
   }
 
   /**
@@ -243,7 +255,7 @@ export class TabLayout extends Layout {
     const item = items?.find(value => value.gridstackNode?.id === id);
 
     if (item) {
-      this._gridItems = this._gridItems.filter(obj => obj.cellIdentity !== id);
+      this._gridItems.delete(id);
       this._grid.removeWidget(item, true);
     }
   }
@@ -251,7 +263,7 @@ export class TabLayout extends Layout {
   /**
    * Remove all items from gridstack.
    */
-  cleanGrid(): void {
+  clearGrid(): void {
     const items = this._grid?.getGridItems();
     items?.forEach(item => this._grid.removeWidget(item, true, false));
   }
@@ -278,9 +290,7 @@ export class TabLayout extends Layout {
    * Handle resize event messages sent from gridstack.
    */
   private _onResize(event: Event, item: GridStackNode): void {
-    const widget = this._gridItems.find(
-      value => value.cellIdentity === item.id
-    );
+    const widget = this._gridItems.get(item.id as string);
     if (!widget) {
       return;
     }
@@ -322,7 +332,7 @@ export class TabLayout extends Layout {
 
   private _gridHost: HTMLElement;
   private _grid: GridStack;
-  private _gridItems: GridStackItem[] = [];
+  private _gridItems: Map<string, GridStackItem>;
   private _gridItemChanged = new Signal<this, TabLayout.IChange>(this);
   private _resizeTimeout = 0;
 }
