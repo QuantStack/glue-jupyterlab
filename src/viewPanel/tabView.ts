@@ -115,7 +115,11 @@ export class TabView extends Widget {
   private async _initGrid(): Promise<void> {
     for (const [viewerId, viewerData] of Object.entries(this.tabData)) {
       // Create new viewers
-      const viewer = await this._createViewer(this.tabName, viewerId, viewerData);
+      const viewer = await this._createViewer(
+        this.tabName,
+        viewerId,
+        viewerData
+      );
 
       if (!viewer) {
         console.error(`Unable to create viewer for ${viewerId}`);
@@ -254,7 +258,11 @@ export class TabView extends Widget {
             }
           } else {
             // Create new viewers
-            const viewer = await this._createViewer(this._tabName, viewerId, viewerData);
+            const viewer = await this._createViewer(
+              this._tabName,
+              viewerId,
+              viewerData
+            );
 
             if (!viewer) {
               console.error(`Unable to create viewer for ${viewerId}`);
