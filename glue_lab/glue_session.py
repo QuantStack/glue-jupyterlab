@@ -107,38 +107,60 @@ class SharedGlueSession:
                         data = None
                     if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
                         output.clear_output()
-                        with output:
-                            scatter = self.app.scatter2d(data=data)
-                            for key, value in state.items():
-                                try:
-                                    setattr(scatter.state, key, value)
-                                except Exception:
-                                    pass
+                        try:
+                            with output:
+                                scatter = self.app.scatter2d(data=data)
+                                for key, value in state.items():
+                                    try:
+                                        setattr(scatter.state, key, value)
+                                    except Exception:
+                                        pass
+                        except Exception as e:
+                            output.clear_output()
+                            with output:
+                                print(e)
+
                     elif view_type == "glue.viewers.image.qt.data_viewer.ImageViewer":
                         output.clear_output()
-                        with output:
-                            self.app.imshow(data=data)
+                        try:
+                            with output:
+                                self.app.imshow(data=data)
+                        except Exception as e:
+                            output.clear_output()
+                            with output:
+                                print(e)
                     elif (
                         view_type
                         == "glue.viewers.histogram.qt.data_viewer.HistogramViewer"
                     ):
                         output.clear_output()
-                        with output:
-                            hist = self.app.histogram1d(data=data)
-                            for key, value in state.items():
-                                try:
-                                    setattr(hist.state, key, value)
-                                except Exception:
-                                    pass
+                        try:
+                            with output:
+                                hist = self.app.histogram1d(data=data)
+                                for key, value in state.items():
+                                    try:
+                                        setattr(hist.state, key, value)
+                                    except Exception:
+                                        pass
+                        except Exception as e:
+                            output.clear_output()
+                            with output:
+                                print(e)
                     elif view_type == "glue.viewers.table.qt.data_viewer.TableViewer":
                         output.clear_output()
-                        with output:
-                            table = self.app.table(data=data)
-                            for key, value in state.items():
-                                try:
-                                    setattr(table.state, key, value)
-                                except Exception:
-                                    pass
+                        try:
+                            with output:
+                                table = self.app.table(data=data)
+                                for key, value in state.items():
+                                    try:
+                                        setattr(table.state, key, value)
+                                    except Exception:
+                                        pass
+                        except Exception as e:
+                            output.clear_output()
+                            with output:
+                                print(e)
+
                     saved_viewer["rendered"] = True
 
     def _read_view_state(
