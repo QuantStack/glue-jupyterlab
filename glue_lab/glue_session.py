@@ -100,7 +100,11 @@ class SharedGlueSession:
                         continue
                     output = saved_viewer["output"]
                     view_type, state = self._read_view_state(tab_name, viewer_id)
-                    data = self._data[state["layer"]]
+                    data_name = state.get("layer", None)
+                    if data_name is not None:
+                        data = self._data.get(data_name, None)
+                    else:
+                        data = None
                     if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
                         output.clear_output()
                         with output:
