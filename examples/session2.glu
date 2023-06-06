@@ -555,7 +555,7 @@
     "kwargs": [
       []
     ],
-    "path": "../../w5/w5/w5.fits"
+    "path": "./w5.fits"
   },
   "PRIMARY": {
     "_type": "glue.core.component_id.ComponentID",
