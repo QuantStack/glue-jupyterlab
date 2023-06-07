@@ -3,7 +3,7 @@ from typing import Dict, List, Any, Callable, Optional
 from functools import partial
 from jupyter_ydoc.ybasedoc import YBaseDoc
 import y_py as Y
-
+from copy import deepcopy
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 
 
@@ -128,13 +128,29 @@ class YGlue(YBaseDoc):
 
         links: Dict[str, Dict] = {}
         for link_name in link_names:
-            links[link_name] = contents.get(link_name, {})
-            if links[link_name]["_type"] != COMPONENT_LINK_TYPE:
-                for i in range(1, 3):
-                    listName = links[link_name][f"cids{i}"]
-                    links[link_name][f"cids{i}"] = contents.get(listName, {}).get(
+            link: Dict = contents.get(link_name, {})
+            uniform_link = {"_type": link.pop("_type")}
+            if uniform_link["_type"] == COMPONENT_LINK_TYPE:
+                uniform_link["data1"] = \
+                    next((k for k, v in dataset.items() if link["frm"][0] in v["primary_owner"]), None)
+                uniform_link["data2"] = \
+                    next((k for k, v in dataset.items() if link["to"][0] in v["primary_owner"]), None)
+                uniform_link["cids1"] = link.pop("frm")
+                uniform_link["cids2"] = link.pop("to")
+                for i in [1, 2]:
+                    uniform_link[f"cids{i}_labels"] = \
+                        [attributes[attribute]["label"] for attribute in uniform_link[f"cids{i}"]]
+            else:
+                for i in [1, 2]:
+                    listName = link.pop(f"cids{i}")
+                    uniform_link[f"cids{i}"] = contents.get(listName, {}).get(
                         "contents"
                     )
+                    uniform_link[f"cids{i}_labels"] = \
+                        [attributes[attribute]["label"] for attribute in uniform_link[f"cids{i}"]]
+
+            uniform_link.update(link)
+            links[link_name] = uniform_link
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())

@@ -20,28 +20,25 @@ export class LinkedDataset extends LinkEditorWidget {
     this._linkEditorModel.linksChanged.connect(this.onLinksChanged, this);
   }
 
+  /**
+   * Fills the panel when the links changed.
+   */
   onLinksChanged(): void {
     // Remove all the existing widgets.
     while (this._createdLinksView.widgets.length) {
       this._createdLinksView.widgets[0].dispose();
     }
 
-    // Get a set of the identity linked dataset.
+    // Get a set of the linked dataset.
     const datasetLinks = new Set<string>();
-    this._linkEditorModel.relatedLinks.forEach(relatedLink => {
-      if (relatedLink.src && relatedLink.dest) {
-        const sortedDatasets = [
-          relatedLink.src.dataset,
-          relatedLink.dest.dataset
-        ].sort();
-
-        datasetLinks.add(
-          JSON.stringify({
-            first: sortedDatasets[0],
-            second: sortedDatasets[1]
-          })
-        );
-      }
+    this._linkEditorModel.identityLinks.forEach(identityLink => {
+      const sortedDatasets = [identityLink.data1, identityLink.data2].sort();
+      datasetLinks.add(
+        JSON.stringify({
+          first: sortedDatasets[0],
+          second: sortedDatasets[1]
+        })
+      );
     });
     this._linkEditorModel.advancedLinks.forEach(advancedLink => {
       const sortedDatasets = [advancedLink.data1, advancedLink.data2].sort();
@@ -52,7 +49,6 @@ export class LinkedDataset extends LinkEditorWidget {
         })
       );
     });
-
     // Updates the view with one widget per linked dataset.
     datasetLinks.forEach(datasetLink => {
       const datasets = JSON.parse(datasetLink) as IDatasets;

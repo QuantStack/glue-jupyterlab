@@ -44,18 +44,9 @@
       "type": "object",
       "patternProperties": {
         ".*": {
-          "type": "object",
-          "anyOf": [
-            {
-              "$ref": "./links/advancedLink.schema.json"
-            },
-            {
-              "$ref": "./links/componentLink.schema.json"
-            }
-          ]
+          "$ref": "./link.schema.json"
         }
-      },
-      "additionalProperties": false
+      }
     },
     "tabs": {
       "title": "IGlueSessionTabs",
