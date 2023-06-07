@@ -7,6 +7,11 @@ export { ILink } from '../_interface/glue.schema';
 export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
 export const IdentityLinkFunction = 'glue.core.link_helpers.identity';
 
+export const IdentityLinkUsing = {
+  _type: 'types.FunctionType',
+  function: IdentityLinkFunction
+};
+
 export const IDatasetsKeys = ['first', 'second'] as (keyof IDatasets)[];
 /**
  * The link editor model.

@@ -12,7 +12,9 @@ import {
   ILink,
   ILinkEditorModel,
   IDatasets,
-  IDatasetsKeys
+  IDatasetsKeys,
+  IdentityLinkFunction,
+  IdentityLinkUsing
 } from '../types';
 
 export class Linking extends LinkEditorWidget {
@@ -166,7 +168,9 @@ export class Linking extends LinkEditorWidget {
       cids1_labels: [this._identityAttributes.first.label],
       cids2_labels: [this._identityAttributes.second.label],
       data1: this._linkEditorModel.currentDatasets.first,
-      data2: this._linkEditorModel.currentDatasets.second
+      data2: this._linkEditorModel.currentDatasets.second,
+      inverse: IdentityLinkUsing,
+      using: IdentityLinkUsing
     };
     const linkName = Private.newLinkName('ComponentLink', this._sharedModel);
     this._sharedModel.setLink(linkName, link);
@@ -248,7 +252,7 @@ export class Linking extends LinkEditorWidget {
     }
 
     const link: ILink = {
-      _type: info?._type || '',
+      _type: info._type,
       cids1: inputs.map(input => input.name),
       cids2: outputs.map(output => output.name),
       cids1_labels: inputs.map(input => input.label),
@@ -257,7 +261,23 @@ export class Linking extends LinkEditorWidget {
       data2: this._linkEditorModel.currentDatasets.second
     };
 
-    const linkName = Private.newLinkName(info.function, this._sharedModel);
+    let linkName = Private.newLinkName(info.function, this._sharedModel);
+
+    // Advanced link in General category are component links.
+    if (this._selectedAdvLink.category === 'General') {
+      link._type = ComponentLinkType;
+      if (info._type !== IdentityLinkFunction) {
+        link.inverse = null;
+        link.using = {
+          _type: 'types.FunctionType',
+          function: info._type
+        };
+      } else {
+        link.inverse = IdentityLinkUsing;
+        link.using = IdentityLinkUsing;
+      }
+      linkName = Private.newLinkName('ComponentLink', this._sharedModel);
+    }
 
     this._sharedModel.setLink(linkName, link);
   };
