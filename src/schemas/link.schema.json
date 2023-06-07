@@ -2,7 +2,15 @@
   "type": "object",
   "description": "Link",
   "title": "ILink",
-  "required": ["_type", "cids1", "cids2", "cids1_labels", "cids2_labels", "data1", "data2"],
+  "required": [
+    "_type",
+    "cids1",
+    "cids2",
+    "cids1_labels",
+    "cids2_labels",
+    "data1",
+    "data2"
+  ],
   "additionalProperties": true,
   "properties": {
     "_type": {
