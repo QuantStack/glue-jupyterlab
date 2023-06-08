@@ -274,17 +274,17 @@ class SharedGlueSession:
             link_desc["data1"],
             link_desc["cids1_labels"],
             link_desc["cids2_labels"],
-            link_desc["data2"]
+            link_desc["data2"],
         ]
         links = self.app.data_collection.external_links
         for link in links:
-            if not link.display == 'identity link':
+            if not link.display == "identity link":
                 continue
             link_lst = [
                 link.data1.label,
                 [str(id) for id in link.cids1],
                 [str(id) for id in link.cids2],
-                link.data2.label
+                link.data2.label,
             ]
             if desc_lst == link_lst or desc_lst == link_lst[::-1]:
                 return link
