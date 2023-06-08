@@ -5,6 +5,7 @@ from jupyter_ydoc.ybasedoc import YBaseDoc
 import y_py as Y
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
+IDENTITY_LINK_FUNCTION = 'glue.core.link_helpers.identity'
 
 
 class YGlue(YBaseDoc):
