@@ -454,25 +454,6 @@ namespace Private {
     }
 
     /**
-     * Triggered when an attribute change.
-     * @param ioType - The type of I/O.
-     * @param index - The index of the attribute in I/O list.
-     * @param value - The value of the attribute.
-     */
-    onSelectIO(
-      ioType: IIOTypes,
-      index: number,
-      name: string,
-      label: string
-    ): void {
-      this._io[ioType][index] = {
-        name: name,
-        label: label
-      };
-      this._onAttributeChanged();
-    }
-
-    /**
      * Creates the description DOM element.
      * @param info - The description of the advanced link.
      * @returns - The DOM element.
@@ -531,13 +512,13 @@ namespace Private {
           select.append(option);
         });
 
-        select.onchange = () => {
-          this.onSelectIO(
-            ioType,
-            index,
-            select.value,
-            (select.querySelector('option:selected') as HTMLOptionElement).label
-          );
+        select.onchange = (event: Event) => {
+          const element = event.target as HTMLSelectElement;
+          this._io[ioType][index] = {
+            name: element.value,
+            label: element.selectedOptions.item(0)?.label || ''
+          };
+          this._onAttributeChanged();
         };
 
         let init_select = index;
