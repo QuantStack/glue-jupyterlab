@@ -1,7 +1,6 @@
 import warnings
 from pathlib import Path
 from typing import Dict, Optional, Tuple
-
 from glue.core.link_helpers import LinkSame
 import glue_jupyter as gj
 import y_py as Y
@@ -256,17 +255,38 @@ class SharedGlueSession:
                 ):
                     if not self._get_identity_link(link_desc):
                         self._add_identity_link(link_desc)
+            if change["action"] == "delete":
+                link_desc = change["oldValue"]
+                if (
+                    link_desc.get("_type", "") == COMPONENT_LINK_TYPE
+                    and link_desc.get("using", {}).get("function", None)
+                    == IDENTITY_LINK_FUNCTION
+                ):
+                    link = self._get_identity_link(link_desc)
+                    if link:
+                        self.app.data_collection.remove_link(link)
 
     def _get_identity_link(self, link_desc: Dict) -> Optional[LinkSame]:
-        links = self.app.data_collection.links
+        # Build a list of elements to compare (datasets names and attributes names).
+        # The order of the list allows to easily compare a reversed link, which is
+        # the same link in the case of identity links.
+        desc_lst = [
+            link_desc["data1"],
+            link_desc["cids1_labels"],
+            link_desc["cids2_labels"],
+            link_desc["data2"]
+        ]
+        links = self.app.data_collection.external_links
         for link in links:
-            if not link.identity:
+            if not link.display == 'identity link':
                 continue
-            from_ids = [str(id) for id in link.get_from_ids()]
-            to_ids = [str(id) for id in link.get_to_ids()]
-            if (from_ids == link_desc["cids1"] and to_ids == link_desc["cids2"]) or (
-                from_ids == link_desc["cids2"] and to_ids == link_desc["cids1"]
-            ):
+            link_lst = [
+                link.data1.label,
+                [str(id) for id in link.cids1],
+                [str(id) for id in link.cids2],
+                link.data2.label
+            ]
+            if desc_lst == link_lst or desc_lst == link_lst[::-1]:
                 return link
         return None
 
