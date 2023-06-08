@@ -139,8 +139,8 @@ export class Linking extends LinkEditorWidget {
     if (!isSelected) {
       attribute.addClass('selected');
       this._identityAttributes[IDatasetsKeys[index]] = {
-        label: attribute.title.label,
-        name: attribute.node.innerText
+        name: attribute.title.label,
+        label: attribute.node.innerText
       };
     } else {
       this._identityAttributes[IDatasetsKeys[index]] = undefined;
@@ -459,10 +459,15 @@ namespace Private {
      * @param index - The index of the attribute in I/O list.
      * @param value - The value of the attribute.
      */
-    onSelectIO(ioType: IIOTypes, index: number, value: string): void {
+    onSelectIO(
+      ioType: IIOTypes,
+      index: number,
+      name: string,
+      label: string
+    ): void {
       this._io[ioType][index] = {
-        name: value,
-        label: value
+        name: name,
+        label: label
       };
       this._onAttributeChanged();
     }
@@ -521,12 +526,18 @@ namespace Private {
         attributes.forEach(attribute => {
           const option = document.createElement('option');
           option.value = attribute;
+          option.label = sharedModel.attributes[attribute].label;
           option.innerText = sharedModel.attributes[attribute].label;
           select.append(option);
         });
 
         select.onchange = () => {
-          this.onSelectIO(ioType, index, select.value);
+          this.onSelectIO(
+            ioType,
+            index,
+            select.value,
+            (select.querySelector('option:selected') as HTMLOptionElement).label
+          );
         };
 
         let init_select = index;
