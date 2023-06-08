@@ -12,6 +12,7 @@ from ypywidgets import Widget
 from typing import TYPE_CHECKING
 
 from .glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
+
 if TYPE_CHECKING:
     # Import `YGlue` just for type checking.
     from .glue_ydoc import YGlue
@@ -248,7 +249,11 @@ class SharedGlueSession:
         for change in changes.values():
             if change["action"] == "add":
                 link_desc = change["newValue"]
-                if link_desc.get("_type", "") == COMPONENT_LINK_TYPE and link_desc.get("using", {}).get("function", None) == IDENTITY_LINK_FUNCTION:
+                if (
+                    link_desc.get("_type", "") == COMPONENT_LINK_TYPE
+                    and link_desc.get("using", {}).get("function", None)
+                    == IDENTITY_LINK_FUNCTION
+                ):
                     if not self._get_identity_link(link_desc):
                         self._add_identity_link(link_desc)
 
@@ -259,7 +264,9 @@ class SharedGlueSession:
                 continue
             from_ids = [str(id) for id in link.get_from_ids()]
             to_ids = [str(id) for id in link.get_to_ids()]
-            if (from_ids == link_desc["cids1"] and to_ids == link_desc["cids2"]) or (from_ids == link_desc["cids2"] and to_ids == link_desc["cids1"]):
+            if (from_ids == link_desc["cids1"] and to_ids == link_desc["cids2"]) or (
+                from_ids == link_desc["cids2"] and to_ids == link_desc["cids1"]
+            ):
                 return link
         return None
 
