@@ -55,7 +55,5 @@ def identity_link():
         "cids2": ["DEJ2000"],
         "cids1_labels": ["Declination"],
         "cids2_labels": ["DEJ2000"],
-        "using": {
-            "function": IDENTITY_LINK_FUNCTION
-        }
+        "using": {"function": IDENTITY_LINK_FUNCTION},
     }

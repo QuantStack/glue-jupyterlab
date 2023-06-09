@@ -63,12 +63,7 @@ def test__read_view_state(yglue_session):
 
 def test_add_identity_link(yglue_session, identity_link):
     yglue_session._load_data()
-    change = {
-        "LinkTest": {
-            "action": "add",
-            "newValue": identity_link
-        }
-    }
+    change = {"LinkTest": {"action": "add", "newValue": identity_link}}
     yglue_session._update_links(change)
 
     assert yglue_session._get_identity_link(identity_link) is not None
@@ -76,12 +71,7 @@ def test_add_identity_link(yglue_session, identity_link):
 
 def test_delete_identity_link(yglue_session, identity_link):
     test_add_identity_link(yglue_session, identity_link)
-    change = {
-        "LinkTest": {
-            "action": "delete",
-            "oldValue": identity_link
-        }
-    }
+    change = {"LinkTest": {"action": "delete", "oldValue": identity_link}}
     yglue_session._update_links(change)
 
     assert yglue_session._get_identity_link(identity_link) is None
