@@ -47,7 +47,15 @@ def test_get(session_path, yglue_doc):
 def test_links(yglue_doc_links):
     yglue_doc_links.get()
     links = yglue_doc_links.links
-    required = ["_type", "data1", "data2", "cids1", "cids2", "cids1_labels", "cids2_labels"]
+    required = [
+        "_type",
+        "data1",
+        "data2",
+        "cids1",
+        "cids2",
+        "cids1_labels",
+        "cids2_labels",
+    ]
     types = [str, str, str, list, list, list, list]
 
     # Links should have been populated according the session file, and all links should have the same schema.
@@ -55,7 +63,9 @@ def test_links(yglue_doc_links):
     for link in links.values():
         assert all(item in link.keys() for item in required)
         assert type(link["cids1"]) == list
-        assert all([type(link[key]) == value_type for key, value_type in zip(required, types)])
+        assert all(
+            [type(link[key]) == value_type for key, value_type in zip(required, types)]
+        )
 
     ## Fake editing of the y structure
     with yglue_doc_links._ydoc.begin_transaction() as t:
@@ -66,7 +76,7 @@ def test_links(yglue_doc_links):
             "cids1": ["cid1"],
             "cids2": ["cid2"],
             "cids1_labels": ["cid1_label"],
-            "cids2_labels": ["cid2_label"]
+            "cids2_labels": ["cid2_label"],
         }
 
         yglue_doc_links._ylinks.update(t, links.items())
