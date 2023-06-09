@@ -23,14 +23,14 @@
   "ComponentLink": {
     "_type": "glue.core.component_link.ComponentLink",
     "frm": [
-      "PRIMARY"
+      "RAJ2000"
     ],
     "inverse": {
       "_type": "types.FunctionType",
       "function": "glue.core.link_helpers.identity"
     },
     "to": [
-      "RAJ2000"
+      "RAJ2000_0"
     ],
     "using": {
       "_type": "types.FunctionType",
@@ -40,81 +40,14 @@
   "ComponentLink_0": {
     "_type": "glue.core.component_link.ComponentLink",
     "frm": [
-      "Pixel Axis 0 [y]"
-    ],
-    "inverse": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    },
-    "to": [
       "DEJ2000"
     ],
-    "using": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    }
-  },
-  "ComponentLink_1": {
-    "_type": "glue.core.component_link.ComponentLink",
-    "frm": [
-      "Pixel Axis 0 [y]"
-    ],
     "inverse": {
       "_type": "types.FunctionType",
       "function": "glue.core.link_helpers.identity"
     },
     "to": [
-      "RAJ2000"
-    ],
-    "using": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    }
-  },
-  "ComponentLink_2": {
-    "_type": "glue.core.component_link.ComponentLink",
-    "frm": [
-      "RAJ2000"
-    ],
-    "inverse": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    },
-    "to": [
-      "PRIMARY"
-    ],
-    "using": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    }
-  },
-  "ComponentLink_3": {
-    "_type": "glue.core.component_link.ComponentLink",
-    "frm": [
-      "ID",
-      "RAJ2000",
-      "DEJ2000"
-    ],
-    "inverse": null,
-    "to": [
-      "PRIMARY"
-    ],
-    "using": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.lengths_to_volume"
-    }
-  },
-  "ComponentLink_4": {
-    "_type": "glue.core.component_link.ComponentLink",
-    "frm": [
-      "ID_0"
-    ],
-    "inverse": {
-      "_type": "types.FunctionType",
-      "function": "glue.core.link_helpers.identity"
-    },
-    "to": [
-      "PRIMARY"
+      "DEJ2000_0"
     ],
     "using": {
       "_type": "types.FunctionType",
@@ -375,25 +308,13 @@
     "links": [
       "ComponentLink",
       "ComponentLink_0",
-      "FK4_to_FK5",
-      "ComponentLink_1",
-      "ComponentLink_2",
-      "ComponentLink_3",
-      "ICRS_to_Galactic",
-      "ComponentLink_4"
+      "ICRS_to_FK5"
     ],
     "subset_group_count": 0
   },
   "Declination": {
     "_type": "glue.core.component_id.ComponentID",
     "label": "Declination"
-  },
-  "FK4_to_FK5": {
-    "_type": "glue.plugins.coordinate_helpers.link_helpers.FK4_to_FK5",
-    "cids1": "list",
-    "cids2": "list_0",
-    "data1": "w5",
-    "data2": "w5_psc"
   },
   "Hmag": {
     "_type": "glue.core.component_id.ComponentID",
@@ -403,12 +324,12 @@
     "_type": "glue.core.component_id.ComponentID",
     "label": "Hmag"
   },
-  "ICRS_to_Galactic": {
-    "_type": "glue.plugins.coordinate_helpers.link_helpers.ICRS_to_Galactic",
-    "cids1": "list_1",
-    "cids2": "list_2",
-    "data1": "w5_psc",
-    "data2": "w5"
+  "ICRS_to_FK5": {
+    "_type": "glue.plugins.coordinate_helpers.link_helpers.ICRS_to_FK5",
+    "cids1": "list",
+    "cids2": "list_0",
+    "data1": "w5",
+    "data2": "w5_psc"
   },
   "ID": {
     "_type": "glue.core.component_id.ComponentID",
@@ -699,29 +620,15 @@
   "list": {
     "_type": "builtins.list",
     "contents": [
-      "PRIMARY",
-      "Pixel Axis 0 [y]"
+      "Right Ascension",
+      "Declination"
     ]
   },
   "list_0": {
     "_type": "builtins.list",
     "contents": [
-      "ID",
-      "RAJ2000"
-    ]
-  },
-  "list_1": {
-    "_type": "builtins.list",
-    "contents": [
-      "ID",
-      "RAJ2000"
-    ]
-  },
-  "list_2": {
-    "_type": "builtins.list",
-    "contents": [
-      "PRIMARY",
-      "Pixel Axis 0 [y]"
+      "RAJ2000",
+      "DEJ2000"
     ]
   },
   "w5": {
