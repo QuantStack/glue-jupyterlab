@@ -42,3 +42,49 @@ def test_get(session_path, yglue_doc):
     assert "Tab 3" in updated_content["__main__"]["tab_names"]
     assert len(updated_content["__main__"]["viewers"]) == 3
     assert "NewScatter" in updated_content["__main__"]["viewers"][2]
+
+
+def test_links(yglue_doc_links):
+    yglue_doc_links.get()
+    links = yglue_doc_links.links
+    required = [
+        "_type",
+        "data1",
+        "data2",
+        "cids1",
+        "cids2",
+        "cids1_labels",
+        "cids2_labels",
+    ]
+    types = [str, str, str, list, list, list, list]
+
+    # Links should have been populated according the session file, and all links should
+    # have the same schema.
+    assert len(links) == 3
+    for link in links.values():
+        assert all(item in link.keys() for item in required)
+        assert type(link["cids1"]) == list
+        assert all(
+            [type(link[key]) == value_type for key, value_type in zip(required, types)]
+        )
+
+    ## Fake editing of the y structure
+    with yglue_doc_links._ydoc.begin_transaction() as t:
+        links["TestLink"] = {
+            "_type": "glue.core.component_link.ComponentLink",
+            "data1": "data1",
+            "data2": "data2",
+            "cids1": ["cid1"],
+            "cids2": ["cid2"],
+            "cids1_labels": ["cid1_label"],
+            "cids2_labels": ["cid2_label"],
+        }
+
+        yglue_doc_links._ylinks.update(t, links.items())
+
+    # The new link should be in the glue session content.
+    updated_content = json.loads(yglue_doc_links.get())
+    _data_collection_name: str = updated_content.get("__main__", {}).get("data", "")
+    link_names = updated_content.get(_data_collection_name, {}).get("links", [])
+
+    assert "TestLink" in link_names

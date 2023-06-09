@@ -9,11 +9,12 @@ import {
   ComponentLinkType,
   IAdvLinkCategories,
   IAdvLinkDescription,
+  ILink,
   ILinkEditorModel,
-  IComponentLink,
-  IAdvancedLink,
   IDatasets,
-  IDatasetsKeys
+  IDatasetsKeys,
+  IdentityLinkFunction,
+  IdentityLinkUsing
 } from '../types';
 
 export class Linking extends LinkEditorWidget {
@@ -29,7 +30,7 @@ export class Linking extends LinkEditorWidget {
       this.mainContent([
         {
           name: 'Identity Linking',
-          widget: this._identityLinking(this._linkEditorModel.currentDatasets)
+          widget: this._identityLinking()
         },
         { name: 'Advanced Linking', widget: this._advancedLinking() }
       ])
@@ -48,16 +49,27 @@ export class Linking extends LinkEditorWidget {
     }
 
     this._identityAttributes = {
-      first: '',
-      second: ''
+      first: undefined,
+      second: undefined
     };
   }
 
+  /**
+   * Reload the panels when the selected datasets changed.
+   *
+   * @param _sender - the link editor model.
+   * @param selection - the selected datasets.
+   */
   onDatasetChange = (_sender: ILinkEditorModel, selection: IDatasets): void => {
     this.updateIdentityAttributes();
     this.updateAdvancedLink();
   };
 
+  /**
+   * Update the advanced link panel when the selected advanced link changed.
+   *
+   * @param selectedLink - the selected advanced link.
+   */
   onAdvancedLinkChanged = (
     selectedLink: Private.IAdvancedLinkSelected
   ): void => {
@@ -109,6 +121,12 @@ export class Linking extends LinkEditorWidget {
     });
   }
 
+  /**
+   * Handle the click event on an attribute in identity links panel.
+   *
+   * @param attribute - the attribute widget clicked.
+   * @param index - the index of the panel where the attribute widget has been clicked.
+   */
   onIdentityAttributeClicked(attribute: Widget, index: number): void {
     const isSelected = attribute.hasClass('selected');
 
@@ -120,9 +138,12 @@ export class Linking extends LinkEditorWidget {
     // Select the attribute.
     if (!isSelected) {
       attribute.addClass('selected');
-      this._identityAttributes[IDatasetsKeys[index]] = attribute.title.label;
+      this._identityAttributes[IDatasetsKeys[index]] = {
+        name: attribute.title.label,
+        label: attribute.node.innerText
+      };
     } else {
-      this._identityAttributes[IDatasetsKeys[index]] = '';
+      this._identityAttributes[IDatasetsKeys[index]] = undefined;
     }
 
     const currentDatasets = this._linkEditorModel.currentDatasets;
@@ -136,10 +157,20 @@ export class Linking extends LinkEditorWidget {
    * Creates identity link.
    */
   glueIdentity = (): void => {
-    const link: IComponentLink = {
+    if (!(this._identityAttributes.first && this._identityAttributes.second)) {
+      return;
+    }
+
+    const link: ILink = {
       _type: ComponentLinkType,
-      frm: [this._identityAttributes.first],
-      to: [this._identityAttributes.second]
+      cids1: [this._identityAttributes.first.name],
+      cids2: [this._identityAttributes.second.name],
+      cids1_labels: [this._identityAttributes.first.label],
+      cids2_labels: [this._identityAttributes.second.label],
+      data1: this._linkEditorModel.currentDatasets.first,
+      data2: this._linkEditorModel.currentDatasets.second,
+      inverse: IdentityLinkUsing,
+      using: IdentityLinkUsing
     };
     const linkName = Private.newLinkName('ComponentLink', this._sharedModel);
     this._sharedModel.setLink(linkName, link);
@@ -200,6 +231,9 @@ export class Linking extends LinkEditorWidget {
       new Set(outputs).size === outputs.length;
   };
 
+  /**
+   * Creates advanced link.
+   */
   glueAdvanced = (): void => {
     const inputs = (
       this._advancedPanel.widgets[0] as Private.AdvancedAttributes
@@ -217,20 +251,44 @@ export class Linking extends LinkEditorWidget {
       return;
     }
 
-    const link: IAdvancedLink = {
-      _type: info?._type || '',
-      cids1: inputs,
-      cids2: outputs,
+    const link: ILink = {
+      _type: info._type,
+      cids1: inputs.map(input => input.name),
+      cids2: outputs.map(output => output.name),
+      cids1_labels: inputs.map(input => input.label),
+      cids2_labels: outputs.map(output => output.label),
       data1: this._linkEditorModel.currentDatasets.first,
       data2: this._linkEditorModel.currentDatasets.second
     };
 
-    const linkName = Private.newLinkName(info.function, this._sharedModel);
+    let linkName = Private.newLinkName(info.function, this._sharedModel);
+
+    // Advanced link in General category are component links.
+    if (this._selectedAdvLink.category === 'General') {
+      link._type = ComponentLinkType;
+      if (info._type !== IdentityLinkFunction) {
+        link.inverse = null;
+        link.using = {
+          _type: 'types.FunctionType',
+          function: info._type
+        };
+      } else {
+        link.inverse = IdentityLinkUsing;
+        link.using = IdentityLinkUsing;
+      }
+      linkName = Private.newLinkName('ComponentLink', this._sharedModel);
+    }
 
     this._sharedModel.setLink(linkName, link);
   };
 
-  _identityLinking(selections: IDatasets): BoxPanel {
+  /**
+   * Build the identity link panel.
+   *
+   * @returns - the panel.
+   */
+  _identityLinking(): BoxPanel {
+    const selections = this._linkEditorModel.currentDatasets;
     const panel = new BoxPanel();
     panel.title.label = 'Identity linking';
 
@@ -274,6 +332,11 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
+  /**
+   * Build the advanced link panel.
+   *
+   * @returns - the panel.
+   */
   _advancedLinking(): BoxPanel {
     const panel = new BoxPanel();
     panel.title.label = 'Advanced linking';
@@ -323,7 +386,7 @@ export class Linking extends LinkEditorWidget {
       .widget as ToolbarButton;
   }
 
-  private _identityAttributes: Private.IIdentityAttributes;
+  private _identityAttributes: Private.ISelectedIdentityAttributes;
   private _selectedAdvLink: Private.IAdvancedLinkSelected;
   private _identityToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _identityPanel = [new Panel(), new Panel()];
@@ -341,9 +404,20 @@ namespace Private {
   }
 
   /**
-   * The identity attribute.
+   * The attribute description.
    */
-  export type IIdentityAttributes = IDatasets;
+  export interface IAttribute {
+    label: string;
+    name: string;
+  }
+
+  /**
+   * The selected identity attributes.
+   */
+  export interface ISelectedIdentityAttributes {
+    first?: IAttribute;
+    second?: IAttribute;
+  }
 
   /**
    * The IO types names.
@@ -371,24 +445,12 @@ namespace Private {
       );
     }
 
-    get inputs(): string[] {
+    get inputs(): IAttribute[] {
       return this._io.inputs;
     }
 
-    get outputs(): string[] {
+    get outputs(): IAttribute[] {
       return this._io.outputs;
-    }
-
-    /**
-     * Triggered when an attribute change.
-     * @param ioType - The type of I/O.
-     * @param index - The index of the attribute in I/O list.
-     * @param value - The value of the attribute.
-     */
-    onSelectIO(ioType: IIOTypes, index: number, value: string): void {
-      this._io[ioType][index] = value;
-      // this._parentPanel.advancedGlueButtonStatus();
-      this._onAttributeChanged();
     }
 
     /**
@@ -445,16 +507,30 @@ namespace Private {
         attributes.forEach(attribute => {
           const option = document.createElement('option');
           option.value = attribute;
+          option.label = sharedModel.attributes[attribute].label;
           option.innerText = sharedModel.attributes[attribute].label;
           select.append(option);
         });
 
-        select.value = attributes[index] || attributes[0];
-        this._io[ioType].push(attributes[index] || attributes[0]);
-
-        select.onchange = () => {
-          this.onSelectIO(ioType, index, select.value);
+        select.onchange = (event: Event) => {
+          const element = event.target as HTMLSelectElement;
+          this._io[ioType][index] = {
+            name: element.value,
+            label: element.selectedOptions.item(0)?.label || ''
+          };
+          this._onAttributeChanged();
         };
+
+        let init_select = index;
+        if (!attributes[index]) {
+          init_select = 0;
+        }
+        select.value = attributes[init_select];
+
+        this._io[ioType].push({
+          name: attributes[init_select],
+          label: sharedModel.attributes[attributes[init_select]].label
+        });
 
         selectCol.append(select);
         row.append(selectCol);
@@ -470,8 +546,8 @@ namespace Private {
     // private _parentPanel: Linking;
     private _onAttributeChanged: () => void;
     private _io = {
-      inputs: [] as string[],
-      outputs: [] as string[]
+      inputs: [] as IAttribute[],
+      outputs: [] as IAttribute[]
     };
   }
 

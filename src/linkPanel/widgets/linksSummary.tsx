@@ -1,6 +1,6 @@
 import { Button, deleteIcon, LabIcon } from '@jupyterlab/ui-components';
 import React from 'react';
-import { IAdvancedLinkInfo, IComponentLinkInfo } from '../types';
+import { ILink } from '../types';
 
 /**
  * A React widget with the identity links.
@@ -9,19 +9,27 @@ import { IAdvancedLinkInfo, IComponentLinkInfo } from '../types';
  * @param clickCallback - Function to call when clicking on the delete icon.
  */
 export function identityLinks(
-  links: [IComponentLinkInfo, boolean][],
-  clickCallback: (link: IComponentLinkInfo) => void
+  links: LinksSummary.IIdentityLink[],
+  clickCallback: (linkName: string) => void
 ): JSX.Element {
   return (
     <table>
       {links.map(link => (
-        <tr key={link[0].origin}>
-          <td>{link[1] ? link[0].dest.label : link[0].src.label}</td>
-          <td>{link[1] ? link[0].src.label : link[0].dest.label}</td>
+        <tr key={link.name}>
+          <td>
+            {link.revert
+              ? link.value.cids2_labels[0]
+              : link.value.cids1_labels[0]}
+          </td>
+          <td>
+            {link.revert
+              ? link.value.cids1_labels[0]
+              : link.value.cids2_labels[0]}
+          </td>
           <td>
             <Button
               className="glue-LinkEditor-button"
-              onClick={() => clickCallback(link[0])}
+              onClick={() => clickCallback(link.name)}
               minimal
             >
               <LabIcon.resolveReact
@@ -44,34 +52,34 @@ export function identityLinks(
  * @param clickCallback - Function to call when clicking on the delete icon.
  */
 export function advancedLinks(
-  links: IAdvancedLinkInfo[],
-  clickCallback: (link: IAdvancedLinkInfo) => void
+  links: LinksSummary.IAdvancedLink[],
+  clickCallback: (linkName: string) => void
 ): JSX.Element {
   return (
     <div>
       {links.map(link => (
-        <div key={link.origin} className={'glue-LinkEditor-advancedLinkItem'}>
+        <div key={link.name} className={'glue-LinkEditor-advancedLinkItem'}>
           <div style={{ fontWeight: 'bold' }}>
             {link.name.split('.')[link.name.split('.').length - 1]}
           </div>
           <table>
-            <tr key={link.origin}>
+            <tr key={link.name}>
               <td>
-                <div>{link.data1}</div>
+                <div>{link.value.data1}</div>
                 <div style={{ fontStyle: 'italic' }}>
-                  {link.cids1.join(', ')}
+                  {link.value.cids1_labels.join(', ')}
                 </div>
               </td>
               <td>
-                <div>{link.data2}</div>
+                <div>{link.value.data2}</div>
                 <div style={{ fontStyle: 'italic' }}>
-                  {link.cids2.join(', ')}
+                  {link.value.cids2_labels.join(', ')}
                 </div>
               </td>
               <td>
                 <Button
                   className="glue-LinkEditor-button"
-                  onClick={() => clickCallback(link)}
+                  onClick={() => clickCallback(link.name)}
                   minimal
                 >
                   <LabIcon.resolveReact
@@ -87,4 +95,26 @@ export function advancedLinks(
       ))}
     </div>
   );
+}
+
+/**
+ * The LinksSummary namespace.
+ */
+export namespace LinksSummary {
+  /**
+   * The advanced link description.
+   */
+  export interface IAdvancedLink {
+    name: string;
+    value: ILink;
+  }
+
+  /**
+   * The identity link description.
+   */
+  export interface IIdentityLink {
+    name: string;
+    value: ILink;
+    revert: boolean;
+  }
 }

@@ -5,17 +5,14 @@ import { ISignal, Signal } from '@lumino/signaling';
 import { IGlueSessionSharedModel } from '../types';
 
 import {
-  ComponentLinkType,
-  IComponentLink,
   ILinkEditorModel,
-  IComponentLinkInfo,
   IAdvLinkCategories,
   IAdvLinkDescription,
-  IAdvancedLinkInfo,
-  ILinkInfo,
-  IAdvancedLink,
-  IDatasets
+  IDatasets,
+  ComponentLinkType,
+  IdentityLinkFunction
 } from './types';
+import { ILink } from '../_interface/glue.schema';
 
 const ADVANCED_LINKS_URL = '/glue-lab/advanced-links';
 
@@ -65,26 +62,44 @@ export class LinkEditorModel implements ILinkEditorModel {
     return this._datasetsChanged;
   }
 
-  get relatedLinks(): Map<string, IComponentLinkInfo> {
-    return this._relatedLinks;
+  /**
+   * The identity links.
+   */
+  get identityLinks(): Map<string, ILink> {
+    return this._identityLinks;
   }
 
+  /**
+   * The advanced links definitions.
+   */
   get advLinkCategories(): IAdvLinkCategories {
     return this._advLinkCategories;
   }
 
-  get advancedLinks(): Map<string, IAdvancedLinkInfo> {
+  /**
+   * The advanced links.
+   */
+  get advancedLinks(): Map<string, ILink> {
     return this._advancedLinks;
   }
 
+  /**
+   * A signal emitted when the links changed.
+   */
   get linksChanged(): ISignal<this, void> {
     return this._linksChanged;
   }
 
+  /**
+   * A promise that resolve when the advanced links definitions are fetched.
+   */
   get advLinksPromise(): Promise<IAdvLinkCategories> {
     return this._advLinksPromise.promise;
   }
 
+  /**
+   * Populate the advanced links definitions.
+   */
   private async _getAdvancedLinksCategories(): Promise<void> {
     // Make request to Jupyter API.
     const settings = ServerConnection.makeSettings();
@@ -127,83 +142,25 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   /**
-   * Called when the links have changed in the glue session model.
+   * Populates the identity and advanced links when the links have changed in the glue session model.
    */
   onLinksChanged(): void {
-    this._relatedLinks = new Map<string, IComponentLinkInfo>();
-    this._advancedLinks = new Map<string, IAdvancedLinkInfo>();
+    this._identityLinks = new Map<string, ILink>();
+    this._advancedLinks = new Map<string, ILink>();
 
-    // Find origin of attributes in links.
     Object.entries(this._sharedModel?.links).forEach(
       ([linkName, link], idx) => {
-        if (link._type === ComponentLinkType) {
-          const identityLink = this._getIdentityLink(
-            linkName,
-            link as IComponentLink
-          );
-          if (identityLink) {
-            this._relatedLinks.set(linkName, identityLink);
-          }
+        if (
+          link._type === ComponentLinkType &&
+          link.using?.function === IdentityLinkFunction
+        ) {
+          this._identityLinks.set(linkName, link);
         } else {
-          const advancedLink = this._getAdvancedLink(
-            linkName,
-            link as IAdvancedLink
-          );
-          if (advancedLink) {
-            this._advancedLinks.set(linkName, advancedLink);
-          }
+          this._advancedLinks.set(linkName, link);
         }
       }
     );
     this._linksChanged.emit();
-  }
-
-  _getIdentityLink(
-    linkName: string,
-    link: IComponentLink
-  ): IComponentLinkInfo | undefined {
-    const dataset = this._sharedModel.dataset;
-    let src: ILinkInfo | undefined;
-    let dest: ILinkInfo | undefined;
-    for (const dataName in dataset) {
-      if (dataset[dataName].primary_owner.includes(link.frm[0])) {
-        src = {
-          attribute: link.frm[0],
-          dataset: dataName,
-          label: this._sharedModel.attributes[link.frm[0]].label || link.frm[0]
-        };
-      } else if (dataset[dataName].primary_owner.includes(link.to[0])) {
-        dest = {
-          attribute: link.to[0],
-          dataset: dataName,
-          label: this._sharedModel.attributes[link.to[0]].label || link.to[0]
-        };
-      }
-    }
-
-    if (!(src && dest)) {
-      return undefined;
-    } else {
-      return {
-        origin: linkName,
-        src: src,
-        dest: dest
-      };
-    }
-  }
-
-  _getAdvancedLink(
-    linkName: string,
-    link: IAdvancedLink
-  ): IAdvancedLinkInfo | undefined {
-    return {
-      origin: linkName,
-      name: link._type,
-      cids1: link.cids1,
-      cids2: link.cids2,
-      data1: link.data1,
-      data2: link.data2
-    };
   }
 
   private _sharedModel: IGlueSessionSharedModel;
@@ -211,8 +168,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   private _datasetsChanged = new Signal<this, IDatasets>(this);
   private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
   private _advLinkCategories: IAdvLinkCategories = {};
-  private _relatedLinks = new Map<string, IComponentLinkInfo>();
-  private _advancedLinks = new Map<string, IAdvancedLinkInfo>();
+  private _identityLinks = new Map<string, ILink>();
+  private _advancedLinks = new Map<string, ILink>();
   private _linksChanged = new Signal<this, void>(this);
 }
 

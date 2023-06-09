@@ -2,18 +2,16 @@ import { ReactWidget } from '@jupyterlab/ui-components';
 import { Panel, Widget } from '@lumino/widgets';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import {
-  IAdvancedLinkInfo,
-  IComponentLinkInfo,
-  IDatasets,
-  ILinkEditorModel
-} from '../types';
-import { advancedLinks, identityLinks } from './linksSummary';
+import { IDatasets, ILinkEditorModel } from '../types';
+import { advancedLinks, identityLinks, LinksSummary } from './linksSummary';
 
 /**
  * The widget displaying the links for the selected dataset.
  */
 export class Summary extends LinkEditorWidget {
+  /**
+   * The widget constructor.
+   */
   constructor(options: LinkEditorWidget.IOptions) {
     super(options);
 
@@ -53,6 +51,9 @@ export class Summary extends LinkEditorWidget {
     }
   }
 
+  /**
+   * Triggered when links has changed.
+   */
   linksChanged(): void {
     this.updateIdentityLinks(this._linkEditorModel.currentDatasets);
     this.updateAdvancedLinks(this._linkEditorModel.currentDatasets);
@@ -69,21 +70,23 @@ export class Summary extends LinkEditorWidget {
    * Updates the list of links when the selected dataset changes.
    */
   updateIdentityLinks(dataset: IDatasets): void {
-    const links: [IComponentLinkInfo, boolean][] = [];
+    const links: LinksSummary.IIdentityLink[] = [];
 
     // Remove all the existing widgets.
     while (this._identityLinks.widgets.length) {
       this._identityLinks.widgets[0].dispose();
     }
 
-    // Keep only the links components for this dataset.
-    this._linkEditorModel.relatedLinks.forEach(link => {
+    this._linkEditorModel.identityLinks.forEach((link, linkName) => {
       if (
-        Object.values(dataset).includes(link.src.dataset) &&
-        Object.values(dataset).includes(link.dest.dataset)
+        Object.values(dataset).includes(link.data1) &&
+        Object.values(dataset).includes(link.data2)
       ) {
-        const revert = link.dest.dataset === dataset.first;
-        links.push([link, revert]);
+        links.push({
+          name: linkName,
+          value: link,
+          revert: link.data2 === dataset.first
+        });
       }
     });
 
@@ -94,23 +97,27 @@ export class Summary extends LinkEditorWidget {
   }
 
   /**
-   *
+   * Updates the list of advanced links.
    */
   updateAdvancedLinks(dataset: IDatasets): void {
-    const links: IAdvancedLinkInfo[] = [];
+    const links: LinksSummary.IAdvancedLink[] = [];
 
     // Remove all the existing widgets.
     while (this._advancedLinks.widgets.length) {
       this._advancedLinks.widgets[0].dispose();
     }
-    this._linkEditorModel.advancedLinks.forEach(link => {
+    this._linkEditorModel.advancedLinks.forEach((link, linkName) => {
       if (
         Object.values(dataset).includes(link.data1) &&
         Object.values(dataset).includes(link.data2)
       ) {
-        links.push(link);
+        links.push({
+          name: linkName,
+          value: link
+        });
       }
     });
+
     // Build the widget.
     this._advancedLinks.addWidget(
       ReactWidget.create(advancedLinks(links, this.onDeleteLink))
@@ -120,8 +127,8 @@ export class Summary extends LinkEditorWidget {
   /**
    * Called when clicking on the delete icon panel.
    */
-  onDeleteLink = (link: IComponentLinkInfo | IAdvancedLinkInfo): void => {
-    this._sharedModel.removeLink(link.origin);
+  onDeleteLink = (linkName: string): void => {
+    this._sharedModel.removeLink(linkName);
   };
 
   private _identityLinks: Panel;

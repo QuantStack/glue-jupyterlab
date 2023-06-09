@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "description": "Link",
+  "title": "ILink",
+  "required": [
+    "_type",
+    "cids1",
+    "cids2",
+    "cids1_labels",
+    "cids2_labels",
+    "data1",
+    "data2"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "_type": {
+      "type": "string"
+    },
+    "cids1": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cids2": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cids1_labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cids2_labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data1": {
+      "type": "string"
+    },
+    "data2": {
+      "type": "string"
+    }
+  }
+}

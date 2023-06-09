@@ -4,12 +4,11 @@ import { JSONObject } from '@lumino/coreutils';
 import { ISignal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 import {
-  IAdvancedLink,
-  IComponentLink,
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
-  IGlueSessionTabs
+  IGlueSessionTabs,
+  ILink
 } from './_interface/glue.schema';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
@@ -72,7 +71,7 @@ export interface IGlueSessionSharedModel
   setSelectedTab(tab: number, emitter?: string): void;
   getSelectedTab(): number | null;
 
-  setLink(linkName: string, link: IComponentLink | IAdvancedLink): void;
+  setLink(linkName: string, link: ILink): void;
   removeLink(linkName: string): void;
 }
 

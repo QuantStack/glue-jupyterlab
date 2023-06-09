@@ -11,12 +11,11 @@ import {
   IGlueSessionViewerTypes
 } from '../types';
 import {
-  IAdvancedLink,
-  IComponentLink,
   IGlueSessionAttributes,
   IGlueSessionDataset,
   IGlueSessionLinks,
-  IGlueSessionTabs
+  IGlueSessionTabs,
+  ILink
 } from '../_interface/glue.schema';
 
 export const globalMutex = createMutex();
@@ -200,7 +199,7 @@ export class GlueSessionSharedModel
    * @param linkName - The link name.
    * @param link - The component or advanced link.
    */
-  setLink(linkName: string, link: IComponentLink | IAdvancedLink): void {
+  setLink(linkName: string, link: ILink): void {
     this._links.set(linkName, link as IDict);
   }
 

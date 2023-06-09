@@ -1,9 +1,16 @@
 import { ISignal } from '@lumino/signaling';
 import { IGlueSessionSharedModel } from '../types';
+import { ILink } from '../_interface/glue.schema';
 
-export { IAdvancedLink, IComponentLink } from '../_interface/glue.schema';
+export { ILink } from '../_interface/glue.schema';
 
 export const ComponentLinkType = 'glue.core.component_link.ComponentLink';
+export const IdentityLinkFunction = 'glue.core.link_helpers.identity';
+
+export const IdentityLinkUsing = {
+  _type: 'types.FunctionType',
+  function: IdentityLinkFunction
+};
 
 export const IDatasetsKeys = ['first', 'second'] as (keyof IDatasets)[];
 /**
@@ -13,30 +20,12 @@ export interface ILinkEditorModel {
   currentDatasets: IDatasets;
   setCurrentDataset(position: keyof IDatasets, value: string): void;
   readonly currentDatasetsChanged: ISignal<this, IDatasets>;
-  readonly relatedLinks: Map<string, IComponentLinkInfo>;
-  readonly advancedLinks: Map<string, IAdvancedLinkInfo>;
+  readonly identityLinks: Map<string, ILink>;
+  readonly advancedLinks: Map<string, ILink>;
   readonly linksChanged: ISignal<this, void>;
   readonly sharedModel: IGlueSessionSharedModel | undefined;
   readonly advLinkCategories: IAdvLinkCategories;
   readonly advLinksPromise: Promise<IAdvLinkCategories>;
-}
-
-/**
- * The existing identity link.
- */
-export interface IComponentLinkInfo {
-  src: ILinkInfo;
-  dest: ILinkInfo;
-  origin: string;
-}
-
-/**
- * The attribute info of identity link.
- */
-export interface ILinkInfo {
-  attribute: string;
-  dataset: string;
-  label?: string;
 }
 
 /**
@@ -56,15 +45,6 @@ export interface IAdvLinkDescription {
  */
 export interface IAdvLinkCategories {
   [category: string]: IAdvLinkDescription[];
-}
-
-export interface IAdvancedLinkInfo {
-  name: string;
-  cids1: string[];
-  cids2: string[];
-  data1: string;
-  data2: string;
-  origin: string;
 }
 
 /**
