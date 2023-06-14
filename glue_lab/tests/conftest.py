@@ -2,6 +2,7 @@ import pytest
 from pathlib import Path
 from jupyter_ydoc import ydocs
 from glue_lab.glue_session import SharedGlueSession
+from glue_lab.glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
 
 
 @pytest.fixture
@@ -42,3 +43,17 @@ def yglue_doc_links(session_links_path):
     glue.set(data)
 
     return glue
+
+
+@pytest.fixture
+def identity_link():
+    return {
+        "_type": COMPONENT_LINK_TYPE,
+        "data1": "w5",
+        "data2": "w5_psc",
+        "cids1": ["Declination"],
+        "cids2": ["DEJ2000"],
+        "cids1_labels": ["Declination"],
+        "cids2_labels": ["DEJ2000"],
+        "using": {"function": IDENTITY_LINK_FUNCTION},
+    }

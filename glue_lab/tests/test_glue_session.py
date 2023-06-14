@@ -59,3 +59,19 @@ def test__read_view_state(yglue_session):
     view_type, state = yglue_session._read_view_state("Tab 1", "ScatterViewer")
     assert view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer"
     assert len(state) > 0
+
+
+def test_add_identity_link(yglue_session, identity_link):
+    yglue_session._load_data()
+    change = {"LinkTest": {"action": "add", "newValue": identity_link}}
+    yglue_session._update_links(change)
+
+    assert yglue_session._get_identity_link(identity_link) is not None
+
+
+def test_delete_identity_link(yglue_session, identity_link):
+    test_add_identity_link(yglue_session, identity_link)
+    change = {"LinkTest": {"action": "delete", "oldValue": identity_link}}
+    yglue_session._update_links(change)
+
+    assert yglue_session._get_identity_link(identity_link) is None

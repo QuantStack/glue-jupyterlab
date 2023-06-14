@@ -1,7 +1,7 @@
 import warnings
 from pathlib import Path
 from typing import Dict, Optional, Tuple
-
+from glue.core.link_helpers import LinkSame
 import glue_jupyter as gj
 import y_py as Y
 from IPython.display import display
@@ -9,6 +9,8 @@ from ipywidgets import Output
 from jupyter_ydoc import ydocs
 from ypywidgets import Widget
 from typing import TYPE_CHECKING
+
+from .glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
 
 if TYPE_CHECKING:
     # Import `YGlue` just for type checking.
@@ -242,6 +244,60 @@ class SharedGlueSession:
             if data_name not in self._data:
                 self._data[data_name] = self.app.load_data(data_path)
 
+    def _update_links(self, changes: Dict) -> None:
+        for change in changes.values():
+            if change["action"] == "add":
+                link_desc = change["newValue"]
+                if (
+                    link_desc.get("_type", "") == COMPONENT_LINK_TYPE
+                    and link_desc.get("using", {}).get("function", None)
+                    == IDENTITY_LINK_FUNCTION
+                ):
+                    if not self._get_identity_link(link_desc):
+                        self._add_identity_link(link_desc)
+            if change["action"] == "delete":
+                link_desc = change["oldValue"]
+                if (
+                    link_desc.get("_type", "") == COMPONENT_LINK_TYPE
+                    and link_desc.get("using", {}).get("function", None)
+                    == IDENTITY_LINK_FUNCTION
+                ):
+                    link = self._get_identity_link(link_desc)
+                    if link:
+                        self.app.data_collection.remove_link(link)
+
+    def _get_identity_link(self, link_desc: Dict) -> Optional[LinkSame]:
+        # Build a list of elements to compare (datasets names and attributes names).
+        # The order of the list allows to easily compare a reversed link, which is
+        # the same link in the case of identity links.
+        desc_lst = [
+            link_desc["data1"],
+            link_desc["cids1_labels"],
+            link_desc["cids2_labels"],
+            link_desc["data2"],
+        ]
+        links = self.app.data_collection.external_links
+        for link in links:
+            if not link.display == "identity link":
+                continue
+            link_lst = [
+                link.data1.label,
+                [str(id) for id in link.cids1],
+                [str(id) for id in link.cids2],
+                link.data2.label,
+            ]
+            if desc_lst == link_lst or desc_lst == link_lst[::-1]:
+                return link
+        return None
+
+    def _add_identity_link(self, link_desc: Dict) -> None:
+        data1 = self._data[link_desc["data1"]]
+        data2 = self._data[link_desc["data2"]]
+        attributes1 = data1.id[link_desc["cids1_labels"][0]]
+        attributes2 = data2.id[link_desc["cids2_labels"][0]]
+        link = LinkSame(attributes1, attributes2)
+        self.app.data_collection.add_link(link)
+
     def _on_document_change(self, target, event):
         """Callback on ydoc changed event."""
         if target == "contents":
@@ -249,3 +305,6 @@ class SharedGlueSession:
         elif target == "tabs":
             self._load_data()
             self.render_viewer()
+        elif target == "links":
+            self._load_data()
+            self._update_links(event.keys)

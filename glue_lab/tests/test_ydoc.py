@@ -44,7 +44,7 @@ def test_get(session_path, yglue_doc):
     assert "NewScatter" in updated_content["__main__"]["viewers"][2]
 
 
-def test_links(yglue_doc_links):
+def test_links(yglue_doc_links, identity_link):
     yglue_doc_links.get()
     links = yglue_doc_links.links
     required = [
@@ -70,15 +70,7 @@ def test_links(yglue_doc_links):
 
     ## Fake editing of the y structure
     with yglue_doc_links._ydoc.begin_transaction() as t:
-        links["TestLink"] = {
-            "_type": "glue.core.component_link.ComponentLink",
-            "data1": "data1",
-            "data2": "data2",
-            "cids1": ["cid1"],
-            "cids2": ["cid2"],
-            "cids1_labels": ["cid1_label"],
-            "cids2_labels": ["cid2_label"],
-        }
+        links["TestLink"] = identity_link
 
         yglue_doc_links._ylinks.update(t, links.items())
 
