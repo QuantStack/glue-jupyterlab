@@ -64,6 +64,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       yWidgetManager: yWidgetManager,
       preferKernel: true,
       canStartKernel: true,
+      autoStartDefault: true,
       commands: app.commands
     });
     widgetFactory.widgetCreated.connect((_, widget) => {
