@@ -56,13 +56,22 @@ class SharedGlueSession:
             display_view (bool, optional): Display the output widget immediately?
             Defaults to True.
         """
+
         if tab_name in self._viewers:
             if viewer_id not in self._viewers[tab_name]:
-                self._viewers[tab_name][viewer_id] = dict(
-                    output=Output(), rendered=False
-                )
+                self._viewers[tab_name][viewer_id] = dict(output=Output(), widget=None)
+            elif (
+                "widget" in self._viewers[tab_name][viewer_id]
+                and self._viewers[tab_name][viewer_id]["widget"] is not None
+            ):
+                output = Output()
+                widget = self._viewers[tab_name][viewer_id]["widget"]
+
+                with output:
+                    widget.show()
+                self._viewers[tab_name][viewer_id]["output"] = output
         else:
-            self._viewers[tab_name] = {viewer_id: dict(output=Output(), rendered=False)}
+            self._viewers[tab_name] = {viewer_id: dict(output=Output(), widget=None)}
 
         if display_view:
             display(self._viewers[tab_name][viewer_id]["output"])
@@ -82,7 +91,8 @@ class SharedGlueSession:
     def render_viewer(self) -> None:
         """Fill the place holder output with glu-jupyter widgets"""
 
-        for tab_name in self._viewers:
+        all_tabs = self._document.get_tab_names()
+        for tab_name in all_tabs:
             document_tab_data = self._document.get_tab_data(tab_name)
             if document_tab_data is None:
                 # Tab removed from the frontend
@@ -98,7 +108,7 @@ class SharedGlueSession:
             for viewer_id in document_tab_data:
                 saved_viewer = self._viewers.get(tab_name, {}).get(viewer_id)
                 if saved_viewer is not None:
-                    if saved_viewer["rendered"]:
+                    if saved_viewer["widget"] is not None:
                         continue
                     output = saved_viewer["output"]
                     view_type, state = self._read_view_state(tab_name, viewer_id)
@@ -107,63 +117,83 @@ class SharedGlueSession:
                         data = self._data.get(data_name, None)
                     else:
                         data = None
-                    if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
-                        output.clear_output()
-                        try:
-                            with output:
-                                scatter = self.app.scatter2d(data=data)
-                                for key, value in state.items():
-                                    try:
-                                        setattr(scatter.state, key, value)
-                                    except Exception:
-                                        pass
-                        except Exception as e:
-                            output.clear_output()
-                            with output:
-                                print(e)
+                    output.clear_output()
+                    with output:
+                        widget = self._viewer_factory(
+                            view_type=view_type, viewer_data=data, viewer_state=state
+                        )
 
-                    elif view_type == "glue.viewers.image.qt.data_viewer.ImageViewer":
-                        output.clear_output()
-                        try:
-                            with output:
-                                self.app.imshow(data=data)
-                        except Exception as e:
-                            output.clear_output()
-                            with output:
-                                print(e)
-                    elif (
-                        view_type
-                        == "glue.viewers.histogram.qt.data_viewer.HistogramViewer"
-                    ):
-                        output.clear_output()
-                        try:
-                            with output:
-                                hist = self.app.histogram1d(data=data)
-                                for key, value in state.items():
-                                    try:
-                                        setattr(hist.state, key, value)
-                                    except Exception:
-                                        pass
-                        except Exception as e:
-                            output.clear_output()
-                            with output:
-                                print(e)
-                    elif view_type == "glue.viewers.table.qt.data_viewer.TableViewer":
-                        output.clear_output()
-                        try:
-                            with output:
-                                table = self.app.table(data=data)
-                                for key, value in state.items():
-                                    try:
-                                        setattr(table.state, key, value)
-                                    except Exception:
-                                        pass
-                        except Exception as e:
-                            output.clear_output()
-                            with output:
-                                print(e)
+                    saved_viewer["widget"] = widget
+                else:
+                    # No existing viewer, create widget only.
 
-                    saved_viewer["rendered"] = True
+                    view_type, state = self._read_view_state(tab_name, viewer_id)
+                    data_name = state.get("layer", None)
+                    if data_name is not None:
+                        data = self._data.get(data_name, None)
+                    else:
+                        data = None
+
+                    if tab_name in self._viewers:
+                        self._viewers[tab_name][viewer_id] = {
+                            "widget": self._viewer_factory(
+                                view_type=view_type,
+                                viewer_data=data,
+                                viewer_state=state,
+                            )
+                        }
+                    else:
+                        self._viewers[tab_name] = {
+                            viewer_id: {
+                                "widget": self._viewer_factory(
+                                    view_type=view_type,
+                                    viewer_data=data,
+                                    viewer_state=state,
+                                )
+                            }
+                        }
+
+    def _viewer_factory(
+        self, view_type: str, viewer_data: any, viewer_state: dict
+    ) -> Optional[Widget]:
+        widget = None
+        if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
+            try:
+                widget = self.app.scatter2d(data=viewer_data)
+                for key, value in viewer_state.items():
+                    try:
+                        setattr(widget.state, key, value)
+                    except Exception:
+                        pass
+            except Exception as e:
+                print(e)
+
+        elif view_type == "glue.viewers.image.qt.data_viewer.ImageViewer":
+            try:
+                widget = self.app.imshow(data=viewer_data)
+            except Exception as e:
+                print(e)
+        elif view_type == "glue.viewers.histogram.qt.data_viewer.HistogramViewer":
+            try:
+                widget = self.app.histogram1d(data=viewer_data)
+                for key, value in viewer_state.items():
+                    try:
+                        setattr(widget.state, key, value)
+                    except Exception:
+                        pass
+            except Exception as e:
+                print(e)
+        elif view_type == "glue.viewers.table.qt.data_viewer.TableViewer":
+            try:
+                widget = self.app.table(data=viewer_data)
+                for key, value in viewer_state.items():
+                    try:
+                        setattr(widget.state, key, value)
+                    except Exception:
+                        pass
+            except Exception as e:
+                print(e)
+        return widget
 
     def _read_view_state(
         self, tab_name: str, viewer_id: str
