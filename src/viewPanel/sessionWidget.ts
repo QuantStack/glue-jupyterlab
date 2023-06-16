@@ -18,7 +18,6 @@ import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
 import { IJupyterYWidgetManager } from 'yjs-widgets';
 
-
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
@@ -175,7 +174,8 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _tabViews: { [k: string]: TabView } = {};
-  private _pythonSessionCreated: PromiseDelegate<void> = new PromiseDelegate<void>();
+  private _pythonSessionCreated: PromiseDelegate<void> =
+    new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkEditor | undefined = undefined;
   private _model: IGlueSessionSharedModel;
