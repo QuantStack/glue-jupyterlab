@@ -120,6 +120,16 @@
       }
     },
     "extension": true,
-    "outputDir": "glue_lab/labextension"
+    "outputDir": "glue_lab/labextension",
+    "sharedPackages": {
+      "yjs": {
+        "bundled": false,
+        "singleton": true
+      },
+      "yjs-widgets": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   }
 }
