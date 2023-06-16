@@ -1,3 +1,4 @@
+import os
 import pytest
 from pathlib import Path
 from jupyter_ydoc import ydocs
@@ -20,6 +21,8 @@ def yglue_doc(session_path):
     with open(session_path, "r") as fobj:
         data = fobj.read()
 
+    os.chdir(Path(__file__).parents[2] / "examples")
+
     glue = ydocs["glu"]()
     glue.set(data)
 
@@ -38,6 +41,8 @@ def yglue_session(session_path, yglue_doc):
 def yglue_doc_links(session_links_path):
     with open(session_links_path, "r") as fobj:
         data = fobj.read()
+
+    os.chdir(Path(__file__).parents[2] / "examples")
 
     glue = ydocs["glu"]()
     glue.set(data)
