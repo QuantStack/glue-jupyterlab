@@ -227,17 +227,16 @@ class SharedGlueSession:
         """Load data defined in the glue session"""
         data_paths = {}
         contents = self._document.contents
-        session_path = Path(self._path).parent
         if "LoadLog" in contents:
             path = Path(contents["LoadLog"]["path"])
-            data_paths[path.stem] = str(session_path / path)
+            data_paths[path.stem] = str(path)
         idx = 0
         while True:
             load_log = f"LoadLog_{idx}"
             if load_log not in contents:
                 break
             path = Path(contents[load_log]["path"])
-            data_paths[path.stem] = str(session_path / path)
+            data_paths[path.stem] = str(path)
             idx += 1
 
         for data_name, data_path in data_paths.items():
