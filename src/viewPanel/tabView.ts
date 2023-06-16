@@ -16,7 +16,6 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { GlueSessionModel } from '../document/docModel';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { PromiseDelegate } from '@lumino/coreutils';
 
 export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
@@ -336,6 +335,5 @@ export namespace TabView {
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
-    dataLoaded: PromiseDelegate<void>;
   }
 }

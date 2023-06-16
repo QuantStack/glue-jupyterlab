@@ -18,6 +18,7 @@ import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
 import { IJupyterYWidgetManager } from 'yjs-widgets';
 
+
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
@@ -130,9 +131,12 @@ export class SessionWidget extends BoxPanel {
 
     const future = kernel.requestExecute({ code }, false);
     await future.done;
+    this._dataLoaded.resolve();
   }
 
-  private _onTabsChanged(): void {
+  private async _onTabsChanged() {
+    await this._dataLoaded.promise;
+
     const tabNames = this._model.getTabNames();
 
     tabNames.forEach((tabName, idx) => {
@@ -147,8 +151,7 @@ export class SessionWidget extends BoxPanel {
         model: this._model,
         rendermime: this._rendermime,
         context: this._context,
-        notebookTracker: this._notebookTracker,
-        dataLoaded: this._dataLoaded
+        notebookTracker: this._notebookTracker
       }));
 
       this._tabPanel.addTab(tabWidget, idx + 1);
