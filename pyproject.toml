@@ -24,7 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "jupyter_server>=1.21,<3",
-    "jupyter_collaboration>=1.0.0a8",
+    "jupyter_collaboration>=1.0.0,<2.0.0",
     "glue-core",
     "glue-jupyter",
     "yjs-widgets>=0.3.3,<0.4.0",
