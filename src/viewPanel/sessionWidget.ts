@@ -131,11 +131,11 @@ export class SessionWidget extends BoxPanel {
 
     const future = kernel.requestExecute({ code }, false);
     await future.done;
-    this._dataLoaded.resolve();
+    this._pythonSessionCreated.resolve();
   }
 
   private async _onTabsChanged() {
-    await this._dataLoaded.promise;
+    await this._pythonSessionCreated.promise;
 
     const tabNames = this._model.getTabNames();
 
@@ -175,7 +175,7 @@ export class SessionWidget extends BoxPanel {
   }
 
   private _tabViews: { [k: string]: TabView } = {};
-  private _dataLoaded: PromiseDelegate<void> = new PromiseDelegate<void>();
+  private _pythonSessionCreated: PromiseDelegate<void> = new PromiseDelegate<void>();
   private _tabPanel: HTabPanel;
   private _linkWidget: LinkEditor | undefined = undefined;
   private _model: IGlueSessionSharedModel;
