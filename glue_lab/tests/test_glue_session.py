@@ -20,7 +20,7 @@ def test_create_viewer(yglue_session):
     yglue_session.create_viewer("Tab 1", "ScatterViewer")
     assert "Tab 1" in yglue_session._viewers
     assert "ScatterViewer" in yglue_session._viewers["Tab 1"]
-    assert yglue_session._viewers["Tab 1"]["ScatterViewer"]["rendered"] is False
+    assert yglue_session._viewers["Tab 1"]["ScatterViewer"]["widget"] is None
     assert isinstance(
         yglue_session._viewers["Tab 1"]["ScatterViewer"]["output"], Output
     )
@@ -43,7 +43,7 @@ def test_render_viewer(yglue_session):
     yglue_session._load_data()
     yglue_session.create_viewer("Tab 1", "ScatterViewer")
     yglue_session.render_viewer()
-    assert yglue_session._viewers["Tab 1"]["ScatterViewer"]["rendered"] is True
+    assert yglue_session._viewers["Tab 1"]["ScatterViewer"]["widget"] is not None
 
 
 def test_render_removed_viewer(yglue_session):

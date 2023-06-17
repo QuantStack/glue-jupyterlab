@@ -92,11 +92,14 @@ class SharedGlueSession:
         """Fill the place holder output with glu-jupyter widgets"""
 
         all_tabs = self._document.get_tab_names()
+        for frontend_tab in self._viewers:
+            if frontend_tab not in all_tabs:
+                # Tab removed from the frontend
+                self.remove_tab(frontend_tab)
+
         for tab_name in all_tabs:
             document_tab_data = self._document.get_tab_data(tab_name)
             if document_tab_data is None:
-                # Tab removed from the frontend
-                self.remove_tab(tab_name)
                 continue
 
             saved_tab_viewers = list(self._viewers.get(tab_name, {}))
@@ -107,33 +110,26 @@ class SharedGlueSession:
 
             for viewer_id in document_tab_data:
                 saved_viewer = self._viewers.get(tab_name, {}).get(viewer_id)
+
+                view_type, state = self._read_view_state(tab_name, viewer_id)
+                data_name = state.get("layer", None)
+                if data_name is not None:
+                    data = self._data.get(data_name, None)
+                else:
+                    data = None
+
                 if saved_viewer is not None:
                     if saved_viewer["widget"] is not None:
                         continue
                     output = saved_viewer["output"]
-                    view_type, state = self._read_view_state(tab_name, viewer_id)
-                    data_name = state.get("layer", None)
-                    if data_name is not None:
-                        data = self._data.get(data_name, None)
-                    else:
-                        data = None
                     output.clear_output()
                     with output:
                         widget = self._viewer_factory(
                             view_type=view_type, viewer_data=data, viewer_state=state
                         )
-
                     saved_viewer["widget"] = widget
                 else:
                     # No existing viewer, create widget only.
-
-                    view_type, state = self._read_view_state(tab_name, viewer_id)
-                    data_name = state.get("layer", None)
-                    if data_name is not None:
-                        data = self._data.get(data_name, None)
-                    else:
-                        data = None
-
                     if tab_name in self._viewers:
                         self._viewers[tab_name][viewer_id] = {
                             "widget": self._viewer_factory(
@@ -156,6 +152,19 @@ class SharedGlueSession:
     def _viewer_factory(
         self, view_type: str, viewer_data: any, viewer_state: dict
     ) -> Optional[Widget]:
+        """Create widget for viewer
+
+        Args:
+            view_type (str): Type of the widget, it is taken from
+            the session file.
+            viewer_data (any): The data used to create the glue-jupyter widget
+            viewer_state (dict): The state of the widget, it is taken from
+            the session file.
+
+        Returns:
+            Optional[Widget]: The glue-jupyter widget
+        """
+
         widget = None
         if view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer":
             try:
