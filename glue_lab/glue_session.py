@@ -1,15 +1,16 @@
 import warnings
 from pathlib import Path
-from typing import Dict, Optional, Tuple
-from glue.core.link_helpers import LinkSame
+from typing import TYPE_CHECKING, Dict, Optional, Tuple
+
 import glue_jupyter as gj
 import y_py as Y
+from glue.core.link_helpers import LinkSame
 from IPython.display import display
 from ipywidgets import Output
 from jupyter_ydoc import ydocs
 from ypywidgets import Widget
-from typing import TYPE_CHECKING
 
+from .glue_utils import ErrorWidget
 from .glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
 
 if TYPE_CHECKING:
@@ -175,7 +176,7 @@ class SharedGlueSession:
                     except Exception:
                         pass
             except Exception as e:
-                print(e)
+                widget = ErrorWidget(e, __file__)
 
         elif view_type == "glue.viewers.image.qt.data_viewer.ImageViewer":
             try:
@@ -191,7 +192,7 @@ class SharedGlueSession:
                     except Exception:
                         pass
             except Exception as e:
-                print(e)
+                widget = ErrorWidget(e, __file__)
         elif view_type == "glue.viewers.table.qt.data_viewer.TableViewer":
             try:
                 widget = self.app.table(data=viewer_data)
@@ -201,7 +202,7 @@ class SharedGlueSession:
                     except Exception:
                         pass
             except Exception as e:
-                print(e)
+                widget = ErrorWidget(e, __file__)
         return widget
 
     def _read_view_state(

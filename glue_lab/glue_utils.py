@@ -1,8 +1,11 @@
 import json
 from inspect import getfullargspec
-from typing import List, Dict
-from glue.main import load_plugins
+from typing import Dict, List
+
 from glue.config import link_function, link_helper
+from glue.main import load_plugins
+from IPython.display import display
+from ipywidgets import HTML
 
 load_plugins()
 
@@ -62,3 +65,14 @@ def get_advanced_links():
     categories = ["General"] + sorted(set(advanced_links.keys()) - set(["General"]))
     advanced_links = {k: advanced_links[k] for k in categories}
     return advanced_links
+
+
+class ErrorWidget:
+    """Wrapper of a HTML widget for showing error message"""
+
+    def __init__(self, e: Exception, path: str) -> None:
+        value = f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {path}: {e}"
+        self._widget = HTML(value=value)
+
+    def show(self):
+        display(self._widget)
