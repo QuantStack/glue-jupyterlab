@@ -1,5 +1,10 @@
 import { Panel, Widget } from '@lumino/widgets';
-import { Toolbar, ToolbarButton, closeIcon } from '@jupyterlab/ui-components';
+import {
+  Toolbar,
+  ToolbarButton,
+  closeIcon,
+  editIcon
+} from '@jupyterlab/ui-components';
 import { ISignal, Signal } from '@lumino/signaling';
 
 export class GridStackItem extends Panel {
@@ -71,12 +76,21 @@ export class GridStackItem extends Panel {
   private _createToolbar(itemTitle: string): Toolbar {
     const toolbar = new Toolbar();
     toolbar.addClass('glue-Session-tab-toolbar');
+
     toolbar.addItem(
       'Close',
       new ToolbarButton({
         tooltip: 'Close',
         icon: closeIcon,
         onClick: () => this._changed.emit({ action: 'close' })
+      })
+    );
+    toolbar.addItem(
+      'Config',
+      new ToolbarButton({
+        tooltip: 'Config',
+        icon: editIcon,
+        onClick: () => this._changed.emit({ action: 'edit' })
       })
     );
     const title = new Widget();
@@ -107,6 +121,6 @@ export namespace GridStackItem {
   }
 
   export interface IChange {
-    action: 'close' | 'lock';
+    action: 'close' | 'lock' | 'edit';
   }
 }

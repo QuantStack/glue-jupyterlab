@@ -8,6 +8,7 @@ import {
 } from '../types';
 import { IGlueSessionTracker } from '../token';
 import { IGlueSessionTabs } from '../_interface/glue.schema';
+import { ISessionContext } from '@jupyterlab/apputils';
 
 export class ControlPanelModel implements IControlPanelModel {
   constructor(options: ControlPanelModel.IOptions) {
@@ -61,6 +62,10 @@ export class ControlPanelModel implements IControlPanelModel {
 
   getTabs(): IGlueSessionTabs {
     return this._tabs;
+  }
+
+  currentSessionContext(): ISessionContext | undefined {
+    return this._tracker.currentWidget?.context.sessionContext;
   }
 
   private _onTabsChanged(_: any, e: any): void {

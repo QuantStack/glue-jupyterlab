@@ -1,4 +1,4 @@
-import { controlPanel } from './controlPanel/plugin';
+import { controlPanel } from './leftPanel/plugin';
 import { gluePlugin, sessionTrackerPlugin } from './document/plugin';
 import { yGlueSessionWidgetPlugin } from './yWidget';
 

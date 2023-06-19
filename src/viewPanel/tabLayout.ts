@@ -121,7 +121,9 @@ export class TabLayout extends Layout {
    */
   init(): void {
     super.init();
-    this.parent!.node.appendChild(this._gridHost);
+    if (this.parent) {
+      this.parent.node.appendChild(this._gridHost);
+    }
     // fake window resize event to resize bqplot
     window.dispatchEvent(new Event('resize'));
   }
@@ -318,9 +320,16 @@ export class TabLayout extends Layout {
     sender: GridStackItem,
     change: GridStackItem.IChange
   ): void {
-    if (change.action === 'close') {
-      sender.changed.disconnect(this._onItemChanged, this);
-      this.removeGridItem(sender.cellIdentity);
+    switch (change.action) {
+      case 'close':
+        sender.changed.disconnect(this._onItemChanged, this);
+        this.removeGridItem(sender.cellIdentity);
+        break;
+      case 'edit':
+        console.log('sender.cellIdentity', sender.cellIdentity);
+        break;
+      default:
+        break;
     }
   }
 

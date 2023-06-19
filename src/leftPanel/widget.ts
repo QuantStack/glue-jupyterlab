@@ -9,7 +9,7 @@ import { ControlPanelHeader } from './header';
 import { IGlueSessionTracker } from '../token';
 import { HTabPanel } from '../common/tabPanel';
 import { DataPanel } from './data/dataPanel';
-import { LayerPanel } from './layers/layerPanel';
+import { ControlPanel } from './control/controlPanel';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
@@ -28,7 +28,7 @@ export class ControlPanelWidget extends SidePanel {
       model: this._model,
       commands: options.commands
     });
-    const canvas = new LayerPanel({ model: this._model });
+    const canvas = new ControlPanel({ model: this._model });
 
     this._tabPanel.addTab(data, 0);
     this._tabPanel.addTab(canvas, 1);
