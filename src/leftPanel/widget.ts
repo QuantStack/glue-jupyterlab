@@ -9,13 +9,15 @@ import { IControlPanelModel } from '../types';
 import { ConfigPanel } from './config/configPanel';
 import { DataPanel } from './data/dataPanel';
 import { ControlPanelHeader } from './header';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
     const content = new BoxPanel();
     super({ content });
     this.addClass('gluelab-sidepanel-widget');
-    this._model = options.model;
+    const { model, rendermime, commands } = options;
+    this._model = model;
     const header = new ControlPanelHeader();
     this.header.addWidget(header);
 
@@ -25,9 +27,9 @@ export class ControlPanelWidget extends SidePanel {
     });
     const data = new DataPanel({
       model: this._model,
-      commands: options.commands
+      commands
     });
-    const canvas = new ConfigPanel({ model: this._model });
+    const canvas = new ConfigPanel({ model, rendermime });
 
     this._tabPanel.addTab(data, 0);
     this._tabPanel.addTab(canvas, 1);
@@ -61,5 +63,6 @@ export namespace LeftPanelWidget {
     model: IControlPanelModel;
     tracker: IGlueSessionTracker;
     commands: CommandRegistry;
+    rendermime: IRenderMimeRegistry;
   }
 }

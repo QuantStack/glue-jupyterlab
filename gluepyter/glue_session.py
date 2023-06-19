@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Optional, Tuple
 
 import glue_jupyter as gj
+from glue_jupyter.view import IPyWidgetView
 import y_py as Y
 from glue.core.link_helpers import LinkSame
 from IPython.display import display
@@ -149,6 +150,14 @@ class SharedGlueSession:
                                 )
                             }
                         }
+
+    def render_config(self, tab_id: str, viewer_id: str):
+        viewer_widget: IPyWidgetView = (
+            self._viewers.get(tab_id, {}).get(viewer_id, {}).get("widget", None)
+        )
+        if viewer_widget is not None:
+            viewer_options = viewer_widget.viewer_options
+            display(viewer_options)
 
     def _viewer_factory(
         self, view_type: str, viewer_data: any, viewer_state: dict

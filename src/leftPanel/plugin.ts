@@ -10,6 +10,7 @@ import { IGlueSessionTracker } from '../token';
 import { CommandIDs, INewViewerArgs } from '../commands';
 import { UUID } from '@lumino/coreutils';
 import { CommandRegistry } from '@lumino/commands';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 const NAME_SPACE = 'gluelab';
 
@@ -160,11 +161,12 @@ function addCommands(
 export const controlPanel: JupyterFrontEndPlugin<void> = {
   id: 'gluepyter:control-panel',
   autoStart: true,
-  requires: [ILayoutRestorer, IGlueSessionTracker],
+  requires: [ILayoutRestorer, IGlueSessionTracker, IRenderMimeRegistry],
   activate: (
     app: JupyterFrontEnd,
     restorer: ILayoutRestorer,
-    tracker: IGlueSessionTracker
+    tracker: IGlueSessionTracker,
+    rendermime: IRenderMimeRegistry
   ) => {
     const { shell, commands } = app;
 
@@ -173,7 +175,8 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
     const controlPanel = new ControlPanelWidget({
       model: controlModel,
       tracker,
-      commands
+      commands,
+      rendermime
     });
 
     controlPanel.id = 'glueLab::controlPanel';

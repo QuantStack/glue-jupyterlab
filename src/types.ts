@@ -10,6 +10,7 @@ import {
   IGlueSessionTabs,
   ILink
 } from './_interface/glue.schema';
+import { ISessionContext } from '@jupyterlab/apputils';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
 
@@ -97,6 +98,7 @@ export interface IControlPanelModel {
   displayConfigRequested: ISignal<IControlPanelModel, IRequestConfigDisplay>;
   getTabs(): IGlueSessionTabs;
   displayConfig(args: IRequestConfigDisplay): void;
+  currentSessionContext(): ISessionContext | undefined;
 }
 
 export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];
