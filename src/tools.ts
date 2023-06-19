@@ -25,7 +25,8 @@ export function mockNotebook(
     },
     sessionContext: {
       session: null,
-      sessionChanged: signal
+      sessionChanged: signal,
+      kernelChanged: signal
     },
     disposed: signal,
     node: document.createElement('div')
