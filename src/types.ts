@@ -83,13 +83,20 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
 
 export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
 
+export interface IRequestConfigDisplay {
+  tabId: string;
+  cellId?: string;
+}
+
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
   glueSessionChanged: ISignal<IControlPanelModel, IGlueSessionWidget | null>;
   selectedDataset: string | null;
   selectedDatasetChanged: ISignal<IControlPanelModel, void>;
   tabsChanged: ISignal<IControlPanelModel, void>;
+  displayConfigRequested: ISignal<IControlPanelModel, IRequestConfigDisplay>;
   getTabs(): IGlueSessionTabs;
+  displayConfig(args: IRequestConfigDisplay): void;
 }
 
 export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];

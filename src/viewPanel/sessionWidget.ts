@@ -159,7 +159,8 @@ export class SessionWidget extends BoxPanel {
         model: this._model,
         rendermime: this._rendermime,
         context: this._context,
-        notebookTracker: this._notebookTracker
+        notebookTracker: this._notebookTracker,
+        commands: this._commands
       }));
 
       this._tabPanel.addTab(tabWidget, idx + 1);

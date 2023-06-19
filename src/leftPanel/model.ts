@@ -4,7 +4,8 @@ import {
   IControlPanelModel,
   IGlueSessionWidget,
   IGlueSessionSharedModel,
-  IGlueSessionModel
+  IGlueSessionModel,
+  IRequestConfigDisplay
 } from '../types';
 import { IGlueSessionTracker } from '../token';
 import { IGlueSessionTabs } from '../_interface/glue.schema';
@@ -40,6 +41,12 @@ export class ControlPanelModel implements IControlPanelModel {
   > {
     return this._glueSessionChanged;
   }
+  get displayConfigRequested(): ISignal<
+    IControlPanelModel,
+    IRequestConfigDisplay
+  > {
+    return this._displayConfigRequested;
+  }
 
   get selectedDataset(): string | null {
     return this._selectedDataset;
@@ -68,6 +75,10 @@ export class ControlPanelModel implements IControlPanelModel {
     return this._tracker.currentWidget?.context.sessionContext;
   }
 
+  displayConfig(args: IRequestConfigDisplay): void {
+    this._displayConfigRequested.emit(args);
+  }
+
   private _onTabsChanged(_: any, e: any): void {
     this._tabs = this._sessionModel?.sharedModel.tabs ?? {};
     this._tabsChanged.emit();
@@ -78,12 +89,17 @@ export class ControlPanelModel implements IControlPanelModel {
     IControlPanelModel,
     IGlueSessionWidget | null
   >(this);
+  private _tabs: IGlueSessionTabs = {};
   private _tabsChanged = new Signal<IControlPanelModel, void>(this);
   private _selectedDataset: string | null = null;
   private _selectedDatasetChanged = new Signal<IControlPanelModel, void>(this);
 
+  private _displayConfigRequested = new Signal<
+    IControlPanelModel,
+    IRequestConfigDisplay
+  >(this);
+
   private _sessionModel?: IGlueSessionModel;
-  private _tabs: IGlueSessionTabs = {};
 }
 
 namespace ControlPanelModel {

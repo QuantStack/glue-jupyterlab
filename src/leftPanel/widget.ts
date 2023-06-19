@@ -1,15 +1,14 @@
-import { CommandRegistry } from '@lumino/commands';
-import { BoxPanel } from '@lumino/widgets';
-import { Message } from '@lumino/messaging';
-
 import { SidePanel } from '@jupyterlab/ui-components';
+import { CommandRegistry } from '@lumino/commands';
+import { Message } from '@lumino/messaging';
+import { BoxPanel } from '@lumino/widgets';
 
-import { IControlPanelModel } from '../types';
-import { ControlPanelHeader } from './header';
-import { IGlueSessionTracker } from '../token';
 import { HTabPanel } from '../common/tabPanel';
+import { IGlueSessionTracker } from '../token';
+import { IControlPanelModel } from '../types';
+import { ConfigPanel } from './config/configPanel';
 import { DataPanel } from './data/dataPanel';
-import { ControlPanel } from './control/controlPanel';
+import { ControlPanelHeader } from './header';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
@@ -28,7 +27,7 @@ export class ControlPanelWidget extends SidePanel {
       model: this._model,
       commands: options.commands
     });
-    const canvas = new ControlPanel({ model: this._model });
+    const canvas = new ConfigPanel({ model: this._model });
 
     this._tabPanel.addTab(data, 0);
     this._tabPanel.addTab(canvas, 1);

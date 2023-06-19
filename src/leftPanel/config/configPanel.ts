@@ -1,12 +1,14 @@
 import { SidePanel } from '@jupyterlab/ui-components';
 // import { CanvasControlWidget } from './canvasControl';
 import { IControlPanelModel } from '../../types';
-export class ControlPanel extends SidePanel {
+import { ConfigWidget } from './configWidget';
+export class ConfigPanel extends SidePanel {
   constructor(options: { model: IControlPanelModel }) {
     super();
     this.title.label = 'Control Panel';
     this._model = options.model;
-    console.log('this._mode', this._model.getTabs());
+    const widgetControl = new ConfigWidget({ model: this._model });
+    this.addWidget(widgetControl);
   }
   private _model: IControlPanelModel;
 }

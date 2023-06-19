@@ -3,7 +3,6 @@ import { InputDialog } from '@jupyterlab/apputils';
 import { CommandRegistry } from '@lumino/commands';
 import { Message } from '@lumino/messaging';
 import { ContextMenu, Widget } from '@lumino/widgets';
-
 import { TabLayout, ViewInfo } from './tabLayout';
 import { GridStackItem } from './gridStackItem';
 import {
@@ -21,16 +20,16 @@ export class TabView extends Widget {
   constructor(options: TabView.IOptions) {
     super();
     this.addClass('grid-editor');
+    const { model, tabName, context, rendermime, commands } = options;
+    this._model = model;
+    this._tabName = this.title.label = tabName;
+    this._context = context;
+    this._rendermime = rendermime;
 
-    this._model = options.model;
-    this._tabName = this.title.label = options.tabName;
-    this._context = options.context;
-    this._rendermime = options.rendermime;
+    const layout = (this.layout = new TabLayout(commands));
 
-    const layout = (this.layout = new TabLayout());
-
-    this._commands = new CommandRegistry();
-    this._contextMenu = new ContextMenu({ commands: this._commands });
+    this._localCommands = new CommandRegistry();
+    this._contextMenu = new ContextMenu({ commands: this._localCommands });
 
     this._addCommands();
 
@@ -167,7 +166,7 @@ export class TabView extends Widget {
   }
 
   private _addCommands(): void {
-    this._commands.addCommand('moveItem', {
+    this._localCommands.addCommand('moveItem', {
       label: 'Move Item',
       isEnabled: () => true,
       execute: async () => {
@@ -325,7 +324,7 @@ export class TabView extends Widget {
   private _rendermime: IRenderMimeRegistry;
   private _tabName: string;
   private _contextMenu: ContextMenu;
-  private _commands: CommandRegistry;
+  private _localCommands: CommandRegistry;
 }
 
 export namespace TabView {
@@ -335,5 +334,6 @@ export namespace TabView {
     rendermime: IRenderMimeRegistry;
     context: DocumentRegistry.IContext<GlueSessionModel>;
     notebookTracker: INotebookTracker;
+    commands: CommandRegistry;
   }
 }

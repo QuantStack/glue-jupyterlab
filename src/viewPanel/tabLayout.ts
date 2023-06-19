@@ -12,6 +12,8 @@ import {
 } from 'gridstack';
 
 import { GridStackItem } from './gridStackItem';
+import { CommandRegistry } from '@lumino/commands';
+import { CommandIDs } from '../commands';
 
 const COLUMNS = 12;
 const CELL_HEIGHT = 40;
@@ -39,9 +41,9 @@ export class TabLayout extends Layout {
    *
    * @param info - The `DashboardView` metadata.
    */
-  constructor() {
+  constructor(commands: CommandRegistry) {
     super();
-
+    this._commands = commands;
     this._gridItems = new Map();
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
@@ -326,7 +328,9 @@ export class TabLayout extends Layout {
         this.removeGridItem(sender.cellIdentity);
         break;
       case 'edit':
-        console.log('sender.cellIdentity', sender.cellIdentity);
+        this._commands.execute(CommandIDs.openControlPanel, {
+          cellId: sender.cellIdentity
+        });
         break;
       default:
         break;
@@ -344,6 +348,7 @@ export class TabLayout extends Layout {
   private _gridItems: Map<string, GridStackItem>;
   private _gridItemChanged = new Signal<this, TabLayout.IChange>(this);
   private _resizeTimeout = 0;
+  private _commands: CommandRegistry;
 }
 
 export namespace TabLayout {

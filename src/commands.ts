@@ -9,6 +9,8 @@ export namespace CommandIDs {
   export const new2DScatter = 'glue-control:new-2d-scatter-viewer';
 
   export const newTable = 'glue-control:new-table-viewer';
+
+  export const openControlPanel = 'glue-control:open-control-panel';
 }
 
 export interface INewViewerArgs {
