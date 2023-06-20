@@ -28,7 +28,7 @@ export function identityLinks(
           </td>
           <td>
             <Button
-              className="glue-LinkEditor-button"
+              className="glue-LinkEditor-deleteButton"
               onClick={() => clickCallback(link.name)}
               minimal
             >
@@ -78,7 +78,7 @@ export function advancedLinks(
               </td>
               <td>
                 <Button
-                  className="glue-LinkEditor-button"
+                  className="glue-LinkEditor-deleteButton"
                   onClick={() => clickCallback(link.name)}
                   minimal
                 >

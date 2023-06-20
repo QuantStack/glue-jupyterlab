@@ -193,7 +193,7 @@
   font-weight: bold;
 }
 
-.glue-LinkEditor-button {
+.glue-LinkEditor-deleteButton:hover {
   cursor: pointer;
   background-color: var(--jp-layout-color2);
 }
@@ -302,6 +302,23 @@
 
 .glue-LinkEditor-advanced table tr td:last-child {
   text-align: right;
+}
+
+.glue-LinkEditor-header {
+  width: 100%;
+  min-height: 3em;
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-glueButton {
+  position: relative;
+  height: 30px;
+  top: 3px;
+  right: 3px;
+}
+
+.glue-LinkEditor-glueButton:hover {
+  background-color: var(--jp-layout-color3) !important;
 }
 
 .glue-Spinner {

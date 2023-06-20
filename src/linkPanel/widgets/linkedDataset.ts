@@ -11,7 +11,7 @@ export class LinkedDataset extends LinkEditorWidget {
     this.titleValue = 'Linked Dataset';
 
     this.content.addWidget(
-      this.mainContent([
+      this.tabsContent([
         { name: 'Created Links', widget: this._createdLinksContent() },
         { name: 'Inferred Links', widget: this._inferredLinksContent() }
       ])

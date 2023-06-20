@@ -4,7 +4,7 @@ import { IGlueSessionSharedModel } from '../types';
 import { LinkEditorModel } from './model';
 import { LinkedDataset } from './widgets/linkedDataset';
 import { Linking } from './widgets/linking';
-import { Summary } from './widgets/summary';
+// import { Summary } from './widgets/summary';
 
 /**
  * The link editor widget.
@@ -18,23 +18,25 @@ export class LinkEditor extends BoxPanel {
     this.title.className = 'glue-LinkEditor-tab';
 
     const model = new LinkEditorModel({ sharedModel: this._sharedModel });
+    const linking = new Linking({
+      linkEditorModel: model,
+      sharedModel: this._sharedModel
+    });
     const linkedDataset = new LinkedDataset({
       linkEditorModel: model,
       sharedModel: this._sharedModel
     });
+    this.addWidget(linking);
     this.addWidget(linkedDataset);
-    this.addWidget(
-      new Linking({
-        linkEditorModel: model,
-        sharedModel: this._sharedModel
-      })
-    );
-    this.addWidget(
-      new Summary({
-        linkEditorModel: model,
-        sharedModel: this._sharedModel
-      })
-    );
+
+    BoxPanel.setStretch(linking, 2);
+    BoxPanel.setStretch(linkedDataset, 1);
+    // this.addWidget(
+    //   new Summary({
+    //     linkEditorModel: model,
+    //     sharedModel: this._sharedModel
+    //   })
+    // );
   }
 
   get sharedModel(): IGlueSessionSharedModel {

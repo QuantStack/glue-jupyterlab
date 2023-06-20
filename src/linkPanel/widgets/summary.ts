@@ -33,7 +33,7 @@ export class Summary extends LinkEditorWidget {
     this._advancedLinks.hide();
 
     this.content.addWidget(
-      this.mainContent([
+      this.tabsContent([
         { name: 'Identity Links', widget: this._identityLinks },
         { name: 'Advanced Links', widget: this._advancedLinks }
       ])

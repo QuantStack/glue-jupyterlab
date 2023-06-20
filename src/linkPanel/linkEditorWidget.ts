@@ -8,15 +8,16 @@ import { ILinkEditorModel } from './types';
 export class LinkEditorWidget extends BoxPanel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
+    this.node.style.display = 'flex';
     this._linkEditorModel = options.linkEditorModel;
     this._sharedModel = options.sharedModel;
     this.addClass('glue-LinkEditor-widget');
     this._titleWidget.addClass('glue-LinkEditor-title');
     this._content.addClass('glue-LinkEditor-content');
-    this.addWidget(this._titleWidget);
+    // this.addWidget(this._titleWidget);
     this.addWidget(this._content);
-    BoxPanel.setStretch(this._titleWidget, 0);
-    BoxPanel.setStretch(this._content, 1);
+    // BoxPanel.setStretch(this._titleWidget, 0);
+    // BoxPanel.setStretch(this._content, 1);
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
   }
 
@@ -31,7 +32,42 @@ export class LinkEditorWidget extends BoxPanel {
     return this._content;
   }
 
-  protected mainContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
+  /**
+   * Set the header widget to the panel. If a header already exists it will be removed.
+   *
+   * @param header - widget to add as header.
+   */
+  protected setHeader(header: Widget | string): void {
+    if (this._headerSet) {
+      this.widgets[0].dispose();
+    }
+
+    // Create a new widget if a string has been provided.
+    if (typeof header === 'string') {
+      const node = document.createElement('div');
+      node.innerText = header;
+      header = new Widget({ node });
+    }
+    header.addClass('glue-LinkEditor-header');
+
+    this.insertWidget(0, header);
+    BoxPanel.setStretch(header, 0);
+    BoxPanel.setStretch(this._content, 1);
+
+    this._headerSet = true;
+  }
+
+  protected setContent(widget: Widget): void {
+    this._content.addWidget(widget);
+    this._content.fit();
+    // this.addWidget(this._content);
+    // if (this._headerSet) {
+    //   BoxPanel.setStretch(this.widgets[0], 0);
+    //   BoxPanel.setStretch(this._content, 1);
+    // }
+  }
+
+  protected tabsContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
     const mainContent = new BoxPanel();
 
     const tabToolbar = new Toolbar();
@@ -81,6 +117,7 @@ export class LinkEditorWidget extends BoxPanel {
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _titleWidget = new Widget();
   private _content = new BoxPanel();
+  private _headerSet = false;
 }
 
 export namespace LinkEditorWidget {
