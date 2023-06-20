@@ -2,11 +2,11 @@ from .handlers import setup_handlers
 
 
 def _jupyter_labextension_paths():
-    return [{"src": "labextension", "dest": "glue-lab"}]
+    return [{"src": "labextension", "dest": "gluepyter"}]
 
 
 def _jupyter_server_extension_points():
-    return [{"module": "glue_lab"}]
+    return [{"module": "gluepyter"}]
 
 
 def _load_jupyter_server_extension(server_app):
@@ -18,7 +18,7 @@ def _load_jupyter_server_extension(server_app):
         JupyterLab application instance
     """
     setup_handlers(server_app.web_app)
-    name = "glue_lab"
+    name = "gluepyter"
     server_app.log.info(f"Registered {name} server extension")
 
 

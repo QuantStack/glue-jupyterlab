@@ -3,7 +3,7 @@ requires = ["hatchling>=1.4.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
-name = "glue_lab"
+name = "gluepyter"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
@@ -48,26 +48,26 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["glue_lab/labextension"]
+artifacts = ["gluepyter/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"glue_lab/labextension" = "share/jupyter/labextensions/glue-lab"
-"install.json" = "share/jupyter/labextensions/glue-lab/install.json"
+"gluepyter/labextension" = "share/jupyter/labextensions/gluepyter"
+"install.json" = "share/jupyter/labextensions/gluepyter/install.json"
 "jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
 "jupyter-config/nb-config" = "etc/jupyter/jupyter_notebook_config.d"
 
 [tool.hatch.build.hooks.version]
-path = "glue_lab/_version.py"
+path = "gluepyter/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "glue_lab/labextension/static/style.js",
-    "glue_lab/labextension/package.json",
+    "gluepyter/labextension/static/style.js",
+    "gluepyter/labextension/package.json",
 ]
-skip-if-exists = ["glue_lab/labextension/static/style.js"]
+skip-if-exists = ["gluepyter/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -77,7 +77,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "glue_lab/labextension"
+build_dir = "gluepyter/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"
@@ -94,4 +94,4 @@ before-build-python = ["jlpm clean:all"]
 ignore = ["W002"]
 
 [project.entry-points.jupyter_ydoc]
-glu = "glue_lab.glue_ydoc:YGlue"
+glu = "gluepyter.glue_ydoc:YGlue"

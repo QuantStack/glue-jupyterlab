@@ -28,7 +28,7 @@ class YGlueSessionWidget implements IJupyterYWidget {
 }
 
 export const yGlueSessionWidgetPlugin: JupyterFrontEndPlugin<void> = {
-  id: 'glue-lab:yjswidget-plugin',
+  id: 'gluepyter:yjswidget-plugin',
   autoStart: true,
   requires: [IJupyterYWidgetManager, IGlueSessionTracker],
   activate: (

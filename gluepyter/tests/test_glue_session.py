@@ -1,5 +1,5 @@
 import y_py as Y
-from glue_lab.glue_session import SharedGlueSession
+from gluepyter.glue_session import SharedGlueSession
 from ipywidgets import Output
 
 

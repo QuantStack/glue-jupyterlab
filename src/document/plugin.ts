@@ -22,7 +22,7 @@ const NAME_SPACE = 'gluelab';
 
 export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
   {
-    id: 'glue-lab:tracker-plugin',
+    id: 'gluepyter:tracker-plugin',
     autoStart: true,
     provides: IGlueSessionTracker,
     activate: (app: JupyterFrontEnd) => {
@@ -34,10 +34,10 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
   };
 
 /**
- * Initialization data for the glue-lab extension.
+ * Initialization data for the gluepyter extension.
  */
 export const gluePlugin: JupyterFrontEndPlugin<void> = {
-  id: 'glue-lab:document-plugin',
+  id: 'gluepyter:document-plugin',
   autoStart: true,
   requires: [
     IRenderMimeRegistry,

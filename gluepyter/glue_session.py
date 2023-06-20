@@ -253,7 +253,7 @@ class SharedGlueSession:
         """
 
         self._sessionYDoc = Y.YDoc()
-        # Import `glue_lab.glue_ydoc.YGlue`` class through `jupyter_ydoc``
+        # Import `gluepyter.glue_ydoc.YGlue`` class through `jupyter_ydoc``
         self._document: YGlue = ydocs.get("glu")(self._sessionYDoc)
         self._document.observe(self._on_document_change)
         self._ywidget = Widget(

@@ -1,6 +1,6 @@
 # Glue JupyterLab Extension
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/glue-lab/main?urlpath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/gluepyter/main?urlpath=lab)
 
 ## Overview
 
@@ -15,7 +15,7 @@ Glue is an open-source data exploration tool that allows users to visualize and 
 To install the extension, execute:
 
 ```bash
-pip install glue_lab
+pip install gluepyter
 ```
 
 ## Uninstall
@@ -23,7 +23,7 @@ pip install glue_lab
 To remove the extension, execute:
 
 ```bash
-pip uninstall glue_lab
+pip uninstall gluepyter
 ```
 
 ## Troubleshoot
@@ -54,13 +54,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the glue_lab directory
+# Change directory to the gluepyter directory
 # Install package in development mode
 pip install -e ".[test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable glue_lab
+jupyter server extension enable gluepyter
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -86,13 +86,13 @@ jupyter lab build --minimize=False
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable glue_lab
-pip uninstall glue_lab
+jupyter server extension disable gluepyter
+pip uninstall gluepyter
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `glue-lab` within that folder.
+folder is located. Then you can remove the symlink named `gluepyter` within that folder.
 
 ### Testing the extension
 
@@ -111,7 +111,7 @@ jupyter labextension develop . --overwrite
 To execute them, run:
 
 ```sh
-pytest -vv -r ap --cov glue_lab
+pytest -vv -r ap --cov gluepyter
 ```
 
 #### Frontend tests

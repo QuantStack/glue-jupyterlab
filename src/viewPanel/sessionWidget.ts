@@ -124,7 +124,7 @@ export class SessionWidget extends BoxPanel {
 
     // TODO Handle loading errors and report in the UI?
     const code = `
-    from glue_lab.glue_session import SharedGlueSession
+    from gluepyter.glue_session import SharedGlueSession
     GLUE_SESSION = SharedGlueSession("${this._context.localPath}")
     `;
 
