@@ -4,6 +4,7 @@ import { Toolbar } from '@jupyterlab/ui-components';
 import { BoxPanel, Panel, StackedPanel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { ILinkEditorModel } from './types';
+import { Message } from '@lumino/messaging';
 
 export class LinkEditorWidget extends Panel {
   constructor(options: LinkEditorWidget.IOptions) {
@@ -30,20 +31,18 @@ export class LinkEditorWidget extends Panel {
    *
    * @param header - widget to add as header.
    */
-  protected setHeader(header: Widget | string): void {
+  protected setHeader(header: Widget): void {
     if (this._headerSet) {
+      Private.linkEditorHeaders.splice(
+        Private.linkEditorHeaders.indexOf(this.widgets[0])
+      );
       this.widgets[0].dispose();
     }
 
-    // Create a new widget if a string has been provided.
-    if (typeof header === 'string') {
-      const node = document.createElement('div');
-      node.innerText = header;
-      header = new Widget({ node });
-    }
     header.addClass('glue-LinkEditor-header');
 
     this.insertWidget(0, header);
+    Private.linkEditorHeaders.push(header);
     this._headerSet = true;
   }
 
@@ -96,6 +95,23 @@ export class LinkEditorWidget extends Panel {
     return mainContent;
   }
 
+  /**
+   * Set the header height to the maximal, in comparison to the others headers.
+   */
+  protected onAfterShow(msg: Message): void {
+    if (this._headerSet) {
+      let maxHeight = this.widgets[0].node.offsetHeight;
+      Private.linkEditorHeaders.forEach(header => {
+        if (header.node.offsetHeight > maxHeight) {
+          maxHeight = header.node.offsetHeight;
+        }
+      });
+      if (maxHeight > this.widgets[0].node.offsetHeight) {
+        this.widgets[0].node.style.height = `${maxHeight}px`;
+      }
+    }
+  }
+
   onSharedModelChanged(): void {
     /** no-op */
   }
@@ -120,4 +136,16 @@ export namespace LinkEditorWidget {
     name: string;
     widget: Widget;
   }
+
+  export const HeaderHeight = {
+    headerHeight: 0,
+    linkEditorHeaders: [Widget]
+  };
+}
+
+namespace Private {
+  /**
+   * Headers widgets list.
+   */
+  export const linkEditorHeaders: Widget[] = [];
 }
