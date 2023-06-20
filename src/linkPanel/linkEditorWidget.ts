@@ -1,23 +1,16 @@
 import { ToolbarRegistry } from '@jupyterlab/apputils';
 import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { Toolbar } from '@jupyterlab/ui-components';
-import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
+import { BoxPanel, Panel, StackedPanel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { ILinkEditorModel } from './types';
 
-export class LinkEditorWidget extends BoxPanel {
+export class LinkEditorWidget extends Panel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
-    this.node.style.display = 'flex';
     this._linkEditorModel = options.linkEditorModel;
     this._sharedModel = options.sharedModel;
     this.addClass('glue-LinkEditor-widget');
-    this._titleWidget.addClass('glue-LinkEditor-title');
-    this._content.addClass('glue-LinkEditor-content');
-    // this.addWidget(this._titleWidget);
-    this.addWidget(this._content);
-    // BoxPanel.setStretch(this._titleWidget, 0);
-    // BoxPanel.setStretch(this._content, 1);
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
   }
 
@@ -28,7 +21,7 @@ export class LinkEditorWidget extends BoxPanel {
     return this._titleWidget.node.innerText;
   }
 
-  get content(): BoxPanel {
+  get content(): Panel {
     return this._content;
   }
 
@@ -51,20 +44,16 @@ export class LinkEditorWidget extends BoxPanel {
     header.addClass('glue-LinkEditor-header');
 
     this.insertWidget(0, header);
-    BoxPanel.setStretch(header, 0);
-    BoxPanel.setStretch(this._content, 1);
-
     this._headerSet = true;
   }
 
-  protected setContent(widget: Widget): void {
-    this._content.addWidget(widget);
-    this._content.fit();
-    // this.addWidget(this._content);
-    // if (this._headerSet) {
-    //   BoxPanel.setStretch(this.widgets[0], 0);
-    //   BoxPanel.setStretch(this._content, 1);
-    // }
+  protected setContent(content: Widget): void {
+    if (this._contentSet) {
+      this.widgets[this.widgets.length - 1].dispose();
+    }
+    content.addClass('glue-LinkEditor-content');
+    this.addWidget(content);
+    this._contentSet = true;
   }
 
   protected tabsContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
@@ -116,8 +105,9 @@ export class LinkEditorWidget extends BoxPanel {
   protected _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
     new ObservableList<ToolbarRegistry.IToolbarItem>();
   private _titleWidget = new Widget();
-  private _content = new BoxPanel();
+  private _content = new Panel();
   private _headerSet = false;
+  private _contentSet = false;
 }
 
 export namespace LinkEditorWidget {

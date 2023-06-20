@@ -7,7 +7,7 @@ import {
   // Toolbar,
   // ToolbarButton
 } from '@jupyterlab/ui-components';
-import { BoxPanel, Panel, Widget } from '@lumino/widgets';
+import { Widget } from '@lumino/widgets';
 import * as React from 'react';
 
 import { IGlueSessionSharedModel } from '../../types';
@@ -34,6 +34,15 @@ export class Linking extends LinkEditorWidget {
     this.titleValue = 'Linking';
 
     // this._selectedAdvLink = { category: '', linkName: '' };
+    this._datasetsPanels = [
+      this._emptyDatasetPanel(),
+      this._emptyDatasetPanel()
+    ];
+
+    this._attributesPanels = [
+      this._emptyAttributePanel(),
+      this._emptyAttributePanel()
+    ];
 
     this._headerWidget = ReactWidget.create(
       <Private.header
@@ -42,7 +51,7 @@ export class Linking extends LinkEditorWidget {
       ></Private.header>
     );
     this.setHeader(this._headerWidget);
-    this.setContent(this._linkingContent());
+    this.setContent(new Widget({ node: this._linkingContent() }));
 
     this._sharedModel.datasetChanged.connect(this.onDatasetsChange, this);
     this._linkEditorModel.currentDatasetsChanged.connect(
@@ -95,32 +104,29 @@ export class Linking extends LinkEditorWidget {
   //   this.updateAdvancedLink();
   // };
 
-  /**
-   * Update the datasets lists.
-   */
   updateDatasets(): void {
     const currentDatasets = this._linkEditorModel.currentDatasets;
 
     IDatasetsKeys.forEach((position, index) => {
       const datasetsList = Object.keys(this._sharedModel.dataset);
 
-      // Remove all the existing widgets.
-      while (this._datasetsPanels[index].widgets.length) {
-        this._datasetsPanels[index].widgets[0].dispose();
+      // Remove all the existing datasets.
+      while (this._datasetsPanels[index].firstChild) {
+        this._datasetsPanels[index].lastChild?.remove();
       }
 
-      let selectedDataset: Widget | undefined = undefined;
+      let selectedDataset: HTMLDivElement | undefined = undefined;
 
       datasetsList.sort();
       datasetsList.forEach(value => {
-        const dataset = new Widget();
-        dataset.title.label = value;
-        dataset.addClass('glue-LinkEditor-attribute');
-        dataset.node.innerText = value;
-        dataset.node.onclick = () => {
+        const dataset = document.createElement('div');
+        dataset.title = value;
+        dataset.classList.add('glue-LinkEditor-attribute');
+        dataset.innerText = value;
+        dataset.onclick = () => {
           this.onDatasetSelected(position, dataset);
         };
-        this._datasetsPanels[index].addWidget(dataset);
+        this._datasetsPanels[index].append(dataset);
 
         // Select the current dataset if exists.
         if (currentDatasets[position] === value) {
@@ -131,10 +137,10 @@ export class Linking extends LinkEditorWidget {
       // Select a default dataset.
       if (selectedDataset) {
         this.onDatasetSelected(position, selectedDataset);
-      } else if (this._datasetsPanels[index].widgets[index]) {
+      } else if (this._datasetsPanels[index].childNodes[index]) {
         this.onDatasetSelected(
           position,
-          this._datasetsPanels[index].widgets[index]
+          this._datasetsPanels[index].childNodes[index] as HTMLDivElement
         );
       }
     });
@@ -144,23 +150,23 @@ export class Linking extends LinkEditorWidget {
    * Select the dataset and send a signal.
    *
    * @param position - 'first' or 'second', the column where the widget belongs.
-   * @param dataset - Widget clicked.
+   * @param dataset - Element clicked.
    */
-  onDatasetSelected(position: keyof IDatasets, dataset: Widget): void {
+  onDatasetSelected(position: keyof IDatasets, dataset: HTMLDivElement): void {
     // no-op if the dataset is already selected.
-    if (dataset.hasClass('selected')) {
+    if (dataset.classList.contains('selected')) {
       return;
     }
 
     // Remove sibling dataset selected class.
-    (dataset.parent as Panel).widgets
-      .filter(widget => widget.hasClass('selected'))
-      .forEach(widget => widget.removeClass('selected'));
+    dataset.parentNode?.querySelectorAll('.selected').forEach(elem => {
+      elem.classList.remove('selected');
+    });
 
     // Select the dataset.
-    dataset.addClass('selected');
-    this.updateAttributes(IDatasetsKeys.indexOf(position), dataset.title.label);
-    this._linkEditorModel.setCurrentDataset(position, dataset.title.label);
+    dataset.classList.add('selected');
+    this.updateAttributes(IDatasetsKeys.indexOf(position), dataset.title);
+    this._linkEditorModel.setCurrentDataset(position, dataset.title);
   }
 
   /**
@@ -171,8 +177,8 @@ export class Linking extends LinkEditorWidget {
    */
   updateAttributes(index: number, dataset: string): void {
     // Remove all the existing widgets.
-    while (this._attributesPanels[index].widgets.length) {
-      this._attributesPanels[index].widgets[0].dispose();
+    while (this._attributesPanels[index].firstChild) {
+      this._attributesPanels[index].lastChild?.remove();
     }
 
     if (!dataset) {
@@ -189,14 +195,14 @@ export class Linking extends LinkEditorWidget {
       if (this._sharedModel.attributes[value]) {
         actualName = this._sharedModel.attributes[value].label;
       }
-      const attribute = new Widget();
-      attribute.title.label = value;
-      attribute.addClass('glue-LinkEditor-attribute');
-      attribute.node.innerText = actualName || value;
-      attribute.node.onclick = () => {
+      const attribute = document.createElement('div');
+      attribute.title = value;
+      attribute.classList.add('glue-LinkEditor-attribute');
+      attribute.innerText = actualName || value;
+      attribute.onclick = () => {
         this.onIdentityAttributeClicked(attribute, index);
       };
-      this._attributesPanels[index].addWidget(attribute);
+      this._attributesPanels[index].append(attribute);
     });
 
     this._identityAttributes[IDatasetsKeys[index]] = undefined;
@@ -211,20 +217,20 @@ export class Linking extends LinkEditorWidget {
    * @param attribute - the attribute widget clicked.
    * @param index - the index of the panel where the attribute widget has been clicked.
    */
-  onIdentityAttributeClicked(attribute: Widget, index: number): void {
-    const isSelected = attribute.hasClass('selected');
+  onIdentityAttributeClicked(attribute: HTMLDivElement, index: number): void {
+    const isSelected = attribute.classList.contains('selected');
 
     // Remove sibling attribute selected class.
-    (attribute.parent as Panel).widgets
-      .filter(widget => widget.hasClass('selected'))
-      .forEach(widget => widget.removeClass('selected'));
+    attribute.parentNode?.querySelectorAll('.selected').forEach(elem => {
+      elem.classList.remove('selected');
+    });
 
     // Select the attribute.
     if (!isSelected) {
-      attribute.addClass('selected');
+      attribute.classList.add('selected');
       this._identityAttributes[IDatasetsKeys[index]] = {
-        name: attribute.title.label,
-        label: attribute.node.innerText
+        name: attribute.title,
+        label: attribute.innerText
       };
     } else {
       this._identityAttributes[IDatasetsKeys[index]] = undefined;
@@ -423,25 +429,33 @@ export class Linking extends LinkEditorWidget {
   //     .widget as ToolbarButton;
   // }
 
-  _linkingContent(): BoxPanel {
-    const content = new BoxPanel({ direction: 'left-to-right' });
-
-    content.addWidget(this._datasetsPanels[0]);
-    content.addWidget(this._attributesPanels[0]);
-    content.addWidget(this._attributesPanels[1]);
-    content.addWidget(this._datasetsPanels[1]);
-
-    BoxPanel.setStretch(this._datasetsPanels[0], 3);
-    BoxPanel.setStretch(this._attributesPanels[0], 2);
-    BoxPanel.setStretch(this._attributesPanels[1], 2);
-    BoxPanel.setStretch(this._datasetsPanels[1], 3);
+  _linkingContent(): HTMLElement {
+    // const content = new BoxPanel({ direction: 'left-to-right' });
+    const content = document.createElement('div');
+    content.classList.add('glue-LinkEditor-linkingContent');
+    content.append(this._datasetsPanels[0]);
+    content.append(this._attributesPanels[0]);
+    content.append(this._attributesPanels[1]);
+    content.append(this._datasetsPanels[1]);
     return content;
+  }
+
+  private _emptyDatasetPanel(): HTMLDivElement {
+    const panel = document.createElement('div');
+    panel.classList.add('glue-LinkEditor-linkingDatasetsPanel');
+    return panel;
+  }
+
+  private _emptyAttributePanel(): HTMLDivElement {
+    const panel = document.createElement('div');
+    panel.classList.add('glue-LinkEditor-linkingAttributesPanel');
+    return panel;
   }
 
   private _identityAttributes: Private.ISelectedIdentityAttributes;
   // private _selectedAdvLink: Private.IAdvancedLinkSelected;
-  private _datasetsPanels = [new Panel(), new Panel()];
-  private _attributesPanels = [new Panel(), new Panel()];
+  private _datasetsPanels: [HTMLDivElement, HTMLDivElement];
+  private _attributesPanels: [HTMLDivElement, HTMLDivElement];
   // private _advancedToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
   // private _advancedPanel = new BoxPanel();
   private _headerWidget: Widget;
@@ -485,20 +499,12 @@ namespace Private {
 
   export function header(props: IHeaderProps): JSX.Element {
     return (
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '30%', padding: '0.5em' }}>
+      <div className={'glue-LinkEditor-linkingHeader'}>
+        <div className={'glue-LinkEditor-linkingHeaderDatasets'}>
           <div style={{ fontWeight: 'bold' }}>Dataset 1</div>
           <div>Select a first dataset</div>
         </div>
-        <div
-          style={{
-            width: '40%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            padding: '0.5em'
-          }}
-        >
+        <div className={'glue-LinkEditor-linkingHeaderAttributes'}>
           <div>
             <div style={{ fontWeight: 'bold' }}>Attributes</div>
             <div>Select an attribute from each column</div>
@@ -510,7 +516,7 @@ namespace Private {
                   onClick={props.glueCallback}
                   minimal
                   disabled={disabledStatus ?? true}
-                  className={'glue-LinkEditor-glueButton'}
+                  className={'glue-LinkEditor-linkingGlueButton'}
                 >
                   GLUE
                 </Button>
@@ -518,11 +524,12 @@ namespace Private {
             }}
           </UseSignal>
         </div>
-        <div style={{ width: '30%', padding: '0.5em' }}>
+        <div className={'glue-LinkEditor-linkingHeaderDatasets'}>
           <div style={{ fontWeight: 'bold' }}>Dataset 2</div>
           <div>Select a second dataset</div>
         </div>
       </div>
+      // </div>
     );
   }
 
