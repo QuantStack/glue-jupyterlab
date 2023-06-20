@@ -6112,9 +6112,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glue-lab@workspace:.":
+"gluepyter@workspace:.":
   version: 0.0.0-use.local
-  resolution: "glue-lab@workspace:."
+  resolution: "gluepyter@workspace:."
   dependencies:
     "@jupyter/docprovider": ^1.0.0-alpha.8
     "@jupyter/ydoc": ^1.0.2

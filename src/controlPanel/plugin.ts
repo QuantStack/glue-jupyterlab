@@ -13,7 +13,7 @@ import { UUID } from '@lumino/coreutils';
 const NAME_SPACE = 'gluelab';
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {
-  id: 'glue-lab:control-panel',
+  id: 'gluepyter:control-panel',
   autoStart: true,
   requires: [ILayoutRestorer, IGlueSessionTracker],
   activate: (

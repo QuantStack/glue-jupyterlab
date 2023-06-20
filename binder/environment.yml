@@ -1,10 +1,10 @@
-# a mybinder.org-ready environment for demoing glue_lab
+# a mybinder.org-ready environment for demoing gluepyter
 # this environment may also be used locally on Linux/MacOS/Windows, e.g.
 #
 #   conda env update --file binder/environment.yml
-#   conda activate glue-lab-demo
+#   conda activate gluepyter-demo
 #
-name: glue-lab-demo
+name: gluepyter-demo
 
 channels:
   - conda-forge
