@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Optional, Tuple
 
 import glue_jupyter as gj
 from glue_jupyter.view import IPyWidgetView
+from glue_jupyter.widgets.layer_options import LayerOptionsWidget
 import y_py as Y
 from glue.core.link_helpers import LinkSame
 from IPython.display import display
@@ -129,35 +130,63 @@ class SharedGlueSession:
                         widget = self._viewer_factory(
                             view_type=view_type, viewer_data=data, viewer_state=state
                         )
+
                     saved_viewer["widget"] = widget
+                    viewer_options = widget.viewer_options
+                    try:
+                        layer_options = LayerOptionsWidget(widget)
+                    except Exception:
+                        layer_options = None
+
+                    saved_viewer["viewer_options"] = viewer_options
+                    saved_viewer["layer_options"] = layer_options
+
                 else:
+                    widget = self._viewer_factory(
+                        view_type=view_type,
+                        viewer_data=data,
+                        viewer_state=state,
+                    )
+
+                    viewer_options = widget.viewer_options
+                    try:
+                        layer_options = LayerOptionsWidget(widget)
+                    except Exception:
+                        layer_options = None
                     # No existing viewer, create widget only.
                     if tab_name in self._viewers:
                         self._viewers[tab_name][viewer_id] = {
-                            "widget": self._viewer_factory(
-                                view_type=view_type,
-                                viewer_data=data,
-                                viewer_state=state,
-                            )
+                            "widget": widget,
+                            "viewer_options": viewer_options,
+                            "layer_options": layer_options,
                         }
                     else:
                         self._viewers[tab_name] = {
                             viewer_id: {
-                                "widget": self._viewer_factory(
-                                    view_type=view_type,
-                                    viewer_data=data,
-                                    viewer_state=state,
-                                )
+                                "widget": widget,
+                                "viewer_options": viewer_options,
+                                "layer_options": layer_options,
                             }
                         }
 
-    def render_config(self, tab_id: str, viewer_id: str):
-        viewer_widget: IPyWidgetView = (
-            self._viewers.get(tab_id, {}).get(viewer_id, {}).get("widget", None)
-        )
-        if viewer_widget is not None:
-            viewer_options = viewer_widget.viewer_options
-            display(viewer_options)
+    def render_config(self, config: str, tab_id: str, viewer_id: str):
+        """Get the config widgets of a viewer and display it in
+        the frontend
+
+        Args:
+            config (str): _description_
+            tab_id (str): _description_
+            viewer_id (str): _description_
+        """
+        viewer: IPyWidgetView = self._viewers.get(tab_id, {}).get(viewer_id, None)
+        if viewer is not None:
+            widget = None
+            if config == "Viewer":
+                widget = viewer.get("viewer_options")
+            elif config == "Layer":
+                widget = viewer.get("layer_options")
+            if widget is not None:
+                display(widget)
 
     def _viewer_factory(
         self, view_type: str, viewer_data: any, viewer_state: dict

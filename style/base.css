@@ -324,9 +324,7 @@
   height: 6em;
   border-radius: 50%;
   position: relative;
-  animation:
-    load3 1s infinite linear,
-    fadeIn 1s;
+  animation: load3 1s infinite linear, fadeIn 1s;
 }
 
 .glue-SpinnerContent:before {
@@ -356,4 +354,24 @@
 
 .grid-item-widget .glue-Spinner:not(:only-child) {
   display: none;
+}
+
+.glue-LeftPanel-configWidget {
+  padding: 10px;
+  padding-right: 2px;
+  background: var(--jp-layout-color0);
+}
+
+.glue-LeftPanel-configWidget .jp-OutputArea {
+  height: 100%;
+}
+.glue-LeftPanel-configWidget .jp-OutputArea-output {
+  display: block;
+}
+
+.glue-LeftPanel-configWidget .vuetify-styles {
+  overflow: hidden;
+}
+.glue-LeftPanel-configWidget .vuetify-styles * {
+  font-size: 0.8rem;
 }
