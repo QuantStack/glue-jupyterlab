@@ -373,5 +373,5 @@
   overflow: hidden;
 }
 .glue-LeftPanel-configWidget .vuetify-styles * {
-  font-size: 0.8rem;
+  font-size: 0.8rem !important;
 }

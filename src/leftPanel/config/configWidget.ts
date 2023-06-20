@@ -1,35 +1,39 @@
+import { Signal } from '@lumino/signaling';
 import { Panel } from '@lumino/widgets';
-import { IControlPanelModel } from '../../types';
-import { SimplifiedOutputArea, OutputAreaModel } from '@jupyterlab/outputarea';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+
+import { ConfigWidgetModel, IOutputChangedArg } from './configWidgetModel';
+
 export class ConfigWidget extends Panel {
-  constructor(options: {
-    config: 'Layer' | 'Viewer';
-    model: IControlPanelModel;
-    rendermime: IRenderMimeRegistry;
-  }) {
+  constructor(options: { model: ConfigWidgetModel }) {
     super();
     this.addClass('glue-LeftPanel-configWidget');
     this._model = options.model;
-
-    const { config } = options;
-    const output = new SimplifiedOutputArea({
-      model: new OutputAreaModel({ trusted: true }),
-      rendermime: options.rendermime
-    });
-    this.addWidget(output);
-    this.title.label = `${config} Options`;
-    this._model.displayConfigRequested.connect((_, args) => {
-      const context = this._model.currentSessionContext();
-      if (context) {
-        SimplifiedOutputArea.execute(
-          `GLUE_SESSION.render_config("${config}","${args.tabId}","${args.cellId}")`,
-          output,
-          context
-        );
-      }
-    });
+    this.title.label = `${this._model.config} Options`;
+    this._model.outputChanged.connect(this._outputChangedHanler, this);
   }
 
-  private _model: IControlPanelModel;
+  private _outputChangedHanler(
+    sender: ConfigWidgetModel,
+    args: IOutputChangedArg
+  ): void {
+    const { oldOuput, newOutput } = args;
+    if (oldOuput) {
+      this.layout?.removeWidget(oldOuput);
+    }
+    if (newOutput) {
+      this.addWidget(newOutput);
+    }
+    if (!oldOuput && !newOutput) {
+      for (const iterator of this.children()) {
+        this.layout?.removeWidget(iterator);
+      }
+    }
+  }
+
+  dispose(): void {
+    Signal.clearData(this);
+    super.dispose();
+  }
+
+  private _model: ConfigWidgetModel;
 }

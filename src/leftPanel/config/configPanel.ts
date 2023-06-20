@@ -4,6 +4,7 @@ import { IControlPanelModel } from '../../types';
 import { ConfigWidget } from './configWidget';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { Widget } from '@lumino/widgets';
+import { ConfigWidgetModel } from './configWidgetModel';
 export class ConfigPanel extends SidePanel {
   constructor(options: {
     model: IControlPanelModel;
@@ -13,15 +14,21 @@ export class ConfigPanel extends SidePanel {
     const { model, rendermime } = options;
     this.title.label = 'Control Panel';
     this._model = model;
+
     const viewerControl = new ConfigWidget({
-      config: 'Viewer',
-      model: this._model,
-      rendermime
+      model: new ConfigWidgetModel({
+        model: this._model,
+        config: 'Viewer',
+        rendermime
+      })
     });
+
     const layerControl = new ConfigWidget({
-      config: 'Layer',
-      model: this._model,
-      rendermime
+      model: new ConfigWidgetModel({
+        model: this._model,
+        config: 'Layer',
+        rendermime
+      })
     });
     this.addWidget(viewerControl);
     this.addWidget(layerControl);
