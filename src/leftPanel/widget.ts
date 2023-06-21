@@ -15,7 +15,7 @@ export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
     const content = new BoxPanel();
     super({ content });
-    this.addClass('gluelab-sidepanel-widget');
+    this.addClass('glue-sidepanel-widget');
     const { model, rendermime, commands } = options;
     this._model = model;
     const header = new ControlPanelHeader();

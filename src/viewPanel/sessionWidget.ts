@@ -22,6 +22,7 @@ export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
     this.addClass('grid-panel');
+    this.addClass('glue-Session-panel');
 
     this._spinner = document.createElement('div');
     this._spinner.classList.add('glue-Spinner');

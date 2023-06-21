@@ -34,6 +34,25 @@ class SharedGlueSession:
         self._data = {}
         self._init_ydoc()
 
+    def remove_viewer(self, tab_name: str, viewer_id: str) -> None:
+        """Remove a viewer
+
+        Args:
+            tab_name (str): Name of the tab
+            viewer_id (str): Id of the viewer
+        """
+        viewer = self._viewers.get(tab_name, {}).pop(viewer_id, {})
+        out: Output = viewer.get("output")
+        if out is not None:
+            out.clear_output()
+        widget: IPyWidgetView = viewer.get("widget")
+        if widget is not None:
+            widget._layout.__del__()
+        for key in ["viewer_options", "layer_options"]:
+            w = viewer.get(key)
+            if w is not None:
+                w.__del__()
+
     def remove_tab(self, tab_name: str) -> None:
         """Remove a tab and all of its viewers
 
@@ -43,11 +62,12 @@ class SharedGlueSession:
         if tab_name not in self._viewers:
             return
 
-        tab_viewers = self._viewers.pop(tab_name, {})
-        for viewer in tab_viewers.values():
-            out: Output = viewer.get("output")
-            if out is not None:
-                out.clear_output()
+        tab_viewers = self._viewers.get(tab_name, {})
+
+        for viewer_id in tab_viewers:
+            self.remove_viewer(tab_name, viewer_id)
+
+        self._viewers.pop(tab_name, None)
 
     def create_viewer(self, tab_name: str, viewer_id: str, display_view=True) -> None:
         """Create a new viewer placeholder. This method will create a
@@ -78,18 +98,6 @@ class SharedGlueSession:
 
         if display_view:
             display(self._viewers[tab_name][viewer_id]["output"])
-
-    def remove_viewer(self, tab_name: str, viewer_id: str) -> None:
-        """Remove a viewer
-
-        Args:
-            tab_name (str): Name of the tab
-            viewer_id (str): Id of the viewer
-        """
-        viewer = self._viewers.get(tab_name, {}).pop(viewer_id, {})
-        out: Output = viewer.get("output")
-        if out is not None:
-            out.clear_output()
 
     def render_viewer(self) -> None:
         """Fill the place holder output with glu-jupyter widgets"""
@@ -174,9 +182,9 @@ class SharedGlueSession:
         the frontend
 
         Args:
-            config (str): _description_
-            tab_id (str): _description_
-            viewer_id (str): _description_
+            config (str): Type of the config widget
+            tab_id (str): Id of the tab containing viewer
+            viewer_id (str): Id of the viewer
         """
         viewer: IPyWidgetView = self._viewers.get(tab_id, {}).get(viewer_id, None)
         if viewer is not None:

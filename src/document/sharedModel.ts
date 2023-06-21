@@ -233,7 +233,7 @@ export class GlueSessionSharedModel
     events.forEach(event => {
       this._tabs.forEach((tab, name) => {
         if (event.target === tab) {
-          this._tabChanged.emit({ tab: name });
+          this._tabChanged.emit({ tab: name, changes: event.changes });
           return;
         }
       });

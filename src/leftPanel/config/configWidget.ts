@@ -9,10 +9,10 @@ export class ConfigWidget extends Panel {
     this.addClass('glue-LeftPanel-configWidget');
     this._model = options.model;
     this.title.label = `${this._model.config} Options`;
-    this._model.outputChanged.connect(this._outputChangedHanler, this);
+    this._model.outputChanged.connect(this._outputChangedHandler, this);
   }
 
-  private _outputChangedHanler(
+  private _outputChangedHandler(
     sender: ConfigWidgetModel,
     args: IOutputChangedArg
   ): void {
@@ -31,6 +31,7 @@ export class ConfigWidget extends Panel {
   }
 
   dispose(): void {
+    this._model.outputChanged.disconnect(this._outputChangedHandler);
     Signal.clearData(this);
     super.dispose();
   }
