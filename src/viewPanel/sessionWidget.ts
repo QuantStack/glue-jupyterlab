@@ -24,7 +24,7 @@ export class SessionWidget extends BoxPanel {
     this.addClass('grid-panel');
 
     this._model = options.model;
-    this._rendermime = options.rendermime;
+    this._rendermime = options.rendermime.clone();
     this._notebookTracker = options.notebookTracker;
     this._context = options.context;
     this._commands = options.commands;
