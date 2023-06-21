@@ -308,7 +308,7 @@
 
 .glue-LinkEditor-linkingAttributesPanel {
   width: 20%;
-  background-color: var(--jp-layout-color2)
+  background-color: var(--jp-layout-color2);
 }
 
 .glue-LinkEditor-summaryHeader {
@@ -347,7 +347,9 @@
   width: 24px;
 }
 
-.glue-LinkEditor-accordionTitle.lm-mod-expanded .glue-LinkEditor-accordionCollapser svg {
+.glue-LinkEditor-accordionTitle.lm-mod-expanded
+  .glue-LinkEditor-accordionCollapser
+  svg {
   transform: rotate(90deg);
 }
 
