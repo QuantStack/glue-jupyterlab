@@ -1,9 +1,6 @@
-import { ToolbarRegistry } from '@jupyterlab/apputils';
-import { IObservableList, ObservableList } from '@jupyterlab/observables';
 import { Panel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { ILinkEditorModel } from './types';
-import { Message } from '@lumino/messaging';
 
 export class LinkEditorWidget extends Panel {
   constructor(options: LinkEditorWidget.IOptions) {
@@ -14,79 +11,44 @@ export class LinkEditorWidget extends Panel {
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
   }
 
-  set titleValue(value: string) {
-    this._titleWidget.node.innerText = value;
-  }
-  get titleValue(): string {
-    return this._titleWidget.node.innerText;
-  }
-
-  get content(): Panel {
-    return this._content;
-  }
-
   /**
-   * Set the header widget to the panel. If a header already exists it will be removed.
-   *
-   * @param header - widget to add as header.
+   * Getter and setter of the header.
    */
-  protected setHeader(header: Widget): void {
-    if (this._headerSet) {
-      Private.linkEditorHeaders.splice(
-        Private.linkEditorHeaders.indexOf(this.widgets[0])
-      );
-      this.widgets[0].dispose();
+  get header(): Widget | undefined {
+    return this._header;
+  }
+  protected set header(header: Widget | undefined) {
+    if (this._header) {
+      this._header.dispose();
+    }
+    if (!header) {
+      return;
     }
 
     header.addClass('glue-LinkEditor-header');
 
-    this.insertWidget(0, header);
-    Private.linkEditorHeaders.push(header);
-    this._headerSet = true;
-  }
-
-  protected setContent(content: Widget): void {
-    if (this._contentSet) {
-      this.widgets[this.widgets.length - 1].dispose();
-    }
-    content.addClass('glue-LinkEditor-content');
-    this.addWidget(content);
-    this._contentSet = true;
+    this._header = header;
+    this.insertWidget(0, this._header);
   }
 
   /**
-   * Set the header height to the maximal, in comparison to the others headers.
+   * Getter and setter of the content.
    */
-  protected onAfterShow(msg: Message): void {
-    if (this._headerSet) {
-      let heightMax = this.widgets[0].node.offsetHeight;
-      Private.linkEditorHeaders.forEach(header => {
-        if (header.node.offsetHeight > heightMax) {
-          heightMax = header.node.offsetHeight;
-        }
-      });
-      if (heightMax > this.widgets[0].node.offsetHeight) {
-        this.widgets[0].node.style.height = `${heightMax}px`;
-      }
-    }
+  get content(): Widget | undefined {
+    return this._content;
   }
+  protected set content(content: Widget | undefined) {
+    if (this._content) {
+      this._content.dispose();
+    }
+    if (!content) {
+      return;
+    }
 
-  // protected onResize(msg: Widget.ResizeMessage): void {
-  //   if (this._headerSet) {
-  //     let maxHeight = this.widgets[0].node.offsetHeight;
-  //     console.log('Start', this.widgets[0], maxHeight);
-  //     console.log(this.widgets[0].node.getBoundingClientRect());
-  //     Private.linkEditorHeaders.forEach(header => {
-  //       if (header.node.offsetHeight > maxHeight) {
-  //         maxHeight = header.node.offsetHeight;
-  //       }
-  //     });
-  //     if (maxHeight > this.widgets[0].node.offsetHeight) {
-  //       this.widgets[0].node.style.height = `${maxHeight}px`;
-  //     }
-  //     console.log('End', this.widgets[0], maxHeight);
-  //   }
-  // }
+    content.addClass('glue-LinkEditor-content');
+    this._content = content;
+    this.addWidget(this._content);
+  }
 
   onSharedModelChanged(): void {
     /** no-op */
@@ -94,12 +56,8 @@ export class LinkEditorWidget extends Panel {
 
   protected _sharedModel: IGlueSessionSharedModel;
   protected _linkEditorModel: ILinkEditorModel;
-  protected _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
-  private _titleWidget = new Widget();
-  private _content = new Panel();
-  private _headerSet = false;
-  private _contentSet = false;
+  private _header: Widget | undefined = undefined;
+  private _content: Widget | undefined = undefined;
 }
 
 export namespace LinkEditorWidget {
@@ -112,16 +70,4 @@ export namespace LinkEditorWidget {
     name: string;
     widget: Widget;
   }
-
-  export const HeaderHeight = {
-    headerHeight: 0,
-    linkEditorHeaders: [Widget]
-  };
-}
-
-namespace Private {
-  /**
-   * Headers widgets list.
-   */
-  export const linkEditorHeaders: Widget[] = [];
 }

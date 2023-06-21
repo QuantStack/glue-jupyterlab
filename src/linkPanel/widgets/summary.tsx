@@ -31,12 +31,10 @@ export class Summary extends LinkEditorWidget {
     const accordionLayout = Private.createLayout({});
     this._links = new AccordionPanel({ layout: accordionLayout });
     this._links.addClass('glue-LinkEditor-identity');
-    this.titleValue = 'Summary';
 
-    this._header = ReactWidget.create(<Private.header />);
-    this.setHeader(this._header);
+    this.header = ReactWidget.create(<Private.header />);
 
-    this.setContent(this._links);
+    this.content = this._links;
 
     this._linkEditorModel.currentDatasetsChanged.connect(
       this.onDatasetsChange,
@@ -125,7 +123,6 @@ export class Summary extends LinkEditorWidget {
     this._sharedModel.removeLink(linkName);
   };
 
-  private _header: Widget;
   private _links: AccordionPanel;
 }
 

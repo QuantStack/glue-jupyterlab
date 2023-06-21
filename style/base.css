@@ -265,11 +265,14 @@
 .glue-LinkEditor-header {
   width: 100%;
   background-color: var(--jp-layout-color3);
+  display: flex;
+  align-items: center;
 }
 
 .glue-LinkEditor-linkingHeader {
   display: flex;
   flex-direction: row;
+  width:100%;
 }
 
 .glue-LinkEditor-linkingHeaderDatasets {
@@ -316,8 +319,7 @@
   font-weight: bold;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  height: 100%;
+  width:100%;
 }
 
 .glue-LinkEditor-accordionTitle {

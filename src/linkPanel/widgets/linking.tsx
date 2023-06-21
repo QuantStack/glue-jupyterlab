@@ -31,8 +31,6 @@ export class Linking extends LinkEditorWidget {
 
     this.addClass('glue-LinkEditor-linking');
 
-    this.titleValue = 'Linking';
-
     // this._selectedAdvLink = { category: '', linkName: '' };
     this._datasetsPanels = [
       this._emptyDatasetPanel(),
@@ -44,14 +42,13 @@ export class Linking extends LinkEditorWidget {
       this._emptyAttributePanel()
     ];
 
-    this._header = ReactWidget.create(
+    this.header = ReactWidget.create(
       <Private.header
         reloadButton={this._reloadGlueButton}
         glueCallback={this.glueIdentity}
       ></Private.header>
     );
-    this.setHeader(this._header);
-    this.setContent(new Widget({ node: this._linkingContent() }));
+    this.content = new Widget({ node: this._linkingContent() });
 
     this._sharedModel.datasetChanged.connect(this.onDatasetsChange, this);
     this._linkEditorModel.currentDatasetsChanged.connect(
@@ -458,7 +455,6 @@ export class Linking extends LinkEditorWidget {
   private _attributesPanels: [HTMLDivElement, HTMLDivElement];
   // private _advancedToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
   // private _advancedPanel = new BoxPanel();
-  private _header: Widget;
   private _reloadGlueButton = new Signal<this, boolean>(this);
 }
 
