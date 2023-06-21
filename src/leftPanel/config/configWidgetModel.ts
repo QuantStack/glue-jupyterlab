@@ -7,6 +7,7 @@ import { SimplifiedOutputArea, OutputAreaModel } from '@jupyterlab/outputarea';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { ISignal, Signal } from '@lumino/signaling';
 import { IDisposable } from '@lumino/disposable';
+import { SessionWidget } from '../../viewPanel/sessionWidget';
 
 export interface IOutputChangedArg {
   oldOuput: SimplifiedOutputArea | null | undefined;
@@ -20,7 +21,6 @@ export class ConfigWidgetModel implements IDisposable {
   }) {
     this._model = options.model;
     this._config = options.config;
-    this._rendermime = options.rendermime;
     this._model.glueSessionChanged.connect(this._sessionChanged, this);
     this._model.displayConfigRequested.connect(this._showConfig, this);
   }
@@ -67,9 +67,9 @@ export class ConfigWidgetModel implements IDisposable {
 
   private _sessionChanged(
     sender: IControlPanelModel,
-    sessionWidget: IGlueSessionWidget | null
+    glueSessionWidget: IGlueSessionWidget | null
   ): void {
-    if (!sessionWidget) {
+    if (!glueSessionWidget) {
       if (this._currentSessionWidget) {
         this._outputs.delete(this._currentSessionWidget);
         this._currentSessionWidget = null;
@@ -79,28 +79,27 @@ export class ConfigWidgetModel implements IDisposable {
         });
       }
     } else {
-      if (!this._outputs.has(sessionWidget)) {
+      if (!this._outputs.has(glueSessionWidget)) {
         const output = new SimplifiedOutputArea({
           model: new OutputAreaModel({ trusted: true }),
-          rendermime: this._rendermime
+          rendermime: (glueSessionWidget.content as SessionWidget).rendermime
         });
-        output.id = sessionWidget.context.path;
-        this._outputs.set(sessionWidget, output);
+        output.id = glueSessionWidget.context.path;
+        this._outputs.set(glueSessionWidget, output);
       }
       this._outputChanged.emit({
         oldOuput: this._currentSessionWidget
           ? this._outputs.get(this._currentSessionWidget)
           : null,
-        newOutput: this._outputs.get(sessionWidget)!
+        newOutput: this._outputs.get(glueSessionWidget)!
       });
 
-      this._currentSessionWidget = sessionWidget;
+      this._currentSessionWidget = glueSessionWidget;
     }
   }
 
   private _outputs = new Map<IGlueSessionWidget, SimplifiedOutputArea>();
   private _model: IControlPanelModel;
-  private _rendermime: IRenderMimeRegistry;
   private _config: 'Layer' | 'Viewer';
   private _disposed = false;
   private _currentSessionWidget: IGlueSessionWidget | null = null;

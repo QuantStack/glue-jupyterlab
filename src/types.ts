@@ -11,6 +11,7 @@ import {
   ILink
 } from './_interface/glue.schema';
 import { ISessionContext } from '@jupyterlab/apputils';
+import { SessionWidget } from './viewPanel/sessionWidget';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
 
@@ -82,7 +83,10 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
   disposed: ISignal<any, void>;
 }
 
-export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
+export interface IGlueSessionWidget
+  extends IDocumentWidget<Widget, IGlueSessionModel> {
+  sessionWidget: SessionWidget;
+}
 
 export interface IRequestConfigDisplay {
   tabId: string;
@@ -95,6 +99,7 @@ export interface IControlPanelModel {
   selectedDataset: string | null;
   selectedDatasetChanged: ISignal<IControlPanelModel, void>;
   tabsChanged: ISignal<IControlPanelModel, void>;
+  currentSessionWidget: IGlueSessionWidget | null;
   displayConfigRequested: ISignal<IControlPanelModel, IRequestConfigDisplay>;
   getTabs(): IGlueSessionTabs;
   displayConfig(args: IRequestConfigDisplay): void;

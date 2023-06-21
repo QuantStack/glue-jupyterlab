@@ -64,7 +64,7 @@ class SharedGlueSession:
 
         tab_viewers = self._viewers.get(tab_name, {})
 
-        for viewer_id in tab_viewers:
+        for viewer_id in list(tab_viewers):
             self.remove_viewer(tab_name, viewer_id)
 
         self._viewers.pop(tab_name, None)

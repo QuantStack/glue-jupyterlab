@@ -34,7 +34,9 @@ export class ControlPanelModel implements IControlPanelModel {
   get sharedModel(): IGlueSessionSharedModel | undefined {
     return this._tracker.currentSharedModel();
   }
-
+  get currentSessionWidget(): IGlueSessionWidget | null {
+    return this._tracker.currentWidget;
+  }
   get glueSessionChanged(): ISignal<
     IControlPanelModel,
     IGlueSessionWidget | null

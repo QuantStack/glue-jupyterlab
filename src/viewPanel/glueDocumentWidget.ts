@@ -10,6 +10,11 @@ export class GlueDocumentWidget
     options: DocumentWidget.IOptions<SessionWidget, IGlueSessionModel>
   ) {
     super(options);
+    this._sessionWidget = options.content;
+  }
+
+  get sessionWidget(): SessionWidget {
+    return this._sessionWidget;
   }
   /**
    * Dispose of the resources held by the widget.
@@ -24,4 +29,6 @@ export class GlueDocumentWidget
   onResize = (msg: any): void => {
     window.dispatchEvent(new Event('resize'));
   };
+
+  private _sessionWidget: SessionWidget;
 }
