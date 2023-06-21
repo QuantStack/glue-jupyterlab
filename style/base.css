@@ -272,7 +272,7 @@
 .glue-LinkEditor-linkingHeader {
   display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
 }
 
 .glue-LinkEditor-linkingHeaderDatasets {
@@ -319,7 +319,7 @@
   font-weight: bold;
   display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
 }
 
 .glue-LinkEditor-accordionTitle {
