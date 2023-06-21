@@ -680,14 +680,16 @@ namespace Private {
     Object.keys(sharedModel.links).forEach(linkName => {
       const match = re.exec(linkName);
       if (match) {
-        if (!match[1] && !maxNum) {
-          maxNum = -1;
+        if (!match[1]) {
+          if (maxNum === undefined) {
+            maxNum = -1;
+          }
         } else {
           maxNum = Math.max(maxNum || -1, parseInt(match[1]));
         }
       }
     });
-    const suffix = maxNum ? `_${maxNum + 1}` : '';
+    const suffix = maxNum !== undefined ? `_${maxNum + 1}` : '';
     return `${basename}${suffix}`;
   }
 
