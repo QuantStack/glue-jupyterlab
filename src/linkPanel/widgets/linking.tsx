@@ -44,13 +44,13 @@ export class Linking extends LinkEditorWidget {
       this._emptyAttributePanel()
     ];
 
-    this._headerWidget = ReactWidget.create(
+    this._header = ReactWidget.create(
       <Private.header
         reloadButton={this._reloadGlueButton}
         glueCallback={this.glueIdentity}
       ></Private.header>
     );
-    this.setHeader(this._headerWidget);
+    this.setHeader(this._header);
     this.setContent(new Widget({ node: this._linkingContent() }));
 
     this._sharedModel.datasetChanged.connect(this.onDatasetsChange, this);
@@ -121,7 +121,7 @@ export class Linking extends LinkEditorWidget {
       datasetsList.forEach(value => {
         const dataset = document.createElement('div');
         dataset.title = value;
-        dataset.classList.add('glue-LinkEditor-attribute');
+        dataset.classList.add('glue-LinkEditor-linkingItem');
         dataset.innerText = value;
         dataset.onclick = () => {
           this.onDatasetSelected(position, dataset);
@@ -197,7 +197,7 @@ export class Linking extends LinkEditorWidget {
       }
       const attribute = document.createElement('div');
       attribute.title = value;
-      attribute.classList.add('glue-LinkEditor-attribute');
+      attribute.classList.add('glue-LinkEditor-linkingItem');
       attribute.innerText = actualName || value;
       attribute.onclick = () => {
         this.onIdentityAttributeClicked(attribute, index);
@@ -458,7 +458,7 @@ export class Linking extends LinkEditorWidget {
   private _attributesPanels: [HTMLDivElement, HTMLDivElement];
   // private _advancedToolbar = new ObservableList<ToolbarRegistry.IToolbarItem>();
   // private _advancedPanel = new BoxPanel();
-  private _headerWidget: Widget;
+  private _header: Widget;
   private _reloadGlueButton = new Signal<this, boolean>(this);
 }
 
@@ -501,7 +501,11 @@ namespace Private {
     return (
       <div className={'glue-LinkEditor-linkingHeader'}>
         <div className={'glue-LinkEditor-linkingHeaderDatasets'}>
-          <div style={{ fontWeight: 'bold' }}>Dataset 1</div>
+          <div
+            style={{ fontWeight: 'bold', fontSize: 'var(--jp-ui-font-size1)' }}
+          >
+            Dataset 1
+          </div>
           <div>Select a first dataset</div>
         </div>
         <div className={'glue-LinkEditor-linkingHeaderAttributes'}>

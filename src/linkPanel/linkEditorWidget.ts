@@ -1,7 +1,6 @@
 import { ToolbarRegistry } from '@jupyterlab/apputils';
 import { IObservableList, ObservableList } from '@jupyterlab/observables';
-import { Toolbar } from '@jupyterlab/ui-components';
-import { BoxPanel, Panel, StackedPanel, Widget } from '@lumino/widgets';
+import { Panel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { ILinkEditorModel } from './types';
 import { Message } from '@lumino/messaging';
@@ -55,62 +54,39 @@ export class LinkEditorWidget extends Panel {
     this._contentSet = true;
   }
 
-  protected tabsContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
-    const mainContent = new BoxPanel();
-
-    const tabToolbar = new Toolbar();
-    tabToolbar.addClass('glue-LinkEditor-tabToolbar');
-    const mainContentPanels = new StackedPanel();
-
-    items.forEach(item => {
-      const tabWidget = new Widget();
-      tabWidget.addClass('glue-LinkEditor-linkType');
-      tabWidget.node.innerHTML = `<a href="#">${item.name}</a>`;
-      this._tabToolbar.push({ name: item.name, widget: tabWidget });
-
-      mainContentPanels.addWidget(item.widget);
-    });
-
-    mainContent.addWidget(tabToolbar);
-    mainContent.addWidget(mainContentPanels);
-    BoxPanel.setStretch(tabToolbar, 0);
-    BoxPanel.setStretch(mainContentPanels, 1);
-    Array.from(this._tabToolbar).forEach((item, index) => {
-      tabToolbar.addItem(item.name, item.widget);
-      if (index === 0) {
-        item.widget.addClass('selected');
-        mainContentPanels.widgets[index].show();
-      }
-
-      item.widget.node.onclick = () => {
-        mainContentPanels.widgets.forEach(widget => widget.hide());
-        Array.from(this._tabToolbar).forEach(item =>
-          item.widget.removeClass('selected')
-        );
-        mainContentPanels.widgets[index].show();
-        item.widget.addClass('selected');
-      };
-    });
-
-    return mainContent;
-  }
-
   /**
    * Set the header height to the maximal, in comparison to the others headers.
    */
   protected onAfterShow(msg: Message): void {
     if (this._headerSet) {
-      let maxHeight = this.widgets[0].node.offsetHeight;
+      let heightMax = this.widgets[0].node.offsetHeight;
       Private.linkEditorHeaders.forEach(header => {
-        if (header.node.offsetHeight > maxHeight) {
-          maxHeight = header.node.offsetHeight;
+        if (header.node.offsetHeight > heightMax) {
+          heightMax = header.node.offsetHeight;
         }
       });
-      if (maxHeight > this.widgets[0].node.offsetHeight) {
-        this.widgets[0].node.style.height = `${maxHeight}px`;
+      if (heightMax > this.widgets[0].node.offsetHeight) {
+        this.widgets[0].node.style.height = `${heightMax}px`;
       }
     }
   }
+
+  // protected onResize(msg: Widget.ResizeMessage): void {
+  //   if (this._headerSet) {
+  //     let maxHeight = this.widgets[0].node.offsetHeight;
+  //     console.log('Start', this.widgets[0], maxHeight);
+  //     console.log(this.widgets[0].node.getBoundingClientRect());
+  //     Private.linkEditorHeaders.forEach(header => {
+  //       if (header.node.offsetHeight > maxHeight) {
+  //         maxHeight = header.node.offsetHeight;
+  //       }
+  //     });
+  //     if (maxHeight > this.widgets[0].node.offsetHeight) {
+  //       this.widgets[0].node.style.height = `${maxHeight}px`;
+  //     }
+  //     console.log('End', this.widgets[0], maxHeight);
+  //   }
+  // }
 
   onSharedModelChanged(): void {
     /** no-op */
