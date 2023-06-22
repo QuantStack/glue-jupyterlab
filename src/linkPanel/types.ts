@@ -12,14 +12,13 @@ export const IdentityLinkUsing = {
   function: IdentityLinkFunction
 };
 
-export const IDatasetsKeys = ['first', 'second'] as (keyof IDatasets)[];
 /**
  * The link editor model.
  */
 export interface ILinkEditorModel {
-  currentDatasets: IDatasets;
-  setCurrentDataset(position: keyof IDatasets, value: string): void;
-  readonly currentDatasetsChanged: ISignal<this, IDatasets>;
+  currentDatasets: [string, string];
+  setCurrentDataset(index: number, value: string): void;
+  readonly currentDatasetsChanged: ISignal<this, [string, string]>;
   readonly identityLinks: Map<string, ILink>;
   readonly advancedLinks: Map<string, ILink>;
   readonly linksChanged: ISignal<this, void>;
@@ -45,12 +44,4 @@ export interface IAdvLinkDescription {
  */
 export interface IAdvLinkCategories {
   [category: string]: IAdvLinkDescription[];
-}
-
-/**
- * Definition of the selected datasets.
- */
-export interface IDatasets {
-  first: string;
-  second: string;
 }

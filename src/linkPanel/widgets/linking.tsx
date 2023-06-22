@@ -18,8 +18,6 @@ import {
   // IAdvLinkDescription,
   ILink,
   ILinkEditorModel,
-  IDatasets,
-  IDatasetsKeys,
   // IdentityLinkFunction,
   IdentityLinkUsing
 } from '../types';
@@ -63,11 +61,6 @@ export class Linking extends LinkEditorWidget {
       );
     }
 
-    this._identityAttributes = {
-      first: undefined,
-      second: undefined
-    };
-
     this.updateDatasets();
   }
 
@@ -84,7 +77,10 @@ export class Linking extends LinkEditorWidget {
    * @param _sender - the link editor model.
    * @param selection - the selected datasets.
    */
-  onDatasetChange = (_sender: ILinkEditorModel, selection: IDatasets): void => {
+  onDatasetChange = (
+    _sender: ILinkEditorModel,
+    selection: [string, string]
+  ): void => {
     // this.updateAttributes();
     // this.updateAdvancedLink();
   };
@@ -104,7 +100,7 @@ export class Linking extends LinkEditorWidget {
   updateDatasets(): void {
     const currentDatasets = this._linkEditorModel.currentDatasets;
 
-    IDatasetsKeys.forEach((position, index) => {
+    [0, 1].forEach(index => {
       const datasetsList = Object.keys(this._sharedModel.dataset);
 
       // Remove all the existing datasets.
@@ -121,22 +117,22 @@ export class Linking extends LinkEditorWidget {
         dataset.classList.add('glue-LinkEditor-linkingItem');
         dataset.innerText = value;
         dataset.onclick = () => {
-          this.onDatasetSelected(position, dataset);
+          this.onDatasetSelected(index, dataset);
         };
         this._datasetsPanels[index].append(dataset);
 
         // Select the current dataset if exists.
-        if (currentDatasets[position] === value) {
+        if (currentDatasets[index] === value) {
           selectedDataset = dataset;
         }
       });
 
       // Select a default dataset.
       if (selectedDataset) {
-        this.onDatasetSelected(position, selectedDataset);
+        this.onDatasetSelected(index, selectedDataset);
       } else if (this._datasetsPanels[index].childNodes[index]) {
         this.onDatasetSelected(
-          position,
+          index,
           this._datasetsPanels[index].childNodes[index] as HTMLDivElement
         );
       }
@@ -149,7 +145,7 @@ export class Linking extends LinkEditorWidget {
    * @param position - 'first' or 'second', the column where the widget belongs.
    * @param dataset - Element clicked.
    */
-  onDatasetSelected(position: keyof IDatasets, dataset: HTMLDivElement): void {
+  onDatasetSelected(index: number, dataset: HTMLDivElement): void {
     // no-op if the dataset is already selected.
     if (dataset.classList.contains('selected')) {
       return;
@@ -162,8 +158,8 @@ export class Linking extends LinkEditorWidget {
 
     // Select the dataset.
     dataset.classList.add('selected');
-    this.updateAttributes(IDatasetsKeys.indexOf(position), dataset.title);
-    this._linkEditorModel.setCurrentDataset(position, dataset.title);
+    this.updateAttributes(index, dataset.title);
+    this._linkEditorModel.setCurrentDataset(index, dataset.title);
   }
 
   /**
@@ -202,7 +198,7 @@ export class Linking extends LinkEditorWidget {
       this._attributesPanels[index].append(attribute);
     });
 
-    this._identityAttributes[IDatasetsKeys[index]] = undefined;
+    this._identityAttributes[index] = undefined;
 
     // Enable/disable the Glue button if datasets are different and attributes selected.
     this._updateGlueButtonStatus();
@@ -225,12 +221,12 @@ export class Linking extends LinkEditorWidget {
     // Select the attribute.
     if (!isSelected) {
       attribute.classList.add('selected');
-      this._identityAttributes[IDatasetsKeys[index]] = {
+      this._identityAttributes[index] = {
         name: attribute.title,
         label: attribute.innerText
       };
     } else {
-      this._identityAttributes[IDatasetsKeys[index]] = undefined;
+      this._identityAttributes[index] = undefined;
     }
 
     // Enable/disable the Glue button if datasets are different and attributes selected.
@@ -243,8 +239,8 @@ export class Linking extends LinkEditorWidget {
   private _updateGlueButtonStatus(): void {
     const currentDatasets = this._linkEditorModel.currentDatasets;
     const status =
-      Object.values(this._identityAttributes).every(value => !!value) &&
-      currentDatasets.first !== currentDatasets.second;
+      this._identityAttributes.every(value => !!value) &&
+      currentDatasets[0] !== currentDatasets[1];
     this._reloadGlueButton.emit(!status);
   }
 
@@ -252,18 +248,18 @@ export class Linking extends LinkEditorWidget {
    * Creates identity link.
    */
   glueIdentity = (): void => {
-    if (!(this._identityAttributes.first && this._identityAttributes.second)) {
+    if (!(this._identityAttributes[0] && this._identityAttributes[1])) {
       return;
     }
 
     const link: ILink = {
       _type: ComponentLinkType,
-      cids1: [this._identityAttributes.first.name],
-      cids2: [this._identityAttributes.second.name],
-      cids1_labels: [this._identityAttributes.first.label],
-      cids2_labels: [this._identityAttributes.second.label],
-      data1: this._linkEditorModel.currentDatasets.first,
-      data2: this._linkEditorModel.currentDatasets.second,
+      cids1: [this._identityAttributes[0].name],
+      cids2: [this._identityAttributes[1].name],
+      cids1_labels: [this._identityAttributes[0].label],
+      cids2_labels: [this._identityAttributes[1].label],
+      data1: this._linkEditorModel.currentDatasets[0],
+      data2: this._linkEditorModel.currentDatasets[1],
       inverse: IdentityLinkUsing,
       using: IdentityLinkUsing
     };
@@ -452,7 +448,10 @@ export class Linking extends LinkEditorWidget {
     return panel;
   }
 
-  private _identityAttributes: Private.ISelectedIdentityAttributes;
+  private _identityAttributes: [
+    Private.IAttribute | undefined,
+    Private.IAttribute | undefined
+  ] = [undefined, undefined];
   // private _selectedAdvLink: Private.IAdvancedLinkSelected;
   private _datasetsPanels: [HTMLDivElement, HTMLDivElement];
   private _attributesPanels: [HTMLDivElement, HTMLDivElement];
@@ -476,14 +475,6 @@ namespace Private {
   export interface IAttribute {
     label: string;
     name: string;
-  }
-
-  /**
-   * The selected identity attributes.
-   */
-  export interface ISelectedIdentityAttributes {
-    first?: IAttribute;
-    second?: IAttribute;
   }
 
   /**
