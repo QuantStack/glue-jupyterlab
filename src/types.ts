@@ -10,6 +10,9 @@ import {
   IGlueSessionTabs,
   ILink
 } from './_interface/glue.schema';
+import { ISessionContext } from '@jupyterlab/apputils';
+import { SessionWidget } from './viewPanel/sessionWidget';
+import { GridStackItem } from './viewPanel/gridStackItem';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
 
@@ -81,7 +84,16 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
   disposed: ISignal<any, void>;
 }
 
-export type IGlueSessionWidget = IDocumentWidget<Widget, IGlueSessionModel>;
+export interface IGlueSessionWidget
+  extends IDocumentWidget<Widget, IGlueSessionModel> {
+  sessionWidget: SessionWidget;
+}
+
+export interface IRequestConfigDisplay {
+  tabId: string;
+  cellId?: string;
+  gridItem?: GridStackItem;
+}
 
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
@@ -89,7 +101,11 @@ export interface IControlPanelModel {
   selectedDataset: string | null;
   selectedDatasetChanged: ISignal<IControlPanelModel, void>;
   tabsChanged: ISignal<IControlPanelModel, void>;
+  currentSessionWidget: IGlueSessionWidget | null;
+  displayConfigRequested: ISignal<IControlPanelModel, IRequestConfigDisplay>;
   getTabs(): IGlueSessionTabs;
+  displayConfig(args: IRequestConfigDisplay): void;
+  currentSessionContext(): ISessionContext | undefined;
 }
 
 export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];

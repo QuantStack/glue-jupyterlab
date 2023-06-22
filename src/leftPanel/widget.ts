@@ -1,22 +1,24 @@
-import { CommandRegistry } from '@lumino/commands';
-import { BoxPanel } from '@lumino/widgets';
-import { Message } from '@lumino/messaging';
-
 import { SidePanel } from '@jupyterlab/ui-components';
+import { CommandRegistry } from '@lumino/commands';
+import { Message } from '@lumino/messaging';
+import { BoxPanel } from '@lumino/widgets';
 
-import { IControlPanelModel } from '../types';
-import { ControlPanelHeader } from './header';
-import { IGlueSessionTracker } from '../token';
 import { HTabPanel } from '../common/tabPanel';
+import { IGlueSessionTracker } from '../token';
+import { IControlPanelModel } from '../types';
+import { ConfigPanel } from './config/configPanel';
 import { DataPanel } from './data/dataPanel';
-import { LayerPanel } from './layers/layerPanel';
+import { ControlPanelHeader } from './header';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { Signal } from '@lumino/signaling';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
     const content = new BoxPanel();
     super({ content });
-    this.addClass('gluelab-sidepanel-widget');
-    this._model = options.model;
+    this.addClass('glue-sidepanel-widget');
+    const { model, rendermime, commands } = options;
+    this._model = model;
     const header = new ControlPanelHeader();
     this.header.addWidget(header);
 
@@ -26,9 +28,9 @@ export class ControlPanelWidget extends SidePanel {
     });
     const data = new DataPanel({
       model: this._model,
-      commands: options.commands
+      commands
     });
-    const canvas = new LayerPanel({ model: this._model });
+    const canvas = new ConfigPanel({ model, rendermime });
 
     this._tabPanel.addTab(data, 0);
     this._tabPanel.addTab(canvas, 1);
@@ -43,6 +45,9 @@ export class ControlPanelWidget extends SidePanel {
         header.title.label = '-';
       }
     });
+    this._model.displayConfigRequested.connect(() =>
+      this._tabPanel.activateTab(1)
+    );
   }
 
   protected onActivateRequest(msg: Message): void {
@@ -50,6 +55,7 @@ export class ControlPanelWidget extends SidePanel {
     this._tabPanel.show();
   }
   dispose(): void {
+    Signal.clearData(this);
     super.dispose();
   }
 
@@ -62,5 +68,6 @@ export namespace LeftPanelWidget {
     model: IControlPanelModel;
     tracker: IGlueSessionTracker;
     commands: CommandRegistry;
+    rendermime: IRenderMimeRegistry;
   }
 }

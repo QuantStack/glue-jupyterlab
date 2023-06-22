@@ -22,7 +22,6 @@ export class GridStackItem extends Panel {
 
     const toolbar = this._createToolbar(itemTitle);
     content.addWidget(toolbar);
-
     cell.addClass('grid-item-widget');
     content.addWidget(cell);
 
@@ -70,7 +69,11 @@ export class GridStackItem extends Panel {
 
   private _createToolbar(itemTitle: string): Toolbar {
     const toolbar = new Toolbar();
+    toolbar.node.addEventListener('click', () => {
+      this._changed.emit({ action: 'edit' });
+    });
     toolbar.addClass('glue-Session-tab-toolbar');
+
     toolbar.addItem(
       'Close',
       new ToolbarButton({
@@ -79,6 +82,7 @@ export class GridStackItem extends Panel {
         onClick: () => this._changed.emit({ action: 'close' })
       })
     );
+
     const title = new Widget();
     title.node.innerText = itemTitle;
     title.node.style.flexGrow = '1';
@@ -107,6 +111,6 @@ export namespace GridStackItem {
   }
 
   export interface IChange {
-    action: 'close' | 'lock';
+    action: 'close' | 'lock' | 'edit';
   }
 }

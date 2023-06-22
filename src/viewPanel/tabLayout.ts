@@ -12,6 +12,8 @@ import {
 } from 'gridstack';
 
 import { GridStackItem } from './gridStackItem';
+import { CommandRegistry } from '@lumino/commands';
+import { CommandIDs } from '../commands';
 
 const COLUMNS = 12;
 const CELL_HEIGHT = 40;
@@ -39,9 +41,9 @@ export class TabLayout extends Layout {
    *
    * @param info - The `DashboardView` metadata.
    */
-  constructor() {
+  constructor(commands: CommandRegistry) {
     super();
-
+    this._commands = commands;
     this._gridItems = new Map();
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
@@ -121,7 +123,9 @@ export class TabLayout extends Layout {
    */
   init(): void {
     super.init();
-    this.parent!.node.appendChild(this._gridHost);
+    if (this.parent) {
+      this.parent.node.appendChild(this._gridHost);
+    }
     // fake window resize event to resize bqplot
     window.dispatchEvent(new Event('resize'));
   }
@@ -210,6 +214,7 @@ export class TabLayout extends Layout {
     // Save item
     item.changed.connect(this._onItemChanged, this);
     this._gridItems.set(item.cellIdentity, item);
+    item.node.addEventListener('click', () => void this._handleEdit(item));
 
     // Add item to grid
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
@@ -269,6 +274,17 @@ export class TabLayout extends Layout {
   }
 
   /**
+   * Handle edit request of a grid item.
+   */
+  private _handleEdit(item: GridStackItem): void {
+    this._grid.getGridItems().forEach(i => i.classList.remove('grid-selected'));
+    item.node.classList.add('grid-selected');
+    this._commands.execute(CommandIDs.openControlPanel, {
+      cellId: item.cellIdentity,
+      gridItem: item as any
+    });
+  }
+  /**
    * Handle change-event messages sent to from gridstack.
    */
   private _onChange(event: Event, items: GridStackNode[]): void {
@@ -318,9 +334,16 @@ export class TabLayout extends Layout {
     sender: GridStackItem,
     change: GridStackItem.IChange
   ): void {
-    if (change.action === 'close') {
-      sender.changed.disconnect(this._onItemChanged, this);
-      this.removeGridItem(sender.cellIdentity);
+    switch (change.action) {
+      case 'close':
+        sender.changed.disconnect(this._onItemChanged, this);
+        this.removeGridItem(sender.cellIdentity);
+        break;
+      case 'edit':
+        this._handleEdit(sender);
+        break;
+      default:
+        break;
     }
   }
 
@@ -335,6 +358,7 @@ export class TabLayout extends Layout {
   private _gridItems: Map<string, GridStackItem>;
   private _gridItemChanged = new Signal<this, TabLayout.IChange>(this);
   private _resizeTimeout = 0;
+  private _commands: CommandRegistry;
 }
 
 export namespace TabLayout {

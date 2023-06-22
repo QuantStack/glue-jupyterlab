@@ -127,7 +127,8 @@
   background: var(--jp-layout-color3);
   background-image: unset !important;
   background-position: unset !important;
-  margin: 4px;
+  box-sizing: border-box;
+  border: 4px solid var(--jp-layout-color2);
   min-height: calc(100% - 8px);
 }
 
@@ -144,6 +145,7 @@
   overflow: hidden;
   font-size: 30px;
   font-weight: bold;
+  opacity: 0.5;
 }
 
 .grid-stack-item-content {
@@ -356,4 +358,50 @@
 
 .grid-item-widget .glue-Spinner:not(:only-child) {
   display: none;
+}
+
+.glue-LeftPanel-configWidget {
+  padding: 10px;
+  padding-right: 2px;
+  background: var(--jp-layout-color0);
+}
+
+.glue-LeftPanel-configWidget .jp-OutputArea {
+  height: 100%;
+}
+
+.glue-LeftPanel-configWidget .jp-OutputArea-output {
+  display: block;
+}
+
+.glue-LeftPanel-configWidget .vuetify-styles {
+  overflow: hidden;
+}
+
+.grid-stack-item-content .vuetify-styles {
+  overflow: hidden;
+}
+
+.glue-LeftPanel-configWidget .vuetify-styles * {
+  font-size: 0.8rem !important;
+}
+
+.glue-item div.v-toolbar__items > button:last-child {
+  display: none;
+}
+
+.grid-selected {
+  box-shadow: var(--jp-elevation-z20);
+}
+
+body[data-jp-theme-light='true'] {
+  --glue-activated: #c6d4e2;
+}
+
+body[data-jp-theme-light='false'] {
+  --glue-activated: #2d3c4a;
+}
+
+.grid-selected .glue-Session-tab-toolbar {
+  background: var(--glue-activated);
 }

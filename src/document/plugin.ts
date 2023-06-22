@@ -18,7 +18,7 @@ import { GlueSessionSharedModel } from './sharedModel';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { IJupyterYWidgetManager } from 'yjs-widgets';
 
-const NAME_SPACE = 'gluelab';
+const NAME_SPACE = 'gluepyter';
 
 export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
   {
@@ -72,7 +72,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
         canvasTracker.save(widget);
       });
       canvasTracker.add(widget);
-      app.shell.activateById('glueLab::controlPanel');
+      app.shell.activateById('gluepyter::controlPanel');
     });
     app.docRegistry.addWidgetFactory(widgetFactory);
 

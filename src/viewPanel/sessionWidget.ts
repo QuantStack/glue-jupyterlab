@@ -22,6 +22,7 @@ export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
     super({ direction: 'top-to-bottom' });
     this.addClass('grid-panel');
+    this.addClass('glue-Session-panel');
 
     this._spinner = document.createElement('div');
     this._spinner.classList.add('glue-Spinner');
@@ -159,7 +160,8 @@ export class SessionWidget extends BoxPanel {
         model: this._model,
         rendermime: this._rendermime,
         context: this._context,
-        notebookTracker: this._notebookTracker
+        notebookTracker: this._notebookTracker,
+        commands: this._commands
       }));
 
       this._tabPanel.addTab(tabWidget, idx + 1);
