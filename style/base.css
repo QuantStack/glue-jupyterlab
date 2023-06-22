@@ -387,3 +387,19 @@
 .glue-item div.v-toolbar__items > button:last-child {
   display: none;
 }
+
+.grid-selected {
+  box-shadow: var(--jp-elevation-z20);
+}
+
+body[data-jp-theme-light='true'] {
+  --glue-activated: #c6d4e2;
+}
+
+body[data-jp-theme-light='false'] {
+  --glue-activated: #2d3c4a;
+}
+
+.grid-selected .glue-Session-tab-toolbar {
+  background: var(--glue-activated);
+}

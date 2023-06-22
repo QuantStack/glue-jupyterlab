@@ -12,6 +12,7 @@ import {
 } from './_interface/glue.schema';
 import { ISessionContext } from '@jupyterlab/apputils';
 import { SessionWidget } from './viewPanel/sessionWidget';
+import { GridStackItem } from './viewPanel/gridStackItem';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
 
@@ -91,6 +92,7 @@ export interface IGlueSessionWidget
 export interface IRequestConfigDisplay {
   tabId: string;
   cellId?: string;
+  gridItem?: GridStackItem;
 }
 
 export interface IControlPanelModel {

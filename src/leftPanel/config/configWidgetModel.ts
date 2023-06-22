@@ -51,6 +51,16 @@ export class ConfigWidgetModel implements IDisposable {
     args: IRequestConfigDisplay
   ): void {
     const context = this._model.currentSessionContext();
+    if (this._currentArgs) {
+      const { gridItem, tabId, cellId } = this._currentArgs;
+      if (
+        gridItem === args.gridItem &&
+        tabId === args.tabId &&
+        cellId === args.cellId
+      ) {
+        return;
+      }
+    }
 
     if (context && this._currentSessionWidget) {
       const output = this._outputs.get(this._currentSessionWidget);
@@ -62,6 +72,7 @@ export class ConfigWidgetModel implements IDisposable {
         output,
         context
       );
+      this._currentArgs = { ...args };
     }
   }
 
@@ -106,4 +117,5 @@ export class ConfigWidgetModel implements IDisposable {
   private _outputChanged = new Signal<ConfigWidgetModel, IOutputChangedArg>(
     this
   );
+  private _currentArgs?: IRequestConfigDisplay;
 }

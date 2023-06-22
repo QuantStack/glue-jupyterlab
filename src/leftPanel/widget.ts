@@ -10,6 +10,7 @@ import { ConfigPanel } from './config/configPanel';
 import { DataPanel } from './data/dataPanel';
 import { ControlPanelHeader } from './header';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { Signal } from '@lumino/signaling';
 
 export class ControlPanelWidget extends SidePanel {
   constructor(options: LeftPanelWidget.IOptions) {
@@ -44,6 +45,9 @@ export class ControlPanelWidget extends SidePanel {
         header.title.label = '-';
       }
     });
+    this._model.displayConfigRequested.connect(() =>
+      this._tabPanel.activateTab(1)
+    );
   }
 
   protected onActivateRequest(msg: Message): void {
@@ -51,6 +55,7 @@ export class ControlPanelWidget extends SidePanel {
     this._tabPanel.show();
   }
   dispose(): void {
+    Signal.clearData(this);
     super.dispose();
   }
 

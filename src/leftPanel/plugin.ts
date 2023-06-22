@@ -11,8 +11,9 @@ import { CommandIDs, INewViewerArgs } from '../commands';
 import { UUID } from '@lumino/coreutils';
 import { CommandRegistry } from '@lumino/commands';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { GridStackItem } from '../viewPanel/gridStackItem';
 
-const NAME_SPACE = 'gluelab';
+const NAME_SPACE = 'gluepyter';
 
 function addCommands(
   commands: CommandRegistry,
@@ -139,7 +140,7 @@ function addCommands(
   });
 
   commands.addCommand(CommandIDs.openControlPanel, {
-    execute: (args?: { cellId?: string }) => {
+    execute: (args?: { cellId?: string; gridItem?: GridStackItem }) => {
       if (!controlModel.sharedModel) {
         return;
       }
@@ -152,7 +153,8 @@ function addCommands(
       }
       controlModel.displayConfig({
         tabId: tabs[focusedTab - 1],
-        cellId: args?.cellId
+        cellId: args?.cellId,
+        gridItem: args?.gridItem
       });
     }
   });
@@ -179,8 +181,8 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
       rendermime
     });
 
-    controlPanel.id = 'glueLab::controlPanel';
-    controlPanel.title.caption = 'GlueLab';
+    controlPanel.id = 'gluepyter::controlPanel';
+    controlPanel.title.caption = 'gluepyter';
     controlPanel.title.icon = glueIcon;
 
     if (restorer) {

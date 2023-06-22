@@ -214,6 +214,7 @@ export class TabLayout extends Layout {
     // Save item
     item.changed.connect(this._onItemChanged, this);
     this._gridItems.set(item.cellIdentity, item);
+    item.node.addEventListener('click', () => void this._handleEdit(item));
 
     // Add item to grid
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
@@ -273,6 +274,17 @@ export class TabLayout extends Layout {
   }
 
   /**
+   * Handle edit request of a grid item.
+   */
+  private _handleEdit(item: GridStackItem): void {
+    this._grid.getGridItems().forEach(i => i.classList.remove('grid-selected'));
+    item.node.classList.add('grid-selected');
+    this._commands.execute(CommandIDs.openControlPanel, {
+      cellId: item.cellIdentity,
+      gridItem: item as any
+    });
+  }
+  /**
    * Handle change-event messages sent to from gridstack.
    */
   private _onChange(event: Event, items: GridStackNode[]): void {
@@ -328,9 +340,7 @@ export class TabLayout extends Layout {
         this.removeGridItem(sender.cellIdentity);
         break;
       case 'edit':
-        this._commands.execute(CommandIDs.openControlPanel, {
-          cellId: sender.cellIdentity
-        });
+        this._handleEdit(sender);
         break;
       default:
         break;
