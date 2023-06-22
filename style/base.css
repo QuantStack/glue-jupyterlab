@@ -179,67 +179,8 @@
   flex-direction: row-reverse;
 }
 
-.glue-LinkEditor-widget {
-  border: solid 2px var(--jp-border-color1);
-}
-
-.glue-LinkEditor-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--jp-layout-color2);
-  min-height: 25px;
-  color: var(--jp-ui-font-color1);
-  font-weight: bold;
-}
-
-.glue-LinkEditor-button {
-  cursor: pointer;
-  background-color: var(--jp-layout-color2);
-}
-
-.glue-LinkEditor-tabToolbar {
-  justify-content: space-around;
-}
-
-.glue-LinkEditor-tabToolbar .selected {
-  text-decoration: underline;
-  color: var(--jp-content-link-color);
-  font-weight: bold;
-}
-
-.glue-LinkEditor-createdLinks {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  font-weight: bold;
-  padding: 0.5em;
-  font-size: 1.1em;
-}
-
-.glue-LinkEditor-createdLinks:hover {
-  cursor: pointer;
-  background-color: var(--jp-layout-color2);
-}
-
-.glue-LinkEditor-linking .lm-StackedPanel .jp-Toolbar {
-  justify-content: space-between;
-}
-
-.glue-LinkEditor-linking .glue-LinkEditor-linkingDatasetName {
-  flex-grow: 1;
-  margin-left: 10px;
-  font-weight: bold;
-}
-
-.glue-LinkEditor-linking .jp-ToolbarButtonComponent {
-  background-color: var(--jp-layout-color3);
-  margin-right: 10px;
-}
-
-.glue-LinkEditor-linking .jp-ToolbarButtonComponent:hover {
-  background-color: var(--jp-layout-color2);
-  cursor: pointer;
+.glue-LinkEditor-deleteButton:hover {
+  background-color: none !important;
 }
 
 .glue-LinkEditor-linking .advanced-link-description {
@@ -259,19 +200,19 @@
   font-size: var(--jp-ui-font-size1);
 }
 
-.glue-LinkEditor-attribute {
+.glue-LinkEditor-linkingItem {
   padding: 0.5em;
 }
 
-.glue-LinkEditor-attribute:hover {
+.glue-LinkEditor-linkingItem:hover {
   cursor: pointer;
 }
 
-.glue-LinkEditor-attribute:not(.selected):hover {
+.glue-LinkEditor-linkingItem:not(.selected):hover {
   background-color: var(--jp-layout-color2);
 }
 
-.glue-LinkEditor-attribute.selected {
+.glue-LinkEditor-linkingItem.selected {
   background-color: var(--jp-brand-color4);
   color: var(--jp-content-link-color);
 }
@@ -284,7 +225,7 @@
   width: 40%;
 }
 
-.glue-LinkEditor-identity table tr td:not(:first-child) {
+.glue-LinkEditor-identity table tr td:last-child {
   text-align: right;
 }
 
@@ -302,6 +243,124 @@
 
 .glue-LinkEditor-advanced table tr td:last-child {
   text-align: right;
+}
+
+.glue-LinkEditor-widget {
+  display: flex;
+  flex-direction: column;
+}
+
+.glue-LinkEditor-widget:first-child {
+  border-right: solid 2px var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-widget:last-child {
+  border-left: solid 2px var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-widget > :last-child {
+  flex-grow: 1;
+}
+
+.glue-LinkEditor-header {
+  width: 100%;
+  background-color: var(--jp-layout-color3);
+  display: flex;
+  align-items: center;
+}
+
+.glue-LinkEditor-linkingHeader {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.glue-LinkEditor-linkingHeaderDatasets {
+  width: 30%;
+  padding: 0.5em;
+}
+
+.glue-LinkEditor-linkingHeaderAttributes {
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5em;
+}
+
+.glue-LinkEditor-linkingGlueButton {
+  height: 30px;
+}
+
+.glue-LinkEditor-linkingGlueButton:hover {
+  background-color: var(--jp-layout-color4) !important;
+}
+
+.glue-LinkEditor-content {
+  width: 100%;
+}
+
+.glue-LinkEditor-linkingContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.glue-LinkEditor-linkingDatasetsPanel {
+  width: 30%;
+}
+
+.glue-LinkEditor-linkingAttributesPanel {
+  width: 20%;
+  background-color: var(--jp-layout-color2);
+}
+
+.glue-LinkEditor-linkingAttributesPanel.firstAttributePanel {
+  border-right: solid var(--jp-toolbar-border-color);
+}
+
+.glue-LinkEditor-linkingAttributesPanel.secondAttributePanel {
+  border-left: solid var(--jp-toolbar-border-color);
+}
+
+.glue-LinkEditor-summaryHeader {
+  padding-left: 5px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.glue-LinkEditor-accordionTitle {
+  font-weight: bold;
+  border-bottom: 2px solid var(--jp-toolbar-border-color);
+}
+
+.glue-LinkEditor-accordionTitle,
+.glue-LinkEditor-summaryIdentity {
+  display: flex;
+  align-items: center;
+}
+
+.glue-LinkEditor-accordionTitle > :first-child,
+.glue-LinkEditor-accordionTitle > :nth-child(2),
+.glue-LinkEditor-summaryIdentity > :not(:last-child) {
+  width: 40%;
+}
+
+.glue-LinkEditor-accordionTitle > :last-child,
+.glue-LinkEditor-summaryIdentity > :last-child {
+  flex-grow: 1;
+  text-align: right;
+}
+
+.glue-LinkEditor-accordionCollapser svg {
+  width: 24px;
+}
+
+.glue-LinkEditor-accordionTitle.lm-mod-expanded
+  .glue-LinkEditor-accordionCollapser
+  svg {
+  transform: rotate(90deg);
 }
 
 .glue-Spinner {

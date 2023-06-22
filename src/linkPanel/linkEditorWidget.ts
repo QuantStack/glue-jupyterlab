@@ -1,74 +1,53 @@
-import { ToolbarRegistry } from '@jupyterlab/apputils';
-import { IObservableList, ObservableList } from '@jupyterlab/observables';
-import { Toolbar } from '@jupyterlab/ui-components';
-import { BoxPanel, StackedPanel, Widget } from '@lumino/widgets';
+import { Panel, Widget } from '@lumino/widgets';
 import { IGlueSessionSharedModel } from '../types';
 import { ILinkEditorModel } from './types';
 
-export class LinkEditorWidget extends BoxPanel {
+export class LinkEditorWidget extends Panel {
   constructor(options: LinkEditorWidget.IOptions) {
     super();
     this._linkEditorModel = options.linkEditorModel;
     this._sharedModel = options.sharedModel;
     this.addClass('glue-LinkEditor-widget');
-    this._titleWidget.addClass('glue-LinkEditor-title');
-    this._content.addClass('glue-LinkEditor-content');
-    this.addWidget(this._titleWidget);
-    this.addWidget(this._content);
-    BoxPanel.setStretch(this._titleWidget, 0);
-    BoxPanel.setStretch(this._content, 1);
     this._sharedModel.changed.connect(this.onSharedModelChanged, this);
   }
 
-  set titleValue(value: string) {
-    this._titleWidget.node.innerText = value;
+  /**
+   * Getter and setter of the header.
+   */
+  get header(): Widget | undefined {
+    return this._header;
   }
-  get titleValue(): string {
-    return this._titleWidget.node.innerText;
+  protected set header(header: Widget | undefined) {
+    if (this._header) {
+      this._header.dispose();
+    }
+    if (!header) {
+      return;
+    }
+
+    header.addClass('glue-LinkEditor-header');
+
+    this._header = header;
+    this.insertWidget(0, this._header);
   }
 
-  get content(): BoxPanel {
+  /**
+   * Getter and setter of the content.
+   */
+  get content(): Widget | undefined {
     return this._content;
   }
+  protected set content(content: Widget | undefined) {
+    if (this._content) {
+      this._content.dispose();
+    }
+    if (!content) {
+      return;
+    }
 
-  protected mainContent(items: LinkEditorWidget.IMainContentItems[]): BoxPanel {
-    const mainContent = new BoxPanel();
-
-    const tabToolbar = new Toolbar();
-    tabToolbar.addClass('glue-LinkEditor-tabToolbar');
-    const mainContentPanels = new StackedPanel();
-
-    items.forEach(item => {
-      const tabWidget = new Widget();
-      tabWidget.addClass('glue-LinkEditor-linkType');
-      tabWidget.node.innerHTML = `<a href="#">${item.name}</a>`;
-      this._tabToolbar.push({ name: item.name, widget: tabWidget });
-
-      mainContentPanels.addWidget(item.widget);
-    });
-
-    mainContent.addWidget(tabToolbar);
-    mainContent.addWidget(mainContentPanels);
-    BoxPanel.setStretch(tabToolbar, 0);
-    BoxPanel.setStretch(mainContentPanels, 1);
-    Array.from(this._tabToolbar).forEach((item, index) => {
-      tabToolbar.addItem(item.name, item.widget);
-      if (index === 0) {
-        item.widget.addClass('selected');
-        mainContentPanels.widgets[index].show();
-      }
-
-      item.widget.node.onclick = () => {
-        mainContentPanels.widgets.forEach(widget => widget.hide());
-        Array.from(this._tabToolbar).forEach(item =>
-          item.widget.removeClass('selected')
-        );
-        mainContentPanels.widgets[index].show();
-        item.widget.addClass('selected');
-      };
-    });
-
-    return mainContent;
+    content.addClass('glue-LinkEditor-content');
+    this._content = content;
+    this.addWidget(this._content);
   }
 
   onSharedModelChanged(): void {
@@ -77,10 +56,8 @@ export class LinkEditorWidget extends BoxPanel {
 
   protected _sharedModel: IGlueSessionSharedModel;
   protected _linkEditorModel: ILinkEditorModel;
-  protected _tabToolbar: IObservableList<ToolbarRegistry.IToolbarItem> =
-    new ObservableList<ToolbarRegistry.IToolbarItem>();
-  private _titleWidget = new Widget();
-  private _content = new BoxPanel();
+  private _header: Widget | undefined = undefined;
+  private _content: Widget | undefined = undefined;
 }
 
 export namespace LinkEditorWidget {
