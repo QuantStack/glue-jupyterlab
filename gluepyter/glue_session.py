@@ -1,14 +1,21 @@
+import os
+import json
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Optional, Tuple
 
+from glue.core.link_helpers import LinkSame
+from glue.core.state import GlueSerializer
 import glue_jupyter as gj
 from glue_jupyter.view import IPyWidgetView
 from glue_jupyter.widgets.layer_options import LayerOptionsWidget
+
 import y_py as Y
-from glue.core.link_helpers import LinkSame
+
 from IPython.display import display
+
 from ipywidgets import Output
+
 from jupyter_ydoc import ydocs
 from ypywidgets import Widget
 
@@ -140,6 +147,13 @@ class SharedGlueSession:
                         )
 
                     saved_viewer["widget"] = widget
+
+                    # This may be the error widget
+                    if widget is None or not hasattr(widget, "viewer_options"):
+                        with output:
+                            display(widget)
+                        return
+
                     viewer_options = widget.viewer_options
                     try:
                         layer_options = LayerOptionsWidget(widget)
@@ -155,6 +169,10 @@ class SharedGlueSession:
                         viewer_data=data,
                         viewer_state=state,
                     )
+
+                    # This may be the error widget
+                    if widget is None or not hasattr(widget, "viewer_options"):
+                        return
 
                     viewer_options = widget.viewer_options
                     try:
@@ -308,6 +326,37 @@ class SharedGlueSession:
             ),
             ydoc=self._sessionYDoc,
         )
+
+    def add_data(self, file_path: str) -> None:
+        """Add a new data file to the session"""
+        relative_path = Path(file_path).relative_to(Path(self._path).parent)
+        assert os.path.exists(relative_path)
+
+        data = self.app.load_data(str(relative_path))
+        self._data[data.label] = data
+
+        # We generate the data reprensation and merge it into our ycontent
+        serializer = GlueSerializer(data)
+        serialized_data = serializer.dumpo()
+
+        contents = self._document.contents
+
+        # Inject the main data repr
+        contents[data.label] = serialized_data["__main__"]
+        # Inject all components
+        for key, value in serialized_data.items():
+            if key != "__main__":
+                contents[key] = value
+        # Inject the label in the data collection
+        contents["DataCollection"]["data"].append(data.label)
+        contents["DataCollection"]["cids"].extend(
+            cid for cid, comp in serialized_data["__main__"]["components"]
+        )
+        contents["DataCollection"]["components"].extend(
+            comp for cid, comp in serialized_data["__main__"]["components"]
+        )
+
+        self._document.set(json.dumps(contents))
 
     def _load_data(self) -> None:
         """Load data defined in the glue session"""

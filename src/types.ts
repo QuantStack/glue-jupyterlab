@@ -13,6 +13,7 @@ import {
 import { ISessionContext } from '@jupyterlab/apputils';
 import { SessionWidget } from './viewPanel/sessionWidget';
 import { GridStackItem } from './viewPanel/gridStackItem';
+import { IKernelConnection } from '@jupyterlab/services/lib/kernel/kernel';
 
 export const DATASET_MIME = 'application/x-gluejupyter-dataset';
 
@@ -99,6 +100,7 @@ export interface IRequestConfigDisplay {
 export interface IControlPanelModel {
   sharedModel: IGlueSessionSharedModel | undefined;
   glueSessionChanged: ISignal<IControlPanelModel, IGlueSessionWidget | null>;
+  currentSessionPath: string | undefined;
   selectedDataset: string | null;
   selectedDatasetChanged: ISignal<IControlPanelModel, void>;
   tabsChanged: ISignal<IControlPanelModel, void>;
@@ -109,6 +111,7 @@ export interface IControlPanelModel {
   displayConfig(args: IRequestConfigDisplay): void;
   clearConfig(): void;
   currentSessionContext(): ISessionContext | undefined;
+  currentSessionKernel(): IKernelConnection | undefined;
 }
 
 export type IGlueSessionViewerTypes = ValueOf<IGlueSessionTabs>[0];
