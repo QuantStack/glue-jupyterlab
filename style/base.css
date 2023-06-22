@@ -149,13 +149,13 @@
 }
 
 .glue-sidepanel-widget *::-webkit-scrollbar,
-.glue-Session-panel *::-webkit-scrollbar {
+.glue-Session-gridhost *::-webkit-scrollbar {
   width: 8px;
   background: transparent;
 }
 
 .glue-sidepanel-widget *::-webkit-scrollbar-track,
-.glue-Session-panel *::-webkit-scrollbar-track {
+.glue-Session-gridhost *::-webkit-scrollbar-track {
   border: solid 3px transparent;
 }
 
