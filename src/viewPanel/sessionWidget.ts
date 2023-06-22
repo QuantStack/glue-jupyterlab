@@ -23,6 +23,13 @@ export class SessionWidget extends BoxPanel {
     super({ direction: 'top-to-bottom' });
     this.addClass('grid-panel');
 
+    this._spinner = document.createElement('div');
+    this._spinner.classList.add('glue-Spinner');
+    const spinnerContent = document.createElement('div');
+    spinnerContent.classList.add('glue-SpinnerContent');
+    this._spinner.appendChild(spinnerContent);
+    this.node.appendChild(this._spinner);
+
     this._model = options.model;
     this._rendermime = options.rendermime.clone();
     this._notebookTracker = options.notebookTracker;
@@ -131,6 +138,8 @@ export class SessionWidget extends BoxPanel {
     const future = kernel.requestExecute({ code }, false);
     await future.done;
     this._pythonSessionCreated.resolve();
+
+    this._spinner.style.display = 'none';
   }
 
   private async _onTabsChanged() {
@@ -173,6 +182,7 @@ export class SessionWidget extends BoxPanel {
     this._model.setSelectedTab(args.currentIndex);
   }
 
+  private _spinner: HTMLDivElement;
   private _tabViews: { [k: string]: TabView } = {};
   private _pythonSessionCreated: PromiseDelegate<void> =
     new PromiseDelegate<void>();

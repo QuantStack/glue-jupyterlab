@@ -26,6 +26,13 @@ export class GridStackItem extends Panel {
     cell.addClass('grid-item-widget');
     content.addWidget(cell);
 
+    this._spinner = document.createElement('div');
+    this._spinner.classList.add('glue-Spinner');
+    const spinnerContent = document.createElement('div');
+    spinnerContent.classList.add('glue-SpinnerContent');
+    this._spinner.appendChild(spinnerContent);
+    cell.node.appendChild(this._spinner);
+
     this.addWidget(content);
 
     this._changed = new Signal<GridStackItem, GridStackItem.IChange>(this);
@@ -79,6 +86,8 @@ export class GridStackItem extends Panel {
     toolbar.addItem('Title', title);
     return toolbar;
   }
+
+  private _spinner: HTMLDivElement;
 
   private _pos: number[];
   private _size: number[];
