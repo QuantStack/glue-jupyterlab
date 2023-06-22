@@ -38,8 +38,8 @@ export class Linking extends LinkEditorWidget {
     ];
 
     this._attributesPanels = [
-      this._emptyAttributePanel(),
-      this._emptyAttributePanel()
+      this._emptyAttributePanel('firstAttributePanel'),
+      this._emptyAttributePanel('secondAttributePanel')
     ];
 
     this.header = ReactWidget.create(
@@ -437,15 +437,18 @@ export class Linking extends LinkEditorWidget {
     return content;
   }
 
-  private _emptyDatasetPanel(): HTMLDivElement {
+  private _emptyDatasetPanel(className?: string): HTMLDivElement {
     const panel = document.createElement('div');
     panel.classList.add('glue-LinkEditor-linkingDatasetsPanel');
     return panel;
   }
 
-  private _emptyAttributePanel(): HTMLDivElement {
+  private _emptyAttributePanel(className?: string): HTMLDivElement {
     const panel = document.createElement('div');
     panel.classList.add('glue-LinkEditor-linkingAttributesPanel');
+    if (className) {
+      panel.classList.add(className);
+    }
     return panel;
   }
 

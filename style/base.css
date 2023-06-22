@@ -314,6 +314,14 @@
   background-color: var(--jp-layout-color2);
 }
 
+.glue-LinkEditor-linkingAttributesPanel.firstAttributePanel {
+  border-right: solid var(--jp-toolbar-border-color);
+}
+
+.glue-LinkEditor-linkingAttributesPanel.secondAttributePanel {
+  border-left: solid var(--jp-toolbar-border-color);
+}
+
 .glue-LinkEditor-summaryHeader {
   padding-left: 5px;
   font-weight: bold;
