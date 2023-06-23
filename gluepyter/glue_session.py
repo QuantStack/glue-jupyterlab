@@ -393,3 +393,4 @@ class SharedGlueSession:
         elif target == "links":
             self._load_data()
             self._update_links(event.keys)
+            self.render_viewer()
