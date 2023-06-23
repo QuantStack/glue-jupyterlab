@@ -12,7 +12,7 @@ test('should render session file', async ({ page }) => {
   await expect(page.getByText('session.glu')).toBeVisible();
   await page.getByText('session.glu').dblclick();
 
-  await page.sidebar.close('left');
+  page.sidebar.close('left');
 
   // TODO Wait for spinner to not be visible once we have one
   await page.waitForSelector('.bqplot');
@@ -26,7 +26,7 @@ test('should switch tab', async ({ page }) => {
   await expect(page.getByText('session.glu')).toBeVisible();
   await page.getByText('session.glu').dblclick();
 
-  await page.sidebar.close('left');
+  page.sidebar.close('left');
 
   // TODO Wait for spinner to not be visible once we have one
   await page.waitForSelector('.bqplot');
