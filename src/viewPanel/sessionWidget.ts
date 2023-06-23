@@ -46,7 +46,9 @@ export class SessionWidget extends BoxPanel {
         addButtonEnabled: true
       }
     });
-
+    this._tabPanel.topBar.addRequested.connect(() => {
+      this._model.addTab();
+    });
     if (this._model) {
       this._linkWidget = new LinkEditor({ sharedModel: this._model });
       this._tabPanel.addTab(this._linkWidget, 0);
@@ -145,7 +147,8 @@ export class SessionWidget extends BoxPanel {
 
   private async _onTabsChanged() {
     await this._pythonSessionCreated.promise;
-
+    let newTabIndex = 1;
+    const currentIndex = this._tabPanel.topBar.currentIndex;
     const tabNames = this._model.getTabNames();
 
     tabNames.forEach((tabName, idx) => {
@@ -153,7 +156,7 @@ export class SessionWidget extends BoxPanel {
       if (tabName in this._tabViews) {
         return;
       }
-
+      newTabIndex = idx;
       // Tab does not exist, we create it
       const tabWidget = (this._tabViews[tabName] = new TabView({
         tabName,
@@ -173,8 +176,10 @@ export class SessionWidget extends BoxPanel {
     //     todo
     //   }
     // }
-
-    this._tabPanel.activateTab(1);
+    if (currentIndex === 0) {
+      newTabIndex = 0;
+    }
+    this._tabPanel.activateTab(newTabIndex + 1);
   }
 
   private _onFocusedTabChanged(
