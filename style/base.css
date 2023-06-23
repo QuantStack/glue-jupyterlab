@@ -487,10 +487,13 @@
 
 .grid-selected .glue-Session-tab-toolbar {
   background: var(--jp-brand-color1);
-  color: var(--jp-ui-inverse-font-color0)
+  color: var(--jp-ui-inverse-font-color0);
 }
 
-.grid-selected .glue-Session-tab-toolbar .jp-ToolbarButtonComponent .jp-icon3[fill] {
+.grid-selected
+  .glue-Session-tab-toolbar
+  .jp-ToolbarButtonComponent
+  .jp-icon3[fill] {
   fill: var(--jp-ui-inverse-font-color0);
 }
 
