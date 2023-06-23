@@ -182,7 +182,7 @@ class YGlue(YBaseDoc):
         link_names: List[str],
         contents: Dict,
         dataset: Dict[str, Dict],
-        attributes: Dict[str, Dict]
+        attributes: Dict[str, Dict],
     ) -> Dict[str, Dict]:
         links: Dict[str, Dict] = {}
         for link_name in link_names:
@@ -255,7 +255,7 @@ class YGlue(YBaseDoc):
                     link.pop(f"data{i}", None)
                     attr_list = {
                         "_type": "builtins.list",
-                        "contents": link.pop(f"cids{i}", [])
+                        "contents": link.pop(f"cids{i}", []),
                     }
                     contents[list_name] = attr_list
                     link[f"cids{i}"] = list_name
