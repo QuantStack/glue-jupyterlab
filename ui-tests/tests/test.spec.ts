@@ -17,9 +17,7 @@ test('should render session file', async ({ page }) => {
   // TODO Wait for spinner to not be visible once we have one
   await page.waitForSelector('.bqplot');
 
-  expect(
-    await page.screenshot()
-  ).toMatchSnapshot('session-tab1.png');
+  expect(await page.screenshot()).toMatchSnapshot('session-tab1.png');
 });
 
 test('should switch tab', async ({ page }) => {
@@ -42,9 +40,7 @@ test('should switch tab', async ({ page }) => {
 
   await page.waitForSelector('.bqplot');
 
-  expect(
-    await page.screenshot()
-  ).toMatchSnapshot('session-tab2.png');
+  expect(await page.screenshot()).toMatchSnapshot('session-tab2.png');
 });
 
 test('should open link editor', async ({ page }) => {
@@ -59,7 +55,5 @@ test('should open link editor', async ({ page }) => {
   // Switch to link editor
   await (await page.waitForSelector('text="Link Data"')).click();
 
-  expect(
-    await page.screenshot()
-  ).toMatchSnapshot('link-editor.png');
+  expect(await page.screenshot()).toMatchSnapshot('link-editor.png');
 });
