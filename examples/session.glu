@@ -50,6 +50,40 @@
     "log": "LoadLog",
     "log_item": 4
   },
+  "ComponentLink": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "Right Ascension"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "RAJ2000"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
+  "ComponentLink_0": {
+    "_type": "glue.core.component_link.ComponentLink",
+    "frm": [
+      "Declination"
+    ],
+    "inverse": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    },
+    "to": [
+      "DEJ2000"
+    ],
+    "using": {
+      "_type": "types.FunctionType",
+      "function": "glue.core.link_helpers.identity"
+    }
+  },
   "Component_0": {
     "_type": "glue.core.component.Component",
     "log": "LoadLog_0",
@@ -198,7 +232,10 @@
     "groups": [
       "Subset 1"
     ],
-    "links": [],
+    "links": [
+      "ComponentLink",
+      "ComponentLink_0"
+    ],
     "subset_group_count": 1
   },
   "Declination": {
