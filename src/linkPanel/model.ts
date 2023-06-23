@@ -8,7 +8,6 @@ import {
   ILinkEditorModel,
   IAdvLinkCategories,
   IAdvLinkDescription,
-  IDatasets,
   ComponentLinkType,
   IdentityLinkFunction
 } from './types';
@@ -25,11 +24,6 @@ export class LinkEditorModel implements ILinkEditorModel {
     this._sharedModel.linksChanged.connect(this.onLinksChanged, this);
     this._sharedModel.datasetChanged.connect(this.onDatasetsChanged, this);
     this._getAdvancedLinksCategories();
-
-    this._currentDatasets = {
-      first: '',
-      second: ''
-    };
   }
 
   get sharedModel(): IGlueSessionSharedModel {
@@ -39,10 +33,10 @@ export class LinkEditorModel implements ILinkEditorModel {
   /**
    * Getter and setter for datasets.
    */
-  get currentDatasets(): IDatasets {
+  get currentDatasets(): [string, string] {
     return this._currentDatasets;
   }
-  set currentDatasets(datasets: IDatasets) {
+  set currentDatasets(datasets: [string, string]) {
     this._currentDatasets = datasets;
     this._datasetsChanged.emit(this._currentDatasets);
   }
@@ -50,15 +44,15 @@ export class LinkEditorModel implements ILinkEditorModel {
   /**
    * Replace one current dataset.
    */
-  setCurrentDataset(position: keyof IDatasets, value: string): void {
-    this._currentDatasets[position] = value;
+  setCurrentDataset(index: number, value: string): void {
+    this._currentDatasets[index] = value;
     this._datasetsChanged.emit(this._currentDatasets);
   }
 
   /**
    * A signal emits when current datasets changes
    */
-  get currentDatasetsChanged(): ISignal<this, IDatasets> {
+  get currentDatasetsChanged(): ISignal<this, [string, string]> {
     return this._datasetsChanged;
   }
 
@@ -133,10 +127,10 @@ export class LinkEditorModel implements ILinkEditorModel {
     // Reset the current dataset, with empty values if there is less than 2 datasets.
     if (this._sharedModel.dataset) {
       const datasetsList = Object.keys(this._sharedModel.dataset);
-      this._currentDatasets = {
-        first: datasetsList.length > 1 ? datasetsList[0] : '',
-        second: datasetsList.length > 1 ? datasetsList[1] : ''
-      };
+      this._currentDatasets = [
+        datasetsList.length > 1 ? datasetsList[0] : '',
+        datasetsList.length > 1 ? datasetsList[1] : ''
+      ];
       this._datasetsChanged.emit(this._currentDatasets);
     }
   }
@@ -164,8 +158,8 @@ export class LinkEditorModel implements ILinkEditorModel {
   }
 
   private _sharedModel: IGlueSessionSharedModel;
-  private _currentDatasets: IDatasets;
-  private _datasetsChanged = new Signal<this, IDatasets>(this);
+  private _currentDatasets: [string, string] = ['', ''];
+  private _datasetsChanged = new Signal<this, [string, string]>(this);
   private _advLinksPromise = new PromiseDelegate<IAdvLinkCategories>();
   private _advLinkCategories: IAdvLinkCategories = {};
   private _identityLinks = new Map<string, ILink>();

@@ -14,7 +14,7 @@ import {
 import * as React from 'react';
 
 import { LinkEditorWidget } from '../linkEditorWidget';
-import { IDatasets, ILink, ILinkEditorModel } from '../types';
+import { ILink } from '../types';
 
 /**
  * The widget displaying the links for the selected dataset.
@@ -43,7 +43,7 @@ export class Summary extends LinkEditorWidget {
     this._linkEditorModel.linksChanged.connect(this.linksChanged, this);
 
     if (this._linkEditorModel.currentDatasets) {
-      this.updateLinks(this._linkEditorModel.currentDatasets);
+      this.updateLinks();
     }
   }
 
@@ -51,19 +51,19 @@ export class Summary extends LinkEditorWidget {
    * Triggered when links has changed.
    */
   linksChanged(): void {
-    this.updateLinks(this._linkEditorModel.currentDatasets);
+    this.updateLinks();
   }
   /**
    * Callback when the selected datasets change.
    */
-  onDatasetsChange(_sender: ILinkEditorModel, datasets: IDatasets): void {
-    this.updateLinks(datasets);
+  onDatasetsChange(): void {
+    this.updateLinks();
   }
 
   /**
    * Updates the list of links when the selected dataset changes.
    */
-  updateLinks(dataset: IDatasets): void {
+  updateLinks(): void {
     const datasetLinks = new Map<string, Private.ISummaryLink[]>();
 
     // Remove all the existing widgets.
