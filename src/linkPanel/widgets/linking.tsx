@@ -517,7 +517,6 @@ namespace Private {
               return (
                 <Button
                   onClick={props.glueCallback}
-                  minimal
                   disabled={disabledStatus ?? true}
                   className={'glue-LinkEditor-linkingGlueButton'}
                 >

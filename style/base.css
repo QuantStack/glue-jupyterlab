@@ -99,6 +99,7 @@
 
 .glue-Session-tabBar .lm-TabBar-tab.glue-LinkEditor-tab {
   flex: none;
+  color: var(--jp-ui-inverse-font-color0);
   background-color: var(--jp-brand-color1);
 }
 
@@ -108,7 +109,18 @@
 }
 
 .glue-Session-tabBar .lm-TabBar-tab.lm-mod-current.glue-LinkEditor-tab {
-  background: var(--jp-brand-color2);
+  color: var(--jp-ui-font-color0);
+  background: var(--jp-brand-color3);
+}
+
+.glue-Session-tabBar .lm-TabBar-tab.lm-mod-current::before {
+  position: absolute;
+  top: calc(-1 * var(--jp-border-width) + 1px);
+  left: calc(-1 * var(--jp-border-width));
+  content: '';
+  height: var(--jp-private-horizontal-tab-active-top-border);
+  width: calc(100% + 2 * var(--jp-border-width));
+  background: var(--jp-brand-color1);
 }
 
 .grid-panel {
@@ -235,8 +247,8 @@
 }
 
 .glue-LinkEditor-linkingItem.selected {
-  background-color: var(--jp-brand-color4);
-  color: var(--jp-content-link-color);
+  color: var(--jp-ui-inverse-font-color1);
+  background-color: var(--jp-brand-color1);
 }
 
 .glue-LinkEditor-summary table {
@@ -312,10 +324,8 @@
 
 .glue-LinkEditor-linkingGlueButton {
   height: 30px;
-}
-
-.glue-LinkEditor-linkingGlueButton:hover {
-  background-color: var(--jp-layout-color4) !important;
+  background-color: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color1);
 }
 
 .glue-LinkEditor-content {
@@ -400,7 +410,7 @@
 }
 
 .glue-SpinnerContent {
-  border: solid #f376269e;
+  border: solid var(--jp-jupyter-icon-color);
   margin: 50px auto;
   text-indent: -9999em;
   width: 6em;
@@ -417,7 +427,7 @@
   height: 50%;
   background: #f3762605;
   border-radius: 100% 0 100% 0;
-  box-shadow: inset 6px 5px 0 1px #f37626;
+  box-shadow: inset 6px 5px 0 1px var(--jp-jupyter-icon-color);
   position: absolute;
   top: 0;
   left: 0;
@@ -475,14 +485,15 @@
   box-shadow: var(--jp-elevation-z20);
 }
 
-body[data-jp-theme-light='true'] {
-  --glue-activated: #c6d4e2;
-}
-
-body[data-jp-theme-light='false'] {
-  --glue-activated: #2d3c4a;
-}
-
 .grid-selected .glue-Session-tab-toolbar {
-  background: var(--glue-activated);
+  background: var(--jp-brand-color1);
+  color: var(--jp-ui-inverse-font-color0)
+}
+
+.grid-selected .glue-Session-tab-toolbar .jp-ToolbarButtonComponent .jp-icon3[fill] {
+  fill: var(--jp-ui-inverse-font-color0);
+}
+
+.grid-selected .glue-Session-tab-toolbar .jp-Button.jp-mod-minimal:hover {
+  background-color: var(--jp-brand-color1) !important;
 }
