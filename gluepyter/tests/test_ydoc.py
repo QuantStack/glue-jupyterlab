@@ -58,8 +58,8 @@ def test_links(yglue_doc_links, identity_link):
     ]
     types = [str, str, str, list, list, list, list]
 
-    # Links should have been populated according the session file, and all links should
-    # have the same schema.
+    # Links should have been populated according to the session file, and all links
+    # should have the same schema.
     assert len(links) == 3
     for link in links.values():
         assert all(item in link.keys() for item in required)

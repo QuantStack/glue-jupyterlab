@@ -62,7 +62,6 @@ class YGlue(YBaseDoc):
         dataset = json.loads(self._ydataset.to_json())
         links = json.loads(self._ylinks.to_json())
         tabs = json.loads(self._ytabs.to_json())
-
         contents.setdefault("__main__", {})
 
         tab_names = sorted(list(tabs.keys()))
@@ -260,3 +259,4 @@ class YGlue(YBaseDoc):
                     contents[list_name] = attr_list
                     link[f"cids{i}"] = list_name
             contents[link_name] = link
+            contents[self._data_collection_name]["links"].append(link_name)
