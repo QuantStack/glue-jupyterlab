@@ -7,6 +7,8 @@ import { expect, test } from '@jupyterlab/galata';
 test.use({ autoGoto: false });
 
 test('should render session file', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();
@@ -21,6 +23,8 @@ test('should render session file', async ({ page }) => {
 });
 
 test('should switch tab', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();
@@ -44,6 +48,8 @@ test('should switch tab', async ({ page }) => {
 });
 
 test('should open link editor', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();
