@@ -111,7 +111,10 @@ export class TabView extends Widget {
    * Update the viewers.
    */
   private async _initGrid(): Promise<void> {
-    for (const [viewerId, viewerData] of Object.entries(this.tabData)) {
+    const viewerKeys = Object.keys(this.tabData).sort();
+
+    for (const viewerId of viewerKeys) {
+      const viewerData = this.tabData[viewerId];
       // Create new viewers
       const viewer = await this._createViewer(
         this.tabName,
