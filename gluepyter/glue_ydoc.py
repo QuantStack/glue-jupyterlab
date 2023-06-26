@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 from typing import Dict, List, Any, Callable, Optional
 from functools import partial
 from jupyter_ydoc.ybasedoc import YBaseDoc
@@ -61,7 +62,6 @@ class YGlue(YBaseDoc):
         dataset = json.loads(self._ydataset.to_json())
         links = json.loads(self._ylinks.to_json())
         tabs = json.loads(self._ytabs.to_json())
-
         contents.setdefault("__main__", {})
 
         tab_names = sorted(list(tabs.keys()))
@@ -91,8 +91,7 @@ class YGlue(YBaseDoc):
             for data_name in data_names:
                 contents[data_name] = dataset[data_name]
 
-            for link_name in link_names:
-                contents[link_name] = links[link_name]
+            self.add_links_to_contents(links, contents)
 
         return json.dumps(contents, indent=2, sort_keys=True)
 
@@ -127,47 +126,7 @@ class YGlue(YBaseDoc):
             for attribute in contents.get(data_name, {}).get("primary_owner", []):
                 attributes[attribute] = contents.get(attribute, {})
 
-        links: Dict[str, Dict] = {}
-        for link_name in link_names:
-            link: Dict = contents.get(link_name, {})
-            uniform_link = {"_type": link.pop("_type")}
-            if uniform_link["_type"] == COMPONENT_LINK_TYPE:
-                uniform_link["data1"] = next(
-                    (
-                        k
-                        for k, v in dataset.items()
-                        if link["frm"][0] in v["primary_owner"]
-                    ),
-                    None,
-                )
-                uniform_link["data2"] = next(
-                    (
-                        k
-                        for k, v in dataset.items()
-                        if link["to"][0] in v["primary_owner"]
-                    ),
-                    None,
-                )
-                uniform_link["cids1"] = link.pop("frm")
-                uniform_link["cids2"] = link.pop("to")
-                for i in [1, 2]:
-                    uniform_link[f"cids{i}_labels"] = [
-                        attributes[attribute]["label"]
-                        for attribute in uniform_link[f"cids{i}"]
-                    ]
-            else:
-                for i in [1, 2]:
-                    listName = link.pop(f"cids{i}")
-                    uniform_link[f"cids{i}"] = contents.get(listName, {}).get(
-                        "contents"
-                    )
-                    uniform_link[f"cids{i}_labels"] = [
-                        attributes[attribute]["label"]
-                        for attribute in uniform_link[f"cids{i}"]
-                    ]
-
-            uniform_link.update(link)
-            links[link_name] = uniform_link
+        links = self.extract_links_from_file(link_names, contents, dataset, attributes)
 
         with self._ydoc.begin_transaction() as t:
             self._ycontents.update(t, contents.items())
@@ -216,3 +175,88 @@ class YGlue(YBaseDoc):
         if tab is not None:
             with self._ydoc.begin_transaction() as t:
                 tab.pop(t, viewer_id)
+
+    def extract_links_from_file(
+        self,
+        link_names: List[str],
+        contents: Dict,
+        dataset: Dict[str, Dict],
+        attributes: Dict[str, Dict],
+    ) -> Dict[str, Dict]:
+        links: Dict[str, Dict] = {}
+        for link_name in link_names:
+            link: Dict = deepcopy(contents.get(link_name, {}))
+            uniform_link = {"_type": link.pop("_type")}
+            if uniform_link["_type"] == COMPONENT_LINK_TYPE:
+                uniform_link["data1"] = next(
+                    (
+                        k
+                        for k, v in dataset.items()
+                        if link["frm"][0] in v["primary_owner"]
+                    ),
+                    None,
+                )
+                uniform_link["data2"] = next(
+                    (
+                        k
+                        for k, v in dataset.items()
+                        if link["to"][0] in v["primary_owner"]
+                    ),
+                    None,
+                )
+                uniform_link["cids1"] = link.pop("frm")
+                uniform_link["cids2"] = link.pop("to")
+                for i in [1, 2]:
+                    uniform_link[f"cids{i}_labels"] = [
+                        attributes[attribute]["label"]
+                        for attribute in uniform_link[f"cids{i}"]
+                    ]
+            else:
+                for i in [1, 2]:
+                    listName = link.pop(f"cids{i}")
+                    uniform_link[f"cids{i}"] = contents.get(listName, {}).get(
+                        "contents"
+                    )
+                    uniform_link[f"cids{i}_labels"] = [
+                        attributes[attribute]["label"]
+                        for attribute in uniform_link[f"cids{i}"]
+                    ]
+
+            uniform_link.update(link)
+            links[link_name] = uniform_link
+        return links
+
+    def add_links_to_contents(self, links: Dict[str, Dict], contents: Dict):
+        # Delete former links and attributes lists.
+        for link_names in contents.get(self._data_collection_name, {}).get("links", []):
+            link = contents.pop(link_names, {})
+
+            # Delete the list objects containing the attributes of advanced links.
+            if link.get("_type", "") != COMPONENT_LINK_TYPE:
+                contents.pop(link.get("cids1", None), None)
+                contents.pop(link.get("cids2", None), None)
+        contents[self._data_collection_name]["links"] = []
+
+        # Create the new links and attribute lists if necessary.
+        lists_count = -1
+        for link_name, link in links.items():
+            if link["_type"] == COMPONENT_LINK_TYPE:
+                link["frm"] = link.pop("cids1", [])
+                link["to"] = link.pop("cids2", [])
+                for i in [1, 2]:
+                    link.pop(f"cids{i}_labels", None)
+                    link.pop(f"data{i}", None)
+            else:
+                for i in [1, 2]:
+                    list_name = f"list{'' if lists_count < 0 else f'_{lists_count}'}"
+                    lists_count += 1
+                    link.pop(f"cids{i}_labels", None)
+                    link.pop(f"data{i}", None)
+                    attr_list = {
+                        "_type": "builtins.list",
+                        "contents": link.pop(f"cids{i}", []),
+                    }
+                    contents[list_name] = attr_list
+                    link[f"cids{i}"] = list_name
+            contents[link_name] = link
+            contents[self._data_collection_name]["links"].append(link_name)
