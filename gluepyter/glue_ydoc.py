@@ -260,3 +260,4 @@ class YGlue(YBaseDoc):
                     link[f"cids{i}"] = list_name
             contents[link_name] = link
             contents[self._data_collection_name]["links"].append(link_name)
+        contents[self._data_collection_name]["links"].sort()
