@@ -51,6 +51,7 @@ export interface IGlueSessionSharedModel
   tabChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
 
+  addTab(): void;
   getTabNames(): string[];
   getTabData(tabName: string): IDict<IGlueSessionViewerTypes> | undefined;
 

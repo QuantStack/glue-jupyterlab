@@ -111,6 +111,19 @@ export class GlueSessionSharedModel
     this._contents.set(key, value);
   }
 
+  addTab(): void {
+    let idx = 1;
+    let tabName = 'Tab 1';
+    while (this._tabs.has(tabName)) {
+      idx += 1;
+      tabName = `Tab ${idx}`;
+    }
+    const newTab = new Y.Map<IDict>();
+    this.transact(() => {
+      this._tabs.set(tabName, newTab);
+    }, false);
+  }
+
   getTabNames(): string[] {
     return [...this._tabs.keys()];
   }
