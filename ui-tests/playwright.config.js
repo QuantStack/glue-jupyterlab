@@ -12,5 +12,14 @@ module.exports = {
     reuseExistingServer: !process.env.CI
   },
   // Try one retry as some tests are flaky
-  retries: 1
+  retries: 0,
+  expect: {
+    toMatchSnapshot: {
+      // An acceptable ratio of pixels that are different to the total amount of pixels, between 0 and 1.
+      maxDiffPixelRatio: 0.01
+    }
+  },
+  use: {
+    viewport: { width: 1920, height: 1080 }
+  }
 };

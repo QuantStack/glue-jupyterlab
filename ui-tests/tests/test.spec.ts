@@ -1,4 +1,11 @@
-import { expect, test } from '@jupyterlab/galata';
+import { IJupyterLabPageFixture, expect, test } from '@jupyterlab/galata';
+
+async function closeSideTab(page: IJupyterLabPageFixture): Promise<void> {
+  await page
+    .getByRole('tablist', { name: 'main sidebar' })
+    .getByRole('tab', { name: 'gluepyter' })
+    .click();
+}
 
 /**
  * Don't load JupyterLab webpage before running the tests.
@@ -7,14 +14,12 @@ import { expect, test } from '@jupyterlab/galata';
 test.use({ autoGoto: false });
 
 test('should render session file', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();
   await page.getByText('session.glu').dblclick();
 
-  page.sidebar.close('left');
+  await closeSideTab(page);
 
   // TODO Wait for spinner to not be visible once we have one
   await page.waitForSelector('.bqplot');
@@ -23,33 +28,25 @@ test('should render session file', async ({ page }) => {
 });
 
 test('should switch tab', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();
   await page.getByText('session.glu').dblclick();
 
-  page.sidebar.close('left');
+  await closeSideTab(page);
 
   // TODO Wait for spinner to not be visible once we have one
   await page.waitForSelector('.bqplot');
 
   // Switch tab
-  page
-    .locator(
-      '.glue-Session-tabBar > .lm-TabBar-content > .lm-TabBar-tab:nth-of-type(3)'
-    )
-    .click();
+  await page.getByRole('tab', { name: 'Tab 2' }).click();
 
-  await page.waitForSelector('.bqplot');
+  await page.waitForSelector('li#tab-key-2-6.lm-TabBar-tab.lm-mod-current');
 
   expect(await page.screenshot()).toMatchSnapshot('session-tab2.png');
 });
 
 test('should open link editor', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-
   await page.goto();
 
   await expect(page.getByText('session.glu')).toBeVisible();

@@ -39,6 +39,10 @@ jobs:
           jlpm
           python -m pip install .
 
+      - name: Install UI test dependencies
+        working-directory: ui-tests
+        run: jlpm install
+
       - uses: jupyterlab/maintainer-tools/.github/actions/update-snapshots@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
