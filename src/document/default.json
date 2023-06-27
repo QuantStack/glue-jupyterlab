@@ -1,0 +1,23 @@
+{
+  "DataCollection": {
+    "_protocol": 4,
+    "_type": "glue.core.data_collection.DataCollection",
+    "cids": [],
+    "components": [],
+    "data": [],
+    "groups": [],
+    "links": [],
+    "subset_group_count": 0
+  },
+  "Session": {
+    "_type": "glue.core.session.Session"
+  },
+  "__main__": {
+    "_type": "glue.app.qt.application.GlueApplication",
+    "data": "DataCollection",
+    "plugins": [],
+    "session": "Session",
+    "tab_names": ["Tab 1"],
+    "viewers": [[]]
+  }
+}
