@@ -60,3 +60,32 @@ test('should open link editor', async ({ page }) => {
 
   expect(await page.screenshot()).toMatchSnapshot('link-editor.png');
 });
+
+test('should open the control panel on widget clicking', async ({ page }) => {
+  await page.goto();
+
+  await expect(page.getByText('session.glu')).toBeVisible();
+  await page.getByText('session.glu').dblclick();
+  await page.waitForSelector('.bqplot');
+  await page.getByText('Histogram Viewer').click();
+  await page.getByText('TAB 1 - HISTOGRAMVIEWER');
+
+  expect(await page.screenshot()).toMatchSnapshot('control-panel.png');
+});
+
+test('should hide the control panel on tab switching', async ({ page }) => {
+  await page.goto();
+
+  await expect(page.getByText('session.glu')).toBeVisible();
+  await page.getByText('session.glu').dblclick();
+  await page.waitForSelector('.bqplot');
+  await page.getByText('Histogram Viewer').click();
+  await page.getByText('TAB 1 - HISTOGRAMVIEWER');
+
+  // Switch tab
+  await page.getByRole('tab', { name: 'Tab 2' }).click();
+  await page.waitForSelector('li#tab-key-2-6.lm-TabBar-tab.lm-mod-current');
+  expect(await page.screenshot()).toMatchSnapshot(
+    'control-panel-switch-tab.png'
+  );
+});
