@@ -23,6 +23,7 @@ export class ConfigWidgetModel implements IDisposable {
     this._config = options.config;
     this._model.glueSessionChanged.connect(this._sessionChanged, this);
     this._model.displayConfigRequested.connect(this._showConfig, this);
+    this._model.clearConfigRequested.connect(this._clearConfig, this);
   }
 
   get config(): 'Layer' | 'Viewer' {
@@ -43,9 +44,24 @@ export class ConfigWidgetModel implements IDisposable {
 
     this._disposed = true;
     this._model.glueSessionChanged.disconnect(this._sessionChanged);
+    this._model.displayConfigRequested.disconnect(this._showConfig);
+    this._model.clearConfigRequested.disconnect(this._clearConfig);
+
     Signal.clearData(this);
   }
 
+  private _clearConfig(): void {
+    const context = this._model.currentSessionContext();
+
+    if (context && this._currentSessionWidget) {
+      const output = this._outputs.get(this._currentSessionWidget);
+      if (!output) {
+        return;
+      }
+      output.model.clear();
+      this._currentArgs = undefined;
+    }
+  }
   private _showConfig(
     sender: IControlPanelModel,
     args: IRequestConfigDisplay

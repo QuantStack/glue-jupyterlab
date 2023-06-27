@@ -50,7 +50,7 @@ export interface IGlueSessionSharedModel
   linksChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabChanged: ISignal<IGlueSessionSharedModel, IDict>;
   tabsChanged: ISignal<IGlueSessionSharedModel, IDict>;
-
+  localStateChanged: ISignal<IGlueSessionSharedModel, { keys: string[] }>;
   addTab(): void;
   getTabNames(): string[];
   getTabData(tabName: string): IDict<IGlueSessionViewerTypes> | undefined;
@@ -104,8 +104,10 @@ export interface IControlPanelModel {
   tabsChanged: ISignal<IControlPanelModel, void>;
   currentSessionWidget: IGlueSessionWidget | null;
   displayConfigRequested: ISignal<IControlPanelModel, IRequestConfigDisplay>;
+  clearConfigRequested: ISignal<IControlPanelModel, void>;
   getTabs(): IGlueSessionTabs;
   displayConfig(args: IRequestConfigDisplay): void;
+  clearConfig(): void;
   currentSessionContext(): ISessionContext | undefined;
 }
 

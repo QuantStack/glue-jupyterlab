@@ -111,71 +111,12 @@ export class TabLayout extends Layout {
   }
 
   /**
-   * Dispose of the resources held by the widget.
-   */
-  dispose(): void {
-    this._grid.destroy();
-    super.dispose();
-  }
-
-  /**
-   * Init the gridstack layout
-   */
-  init(): void {
-    super.init();
-    if (this.parent) {
-      this.parent.node.appendChild(this._gridHost);
-    }
-    // fake window resize event to resize bqplot
-    window.dispatchEvent(new Event('resize'));
-  }
-
-  /**
-   * Handle `update-request` messages sent to the widget.
-   */
-  protected onUpdateRequest(msg: Message): void {
-    const items = this._grid?.getGridItems();
-    items?.forEach(item => {
-      this._grid.removeWidget(item, true, false);
-      this._grid.addWidget(item);
-    });
-  }
-
-  /**
-   * Handle `resize-request` messages sent to the widget.
-   */
-  protected onResize(msg: Message): void {
-    // Using timeout to wait until the resize stop
-    // rerendering all the widgets every time uses
-    // too much resources
-    clearTimeout(this._resizeTimeout);
-    this._resizeTimeout = setTimeout(this._onResizeStops, 500);
-    this._prepareGrid();
-  }
-
-  /**
-   * Handle `fit-request` messages sent to the widget.
-   */
-  protected onFitRequest(msg: Message): void {
-    this._prepareGrid();
-  }
-
-  /**
    * Create an iterator over the widgets in the layout.
    *
    * @returns A new iterator over the widgets in the layout.
    */
   *[Symbol.iterator](): IterableIterator<Widget> {
     yield* this._gridItems.values();
-  }
-
-  /**
-   * Remove a widget from the layout.
-   *
-   * @param widget - The `widget` to remove.
-   */
-  removeWidget(widget: Widget): void {
-    return;
   }
 
   /**
@@ -197,6 +138,35 @@ export class TabLayout extends Layout {
    */
   get gridElements(): GridItemHTMLElement[] {
     return this._grid.getGridItems() ?? [];
+  }
+
+  /**
+   * Dispose of the resources held by the widget.
+   */
+  dispose(): void {
+    this._grid.destroy();
+    super.dispose();
+  }
+
+  /**
+   * Init the gridstack layout
+   */
+  init(): void {
+    super.init();
+    if (this.parent) {
+      this.parent.node.appendChild(this._gridHost);
+    }
+    // fake window resize event to resize bqplot
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  /**
+   * Remove a widget from the layout.
+   *
+   * @param widget - The `widget` to remove.
+   */
+  removeWidget(widget: Widget): void {
+    return;
   }
 
   /**
@@ -274,10 +244,74 @@ export class TabLayout extends Layout {
   }
 
   /**
+   * Unselect all items of the grid layout.
+   */
+  unselectGridItems(): void {
+    this._grid.getGridItems().forEach(i => i.classList.remove('grid-selected'));
+  }
+
+  /**
+   * Handle `update-request` messages sent to the widget.
+   */
+  protected onUpdateRequest(msg: Message): void {
+    const items = this._grid?.getGridItems();
+    items?.forEach(item => {
+      this._grid.removeWidget(item, true, false);
+      this._grid.addWidget(item);
+    });
+  }
+
+  /**
+   * Handle `resize-request` messages sent to the widget.
+   */
+  protected onResize(msg: Message): void {
+    // Using timeout to wait until the resize stop
+    // rerendering all the widgets every time uses
+    // too much resources
+    clearTimeout(this._resizeTimeout);
+    this._resizeTimeout = setTimeout(this._onResizeStops, 500);
+    this._prepareGrid();
+  }
+
+  /**
+   * Handle `fit-request` messages sent to the widget.
+   */
+  protected onFitRequest(msg: Message): void {
+    this._prepareGrid();
+  }
+
+  /**
+   * Handle `after-attach` messages sent to the widget.
+   */
+  protected onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    this._gridHost.addEventListener('click', this._onClick.bind(this));
+  }
+
+  /**
+   * Handle `before-attach` messages sent to the widget.
+   */
+  protected onBeforeDetach(msg: Message): void {
+    this._gridHost.removeEventListener('click', this._onClick.bind(this));
+
+    super.onBeforeDetach(msg);
+  }
+
+  /**
+   * Handle click event to the widget.
+   */
+  private _onClick(event: MouseEvent) {
+    if (event.target === event.currentTarget) {
+      this._commands.execute(CommandIDs.closeControlPanel);
+      this.unselectGridItems();
+    }
+  }
+
+  /**
    * Handle edit request of a grid item.
    */
   private _handleEdit(item: GridStackItem): void {
-    this._grid.getGridItems().forEach(i => i.classList.remove('grid-selected'));
+    this.unselectGridItems();
     item.node.classList.add('grid-selected');
     this._commands.execute(CommandIDs.openControlPanel, {
       cellId: item.cellIdentity,

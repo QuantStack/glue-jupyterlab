@@ -422,11 +422,11 @@
     fadeIn 1s;
 }
 
-.glue-SpinnerContent:before {
+.glue-SpinnerContent::before {
   width: 50%;
   height: 50%;
   background: #f3762605;
-  border-radius: 100% 0 100% 0;
+  border-radius: 100% 0;
   box-shadow: inset 6px 5px 0 1px var(--jp-jupyter-icon-color);
   position: absolute;
   top: 0;
@@ -434,7 +434,7 @@
   content: '';
 }
 
-.glue-SpinnerContent:after {
+.glue-SpinnerContent::after {
   width: 75%;
   height: 75%;
   border-radius: 50%;

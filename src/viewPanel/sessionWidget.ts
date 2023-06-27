@@ -187,6 +187,7 @@ export class SessionWidget extends BoxPanel {
     args: TabBar.ICurrentChangedArgs<Widget>
   ) {
     this._model.setSelectedTab(args.currentIndex);
+    this._commands.execute(CommandIDs.closeControlPanel);
   }
 
   private _spinner: HTMLDivElement;

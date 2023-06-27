@@ -11,6 +11,8 @@ export namespace CommandIDs {
   export const newTable = 'glue-control:new-table-viewer';
 
   export const openControlPanel = 'glue-control:open-control-panel';
+
+  export const closeControlPanel = 'glue-control:close-control-panel';
 }
 
 export interface INewViewerArgs {

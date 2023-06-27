@@ -37,6 +37,7 @@ export class TabView extends Widget {
 
     layout.gridItemChanged.connect(this._onLayoutChanged, this);
     this._model.tabChanged.connect(this._onTabChanged, this);
+    this._model.localStateChanged.connect(this._onLocalStateChanged, this);
   }
 
   dispose(): void {
@@ -49,7 +50,7 @@ export class TabView extends Widget {
       this
     );
     this._model.tabChanged.disconnect(this._onTabChanged, this);
-
+    this._model.localStateChanged.disconnect(this._onLocalStateChanged);
     super.dispose();
   }
 
@@ -321,6 +322,14 @@ export class TabView extends Widget {
     }
   }
 
+  private _onLocalStateChanged(
+    sender: IGlueSessionSharedModel,
+    changes: { keys: string[] }
+  ) {
+    if (changes.keys.includes('selectedTab')) {
+      (this.layout as TabLayout).unselectGridItems();
+    }
+  }
   private _selectedItem: GridStackItem | null = null;
   private _model: IGlueSessionSharedModel;
   private _context: DocumentRegistry.IContext<GlueSessionModel>;
