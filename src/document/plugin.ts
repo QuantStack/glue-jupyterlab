@@ -1,22 +1,26 @@
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin
-} from '@jupyterlab/application';
-import { WidgetTracker } from '@jupyterlab/apputils';
-
 import {
   ICollaborativeDrive,
   SharedDocumentFactory
 } from '@jupyter/docprovider';
+import {
+  JupyterFrontEnd,
+  JupyterFrontEndPlugin
+} from '@jupyterlab/application';
+import { ICommandPalette, WidgetTracker } from '@jupyterlab/apputils';
+import { IFileBrowserFactory } from '@jupyterlab/filebrowser';
+import { ILauncher } from '@jupyterlab/launcher';
+import { INotebookTracker } from '@jupyterlab/notebook';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
 
+import { CommandIDs } from '../commands';
 import { IGlueSessionTracker } from '../token';
+import { glueIcon } from '../tools';
+import defaultContent from './default.json';
 import { GlueSessionModelFactory } from './modelFactory';
+import { GlueSessionSharedModel } from './sharedModel';
 import { GlueSessionTracker } from './tracker';
 import { GlueCanvasWidgetFactory } from './widgetFactory';
-import { GlueSessionSharedModel } from './sharedModel';
-import { INotebookTracker } from '@jupyterlab/notebook';
-import { IJupyterYWidgetManager } from 'yjs-widgets';
 
 const NAME_SPACE = 'gluepyter';
 
@@ -95,5 +99,67 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
       'glu',
       glueSharedModelFactory
     );
+  }
+};
+
+/**
+ * Add launcher button to create a new glue session.
+ */
+export const newFilePlugin: JupyterFrontEndPlugin<void> = {
+  id: 'gluepyter:create-new-plugin',
+  autoStart: true,
+  requires: [IFileBrowserFactory],
+  optional: [ILauncher, ICommandPalette],
+  activate: (
+    app: JupyterFrontEnd,
+    browserFactory: IFileBrowserFactory,
+    launcher?: ILauncher,
+    commandPalette?: ICommandPalette
+  ) => {
+    const { commands } = app;
+    commands.addCommand(CommandIDs.createNew, {
+      label: args => 'New Glue Session',
+      caption: 'Create a new Glue Session',
+      icon: args => (args['isPalette'] ? undefined : glueIcon),
+      execute: async args => {
+        const cwd = (args['cwd'] ||
+          browserFactory.tracker.currentWidget?.model.path) as string;
+
+        let model = await app.serviceManager.contents.newUntitled({
+          path: cwd,
+          type: 'file',
+          ext: '.glu'
+        });
+        model = await app.serviceManager.contents.save(model.path, {
+          ...model,
+          format: 'text',
+          size: undefined,
+          content: JSON.stringify(defaultContent)
+        });
+
+        // Open the newly created file with the 'Editor'
+        return app.commands.execute('docmanager:open', {
+          path: model.path
+        });
+      }
+    });
+
+    // Add the command to the launcher
+    if (launcher) {
+      launcher.add({
+        command: CommandIDs.createNew,
+        category: 'Gluepyter',
+        rank: 1
+      });
+    }
+
+    // Add the command to the palette
+    if (commandPalette) {
+      commandPalette.addItem({
+        command: CommandIDs.createNew,
+        args: { isPalette: true },
+        category: 'Gluepyter'
+      });
+    }
   }
 };
