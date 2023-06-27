@@ -49,6 +49,9 @@ export class ControlPanelModel implements IControlPanelModel {
   > {
     return this._displayConfigRequested;
   }
+  get clearConfigRequested(): ISignal<IControlPanelModel, void> {
+    return this._clearConfigRequested;
+  }
 
   get selectedDataset(): string | null {
     return this._selectedDataset;
@@ -80,7 +83,9 @@ export class ControlPanelModel implements IControlPanelModel {
   displayConfig(args: IRequestConfigDisplay): void {
     this._displayConfigRequested.emit(args);
   }
-
+  clearConfig(): void {
+    this._clearConfigRequested.emit();
+  }
   private _onTabsChanged(_: any, e: any): void {
     this._tabs = this._sessionModel?.sharedModel.tabs ?? {};
     this._tabsChanged.emit();
@@ -100,6 +105,7 @@ export class ControlPanelModel implements IControlPanelModel {
     IControlPanelModel,
     IRequestConfigDisplay
   >(this);
+  private _clearConfigRequested = new Signal<IControlPanelModel, void>(this);
 
   private _sessionModel?: IGlueSessionModel;
 }

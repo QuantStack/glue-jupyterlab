@@ -89,6 +89,12 @@ export class ConfigPanel extends SidePanel {
   private _createHeader(): void {
     this.toolbar.addItem('Header', this._panelHeader);
     this._model.displayConfigRequested.connect(this._updateHeader, this);
+    this._model.clearConfigRequested.connect(() => {
+      this._panelHeader.node.innerHTML = '';
+      if (this._model.currentSessionWidget) {
+        this._headerData.delete(this._model.currentSessionWidget);
+      }
+    }, this);
   }
 
   private _updateHeader(

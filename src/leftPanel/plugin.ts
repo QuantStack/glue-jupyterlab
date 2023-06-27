@@ -158,6 +158,15 @@ function addCommands(
       });
     }
   });
+
+  commands.addCommand(CommandIDs.closeControlPanel, {
+    execute: () => {
+      if (!controlModel.sharedModel) {
+        return;
+      }
+      controlModel.clearConfig();
+    }
+  });
 }
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {

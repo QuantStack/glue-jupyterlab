@@ -99,6 +99,13 @@ export class GlueSessionSharedModel
     return this._tabsChanged;
   }
 
+  get localStateChanged(): ISignal<
+    IGlueSessionSharedModel,
+    { keys: string[] }
+  > {
+    return this._localStateChanged;
+  }
+
   getValue(key: string): IDict | undefined {
     const content = this._contents.get(key);
     if (!content) {
@@ -194,6 +201,7 @@ export class GlueSessionSharedModel
       value: tab,
       emitter: emitter
     });
+    this._localStateChanged.emit({ keys: ['selectedTab'] });
   }
 
   getSelectedTab(): number | null {
@@ -273,4 +281,8 @@ export class GlueSessionSharedModel
   private _linksChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
   private _tabsChanged = new Signal<IGlueSessionSharedModel, IDict>(this);
+  private _localStateChanged = new Signal<
+    IGlueSessionSharedModel,
+    { keys: string[] }
+  >(this);
 }
