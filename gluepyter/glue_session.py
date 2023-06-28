@@ -335,7 +335,7 @@ class SharedGlueSession:
         data = self.app.load_data(str(relative_path))
         self._data[data.label] = data
 
-        # We generate the data reprensation and merge it into our ycontent
+        # We generate the data representation and merge it into our ycontent
         serializer = GlueSerializer(data)
         serialized_data = serializer.dumpo()
 
