@@ -17,6 +17,7 @@ import { Message } from '@lumino/messaging';
 import { CommandRegistry } from '@lumino/commands';
 import { CommandIDs } from '../commands';
 import { IJupyterYWidgetManager } from 'yjs-widgets';
+import { IKernelConnection } from '@jupyterlab/services/lib/kernel/kernel';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -64,11 +65,16 @@ export class SessionWidget extends BoxPanel {
       this
     );
 
+    this._kernel = undefined;
     this._startKernel();
   }
 
   get rendermime(): IRenderMimeRegistry {
     return this._rendermime;
+  }
+
+  get kernel(): IKernelConnection | undefined {
+    return this._kernel!;
   }
 
   protected onAfterAttach(msg: Message): void {
@@ -132,6 +138,8 @@ export class SessionWidget extends BoxPanel {
     }
     this._yWidgetManager.registerKernel(kernel);
 
+    this._kernel = kernel;
+
     // TODO Handle loading errors and report in the UI?
     const code = `
     from gluepyter.glue_session import SharedGlueSession
@@ -147,7 +155,7 @@ export class SessionWidget extends BoxPanel {
 
   private async _onTabsChanged() {
     await this._pythonSessionCreated.promise;
-    let newTabIndex = 1;
+    let newTabIndex: number | undefined = undefined;
     const currentIndex = this._tabPanel.topBar.currentIndex;
     const tabNames = this._model.getTabNames();
 
@@ -176,10 +184,12 @@ export class SessionWidget extends BoxPanel {
     //     todo
     //   }
     // }
-    if (currentIndex === 0) {
-      newTabIndex = 0;
+    if (newTabIndex !== undefined) {
+      if (currentIndex === 0) {
+        newTabIndex = 0;
+      }
+      this._tabPanel.activateTab(newTabIndex + 1);
     }
-    this._tabPanel.activateTab(newTabIndex + 1);
   }
 
   private _onFocusedTabChanged(
@@ -190,6 +200,7 @@ export class SessionWidget extends BoxPanel {
     this._commands.execute(CommandIDs.closeControlPanel);
   }
 
+  private _kernel: IKernelConnection | undefined;
   private _spinner: HTMLDivElement;
   private _tabViews: { [k: string]: TabView } = {};
   private _pythonSessionCreated: PromiseDelegate<void> =

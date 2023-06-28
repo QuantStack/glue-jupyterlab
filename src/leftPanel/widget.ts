@@ -2,6 +2,7 @@ import { SidePanel } from '@jupyterlab/ui-components';
 import { CommandRegistry } from '@lumino/commands';
 import { Message } from '@lumino/messaging';
 import { BoxPanel } from '@lumino/widgets';
+import { IDocumentManager } from '@jupyterlab/docmanager';
 
 import { HTabPanel } from '../common/tabPanel';
 import { IGlueSessionTracker } from '../token';
@@ -17,7 +18,7 @@ export class ControlPanelWidget extends SidePanel {
     const content = new BoxPanel();
     super({ content });
     this.addClass('glue-sidepanel-widget');
-    const { model, rendermime, commands } = options;
+    const { model, rendermime, commands, manager } = options;
     this._model = model;
     const header = new ControlPanelHeader();
     this.header.addWidget(header);
@@ -28,7 +29,8 @@ export class ControlPanelWidget extends SidePanel {
     });
     const data = new DataPanel({
       model: this._model,
-      commands
+      commands,
+      manager
     });
     const canvas = new ConfigPanel({ model, rendermime });
 
@@ -69,5 +71,6 @@ export namespace LeftPanelWidget {
     tracker: IGlueSessionTracker;
     commands: CommandRegistry;
     rendermime: IRenderMimeRegistry;
+    manager: IDocumentManager;
   }
 }

@@ -12,6 +12,8 @@ import { UUID } from '@lumino/coreutils';
 import { CommandRegistry } from '@lumino/commands';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { GridStackItem } from '../viewPanel/gridStackItem';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { DocumentManager } from '@jupyterlab/docmanager';
 
 const NAME_SPACE = 'gluepyter';
 
@@ -183,11 +185,19 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
 
     const controlModel = new ControlPanelModel({ tracker });
 
+    const docRegistry = new DocumentRegistry();
+    const docManager = new DocumentManager({
+      registry: docRegistry,
+      manager: app.serviceManager,
+      opener
+    });
+
     const controlPanel = new ControlPanelWidget({
       model: controlModel,
       tracker,
       commands,
-      rendermime
+      rendermime,
+      manager: docManager
     });
 
     controlPanel.id = 'gluepyter::controlPanel';

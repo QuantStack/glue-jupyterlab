@@ -19,6 +19,7 @@ module.exports = {
     }
   },
   use: {
-    viewport: { width: 1920, height: 1080 }
+    viewport: { width: 1920, height: 1080 },
+    video: 'retain-on-failure'
   }
 };

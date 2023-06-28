@@ -10,6 +10,7 @@ import {
 import { IGlueSessionTracker } from '../token';
 import { IGlueSessionTabs } from '../_interface/glue.schema';
 import { ISessionContext } from '@jupyterlab/apputils';
+import { IKernelConnection } from '@jupyterlab/services/lib/kernel/kernel';
 
 export class ControlPanelModel implements IControlPanelModel {
   constructor(options: ControlPanelModel.IOptions) {
@@ -22,6 +23,7 @@ export class ControlPanelModel implements IControlPanelModel {
         );
       }
       this._sessionModel = changed?.context.model;
+      this._currentSessionPath = changed?.context.path;
       this._tabs = this._sessionModel?.sharedModel.tabs ?? {};
       this._sessionModel?.sharedModel.tabsChanged.connect(
         this._onTabsChanged,
@@ -53,6 +55,10 @@ export class ControlPanelModel implements IControlPanelModel {
     return this._clearConfigRequested;
   }
 
+  get currentSessionPath(): string | undefined {
+    return this._currentSessionPath;
+  }
+
   get selectedDataset(): string | null {
     return this._selectedDataset;
   }
@@ -80,6 +86,10 @@ export class ControlPanelModel implements IControlPanelModel {
     return this._tracker.currentWidget?.context.sessionContext;
   }
 
+  currentSessionKernel(): IKernelConnection | undefined {
+    return this._tracker.currentWidget?.sessionWidget.kernel;
+  }
+
   displayConfig(args: IRequestConfigDisplay): void {
     this._displayConfigRequested.emit(args);
   }
@@ -97,6 +107,7 @@ export class ControlPanelModel implements IControlPanelModel {
     IGlueSessionWidget | null
   >(this);
   private _tabs: IGlueSessionTabs = {};
+  private _currentSessionPath: string | undefined = undefined;
   private _tabsChanged = new Signal<IControlPanelModel, void>(this);
   private _selectedDataset: string | null = null;
   private _selectedDatasetChanged = new Signal<IControlPanelModel, void>(this);
