@@ -1,10 +1,20 @@
-# Glue JupyterLab Extension
+# Gluepyter
+
+The Glue application for JupyterLab
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/gluepyter/main?urlpath=lab)
 
 ## Overview
 
 Glue is an open-source data exploration tool that allows users to visualize and analyze data in a way that is intuitive and easy to understand. This JupyterLab extension brings Glue's data exploration capabilities directly into JupyterLab, allowing users to seamlessly analyze and visualize data without leaving their JupyterLab environment.
+
+![gluepyter](gluepyter.png)
+
+## What is the difference with Glue-jupyter?
+
+[`glue-jupyter`](https://github.com/glue-viz/glue-jupyter) is a library for creating a Glue "application" object directly in Python from a Jupyter Notebook (either using classic Notebook or JupyterLab) and create Glue "viewers" using tools like bqplot or Matplotlib.
+
+Gluepyter is an extension that allows opening Glue sessions directly from the JupyterLab application. It reuses components of glue-jupyter for creating the viewers and the underlying Glue application object.
 
 ## Requirements
 
