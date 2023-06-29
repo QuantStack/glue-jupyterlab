@@ -251,7 +251,7 @@ class YGlue(YBaseDoc):
                     list_name = f"list{'' if lists_count < 0 else f'_{lists_count}'}"
                     lists_count += 1
                     link.pop(f"cids{i}_labels", None)
-                    link.pop(f"data{i}", None)
+                    link[f"data{i}"] = link.pop(f"data{i}", None)
                     attr_list = {
                         "_type": "builtins.list",
                         "contents": link.pop(f"cids{i}", []),
