@@ -60,7 +60,7 @@ export class LinkEditor extends BoxPanel {
     );
     maxHeight = Math.max(
       ...headers.map(
-        header => (header?.node.firstChild as HTMLElement).offsetHeight || 0
+        header => (header?.node.firstChild as HTMLElement)?.offsetHeight || 0
       )
     );
     headers.forEach(header => {
