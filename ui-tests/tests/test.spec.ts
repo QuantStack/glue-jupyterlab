@@ -1,4 +1,5 @@
 import { IJupyterLabPageFixture, expect, test } from '@jupyterlab/galata';
+import { Locator } from '@playwright/test';
 
 async function closeSideTab(page: IJupyterLabPageFixture): Promise<void> {
   await page
@@ -16,6 +17,47 @@ async function openSession(
     // TODO Wait for spinner to not be visible once we have one
     await page.waitForSelector('.bqplot');
   }
+}
+
+async function session3ViewersSetup(
+  page: IJupyterLabPageFixture
+): Promise<Locator> {
+  const viewers = page.locator('.glue-item');
+  expect(await viewers.count()).toBe(2);
+  await viewers
+    .last()
+    .locator('.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)')
+    .click();
+
+  await page.waitForSelector('text=TAB 1 - 3E7DB9A2-C244-4E6E-A4FD-157329304711');
+  await page.getByRole('button', { name: 'x axis ID' }).click();
+  await page.getByRole('option', { name: 'RAJ2000' }).getByText('RAJ2000').click();
+
+  await viewers
+    .first()
+    .locator('.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)')
+    .click();
+
+  await page.waitForSelector('text=TAB 1 - 34CDE72B-5653-4C88-B631-06A958D51E7E');
+  await page.getByRole('button', { name: 'x axis ID' }).click();
+  await page.getByRole('option', { name: 'RAJ2000' }).getByText('RAJ2000').click();
+  return viewers;
+}
+
+async function selectRange(
+  page: IJupyterLabPageFixture,
+  viewer: Locator
+): Promise<void> {
+  await viewer.locator('button[value="bqplot:xrange"]').click();
+
+  await page.waitForSelector('g.selector.brushintsel');
+
+  const figureBox = await viewer.locator('.bqplot.figure').boundingBox();
+  await page.mouse.move(figureBox!.x + figureBox!.width/3, figureBox!.y + figureBox!.height/3);
+  await page.mouse.down();
+  await page.mouse.move(figureBox!.x + figureBox!.width/2, figureBox!.y + figureBox!.height/2);
+  await page.mouse.up();
+  await expect(viewer.locator('.glue__subset-select')).toContainText(' Subset 1 ');
 }
 
 /**
@@ -153,4 +195,80 @@ test('should add new dataset and create a viewer', async ({ page }) => {
   expect(await page.screenshot()).toMatchSnapshot(
     'add-data-viewer-created.png'
   );
+});
+
+test('should display linked data', async ({ page }) => {
+  await page.goto();
+
+  await openSession(page, 'session3');
+
+  // select attributes in viewers.
+  const viewers = await session3ViewersSetup(page);
+
+  // Select a range.
+  await selectRange(page, viewers.first());
+
+  // expect the selected area and the linked one to match.
+  expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
+    .toMatchSnapshot(
+      'histogram-selection.png'
+    );
+
+  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
+    .toMatchSnapshot(
+      'histogram-linked-selection.png'
+    );
+});
+
+test('should delete and restore links', async ({ page }) => {
+  await page.goto();
+
+  await openSession(page, 'session3');
+
+  // Remove the existing links
+  await (await page.waitForSelector('text="Link Data"')).click();
+  const deleteButton = page.locator('.glue-LinkEditor-deleteButton');
+  while(await deleteButton.count()) {
+    await deleteButton.first().click();
+  }
+
+  await page.getByRole('tab', { name: 'Tab 1' }).click();
+
+  // select attributes in viewers
+  const viewers = await session3ViewersSetup(page);
+
+  // Select a range.
+  await selectRange(page, viewers.first());
+
+  // expect the selected area and the linked one to match
+  expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
+    .toMatchSnapshot(
+      'histogram-selection.png'
+    );
+
+  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
+    .toMatchSnapshot(
+      'histogram-no-selection.png'
+    );
+
+  await (await page.waitForSelector('text="Link Data"')).click();
+  await page.click('.glue-LinkEditor-linkingDatasetsPanel:first-child > div:text("w5_psc")');
+  await page.click('.glue-LinkEditor-linkingDatasetsPanel:last-child > div:text("w6_psc")');
+
+  await page.click('.firstAttributePanel > div:text("RAJ2000")');
+  await page.click('.secondAttributePanel > div:text("RAJ2000")');
+
+  await page.click('.glue-LinkEditor-linkingGlueButton');
+
+  await page.click('.firstAttributePanel > div:text("DEJ2000")');
+  await page.click('.secondAttributePanel > div:text("DEJ2000")');
+
+  await page.click('.glue-LinkEditor-linkingGlueButton');
+
+  await page.getByRole('tab', { name: 'Tab 1' }).click();
+
+  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
+    .toMatchSnapshot(
+      'histogram-linked-selection.png'
+    );
 });
