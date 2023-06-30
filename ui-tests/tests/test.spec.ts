@@ -188,6 +188,40 @@ test('should hide the control panel on tab switching', async ({ page }) => {
   );
 });
 
+test('should add and delete link', async ({ page }) => {
+  await page.goto();
+
+  await openSession(page, 'session');
+
+  let linkCreated = false;
+  await createLink(
+    page,
+    ['w5', 'w5_psc'],
+    ['Pixel Axis 1 [x]', 'Pixel Axis 0 [x]']
+  );
+
+  const summaries = page.locator('.glue-LinkEditor-summaryIdentity');
+  const summariesCount = await summaries.count();
+
+  expect(summariesCount).toBe(3);
+
+  for (let i = 0; i < summariesCount; i++) {
+    if (
+      (await summaries.nth(i).innerText()) ===
+      'Pixel Axis 1 [x]\nPixel Axis 0 [x]'
+    ) {
+      linkCreated = true;
+      break;
+    }
+  }
+
+  expect(linkCreated).toBeTruthy();
+
+  // Remove the last link
+  await page.click('.glue-LinkEditor-deleteButton:last-child');
+  expect(await summaries.count()).toBe(2);
+});
+
 test('should add new dataset and create a viewer', async ({ page }) => {
   await page.goto();
 
@@ -251,40 +285,6 @@ test('should add new dataset and create a viewer', async ({ page }) => {
   );
 });
 
-test('should add and delete link', async ({ page }) => {
-  await page.goto();
-
-  await openSession(page, 'session');
-
-  let linkCreated = false;
-  await createLink(
-    page,
-    ['w5', 'w5_psc'],
-    ['Pixel Axis 1 [x]', 'Pixel Axis 0 [x]']
-  );
-
-  const summaries = page.locator('.glue-LinkEditor-summaryIdentity');
-  const summariesCount = await summaries.count();
-
-  expect(summariesCount).toBe(3);
-
-  for (let i = 0; i < summariesCount; i++) {
-    if (
-      (await summaries.nth(i).innerText()) ===
-      'Pixel Axis 1 [x]\nPixel Axis 0 [x]'
-    ) {
-      linkCreated = true;
-      break;
-    }
-  }
-
-  expect(linkCreated).toBeTruthy();
-
-  // Remove the last link
-  await page.click('.glue-LinkEditor-deleteButton:last-child');
-  expect(await summaries.count()).toBe(2);
-});
-
 test('should display linked data', async ({ page }) => {
   await page.goto();
 
@@ -293,7 +293,24 @@ test('should display linked data', async ({ page }) => {
   // select attributes in viewers.
   const viewers = await session3ViewersSetup(page);
 
-  // Select a range.
+  // force the size of histograms for snapshot comparison
+  viewers
+    .first()
+    .locator('.bqplot.figure > svg.svg-figure > g > rect')
+    .evaluate(element => {
+      element.style.width = '571px';
+      element.style.height = '410px';
+    });
+
+  viewers
+    .last()
+    .locator('.bqplot.figure > svg.svg-figure > g > rect')
+    .evaluate(element => {
+      element.style.width = '571px';
+      element.style.height = '410px';
+    });
+
+  // select a range.
   await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match.
@@ -314,7 +331,7 @@ test('should delete and restore links', async ({ page }) => {
 
   await openSession(page, 'session3');
 
-  // Remove the existing links
+  // remove the existing links
   await (await page.waitForSelector('text="Link Data"')).click();
   const deleteButton = page.locator('.glue-LinkEditor-deleteButton');
   while (await deleteButton.count()) {
@@ -324,7 +341,24 @@ test('should delete and restore links', async ({ page }) => {
   // select attributes in viewers
   const viewers = await session3ViewersSetup(page);
 
-  // Select a range.
+  // force the size of histograms for snapshot comparison
+  viewers
+    .first()
+    .locator('.bqplot.figure > svg.svg-figure > g > rect')
+    .evaluate(element => {
+      element.style.width = '571px';
+      element.style.height = '410px';
+    });
+
+  viewers
+    .last()
+    .locator('.bqplot.figure > svg.svg-figure > g > rect')
+    .evaluate(element => {
+      element.style.width = '571px';
+      element.style.height = '410px';
+    });
+
+  // select a range.
   await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match
