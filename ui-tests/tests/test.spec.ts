@@ -9,7 +9,9 @@ async function closeSideTab(page: IJupyterLabPageFixture): Promise<void> {
 }
 
 async function openSession(
-  page: IJupyterLabPageFixture, session: string, waitUntilReady=true
+  page: IJupyterLabPageFixture,
+  session: string,
+  waitUntilReady = true
 ): Promise<void> {
   await expect(page.getByText(`${session}.glu`)).toBeVisible();
   await page.getByText(`${session}.glu`).dblclick();
@@ -34,7 +36,9 @@ async function createLink(
     `.glue-LinkEditor-linkingDatasetsPanel:last-child > div:text('${datasets[1]}')`
   );
 
-  let attr = page.locator(`.firstAttributePanel > div:text('${attributes[0]}')`);
+  let attr = page.locator(
+    `.firstAttributePanel > div:text('${attributes[0]}')`
+  );
   if (!(await attr.getAttribute('class'))?.includes('selected')) {
     await page.click(`.firstAttributePanel > div:text('${attributes[0]}')`);
   }
@@ -54,21 +58,35 @@ async function session3ViewersSetup(
   expect(await viewers.count()).toBe(2);
   await viewers
     .last()
-    .locator('.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)')
+    .locator(
+      '.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)'
+    )
     .click();
 
-  await page.waitForSelector('text=TAB 1 - 3E7DB9A2-C244-4E6E-A4FD-157329304711');
+  await page.waitForSelector(
+    'text=TAB 1 - 3E7DB9A2-C244-4E6E-A4FD-157329304711'
+  );
   await page.getByRole('button', { name: 'x axis ID' }).click();
-  await page.getByRole('option', { name: 'RAJ2000' }).getByText('RAJ2000').click();
+  await page
+    .getByRole('option', { name: 'RAJ2000' })
+    .getByText('RAJ2000')
+    .click();
 
   await viewers
     .first()
-    .locator('.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)')
+    .locator(
+      '.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)'
+    )
     .click();
 
-  await page.waitForSelector('text=TAB 1 - 34CDE72B-5653-4C88-B631-06A958D51E7E');
+  await page.waitForSelector(
+    'text=TAB 1 - 34CDE72B-5653-4C88-B631-06A958D51E7E'
+  );
   await page.getByRole('button', { name: 'x axis ID' }).click();
-  await page.getByRole('option', { name: 'RAJ2000' }).getByText('RAJ2000').click();
+  await page
+    .getByRole('option', { name: 'RAJ2000' })
+    .getByText('RAJ2000')
+    .click();
   return viewers;
 }
 
@@ -81,11 +99,19 @@ async function selectPlotRange(
   await page.waitForSelector('g.selector.brushintsel');
 
   const figureBox = await viewer.locator('.bqplot.figure').boundingBox();
-  await page.mouse.move(figureBox!.x + figureBox!.width/3, figureBox!.y + figureBox!.height/3);
+  await page.mouse.move(
+    figureBox!.x + figureBox!.width / 3,
+    figureBox!.y + figureBox!.height / 3
+  );
   await page.mouse.down();
-  await page.mouse.move(figureBox!.x + figureBox!.width/2, figureBox!.y + figureBox!.height/2);
+  await page.mouse.move(
+    figureBox!.x + figureBox!.width / 2,
+    figureBox!.y + figureBox!.height / 2
+  );
   await page.mouse.up();
-  await expect(viewer.locator('.glue__subset-select')).toContainText(' Subset 1 ');
+  await expect(viewer.locator('.glue__subset-select')).toContainText(
+    ' Subset 1 '
+  );
 }
 
 /**
@@ -99,7 +125,7 @@ test.use({
       fetchNews: 'false'
     }
   }
- });
+});
 
 test('should render session file', async ({ page }) => {
   await page.goto();
@@ -231,15 +257,22 @@ test('should add and delete link', async ({ page }) => {
   await openSession(page, 'session');
 
   let linkCreated = false;
-  await createLink(page, ['w5', 'w5_psc'], ['Pixel Axis 1 [x]', 'Pixel Axis 0 [x]']);
+  await createLink(
+    page,
+    ['w5', 'w5_psc'],
+    ['Pixel Axis 1 [x]', 'Pixel Axis 0 [x]']
+  );
 
   const summaries = page.locator('.glue-LinkEditor-summaryIdentity');
   const summariesCount = await summaries.count();
 
   expect(summariesCount).toBe(3);
 
-  for (let i=0; i<summariesCount; i++) {
-    if (await summaries.nth(i).innerText() === 'Pixel Axis 1 [x]\nPixel Axis 0 [x]') {
+  for (let i = 0; i < summariesCount; i++) {
+    if (
+      (await summaries.nth(i).innerText()) ===
+      'Pixel Axis 1 [x]\nPixel Axis 0 [x]'
+    ) {
       linkCreated = true;
       break;
     }
@@ -264,15 +297,16 @@ test('should display linked data', async ({ page }) => {
   await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match.
-  expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
-    .toMatchSnapshot(
-      'histogram-selection.png'
-    );
+  expect(
+    await viewers
+      .first()
+      .locator('.bqplot.figure > svg.svg-figure')
+      .screenshot()
+  ).toMatchSnapshot('histogram-selection.png');
 
-  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
-    .toMatchSnapshot(
-      'histogram-linked-selection.png'
-    );
+  expect(
+    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
+  ).toMatchSnapshot('histogram-linked-selection.png');
 });
 
 test('should delete and restore links', async ({ page }) => {
@@ -283,7 +317,7 @@ test('should delete and restore links', async ({ page }) => {
   // Remove the existing links
   await (await page.waitForSelector('text="Link Data"')).click();
   const deleteButton = page.locator('.glue-LinkEditor-deleteButton');
-  while(await deleteButton.count()) {
+  while (await deleteButton.count()) {
     await deleteButton.first().click();
   }
 
@@ -294,23 +328,23 @@ test('should delete and restore links', async ({ page }) => {
   await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match
-  expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
-    .toMatchSnapshot(
-      'histogram-selection.png'
-    );
+  expect(
+    await viewers
+      .first()
+      .locator('.bqplot.figure > svg.svg-figure')
+      .screenshot()
+  ).toMatchSnapshot('histogram-selection.png');
 
-  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
-    .toMatchSnapshot(
-      'histogram-no-selection.png'
-    );
+  expect(
+    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
+  ).toMatchSnapshot('histogram-no-selection.png');
 
   await createLink(page, ['w5_psc', 'w6_psc'], ['RAJ2000', 'RAJ2000']);
   await createLink(page, ['w5_psc', 'w6_psc'], ['DEJ2000', 'DEJ2000']);
 
   await page.getByRole('tab', { name: 'Tab 1' }).click();
 
-  expect(await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot())
-    .toMatchSnapshot(
-      'histogram-linked-selection.png'
-    );
+  expect(
+    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
+  ).toMatchSnapshot('histogram-linked-selection.png');
 });
