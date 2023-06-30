@@ -19,9 +19,37 @@ async function openSession(
   }
 }
 
+async function createLink(
+  page: IJupyterLabPageFixture,
+  datasets: [string, string],
+  attributes: [string, string]
+): Promise<void> {
+  // Switch to link editor
+  await (await page.waitForSelector('text="Link Data"')).click();
+
+  await page.click(
+    `.glue-LinkEditor-linkingDatasetsPanel:first-child > div:text('${datasets[0]}')`
+  );
+  await page.click(
+    `.glue-LinkEditor-linkingDatasetsPanel:last-child > div:text('${datasets[1]}')`
+  );
+
+  let attr = page.locator(`.firstAttributePanel > div:text('${attributes[0]}')`);
+  if (!(await attr.getAttribute('class'))?.includes('selected')) {
+    await page.click(`.firstAttributePanel > div:text('${attributes[0]}')`);
+  }
+  attr = page.locator(`.secondAttributePanel > div:text('${attributes[1]}')`);
+  if (!(await attr.getAttribute('class'))?.includes('selected')) {
+    await page.click(`.secondAttributePanel > div:text('${attributes[1]}')`);
+  }
+
+  await page.click('.glue-LinkEditor-linkingGlueButton');
+}
+
 async function session3ViewersSetup(
   page: IJupyterLabPageFixture
 ): Promise<Locator> {
+  await page.getByRole('tab', { name: 'Tab 1' }).click();
   const viewers = page.locator('.glue-item');
   expect(await viewers.count()).toBe(2);
   await viewers
@@ -44,7 +72,7 @@ async function session3ViewersSetup(
   return viewers;
 }
 
-async function selectRange(
+async function selectPlotRange(
   page: IJupyterLabPageFixture,
   viewer: Locator
 ): Promise<void> {
@@ -197,6 +225,33 @@ test('should add new dataset and create a viewer', async ({ page }) => {
   );
 });
 
+test('should add and delete link', async ({ page }) => {
+  await page.goto();
+
+  await openSession(page, 'session');
+
+  let linkCreated = false;
+  await createLink(page, ['w5', 'w5_psc'], ['Pixel Axis 1 [x]', 'Pixel Axis 0 [x]']);
+
+  const summaries = page.locator('.glue-LinkEditor-summaryIdentity');
+  const summariesCount = await summaries.count();
+
+  expect(summariesCount).toBe(3);
+
+  for (let i=0; i<summariesCount; i++) {
+    if (await summaries.nth(i).innerText() === 'Pixel Axis 1 [x]\nPixel Axis 0 [x]') {
+      linkCreated = true;
+      break;
+    }
+  }
+
+  expect(linkCreated).toBeTruthy();
+
+  // Remove the last link
+  await page.click('.glue-LinkEditor-deleteButton:last-child');
+  expect(await summaries.count()).toBe(2);
+});
+
 test('should display linked data', async ({ page }) => {
   await page.goto();
 
@@ -206,7 +261,7 @@ test('should display linked data', async ({ page }) => {
   const viewers = await session3ViewersSetup(page);
 
   // Select a range.
-  await selectRange(page, viewers.first());
+  await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match.
   expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
@@ -232,13 +287,11 @@ test('should delete and restore links', async ({ page }) => {
     await deleteButton.first().click();
   }
 
-  await page.getByRole('tab', { name: 'Tab 1' }).click();
-
   // select attributes in viewers
   const viewers = await session3ViewersSetup(page);
 
   // Select a range.
-  await selectRange(page, viewers.first());
+  await selectPlotRange(page, viewers.first());
 
   // expect the selected area and the linked one to match
   expect(await viewers.first().locator('.bqplot.figure > svg.svg-figure').screenshot())
@@ -251,19 +304,8 @@ test('should delete and restore links', async ({ page }) => {
       'histogram-no-selection.png'
     );
 
-  await (await page.waitForSelector('text="Link Data"')).click();
-  await page.click('.glue-LinkEditor-linkingDatasetsPanel:first-child > div:text("w5_psc")');
-  await page.click('.glue-LinkEditor-linkingDatasetsPanel:last-child > div:text("w6_psc")');
-
-  await page.click('.firstAttributePanel > div:text("RAJ2000")');
-  await page.click('.secondAttributePanel > div:text("RAJ2000")');
-
-  await page.click('.glue-LinkEditor-linkingGlueButton');
-
-  await page.click('.firstAttributePanel > div:text("DEJ2000")');
-  await page.click('.secondAttributePanel > div:text("DEJ2000")');
-
-  await page.click('.glue-LinkEditor-linkingGlueButton');
+  await createLink(page, ['w5_psc', 'w6_psc'], ['RAJ2000', 'RAJ2000']);
+  await createLink(page, ['w5_psc', 'w6_psc'], ['DEJ2000', 'DEJ2000']);
 
   await page.getByRole('tab', { name: 'Tab 1' }).click();
 
