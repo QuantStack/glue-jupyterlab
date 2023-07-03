@@ -51,6 +51,36 @@ function addCommands(
     }
   });
 
+  commands.addCommand(CommandIDs.new1DProfile, {
+    label: '1D Profile',
+    iconClass: 'fa fa-chart-line',
+    execute: (args?: INewViewerArgs) => {
+      if (!controlModel.sharedModel) {
+        return;
+      }
+
+      const tabs = Object.keys(controlModel.sharedModel.tabs);
+      const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
+      const layer = args?.dataset || controlModel.selectedDataset;
+
+      if (focusedTab === 0) {
+        return;
+      }
+
+      controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
+        _type: 'glue.viewers.profile.state.ProfileLayerState',
+        pos: args?.position || [0, 0],
+        session: 'Session',
+        size: args?.size || [600, 400],
+        state: {
+          values: {
+            layer
+          }
+        }
+      });
+    }
+  });
+
   commands.addCommand(CommandIDs.new2DScatter, {
     label: '2D Scatter',
     iconClass: 'fa fa-chart-line',

@@ -1,7 +1,7 @@
 {
   "type": "object",
-  "description": "Viewer::Scatter",
-  "title": "IGlueScatterViewer",
+  "description": "Viewer::2DScatter",
+  "title": "IGlue2DScatterViewer",
   "required": ["_type", "layers", "pos", "session", "size", "state"],
   "additionalProperties": false,
   "properties": {

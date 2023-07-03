@@ -6,6 +6,8 @@ export namespace CommandIDs {
 
   export const new1DHistogram = 'glue-control:new-1d-histogram-viewer';
 
+  export const new1DProfile = 'glue-control:new-1d-profile-viewer';
+
   export const new2DImage = 'glue-control:new-2d-image-viewer';
 
   export const new2DScatter = 'glue-control:new-2d-scatter-viewer';

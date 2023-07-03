@@ -1,12 +1,12 @@
 {
   "type": "object",
-  "description": "Viewer::3DScatter",
-  "title": "IGlue3DScatterViewer",
+  "description": "Viewer::Profile",
+  "title": "IGlueProfileViewer",
   "required": ["_type", "layers", "pos", "session", "size", "state"],
   "additionalProperties": false,
   "properties": {
     "_type": {
-      "const": "glue_vispy_viewers.scatter.scatter_viewer.VispyScatterViewer"
+      "const": "glue.viewers.profile.state.ProfileLayerState"
     },
     "layers": {
       "type": "array",
