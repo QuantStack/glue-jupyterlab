@@ -57,7 +57,10 @@
           "items": {
             "anyOf": [
               {
-                "$ref": "./viewers/scatter.schema.json"
+                "$ref": "./viewers/3dscatter.schema.json"
+              },
+              {
+                "$ref": "./viewers/2dscatter.schema.json"
               },
               {
                 "$ref": "./viewers/histogram.schema.json"

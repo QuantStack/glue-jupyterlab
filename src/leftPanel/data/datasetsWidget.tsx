@@ -32,6 +32,7 @@ export class DatasetsWidget extends ReactWidget {
     viewerSubmenu.title.iconClass = 'fa fa-caret-right';
     viewerSubmenu.addItem({ command: CommandIDs.new1DHistogram });
     viewerSubmenu.addItem({ command: CommandIDs.new2DScatter });
+    viewerSubmenu.addItem({ command: CommandIDs.new3DScatter });
     viewerSubmenu.addItem({ command: CommandIDs.new2DImage });
     viewerSubmenu.addItem({ command: CommandIDs.newTable });
     this._menu.addItem({ type: 'submenu', submenu: viewerSubmenu });
