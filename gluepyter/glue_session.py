@@ -368,7 +368,7 @@ class SharedGlueSession:
         serialized_data = [
             (previous_data_serializer.id(obj), previous_data_serializer.do(obj))
             for oid, obj in list(data_serializer._objs.items())
-            ]
+        ]
         serialized_data = dict(serialized_data)
 
         contents = self._document.contents
