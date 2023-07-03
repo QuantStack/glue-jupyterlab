@@ -53,7 +53,7 @@ function addCommands(
 
   commands.addCommand(CommandIDs.new2DScatter, {
     label: '2D Scatter',
-    iconClass: 'fa fa-circle',
+    iconClass: 'fa fa-chart-line',
     execute: (args?: INewViewerArgs) => {
       if (!controlModel.sharedModel) {
         return;
@@ -69,6 +69,36 @@ function addCommands(
 
       controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
         _type: 'glue.viewers.scatter.qt.data_viewer.ScatterViewer',
+        pos: args?.position || [0, 0],
+        session: 'Session',
+        size: args?.size || [600, 400],
+        state: {
+          values: {
+            layer
+          }
+        }
+      });
+    }
+  });
+
+  commands.addCommand(CommandIDs.new3DScatter, {
+    label: '3D Scatter',
+    iconClass: 'fa fa-chart-line',
+    execute: (args?: INewViewerArgs) => {
+      if (!controlModel.sharedModel) {
+        return;
+      }
+
+      const tabs = Object.keys(controlModel.sharedModel.tabs);
+      const focusedTab = controlModel.sharedModel.getSelectedTab() || 1;
+      const layer = args?.dataset || controlModel.selectedDataset;
+
+      if (focusedTab === 0) {
+        return;
+      }
+
+      controlModel.sharedModel.setTabItem(tabs[focusedTab - 1], UUID.uuid4(), {
+        _type: 'glue_vispy_viewers.scatter.scatter_viewer.VispyScatterViewer',
         pos: args?.position || [0, 0],
         session: 'Session',
         size: args?.size || [600, 400],

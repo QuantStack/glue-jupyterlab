@@ -101,6 +101,7 @@ export class SessionWidget extends BoxPanel {
     const items: IDict<string> = {
       Histogram: CommandIDs.new1DHistogram,
       '2D Scatter': CommandIDs.new2DScatter,
+      '3D Scatter': CommandIDs.new3DScatter,
       '2D Image': CommandIDs.new2DImage,
       Table: CommandIDs.newTable
     };
