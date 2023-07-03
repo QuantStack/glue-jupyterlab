@@ -1,4 +1,6 @@
 import y_py as Y
+from copy import deepcopy
+from pathlib import Path
 from gluepyter.glue_session import SharedGlueSession
 from ipywidgets import Output
 
@@ -59,6 +61,60 @@ def test__read_view_state(yglue_session):
     view_type, state = yglue_session._read_view_state("Tab 1", "ScatterViewer")
     assert view_type == "glue.viewers.scatter.qt.data_viewer.ScatterViewer"
     assert len(state) > 0
+
+
+def test_add_data(yglue_session):
+
+    def nested_compare(value1, value2):
+        if isinstance(value1, list):
+            if isinstance(value2, list):
+                if len(value1) == len(value2):
+                    for v1, v2 in zip(value1, value2):
+                        if not nested_compare(v1, v2):
+                            return False
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        if isinstance(value1, dict):
+            if isinstance(value2, dict):
+                for k1, v1 in value1.items():
+                    if k1 in value2.keys():
+                        if not nested_compare(v1, value2[k1]):
+                            return False
+                    else:
+                        return False
+                return True
+            else:
+                return False
+        else:
+            return value1 == value2
+
+    yglue_session._load_data()
+    file_path = Path(__file__).parents[2] / "examples" / "w6_psc.vot"
+
+    contents = deepcopy(yglue_session._document.contents)
+    yglue_session.add_data(file_path)
+    updated_contents = yglue_session._document.contents
+
+    assert "w6_psc" in updated_contents.keys()
+
+    # Assert there is no change in previous structure
+    for key, value in contents.items():
+        if key == 'DataCollection':
+            continue
+        assert key in updated_contents.keys()
+        assert nested_compare(value, updated_contents[key])
+
+    # Compare the DataCollection
+    for key, value in contents['DataCollection'].items():
+        if key == 'data' or key == 'cids' or key == 'components':
+            assert not nested_compare(value, updated_contents['DataCollection'][key])
+        else:
+            assert nested_compare(value, updated_contents['DataCollection'][key])
+
+    assert "w6_psc" in updated_contents['DataCollection']['data']
 
 
 def test_add_identity_link(yglue_session, identity_link):
