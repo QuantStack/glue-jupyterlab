@@ -2,7 +2,7 @@
 
 The Glue application for JupyterLab
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/gluepyter/main?urlpath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/gluepyter/stable?urlpath=lab)
 
 ## Overview
 
