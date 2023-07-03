@@ -213,6 +213,10 @@
   flex-direction: row-reverse;
 }
 
+.glue-Session-panel {
+  background-color: var(--jp-layout-color2);
+}
+
 .glue-LinkEditor-deleteButton:hover {
   background-color: none !important;
 }
@@ -259,6 +263,10 @@
   width: 40%;
 }
 
+.glue-LinkEditor-identity {
+  background-color: var(--jp-layout-color0);
+}
+
 .glue-LinkEditor-identity table tr td:last-child {
   text-align: right;
 }
@@ -284,21 +292,14 @@
   flex-direction: column;
 }
 
-.glue-LinkEditor-widget:first-child {
-  border-right: solid 2px var(--jp-layout-color2);
-}
-
-.glue-LinkEditor-widget:last-child {
-  border-left: solid 2px var(--jp-layout-color2);
-}
-
 .glue-LinkEditor-widget > :last-child {
   flex-grow: 1;
 }
 
 .glue-LinkEditor-header {
   width: 100%;
-  background-color: var(--jp-layout-color3);
+  background-color: var(--jp-layout-color0);
+  border-bottom: solid 3px var(--jp-layout-color2);
   display: flex;
   align-items: center;
 }
@@ -339,6 +340,7 @@
 
 .glue-LinkEditor-linkingDatasetsPanel {
   width: 30%;
+  background-color: var(--jp-layout-color0);
 }
 
 .glue-LinkEditor-linkingAttributesPanel {
@@ -347,11 +349,11 @@
 }
 
 .glue-LinkEditor-linkingAttributesPanel.firstAttributePanel {
-  border-right: solid var(--jp-toolbar-border-color);
+  border-right: 1px solid var(--jp-toolbar-border-color);
 }
 
 .glue-LinkEditor-linkingAttributesPanel.secondAttributePanel {
-  border-left: solid var(--jp-toolbar-border-color);
+  border-left: 1px solid var(--jp-toolbar-border-color);
 }
 
 .glue-LinkEditor-summaryHeader {
