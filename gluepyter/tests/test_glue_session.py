@@ -64,7 +64,6 @@ def test__read_view_state(yglue_session):
 
 
 def test_add_data(yglue_session):
-
     def nested_compare(value1, value2):
         if isinstance(value1, list):
             if isinstance(value2, list):
@@ -102,19 +101,19 @@ def test_add_data(yglue_session):
 
     # Assert there is no change in previous structure
     for key, value in contents.items():
-        if key == 'DataCollection':
+        if key == "DataCollection":
             continue
         assert key in updated_contents.keys()
         assert nested_compare(value, updated_contents[key])
 
     # Compare the DataCollection
-    for key, value in contents['DataCollection'].items():
-        if key == 'data' or key == 'cids' or key == 'components':
-            assert not nested_compare(value, updated_contents['DataCollection'][key])
+    for key, value in contents["DataCollection"].items():
+        if key == "data" or key == "cids" or key == "components":
+            assert not nested_compare(value, updated_contents["DataCollection"][key])
         else:
-            assert nested_compare(value, updated_contents['DataCollection'][key])
+            assert nested_compare(value, updated_contents["DataCollection"][key])
 
-    assert "w6_psc" in updated_contents['DataCollection']['data']
+    assert "w6_psc" in updated_contents["DataCollection"]["data"]
 
 
 def test_add_identity_link(yglue_session, identity_link):
