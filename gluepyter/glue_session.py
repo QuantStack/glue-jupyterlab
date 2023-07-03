@@ -279,6 +279,16 @@ class SharedGlueSession:
                         pass
             except Exception as e:
                 widget = ErrorWidget(e, __file__)
+        elif view_type == "glue.viewers.profile.state.ProfileLayerState":
+            try:
+                widget = self.app.profile1d(data=viewer_data)
+                for key, value in viewer_state.items():
+                    try:
+                        setattr(widget.state, key, value)
+                    except Exception:
+                        pass
+            except Exception as e:
+                widget = ErrorWidget(e, __file__)
 
         return widget
 
