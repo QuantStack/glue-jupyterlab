@@ -1,8 +1,9 @@
 import y_py as Y
 from copy import deepcopy
 from pathlib import Path
-from gluepyter.glue_session import SharedGlueSession
 from ipywidgets import Output
+from gluepyter.glue_session import SharedGlueSession
+from gluepyter.glue_utils import nested_compare
 
 
 def test_init(session_path):
@@ -64,32 +65,6 @@ def test__read_view_state(yglue_session):
 
 
 def test_add_data(yglue_session):
-    def nested_compare(value1, value2):
-        if isinstance(value1, list):
-            if isinstance(value2, list):
-                if len(value1) == len(value2):
-                    for v1, v2 in zip(value1, value2):
-                        if not nested_compare(v1, v2):
-                            return False
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        if isinstance(value1, dict):
-            if isinstance(value2, dict):
-                for k1, v1 in value1.items():
-                    if k1 in value2.keys():
-                        if not nested_compare(v1, value2[k1]):
-                            return False
-                    else:
-                        return False
-                return True
-            else:
-                return False
-        else:
-            return value1 == value2
-
     yglue_session._load_data()
     file_path = Path(__file__).parents[2] / "examples" / "w6_psc.vot"
 

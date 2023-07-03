@@ -10,6 +10,17 @@ from ipywidgets import HTML
 load_plugins()
 
 
+class ErrorWidget:
+    """Wrapper of a HTML widget for showing error message"""
+
+    def __init__(self, e: Exception, path: str) -> None:
+        value = f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {path}: {e}"
+        self._widget = HTML(value=value)
+
+    def show(self):
+        display(self._widget)
+
+
 def get_function_info(function_or_helper):
     item_info: Dict[str, Dict] = {}
     attributes = ["description", "labels1", "labels2", "display"]
@@ -67,12 +78,31 @@ def get_advanced_links():
     return advanced_links
 
 
-class ErrorWidget:
-    """Wrapper of a HTML widget for showing error message"""
-
-    def __init__(self, e: Exception, path: str) -> None:
-        value = f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {path}: {e}"
-        self._widget = HTML(value=value)
-
-    def show(self):
-        display(self._widget)
+def nested_compare(value1, value2):
+    # Compare lists
+    if isinstance(value1, list):
+        if isinstance(value2, list):
+            if len(value1) == len(value2):
+                for v1, v2 in zip(value1, value2):
+                    if not nested_compare(v1, v2):
+                        return False
+                return True
+            else:
+                return False
+        else:
+            return False
+    # Compare dict
+    if isinstance(value1, dict):
+        if isinstance(value2, dict):
+            for k1, v1 in value1.items():
+                if k1 in value2.keys():
+                    if not nested_compare(v1, value2[k1]):
+                        return False
+                else:
+                    return False
+            return True
+        else:
+            return False
+    # Compare immutable
+    else:
+        return value1 == value2
