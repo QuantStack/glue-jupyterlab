@@ -317,12 +317,15 @@ test('should display linked data', async ({ page }) => {
   expect(
     await viewers
       .first()
-      .locator('.bqplot.figure > svg.svg-figure')
+      .locator('.bqplot.figure > svg.svg-figure > g > rect')
       .screenshot()
   ).toMatchSnapshot('histogram-selection.png');
 
   expect(
-    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
+    await viewers
+      .last()
+      .locator('.bqplot.figure > svg.svg-figure > g > rect')
+      .screenshot()
   ).toMatchSnapshot('histogram-linked-selection.png');
 });
 
@@ -365,20 +368,25 @@ test('should delete and restore links', async ({ page }) => {
   expect(
     await viewers
       .first()
-      .locator('.bqplot.figure > svg.svg-figure')
+      .locator('.bqplot.figure > svg.svg-figure > g > rect')
       .screenshot()
   ).toMatchSnapshot('histogram-selection.png');
 
   expect(
-    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
+    await viewers
+      .last()
+      .locator('.bqplot.figure > svg.svg-figure > g > rect')
+      .screenshot()
   ).toMatchSnapshot('histogram-no-selection.png');
 
   await createLink(page, ['w5_psc', 'w6_psc'], ['RAJ2000', 'RAJ2000']);
   await createLink(page, ['w5_psc', 'w6_psc'], ['DEJ2000', 'DEJ2000']);
 
   await page.getByRole('tab', { name: 'Tab 1' }).click();
-
   expect(
-    await viewers.last().locator('.bqplot.figure > svg.svg-figure').screenshot()
-  ).toMatchSnapshot('histogram-linked-selection.png');
+    await viewers
+      .last()
+      .locator('.bqplot.figure > svg.svg-figure > g > rect')
+      .screenshot()
+  ).toMatchSnapshot('histogram-linked-selection-back.png');
 });
