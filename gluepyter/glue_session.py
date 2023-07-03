@@ -3,7 +3,6 @@ import json
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Optional, Tuple
-
 from glue.core.link_helpers import LinkSame
 from glue.core.state import GlueSerializer
 import glue_jupyter as gj
@@ -356,29 +355,40 @@ class SharedGlueSession:
         assert os.path.exists(relative_path)
 
         data = self.app.load_data(str(relative_path))
-        self._data[data.label] = data
 
-        # We generate the data representation and merge it into our ycontent
-        serializer = GlueSerializer(data)
-        serialized_data = serializer.dumpo()
+        # Serialize the data on its own (without other context).
+        data_serializer = GlueSerializer(data)
+        data_serializer.dumpo()
+
+        # Serialize the previous data without the new one to create a context.
+        previous_data_serializer = GlueSerializer(self._data)
+        previous_data_serializer.dumpo()
+
+        # We generate the data representation in the previous data context.
+        serialized_data = [
+            (previous_data_serializer.id(obj), previous_data_serializer.do(obj))
+            for oid, obj in list(data_serializer._objs.items())
+            ]
+        serialized_data = dict(serialized_data)
 
         contents = self._document.contents
 
-        # Inject the main data repr
-        contents[data.label] = serialized_data["__main__"]
         # Inject all components
         for key, value in serialized_data.items():
             if key != "__main__":
                 contents[key] = value
+
         # Inject the label in the data collection
-        contents["DataCollection"]["data"].append(data.label)
-        contents["DataCollection"]["cids"].extend(
-            cid for cid, comp in serialized_data["__main__"]["components"]
+        data_collection_name: str = contents.get("__main__", {}).get("data", "")
+        contents[data_collection_name]["data"].append(data.label)
+        contents[data_collection_name]["cids"].extend(
+            cid for cid, comp in serialized_data[data.label]["components"]
         )
-        contents["DataCollection"]["components"].extend(
-            comp for cid, comp in serialized_data["__main__"]["components"]
+        contents[data_collection_name]["components"].extend(
+            comp for cid, comp in serialized_data[data.label]["components"]
         )
 
+        self._data[data.label] = data
         self._document.set(json.dumps(contents))
 
     def _load_data(self) -> None:
