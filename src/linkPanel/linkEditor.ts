@@ -1,4 +1,4 @@
-import { BoxPanel, Widget } from '@lumino/widgets';
+import { SplitPanel, Widget } from '@lumino/widgets';
 
 import { IGlueSessionSharedModel } from '../types';
 import { LinkEditorModel } from './model';
@@ -10,9 +10,9 @@ import { Message } from '@lumino/messaging';
 /**
  * The link editor widget.
  */
-export class LinkEditor extends BoxPanel {
+export class LinkEditor extends SplitPanel {
   constructor(options: LinkWidget.IOptions) {
-    super({ direction: 'left-to-right' });
+    super({});
     this._sharedModel = options.sharedModel;
     this.addClass('glue-linkEditor');
     this.title.label = 'Link Data';
@@ -31,8 +31,8 @@ export class LinkEditor extends BoxPanel {
     this.addWidget(linking);
     this.addWidget(summary);
 
-    BoxPanel.setStretch(linking, 3);
-    BoxPanel.setStretch(summary, 2);
+    SplitPanel.setStretch(linking, 3);
+    SplitPanel.setStretch(summary, 2);
   }
 
   get sharedModel(): IGlueSessionSharedModel {
