@@ -1,4 +1,38 @@
 {
+  "34cde72b-5653-4c88-b631-06a958d51e7e": {
+    "_type": "glue.viewers.histogram.qt.data_viewer.HistogramViewer",
+    "pos": [
+      0,
+      0
+    ],
+    "session": "Session",
+    "size": [
+      614,
+      560
+    ],
+    "state": {
+      "values": {
+        "layer": "w5_psc"
+      }
+    }
+  },
+  "3e7db9a2-c244-4e6e-a4fd-157329304711": {
+    "_type": "glue.viewers.histogram.qt.data_viewer.HistogramViewer",
+    "pos": [
+      614,
+      0
+    ],
+    "session": "Session",
+    "size": [
+      614,
+      560
+    ],
+    "state": {
+      "values": {
+        "layer": "w6_psc"
+      }
+    }
+  },
   "CallbackList": {
     "_type": "echo.containers.CallbackList",
     "values": [
@@ -613,7 +647,8 @@
     ],
     "viewers": [
       [
-        "ImageViewer"
+        "34cde72b-5653-4c88-b631-06a958d51e7e",
+        "3e7db9a2-c244-4e6e-a4fd-157329304711"
       ]
     ]
   },
