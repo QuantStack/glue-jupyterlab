@@ -80,29 +80,26 @@ def get_advanced_links():
 
 def nested_compare(value1, value2):
     # Compare lists
-    if isinstance(value1, list):
-        if isinstance(value2, list):
-            if len(value1) == len(value2):
-                for v1, v2 in zip(value1, value2):
-                    if not nested_compare(v1, v2):
-                        return False
-                return True
-            else:
+    if isinstance(value1, list) and isinstance(value2, list):
+        if not len(value1) == len(value2):
+            return False
+        
+        for v1, v2 in zip(value1, value2):
+            if not nested_compare(v1, v2):
                 return False
-        else:
-            return False
+        
+        return True
+
     # Compare dict
-    if isinstance(value1, dict):
-        if isinstance(value2, dict):
-            for k1, v1 in value1.items():
-                if k1 in value2.keys():
-                    if not nested_compare(v1, value2[k1]):
-                        return False
-                else:
-                    return False
-            return True
-        else:
-            return False
+    if isinstance(value1, dict) and isinstance(value2, dict):
+        for k1, v1 in value1.items():
+            if not k1 in value2.keys():
+                return False
+            
+            if not nested_compare(v1, value2[k1]):
+                return False
+        
+        return True
+    
     # Compare immutable
-    else:
-        return value1 == value2
+    return value1 == value2
