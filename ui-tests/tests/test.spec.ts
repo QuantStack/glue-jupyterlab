@@ -50,46 +50,6 @@ async function createLink(
   await page.click('.glue-LinkEditor-linkingGlueButton');
 }
 
-async function session3ViewersSetup(
-  page: IJupyterLabPageFixture
-): Promise<Locator> {
-  await page.getByRole('tab', { name: 'Tab 1' }).click();
-  const viewers = page.locator('.glue-item');
-  expect(await viewers.count()).toBe(2);
-  await viewers
-    .last()
-    .locator(
-      '.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)'
-    )
-    .click();
-
-  await page.waitForSelector(
-    'text=TAB 1 - 3E7DB9A2-C244-4E6E-A4FD-157329304711'
-  );
-  await page.getByRole('button', { name: 'x axis ID' }).click();
-  await page
-    .getByRole('option', { name: 'RAJ2000' })
-    .getByText('RAJ2000')
-    .click();
-
-  await viewers
-    .first()
-    .locator(
-      '.glue-Session-tab-toolbar .jp-Toolbar-item:not(.jp-ToolbarButton)'
-    )
-    .click();
-
-  await page.waitForSelector(
-    'text=TAB 1 - 34CDE72B-5653-4C88-B631-06A958D51E7E'
-  );
-  await page.getByRole('button', { name: 'x axis ID' }).click();
-  await page
-    .getByRole('option', { name: 'RAJ2000' })
-    .getByText('RAJ2000')
-    .click();
-  return viewers;
-}
-
 async function selectPlotRange(
   page: IJupyterLabPageFixture,
   viewer: Locator
@@ -290,8 +250,11 @@ test('should display linked data', async ({ page }) => {
 
   await openSession(page, 'session3');
 
-  // select attributes in viewers.
-  const viewers = await session3ViewersSetup(page);
+  // Create a link between the ID of datasets
+  await createLink(page, ['w5_psc', 'w6_psc'], ['ID', 'ID']);
+
+  await page.getByRole('tab', { name: 'Tab 1' }).click();
+  const viewers = page.locator('.glue-item');
 
   // force the size of histograms for snapshot comparison
   viewers
@@ -342,7 +305,8 @@ test('should delete and restore links', async ({ page }) => {
   }
 
   // select attributes in viewers
-  const viewers = await session3ViewersSetup(page);
+  await page.getByRole('tab', { name: 'Tab 1' }).click();
+  const viewers = page.locator('.glue-item');
 
   // force the size of histograms for snapshot comparison
   viewers
@@ -379,14 +343,12 @@ test('should delete and restore links', async ({ page }) => {
       .screenshot()
   ).toMatchSnapshot('histogram-no-selection.png');
 
-  await createLink(page, ['w5_psc', 'w6_psc'], ['RAJ2000', 'RAJ2000']);
-  await createLink(page, ['w5_psc', 'w6_psc'], ['DEJ2000', 'DEJ2000']);
-
+  await createLink(page, ['w5_psc', 'w6_psc'], ['ID', 'ID']);
   await page.getByRole('tab', { name: 'Tab 1' }).click();
   expect(
     await viewers
       .last()
       .locator('.bqplot.figure > svg.svg-figure > g > rect')
       .screenshot()
-  ).toMatchSnapshot('histogram-linked-selection-back.png');
+  ).toMatchSnapshot('histogram-linked-selection.png');
 });
