@@ -1,0 +1,7 @@
+name: glue-jupyterlab
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - sphinx
+  - pydata-sphinx-theme
