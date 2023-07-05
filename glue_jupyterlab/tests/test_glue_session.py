@@ -2,8 +2,8 @@ import y_py as Y
 from copy import deepcopy
 from pathlib import Path
 from ipywidgets import Output
-from gluepyter.glue_session import SharedGlueSession
-from gluepyter.glue_utils import nested_compare
+from glue_jupyterlab.glue_session import SharedGlueSession
+from glue_jupyterlab.glue_utils import nested_compare
 
 
 def test_init(session_path):

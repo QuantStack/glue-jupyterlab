@@ -31,12 +31,12 @@ jobs:
           set -eux
           python -m pip install .[test]
 
-          pytest -vv -r ap --cov gluepyter
+          pytest -vv -r ap --cov glue_jupyterlab
           jupyter server extension list
-          jupyter server extension list 2>&1 | grep -ie "gluepyter.*OK"
+          jupyter server extension list 2>&1 | grep -ie "glue_jupyterlab.*OK"
 
           jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "gluepyter.*OK"
+          jupyter labextension list 2>&1 | grep -ie "glue-jupyterlab.*OK"
           python -m jupyterlab.browser_check
 
       - name: Package the extension
@@ -45,13 +45,13 @@ jobs:
 
           pip install build
           python -m build
-          pip uninstall -y "gluepyter" jupyterlab
+          pip uninstall -y "glue-jupyterlab" jupyterlab
 
       - name: Upload extension packages
         uses: actions/upload-artifact@v3
         with:
           name: extension-artifacts
-          path: dist/gluepyter*
+          path: dist/*
           if-no-files-found: error
 
   test_isolated:
@@ -76,14 +76,13 @@ jobs:
           sudo rm -rf $(which node)
           sudo rm -rf $(which node)
 
-          pip install "jupyterlab>=4.0.0,<5" gluepyter*.whl
-
+          pip install "jupyterlab>=4.0.0,<5" glue_jupyterlab*.whl
 
           jupyter server extension list
-          jupyter server extension list 2>&1 | grep -ie "gluepyter.*OK"
+          jupyter server extension list 2>&1 | grep -ie "glue_jupyterlab.*OK"
 
           jupyter labextension list
-          jupyter labextension list 2>&1 | grep -ie "gluepyter.*OK"
+          jupyter labextension list 2>&1 | grep -ie "glue-jupyterlab.*OK"
           python -m jupyterlab.browser_check --no-browser-test
 
   integration-tests:
@@ -109,7 +108,7 @@ jobs:
       - name: Install the extension
         run: |
           set -eux
-          python -m pip install "jupyterlab>=4.0.0,<5" gluepyter*.whl
+          python -m pip install "jupyterlab>=4.0.0,<5" glue_jupyterlab*.whl
 
       - name: Install dependencies
         working-directory: ui-tests
@@ -137,7 +136,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: gluepyter-playwright-tests
+          name: glue-jupyterlab-playwright-tests
           path: |
             ui-tests/test-results
             ui-tests/playwright-report

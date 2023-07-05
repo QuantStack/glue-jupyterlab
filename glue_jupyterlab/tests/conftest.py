@@ -2,8 +2,8 @@ import os
 import pytest
 from pathlib import Path
 from jupyter_ydoc import ydocs
-from gluepyter.glue_session import SharedGlueSession
-from gluepyter.glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
+from glue_jupyterlab.glue_session import SharedGlueSession
+from glue_jupyterlab.glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@ import { Locator } from '@playwright/test';
 async function closeSideTab(page: IJupyterLabPageFixture): Promise<void> {
   await page
     .getByRole('tablist', { name: 'main sidebar' })
-    .getByRole('tab', { name: 'gluepyter' })
+    .getByRole('tab', { name: 'glue-jupyterlab' })
     .click();
 }
 

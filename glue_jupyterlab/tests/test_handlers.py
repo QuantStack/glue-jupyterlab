@@ -3,7 +3,7 @@ import json
 
 async def test_get_advanced_links_list(jp_fetch):
     # When
-    response = await jp_fetch("gluepyter", "advanced-links")
+    response = await jp_fetch("glue-jupyterlab", "advanced-links")
 
     # Then
     assert response.code == 200

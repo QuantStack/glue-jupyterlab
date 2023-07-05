@@ -19,6 +19,6 @@ def setup_handlers(web_app):
     host_pattern = ".*$"
 
     base_url = web_app.settings["base_url"]
-    route_pattern = url_path_join(base_url, "gluepyter", "advanced-links")
+    route_pattern = url_path_join(base_url, "glue-jupyterlab", "advanced-links")
     handlers = [(route_pattern, AdvancedLinkHandler)]
     web_app.add_handlers(host_pattern, handlers)
