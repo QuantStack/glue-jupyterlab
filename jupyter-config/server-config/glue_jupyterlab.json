@@ -1,7 +1,7 @@
 {
   "ServerApp": {
     "jpserver_extensions": {
-      "gluepyter": true
+      "glue_jupyterlab": true
     }
   }
 }

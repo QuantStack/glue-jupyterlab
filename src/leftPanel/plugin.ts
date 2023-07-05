@@ -15,7 +15,7 @@ import { GridStackItem } from '../viewPanel/gridStackItem';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { DocumentManager } from '@jupyterlab/docmanager';
 
-const NAME_SPACE = 'gluepyter';
+const NAME_SPACE = 'glue-jupyterlab';
 
 function addCommands(
   commands: CommandRegistry,
@@ -232,7 +232,7 @@ function addCommands(
 }
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {
-  id: 'gluepyter:control-panel',
+  id: 'glue-jupyterlab:control-panel',
   autoStart: true,
   requires: [ILayoutRestorer, IGlueSessionTracker, IRenderMimeRegistry],
   activate: (
@@ -260,8 +260,8 @@ export const controlPanel: JupyterFrontEndPlugin<void> = {
       manager: docManager
     });
 
-    controlPanel.id = 'gluepyter::controlPanel';
-    controlPanel.title.caption = 'gluepyter';
+    controlPanel.id = 'glue-jupyterlab::controlPanel';
+    controlPanel.title.caption = 'glue-jupyterlab';
     controlPanel.title.icon = glueIcon;
 
     if (restorer) {

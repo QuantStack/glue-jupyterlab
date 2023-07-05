@@ -1,7 +1,7 @@
 {
-  "name": "gluepyter-ui-tests",
+  "name": "glue-jupyterlab-ui-tests",
   "version": "1.0.0",
-  "description": "JupyterLab gluepyter Integration Tests",
+  "description": "JupyterLab glue-jupyterlab Integration Tests",
   "private": true,
   "scripts": {
     "start": "rimraf .jupyter_ystore.db && jupyter lab ../examples --config jupyter_server_test_config.py",

@@ -13,7 +13,7 @@ import {
 } from './types';
 import { ILink } from '../_interface/glue.schema';
 
-const ADVANCED_LINKS_URL = '/gluepyter/advanced-links';
+const ADVANCED_LINKS_URL = '/glue-jupyterlab/advanced-links';
 
 /**
  * The link editor model.

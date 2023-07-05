@@ -1,20 +1,20 @@
-# Gluepyter
+# glue-jupyterlab
 
 The Glue application for JupyterLab
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/gluepyter/stable?urlpath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/QuantStack/glue-jupyterlab/stable?urlpath=lab)
 
 ## Overview
 
 Glue is an open-source data exploration tool that allows users to visualize and analyze data in a way that is intuitive and easy to understand. This JupyterLab extension brings Glue's data exploration capabilities directly into JupyterLab, allowing users to seamlessly analyze and visualize data without leaving their JupyterLab environment.
 
-![gluepyter](gluepyter.png)
+![glue-jupyterlab](glue-jupyterlab.png)
 
 ## What is the difference with Glue-jupyter?
 
 [`glue-jupyter`](https://github.com/glue-viz/glue-jupyter) is a library for creating a Glue "application" object directly in Python from a Jupyter Notebook (either using classic Notebook or JupyterLab) and create Glue "viewers" using tools like bqplot or Matplotlib.
 
-Gluepyter is an extension that allows opening Glue sessions directly from the JupyterLab application. It reuses components of glue-jupyter for creating the viewers and the underlying Glue application object.
+glue-jupyterlab is an extension that allows opening Glue sessions directly from the JupyterLab application. It reuses components of glue-jupyter for creating the viewers and the underlying Glue application object.
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Gluepyter is an extension that allows opening Glue sessions directly from the Ju
 To install the extension, execute:
 
 ```bash
-pip install gluepyter
+pip install glue-jupyterlab
 ```
 
 ## Uninstall
@@ -33,7 +33,7 @@ pip install gluepyter
 To remove the extension, execute:
 
 ```bash
-pip uninstall gluepyter
+pip uninstall glue-jupyterlab
 ```
 
 ## Troubleshoot
@@ -64,13 +64,13 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the gluepyter directory
+# Change directory to the glue-jupyterlab directory
 # Install package in development mode
 pip install -e ".[test]"
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 # Server extension must be manually installed in develop mode
-jupyter server extension enable gluepyter
+jupyter server extension enable glue-jupyterlab
 # Rebuild extension Typescript source after making changes
 jlpm build
 ```
@@ -96,13 +96,13 @@ jupyter lab build --minimize=False
 
 ```bash
 # Server extension must be manually disabled in develop mode
-jupyter server extension disable gluepyter
-pip uninstall gluepyter
+jupyter server extension disable glue-jupyterlab
+pip uninstall glue-jupyterlab
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `gluepyter` within that folder.
+folder is located. Then you can remove the symlink named `glue-jupyterlab` within that folder.
 
 ### Testing the extension
 
@@ -121,7 +121,7 @@ jupyter labextension develop . --overwrite
 To execute them, run:
 
 ```sh
-pytest -vv -r ap --cov gluepyter
+pytest -vv -r ap --cov glue-jupyterlab
 ```
 
 #### Frontend tests

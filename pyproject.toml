@@ -3,7 +3,7 @@ requires = ["hatchling>=1.4.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
-name = "gluepyter"
+name = "glue-jupyterlab"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
@@ -48,26 +48,26 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["gluepyter/labextension"]
+artifacts = ["glue_jupyterlab/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"gluepyter/labextension" = "share/jupyter/labextensions/gluepyter"
-"install.json" = "share/jupyter/labextensions/gluepyter/install.json"
+"glue_jupyterlab/labextension" = "share/jupyter/labextensions/glue-jupyterlab"
+"install.json" = "share/jupyter/labextensions/glue-jupyterlab/install.json"
 "jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
 "jupyter-config/nb-config" = "etc/jupyter/jupyter_notebook_config.d"
 
 [tool.hatch.build.hooks.version]
-path = "gluepyter/_version.py"
+path = "glue_jupyterlab/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "gluepyter/labextension/static/style.js",
-    "gluepyter/labextension/package.json",
+    "glue_jupyterlab/labextension/static/style.js",
+    "glue_jupyterlab/labextension/package.json",
 ]
-skip-if-exists = ["gluepyter/labextension/static/style.js"]
+skip-if-exists = ["glue_jupyterlab/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -77,7 +77,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "gluepyter/labextension"
+build_dir = "glue_jupyterlab/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"
@@ -94,4 +94,4 @@ before-build-python = ["jlpm clean:all"]
 ignore = ["W002"]
 
 [project.entry-points.jupyter_ydoc]
-glu = "gluepyter.glue_ydoc:YGlue"
+glu = "glue_jupyterlab.glue_ydoc:YGlue"

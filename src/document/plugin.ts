@@ -22,11 +22,11 @@ import { GlueSessionSharedModel } from './sharedModel';
 import { GlueSessionTracker } from './tracker';
 import { GlueCanvasWidgetFactory } from './widgetFactory';
 
-const NAME_SPACE = 'gluepyter';
+const NAME_SPACE = 'glue-jupyterlab';
 
 export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
   {
-    id: 'gluepyter:tracker-plugin',
+    id: 'glue-jupyterlab:tracker-plugin',
     autoStart: true,
     provides: IGlueSessionTracker,
     activate: (app: JupyterFrontEnd) => {
@@ -38,10 +38,10 @@ export const sessionTrackerPlugin: JupyterFrontEndPlugin<IGlueSessionTracker> =
   };
 
 /**
- * Initialization data for the gluepyter extension.
+ * Initialization data for the glue-jupyterlab extension.
  */
 export const gluePlugin: JupyterFrontEndPlugin<void> = {
-  id: 'gluepyter:document-plugin',
+  id: 'glue-jupyterlab:document-plugin',
   autoStart: true,
   requires: [
     IRenderMimeRegistry,
@@ -76,7 +76,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
         canvasTracker.save(widget);
       });
       canvasTracker.add(widget);
-      app.shell.activateById('gluepyter::controlPanel');
+      app.shell.activateById('glue-jupyterlab::controlPanel');
     });
     app.docRegistry.addWidgetFactory(widgetFactory);
 
@@ -106,7 +106,7 @@ export const gluePlugin: JupyterFrontEndPlugin<void> = {
  * Add launcher button to create a new glue session.
  */
 export const newFilePlugin: JupyterFrontEndPlugin<void> = {
-  id: 'gluepyter:create-new-plugin',
+  id: 'glue-jupyterlab:create-new-plugin',
   autoStart: true,
   requires: [IFileBrowserFactory],
   optional: [ILauncher, ICommandPalette],
@@ -148,7 +148,7 @@ export const newFilePlugin: JupyterFrontEndPlugin<void> = {
     if (launcher) {
       launcher.add({
         command: CommandIDs.createNew,
-        category: 'Gluepyter',
+        category: 'glue-jupyterlab',
         rank: 1
       });
     }
@@ -158,7 +158,7 @@ export const newFilePlugin: JupyterFrontEndPlugin<void> = {
       commandPalette.addItem({
         command: CommandIDs.createNew,
         args: { isPalette: true },
-        category: 'Gluepyter'
+        category: 'glue-jupyterlab'
       });
     }
   }

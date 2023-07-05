@@ -41,5 +41,5 @@ _("jupyter", "server", "extension", "list")
 _("jupyter", "labextension", "list")
 
 
-print("JupyterLab with gluepyter is ready to run with:\n")
+print("JupyterLab with glue-jupyterlab is ready to run with:\n")
 print("\tjupyter lab\n")
