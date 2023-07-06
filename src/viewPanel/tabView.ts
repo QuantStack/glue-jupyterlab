@@ -153,7 +153,8 @@ export class TabView extends Widget {
         cell: out,
         itemTitle: itemTitle.match(/($[a-z])|[A-Z][^A-Z]+/g)?.join(' '),
         pos: viewerData.pos,
-        size: viewerData.size
+        size: viewerData.size,
+        tabName: tabName
       });
       const cellOutput = item.cellOutput as SimplifiedOutputArea;
       if (this._context) {
