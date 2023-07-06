@@ -349,9 +349,11 @@ class SharedGlueSession:
             ydoc=self._sessionYDoc,
         )
 
-    def add_viewer_layer(self, tab_name: str, viewer_name: str, data_name:str) -> None:
+    def add_viewer_layer(self, tab_name: str, viewer_name: str, data_name: str) -> None:
         """Add a layer with new dataset to a viewer"""
-        viewer = self._viewers.get(tab_name, {}).get(viewer_name, {}).get("widget", None)
+        viewer = (
+            self._viewers.get(tab_name, {}).get(viewer_name, {}).get("widget", None)
+        )
         if not viewer:
             return
         data = self._data[data_name]
