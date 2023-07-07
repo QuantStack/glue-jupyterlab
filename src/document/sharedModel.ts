@@ -131,6 +131,14 @@ export class GlueSessionSharedModel
     }, false);
   }
 
+  removeTab(name: string): void {
+    if (this._tabs.has(name)) {
+      this.transact(() => {
+        this._tabs.delete(name);
+      }, false);
+    }
+  }
+
   getTabNames(): string[] {
     return [...this._tabs.keys()];
   }

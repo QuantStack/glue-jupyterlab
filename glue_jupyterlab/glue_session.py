@@ -109,7 +109,7 @@ class SharedGlueSession:
         """Fill the place holder output with glu-jupyter widgets"""
 
         all_tabs = self._document.get_tab_names()
-        for frontend_tab in self._viewers:
+        for frontend_tab in list(self._viewers):
             if frontend_tab not in all_tabs:
                 # Tab removed from the frontend
                 self.remove_tab(frontend_tab)

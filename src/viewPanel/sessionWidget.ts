@@ -50,6 +50,11 @@ export class SessionWidget extends BoxPanel {
     this._tabPanel.topBar.addRequested.connect(() => {
       this._model.addTab();
     });
+    this._tabPanel.topBar.tabCloseRequested.connect((tab, arg) => {
+      arg.title.owner.close();
+      this._tabPanel.topBar.removeTabAt(arg.index);
+      this._model.removeTab(arg.title.label);
+    });
     if (this._model) {
       this._linkWidget = new LinkEditor({ sharedModel: this._model });
       this._tabPanel.addTab(this._linkWidget, 0);
@@ -166,7 +171,12 @@ export class SessionWidget extends BoxPanel {
     let newTabIndex: number | undefined = undefined;
     const currentIndex = this._tabPanel.topBar.currentIndex;
     const tabNames = this._model.getTabNames();
-
+    Object.keys(this._tabViews).forEach(k => {
+      if (!tabNames.includes(k)) {
+        this._tabViews[k].dispose();
+        delete this._tabViews[k];
+      }
+    });
     tabNames.forEach((tabName, idx) => {
       // Tab already exists, we don't do anything
       if (tabName in this._tabViews) {
@@ -182,7 +192,7 @@ export class SessionWidget extends BoxPanel {
         notebookTracker: this._notebookTracker,
         commands: this._commands
       }));
-
+      tabWidget.title.closable = true;
       this._tabPanel.addTab(tabWidget, idx + 1);
     });
 
