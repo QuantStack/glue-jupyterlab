@@ -318,6 +318,21 @@ export class TabLayout extends Layout {
       gridItem: item as any
     });
   }
+
+  /**
+   * Request to add a layer with a dataset to the viewer.
+   *
+   * @param item - the viewer where to add a layer.
+   * @param dataName - the data to add to the viewer.
+   */
+  private _addViewerLayer(item: GridStackItem, dataName: string): void {
+    this._commands.execute(CommandIDs.addViewerLayer, {
+      tab: item.tabName,
+      viewer: item.cellIdentity,
+      data: dataName
+    });
+  }
+
   /**
    * Handle change-event messages sent to from gridstack.
    */
@@ -375,6 +390,12 @@ export class TabLayout extends Layout {
         break;
       case 'edit':
         this._handleEdit(sender);
+        break;
+      case 'layer':
+        if (!change.dataLayer) {
+          return;
+        }
+        this._addViewerLayer(sender, change.dataLayer);
         break;
       default:
         break;

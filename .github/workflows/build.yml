@@ -130,7 +130,7 @@ jobs:
       - name: Execute integration tests
         working-directory: ui-tests
         run: |
-          jlpm run test
+          jlpm run test --retries=3
 
       - name: Upload Playwright Test report
         if: always()

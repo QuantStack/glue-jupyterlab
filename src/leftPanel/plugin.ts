@@ -229,6 +229,23 @@ function addCommands(
       controlModel.clearConfig();
     }
   });
+
+  commands.addCommand(CommandIDs.addViewerLayer, {
+    execute: async args => {
+      const kernel = controlModel.currentSessionKernel();
+      if (kernel === undefined) {
+        // TODO Show an error dialog
+        return;
+      }
+
+      const code = `
+      GLUE_SESSION.add_viewer_layer("${args.tab}", "${args.viewer}", "${args.data}")
+      `;
+
+      const future = kernel.requestExecute({ code }, false);
+      await future.done;
+    }
+  });
 }
 
 export const controlPanel: JupyterFrontEndPlugin<void> = {

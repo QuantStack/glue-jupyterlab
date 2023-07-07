@@ -19,6 +19,8 @@ export namespace CommandIDs {
   export const openControlPanel = 'glue-control:open-control-panel';
 
   export const closeControlPanel = 'glue-control:close-control-panel';
+
+  export const addViewerLayer = 'glue-control:add-viewer-layer';
 }
 
 export interface INewViewerArgs {

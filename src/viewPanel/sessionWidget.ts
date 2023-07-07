@@ -96,8 +96,14 @@ export class SessionWidget extends BoxPanel {
   }
 
   private async _ondrop(event: DragEvent) {
-    const datasetId = event.dataTransfer?.getData(DATASET_MIME);
+    const target = event.target as HTMLElement;
+    const viewer = target.closest('.grid-stack-item.glue-item');
+    // No-op if the target is a viewer, it will be managed by the viewer itself.
+    if (viewer) {
+      return;
+    }
 
+    const datasetId = event.dataTransfer?.getData(DATASET_MIME);
     const items: IDict<string> = {
       Histogram: CommandIDs.new1DHistogram,
       '1D Profile': CommandIDs.new1DProfile,
