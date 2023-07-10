@@ -1,23 +1,21 @@
-import { PromiseDelegate } from '@lumino/coreutils';
-import { TabBar, BoxPanel, Widget } from '@lumino/widgets';
-
 import { Dialog, InputDialog, showDialog } from '@jupyterlab/apputils';
-import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookTracker } from '@jupyterlab/notebook';
-
-import { HTabPanel } from '../common/tabPanel';
-import { DATASET_MIME, IDict, IGlueSessionSharedModel } from '../types';
-import { GlueSessionModel } from '../document/docModel';
-import { mockNotebook } from '../tools';
-import { TabView } from './tabView';
-import { LinkEditor } from '../linkPanel/linkEditor';
-
-import { Message } from '@lumino/messaging';
-import { CommandRegistry } from '@lumino/commands';
-import { CommandIDs } from '../commands';
-import { IJupyterYWidgetManager } from 'yjs-widgets';
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { IKernelConnection } from '@jupyterlab/services/lib/kernel/kernel';
+import { CommandRegistry } from '@lumino/commands';
+import { PromiseDelegate } from '@lumino/coreutils';
+import { Message } from '@lumino/messaging';
+import { BoxPanel, TabBar, Widget } from '@lumino/widgets';
+import { IJupyterYWidgetManager } from 'yjs-widgets';
+
+import { CommandIDs } from '../commands';
+import { HTabPanel } from '../common/tabPanel';
+import { GlueSessionModel } from '../document/docModel';
+import { LinkEditor } from '../linkPanel/linkEditor';
+import { mockNotebook } from '../tools';
+import { DATASET_MIME, IDict, IGlueSessionSharedModel } from '../types';
+import { TabView } from './tabView';
 
 export class SessionWidget extends BoxPanel {
   constructor(options: SessionWidget.IOptions) {
@@ -49,6 +47,18 @@ export class SessionWidget extends BoxPanel {
     });
     this._tabPanel.topBar.addRequested.connect(() => {
       this._model.addTab();
+    });
+    this._tabPanel.topBar.tabCloseRequested.connect(async (tab, arg) => {
+      const confirm = await showDialog({
+        title: 'Delete Tab',
+        body: 'Are you sure you want to delete this tab?',
+        buttons: [Dialog.cancelButton(), Dialog.okButton({ label: 'Delete' })]
+      });
+      if (confirm.button.accept) {
+        arg.title.owner.close();
+        this._tabPanel.topBar.removeTabAt(arg.index);
+        this._model.removeTab(arg.title.label);
+      }
     });
     if (this._model) {
       this._linkWidget = new LinkEditor({ sharedModel: this._model });
@@ -166,7 +176,12 @@ export class SessionWidget extends BoxPanel {
     let newTabIndex: number | undefined = undefined;
     const currentIndex = this._tabPanel.topBar.currentIndex;
     const tabNames = this._model.getTabNames();
-
+    Object.keys(this._tabViews).forEach(k => {
+      if (!tabNames.includes(k)) {
+        this._tabViews[k].dispose();
+        delete this._tabViews[k];
+      }
+    });
     tabNames.forEach((tabName, idx) => {
       // Tab already exists, we don't do anything
       if (tabName in this._tabViews) {
@@ -182,7 +197,7 @@ export class SessionWidget extends BoxPanel {
         notebookTracker: this._notebookTracker,
         commands: this._commands
       }));
-
+      tabWidget.title.closable = true;
       this._tabPanel.addTab(tabWidget, idx + 1);
     });
 

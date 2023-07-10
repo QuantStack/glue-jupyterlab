@@ -54,6 +54,10 @@ export class TabView extends Widget {
     super.dispose();
   }
 
+  protected onCloseRequest(msg: Message): void {
+    this.dispose();
+  }
+
   /**
    * The tab name
    */

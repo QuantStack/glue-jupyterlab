@@ -412,7 +412,7 @@ export class TabLayout extends Layout {
   private _grid: GridStack;
   private _gridItems: Map<string, GridStackItem>;
   private _gridItemChanged = new Signal<this, TabLayout.IChange>(this);
-  private _resizeTimeout = 0;
+  private _resizeTimeout: any = 0;
   private _commands: CommandRegistry;
 }
 

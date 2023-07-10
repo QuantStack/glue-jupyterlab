@@ -44,6 +44,18 @@ def test_get(session_path, yglue_doc):
     assert "NewScatter" in updated_content["__main__"]["viewers"][2]
 
 
+def test_get_remove_tab(yglue_doc):
+    ## Fake editing of the y structure
+    with yglue_doc._ydoc.begin_transaction() as t:
+        # Remove a tab
+        yglue_doc._ytabs.pop(t, "Tab 1", None)
+
+    updated_content = json.loads(yglue_doc.get())
+
+    assert "Tab 1" not in updated_content["__main__"]["tab_names"]
+    assert len(updated_content["__main__"]["viewers"]) == 1
+
+
 def test_links(yglue_doc_links, identity_link):
     yglue_doc_links.get()
     links = yglue_doc_links.links

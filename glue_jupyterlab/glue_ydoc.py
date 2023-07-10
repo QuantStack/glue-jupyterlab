@@ -69,15 +69,12 @@ class YGlue(YBaseDoc):
 
         contents["__main__"].setdefault("viewers", [])
 
-        while len(contents["__main__"]["viewers"]) != len(tab_names):
-            contents["__main__"]["viewers"].append([])
-
-        viewer_names = []
-        for idx, tab in enumerate(tab_names):
-            viewers = tabs[tab]
+        contents["__main__"]["viewers"] = []
+        for tab in tab_names:
+            viewers = tabs.get(tab, {})
             viewer_names = sorted(list(viewers.keys()))
 
-            contents["__main__"]["viewers"][idx] = viewer_names
+            contents["__main__"]["viewers"].append(viewer_names)
             for viewer in viewer_names:
                 contents[viewer] = viewers[viewer]
 
@@ -92,7 +89,6 @@ class YGlue(YBaseDoc):
                 contents[data_name] = dataset[data_name]
 
             self.add_links_to_contents(links, contents)
-
         return json.dumps(contents, indent=2, sort_keys=True)
 
     def set(self, value: str) -> None:
