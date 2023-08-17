@@ -4,6 +4,7 @@ import glueIconStr from '../style/icons/glue-icon.svg';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 import { Signal } from '@lumino/signaling';
+import { KernelMessage } from '@jupyterlab/services';
 
 export const glueIcon = new LabIcon({
   name: 'gluelab:glue-icon',
@@ -33,3 +34,16 @@ export function mockNotebook(
   };
   return panel;
 }
+
+/**
+ * Log the kernel error message to the JS console.
+ *
+ * @param {KernelMessage.IExecuteReplyMsg} msg
+ */
+export const logKernelError = (msg: KernelMessage.IExecuteReplyMsg): void => {
+  const { content } = msg;
+  if (content.status === 'error') {
+    const { ename, evalue, traceback } = content;
+    console.error('[Kernel Execution Error]', { ename, evalue, traceback });
+  }
+};

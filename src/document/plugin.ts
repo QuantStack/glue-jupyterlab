@@ -117,6 +117,7 @@ export const newFilePlugin: JupyterFrontEndPlugin<void> = {
     commandPalette?: ICommandPalette
   ) => {
     const { commands } = app;
+
     commands.addCommand(CommandIDs.createNew, {
       label: args => 'New Glue Session',
       caption: 'Create a new Glue Session',

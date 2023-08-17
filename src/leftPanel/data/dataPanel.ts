@@ -8,6 +8,7 @@ import { IDocumentManager } from '@jupyterlab/docmanager';
 import { DatasetsWidget } from './datasetsWidget';
 import { SubsetsWidget } from './subsetsWidget';
 import { IControlPanelModel } from '../../types';
+import { logKernelError } from '../../tools';
 
 export class DataPanel extends SidePanel {
   constructor(options: {
@@ -53,6 +54,7 @@ export class DataPanel extends SidePanel {
             `;
 
             const future = kernel.requestExecute({ code }, false);
+            future.onReply = logKernelError;
             await future.done;
           }
         }
