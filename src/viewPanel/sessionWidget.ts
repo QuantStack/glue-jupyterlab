@@ -13,7 +13,7 @@ import { CommandIDs } from '../commands';
 import { HTabPanel } from '../common/tabPanel';
 import { GlueSessionModel } from '../document/docModel';
 import { LinkEditor } from '../linkPanel/linkEditor';
-import { mockNotebook } from '../tools';
+import { logKernelError, mockNotebook } from '../tools';
 import { DATASET_MIME, IDict, IGlueSessionSharedModel } from '../types';
 import { TabView } from './tabView';
 
@@ -163,8 +163,8 @@ export class SessionWidget extends BoxPanel {
     from glue_jupyterlab.glue_session import SharedGlueSession
     GLUE_SESSION = SharedGlueSession("${this._context.localPath}")
     `;
-
     const future = kernel.requestExecute({ code }, false);
+    future.onReply = logKernelError;
     await future.done;
     this._pythonSessionCreated.resolve();
 

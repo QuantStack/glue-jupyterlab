@@ -1,6 +1,6 @@
 import { ControlPanelModel } from './model';
 import { ControlPanelWidget } from './widget';
-import { glueIcon } from '../tools';
+import { glueIcon, logKernelError } from '../tools';
 import {
   ILayoutRestorer,
   JupyterFrontEnd,
@@ -243,6 +243,7 @@ function addCommands(
       `;
 
       const future = kernel.requestExecute({ code }, false);
+      future.onReply = logKernelError;
       await future.done;
     }
   });
