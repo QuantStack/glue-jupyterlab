@@ -154,9 +154,9 @@ class YGlue(YBaseDoc):
         self._subscriptions[self._ytabs] = self._ytabs.observe_deep(
             partial(callback, "tabs")
         )
-        self._subscriptions[
-            self._yprivate_messages
-        ] = self._yprivate_messages.observe_deep(partial(callback, "private_messages"))
+        self._subscriptions[self._yprivate_messages] = (
+            self._yprivate_messages.observe_deep(partial(callback, "private_messages"))
+        )
 
     def get_tab_names(self) -> List[str]:
         return list(self._ytabs.keys())
