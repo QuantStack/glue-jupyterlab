@@ -269,8 +269,7 @@ export class GlueSessionSharedModel
     });
 
     const tabsEvent = events.find(event => event.target === this._tabs) as
-      | Y.YMapEvent<any>
-      | undefined;
+      Y.YMapEvent<any> | undefined;
     if (!tabsEvent) {
       return;
     }

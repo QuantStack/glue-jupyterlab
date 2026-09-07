@@ -4,9 +4,7 @@ import { Contents } from '@jupyterlab/services';
 
 import { GlueSessionModel } from './docModel';
 
-export class GlueSessionModelFactory
-  implements DocumentRegistry.IModelFactory<GlueSessionModel>
-{
+export class GlueSessionModelFactory implements DocumentRegistry.IModelFactory<GlueSessionModel> {
   collaborative = true;
   /**
    * The name of the model.
