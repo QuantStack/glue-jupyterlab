@@ -1,9 +1,10 @@
 import json
 from copy import deepcopy
-from typing import Dict, List, Any, Callable, Optional
 from functools import partial
-from jupyter_ydoc.ybasedoc import YBaseDoc
+from typing import Any, Callable, Dict, List, Optional
+
 import y_py as Y
+from jupyter_ydoc.ybasedoc import YBaseDoc
 
 COMPONENT_LINK_TYPE = "glue.core.component_link.ComponentLink"
 IDENTITY_LINK_FUNCTION = "glue.core.link_helpers.identity"
