@@ -39,8 +39,7 @@ export interface IGlueSessionSharedModelChange {
   stateChange?: StateChange<any>[];
 }
 
-export interface IGlueSessionSharedModel
-  extends YDocument<IGlueSessionSharedModelChange> {
+export interface IGlueSessionSharedModel extends YDocument<IGlueSessionSharedModelChange> {
   contents: JSONObject;
   attributes: IGlueSessionAttributes;
   dataset: IGlueSessionDataset;
@@ -87,8 +86,10 @@ export interface IGlueSessionModel extends DocumentRegistry.IModel {
   disposed: ISignal<any, void>;
 }
 
-export interface IGlueSessionWidget
-  extends IDocumentWidget<Widget, IGlueSessionModel> {
+export interface IGlueSessionWidget extends IDocumentWidget<
+  Widget,
+  IGlueSessionModel
+> {
   sessionWidget: SessionWidget;
 }
 
