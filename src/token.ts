@@ -3,8 +3,7 @@ import { Token } from '@lumino/coreutils';
 
 import { IGlueSessionWidget, IGlueSessionSharedModel } from './types';
 
-export interface IGlueSessionTracker
-  extends IWidgetTracker<IGlueSessionWidget> {
+export interface IGlueSessionTracker extends IWidgetTracker<IGlueSessionWidget> {
   currentSharedModel(): IGlueSessionSharedModel | undefined;
 }
 
