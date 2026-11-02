@@ -1,7 +1,9 @@
-import y_py as Y
 from copy import deepcopy
 from pathlib import Path
+
+import y_py as Y
 from ipywidgets import Output
+
 from glue_jupyterlab.glue_session import SharedGlueSession
 from glue_jupyterlab.glue_utils import nested_compare
 

@@ -1,7 +1,9 @@
 import os
-import pytest
 from pathlib import Path
+
+import pytest
 from jupyter_ydoc import ydocs
+
 from glue_jupyterlab.glue_session import SharedGlueSession
 from glue_jupyterlab.glue_ydoc import COMPONENT_LINK_TYPE, IDENTITY_LINK_FUNCTION
 

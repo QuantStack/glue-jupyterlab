@@ -1,20 +1,17 @@
-import os
 import json
+import os
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, Optional, Tuple
+
+import glue_jupyter as gj
+import y_py as Y
 from glue.core.link_helpers import LinkSame
 from glue.core.state import GlueSerializer
-import glue_jupyter as gj
 from glue_jupyter.view import IPyWidgetView
 from glue_jupyter.widgets.layer_options import LayerOptionsWidget
-
-import y_py as Y
-
 from IPython.display import display
-
 from ipywidgets import Output
-
 from jupyter_ydoc import ydocs
 from ypywidgets import Widget
 
